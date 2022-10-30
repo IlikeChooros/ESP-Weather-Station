@@ -3,6 +3,7 @@
 
 #include "../data_structures/Point.h"
 
+#include <Arduino.h>
 #include <TFT_eSPI.h> 
 #include <SPI.h>
 

@@ -1,11 +1,10 @@
-#include "calibrate/calibrate_data.h"
-#include "data_structures/Point.h"
-#include "output/Coordinate_system.h"
+#include "src/calibrate/calibrate_data.h"
+#include "src/data_structures/Point.h"
+#include "src/output/Coordinate_system.h"
 
 TFT_eSPI tft = TFT_eSPI();
 
-uint16_t touch_x,
-         touch_y;
+Point touch_point;
 
 bool touch_pressed = false;
 
@@ -25,10 +24,10 @@ void setup()
 
 void loop()
 {
-    touch_pressed = tft.getTouch(&touch_x, &touch_y);
+    touch_pressed = tft.getTouch(&touch_point.x, &touch_point.y);
 
     if (touch_pressed)
     {
-        tft.fillCircle(touch_x, touch_y,3, TFT_GOLD);
+        tft.fillCircle(touch_point.x, touch_point.y,3, TFT_GOLD);
     }
 }

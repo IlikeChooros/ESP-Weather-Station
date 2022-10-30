@@ -2,6 +2,7 @@
 #define POINT_H
 
 #include <math.h>
+#include <Arduino.h>
 
 class Point{
     public:
