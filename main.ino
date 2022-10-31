@@ -4,6 +4,12 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h>
+
+// Pobrac biblioteke : ArduinoJson
+// Pobrac konwerter: https://www.instructables.com/Converting-Images-to-Flash-Memory-Iconsimages-for-/
+
+
 
 // 1. Wpisz nazwę miasta
 // 2. Wyślij prośbę do: http://api.openweathermap.org/geo/1.0/direct?q=Oława&limit=1&appid=6a0b31b6c9c1f95d47860092dadc1f6c
@@ -11,7 +17,9 @@
 // 3. [{"name":"Oława","local_names":{"pl":"Oława"},"lat":50.95709295,"lon":17.290269769664455,"country":"PL","state":"Lower Silesian Voivodeship"}]
 // Wybież lat i lon.
 // 4. Wyszukaj to:
-// https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&lang=pl&appid=6a0b31b6c9c1f95d47860092dadc1f6c
+// https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=
+
+//https://api.openweathermap.org/data/2.5/forecast?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=6a0b31b6c9c1f95d47860092dadc1f6c
 //                                                    (lat z Oławy)    (lon z Oławy)
 // 5. Otrzymujesz to:
 // {"coord":{"lon":17.2903,"lat":50.9571},"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04d"}],
@@ -25,10 +33,62 @@ Point touch_point;
 
 bool touch_pressed = false;
 
-const char* ssid = "bc772c";
-const char* password = "269929817";
-const String endpoint = "";
+const char* ssid = "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password = "6epTdSSVW22X"; // 269929817
+const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
+
+uint8_t number_of_tries = 0;
+
+HTTPClient http;
+int16_t http_code;
+
+void try_to_connect_to_wifi()
+{
+    tft.println("Connecting...");
+
+    while(WiFi.status() != WL_CONNECTED)
+    {
+        delay(1000);
+        tft.println("Connecting to WiFi...");
+        number_of_tries++;
+
+        if (number_of_tries == 10){
+            tft.println("[-] Failed to connect to WiFi.");
+            return;
+        }
+    }
+
+    tft.println("[+] Connected to the Wifi");
+}
+
+void get_weather()
+{
+    tft.setCursor(0,0);
+    if(http_code == 200){
+        String payload = http.getString();
+
+        StaticJsonDocument<200> filter;
+        filter["name"] = true;
+        filter["main"]["temp"] = true;
+
+        // Deserialize the document
+        StaticJsonDocument<400> doc;
+        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
+
+        tft.print("[+] Succesful request GET: ");
+        tft.println(http_code);
+        tft.println(doc["name"].as<const char*>());
+        tft.println(String(doc["main"]["temp"].as<double>()));
+        tft.println(payload);
+
+    }
+    else{
+        tft.println("[-] Error on HTTP request: " + String(http_code));
+    }
+
+    http.end();
+}
 
 void setup()
 {
@@ -41,24 +101,18 @@ void setup()
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
-    tft.println("Connecting...");
 
-    while(WiFi.status() != WL_CONNECTED)
-    {
-        delay(1000);
-        tft.println("Connecting to WiFi...");
-    }
+    try_to_connect_to_wifi();
+    tft.fillScreen(TFT_BLACK);
 
-    tft.println("[+] Connected to the Wifi");
+    http.begin(current_weather + key);
+    http_code = http.GET();
+
+    get_weather();
 }
 
 
 void loop()
 {
-    // touch_pressed = tft.getTouch(&touch_point.x, &touch_point.y);
 
-    // if (touch_pressed)
-    // {
-    //     tft.fillCircle(touch_point.x, touch_point.y,3, TFT_GOLD);
-    // }
 }
