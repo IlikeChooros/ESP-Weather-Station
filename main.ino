@@ -1,15 +1,22 @@
 #include "src/calibrate/calibrate_data.h"
 #include "src/data_structures/Point.h"
-#include "src/output/Coordinate_system.h"
+#include "src/output/icons.h"
+#include "src/output/sunny_100x100.h"
+
+#include <TFT_eSPI.h> 
+#include <SPI.h>
 
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
+#define IMG_HEIGHT 75
+#define IMG_WIDTH 75
+
 // Pobrac biblioteke : ArduinoJson
 // Pobrac konwerter: https://www.instructables.com/Converting-Images-to-Flash-Memory-Iconsimages-for-/
-
-
+// YT: How to program TTGO T-Display - PART3 (Images and Custom Fonts)
+// https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa20taEtHTDBLTTh5YmlUdmE2MWdxUkFGU0stZ3xBQ3Jtc0tuU211U3hrX1hyaXJURlVFem9WZVhuaGZfYktLWEUyd3FmTXU1d0xyR3FEVzBZM1UxckRQc1ZJc1BuZ2pua09HN05kZzdUc25TTndlYldfV3F2Z2RjZ3BMWW1ZQ2VEVThtc0prRXBVZ1hEOW1pWkpKaw&q=http%3A%2F%2Fwww.rinkydinkelectronics.com%2Ft_imageconverter565.php&v=R-qFKemDFyM
 
 // 1. Wpisz nazwę miasta
 // 2. Wyślij prośbę do: http://api.openweathermap.org/geo/1.0/direct?q=Oława&limit=1&appid=6a0b31b6c9c1f95d47860092dadc1f6c
@@ -42,6 +49,19 @@ uint8_t number_of_tries = 0;
 
 HTTPClient http;
 int16_t http_code;
+
+void draw_img(const uint16_t * bitmap, uint16_t x, uint16_t y){
+
+    uint16_t buffer=0;
+    for (uint8_t h=0;h<IMG_HEIGHT;h++)
+    {
+        for(uint8_t w=0;w<IMG_WIDTH;w++)
+        {
+            tft.drawPixel(x+w,y+h, pgm_read_word(bitmap + buffer));
+            buffer++;
+        }
+    }
+}
 
 void try_to_connect_to_wifi()
 {
@@ -109,6 +129,12 @@ void setup()
     http_code = http.GET();
 
     get_weather();
+
+    // draw_img(evive_in_hand, 100, 0);
+
+    // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
+
+    // tft.pushImage(100,100,100,100, sunny_100x100);
 }
 
 
