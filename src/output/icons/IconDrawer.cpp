@@ -20,7 +20,7 @@ void Sunny::draw()
         yc = y + size/2,
         Ax = 0.85f * size + x,
         Ay = y + size/2,
-        Bx = size + x,
+        Bx = 0.95f*size + x,
         By = Ay; 
 
     for (float angle=0; angle<2*PI; angle+=PI/4)
