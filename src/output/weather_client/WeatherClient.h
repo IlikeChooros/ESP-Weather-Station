@@ -21,12 +21,9 @@ class WeatherClient
     HTTPClient* http;
     public:
     WeatherClient(HTTPClient * http);
-    uint16_t _init_(String city_name);
+    bool _init_(String city_name);
     Weather* current_weather();
     Forecast* forecast_weather();
-
-    double lat();
-    double lon();
 };
 
 #endif

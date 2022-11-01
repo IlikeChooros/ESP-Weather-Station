@@ -5,13 +5,13 @@ WeatherClient::WeatherClient(HTTPClient* http)
     this->http = http;
 }
 
-uint16_t WeatherClient::_init_(String city_name)
+bool WeatherClient::_init_(String city_name)
 {
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
 
     int16_t http_code = http->GET();
-
-    if (http_code == 200)
+    bool isSuccesful = http_code == 200;
+    if (isSuccesful)
     {
         String payload = http->getString();
 
@@ -25,18 +25,9 @@ uint16_t WeatherClient::_init_(String city_name)
         _lat = doc[0]["lat"].as<double>();
         _lon = doc[0]["lon"].as<double>();
     }
+
     http->end();
-    return http_code;
-}
-
-double WeatherClient::lon()
-{
-    return _lon;
-}
-
-double WeatherClient::lat()
-{
-    return _lat;
+    return isSuccesful;
 }
 
 
@@ -65,9 +56,16 @@ Weather* WeatherClient::current_weather()
         StaticJsonDocument<340> doc;
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
-        weather->feels_like(doc["main"]["feels_like"].as<double>())->main(doc["weather"][0]["main"].as<String>())->icon(doc["weather"][0]["icon"].as<String>());
-        weather->pressure(doc["main"]["pressure"].as<uint16_t>())->humidity(doc["main"]["humidity"].as<uint8_t>())->temp(doc["main"]["temp"].as<double>());
-        weather->wind_speed(doc["wind"]["speed"].as<double>())->sunrise(doc["sys"]["sunrise"].as<uint32_t>())->sunset(doc["sys"]["sunset"].as<uint32_t>());
+        weather
+            ->feels_like(doc["main"]["feels_like"].as<double>())
+            ->main(doc["weather"][0]["main"].as<String>())
+            ->icon(doc["weather"][0]["icon"].as<String>())
+            ->pressure(doc["main"]["pressure"].as<uint16_t>())
+            ->humidity(doc["main"]["humidity"].as<uint8_t>())
+            ->temp(doc["main"]["temp"].as<double>())
+            ->wind_speed(doc["wind"]["speed"].as<double>())
+            ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
+            ->sunset(doc["sys"]["sunset"].as<uint32_t>());
     }
     http->end();
     return weather;
@@ -111,13 +109,19 @@ Forecast* WeatherClient::forecast_weather()
             Serial.println(doc["list"][i]["main"]["temp"].as<String>());
 
 
-            weather[i].feels_like(doc["list"][i]["main"]["feels_like"].as<double>())->main(doc["list"][i]["weather"][0]["main"].as<String>())->icon(doc["list"][i]["weather"][0]["icon"].as<String>());
-            weather[i].pressure(doc["list"][i]["main"]["pressure"].as<uint16_t>())->humidity(doc["list"][i]["main"]["humidity"].as<uint8_t>())->temp(doc["list"][i]["main"]["temp"].as<double>());
-            weather[i].wind_speed(doc["list"][i]["wind"]["speed"].as<double>());
+            weather
+                ->feels_like(doc["list"][i]["main"]["feels_like"].as<double>())
+                ->main(doc["list"][i]["weather"][0]["main"].as<String>())
+                ->icon(doc["list"][i]["weather"][0]["icon"].as<String>())
+                ->pressure(doc["list"][i]["main"]["pressure"].as<uint16_t>())
+                ->humidity(doc["list"][i]["main"]["humidity"].as<uint8_t>())
+                ->temp(doc["list"][i]["main"]["temp"].as<double>())
+                ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>());
+
+            weather++;
         }
     }
-    forecast->forecasted_weather = weather;
-
+    forecast->forecasted_weather = weather - NUMBER_OF_HOURS_TO_FORECAST;
     http->end();
     return forecast;
 }

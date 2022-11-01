@@ -1,7 +1,6 @@
 #include "src/calibrate/calibrate_data.h"
 #include "src/data_structures/Point.h"
-#include "src/output/icons.h"
-#include "src/output/sunny_100x100.h"
+#include "src/output/icons/IconDrawer.h"
 #include "src/output/weather_client/WeatherClient.h"
 
 #include <TFT_eSPI.h> 
@@ -11,14 +10,14 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define IMG_HEIGHT 75
-#define IMG_WIDTH 75
+#define IMG_HEIGHT 150
+#define IMG_WIDTH 150
+#define BACKGROUND_COLOR 0x2124
 
 // Pobrac biblioteke : ArduinoJson
 // Pobrac konwerter: https://www.instructables.com/Converting-Images-to-Flash-Memory-Iconsimages-for-/
 // YT: How to program TTGO T-Display - PART3 (Images and Custom Fonts)
-// https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa20taEtHTDBLTTh5YmlUdmE2MWdxUkFGU0stZ3xBQ3Jtc0tuU211U3hrX1hyaXJURlVFem9WZVhuaGZfYktLWEUyd3FmTXU1d0xyR3FEVzBZM1UxckRQc1ZJc1BuZ2pua09HN05kZzdUc25TTndlYldfV3F2Z2RjZ3BMWW1ZQ2VEVThtc0prRXBVZ1hEOW1pWkpKaw&q=http%3A%2F%2Fwww.rinkydinkelectronics.com%2Ft_imageconverter565.php&v=R-qFKemDFyM
-
+// http://www.rinkydinkelectronics.com/t_imageconverter565.php
 // 1. Wpisz nazwę miasta
 // 2. Wyślij prośbę do: http://api.openweathermap.org/geo/1.0/direct?q=Oława&limit=1&appid=6a0b31b6c9c1f95d47860092dadc1f6c
 //                                                                     (miasto)
@@ -34,6 +33,7 @@
 // "base":"stations","main":{"temp":296.71,"feels_like":296.35,"temp_min":294.83,"temp_max":297.54,"pressure":1019,"humidity":47,"sea_level":1019,"grnd_level":1004},
 // "visibility":10000,"wind":{"speed":1.79,"deg":196,"gust":3.33},"clouds":{"all":93},"dt":1667135121,"sys":
 // {"type":2,"id":2073402,"country":"PL","sunrise":1667108337,"sunset":1667143793},"timezone":3600,"id":7532481,"name":"Oława","cod":200}
+
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -87,33 +87,6 @@ void try_to_connect_to_wifi()
     tft.println("[+] Connected to the Wifi");
 }
 
-void get_weather()
-{
-    tft.setCursor(0,0);
-    if(http_code == 200){
-        String payload = http.getString();
-
-        StaticJsonDocument<200> filter;
-        filter["name"] = true;
-        filter["main"]["temp"] = true;
-
-        // Deserialize the document
-        StaticJsonDocument<400> doc;
-        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
-        tft.print("[+] Succesful request GET: ");
-        tft.println(http_code);
-        tft.println(doc["name"].as<const char*>());
-        tft.println(String(doc["main"]["temp"].as<double>()));
-        tft.println(payload);
-
-    }
-    else{
-        tft.println("[-] Error on HTTP request: " + String(http_code));
-    }
-
-    http.end();
-}
 
 void setup()
 {
@@ -128,54 +101,53 @@ void setup()
     tft.setTextSize(1);
 
     try_to_connect_to_wifi();
-    tft.fillScreen(TFT_BLACK);
+    tft.fillScreen(BACKGROUND_COLOR);
 
-    http_code = wclient._init_("Oława");
+    // http_code = wclient._init_("Oława");
 
-    tft.println("HTTP_CODE: "+String(http_code));
-    tft.println("LON: "+String(wclient.lon())+ "  LAT: "+String(wclient.lat()));
+    // weather = wclient.current_weather();
 
-    weather = wclient.current_weather();
+    // tft.println("MAIN: "+weather->_main);
+    // tft.println("ICON: "+weather->_icon);
+    // tft.println("TEMP: "+String(weather->_temp));
+    // tft.println("FEELS_LIKE: "+String(weather->_feels_like));
+    // tft.println("PRESSURE: "+String(weather->_pressure));
+    // tft.println("HUMIDITY: "+String(weather->_humidity));
+    // tft.println("WIND_SPEED: "+String(weather->_wind_speed));
+    // tft.println("SUNRISE: "+String(weather->_sunrise));
+    // tft.println("SUNSET: "+String(weather->_sunset));
 
-    tft.println("MAIN: "+weather->_main);
-    tft.println("ICON: "+weather->_icon);
-    tft.println("TEMP: "+String(weather->_temp));
-    tft.println("FEELS_LIKE: "+String(weather->_feels_like));
-    tft.println("PRESSURE: "+String(weather->_pressure));
-    tft.println("HUMIDITY: "+String(weather->_humidity));
-    tft.println("WIND_SPEED: "+String(weather->_wind_speed));
-    tft.println("SUNRISE: "+String(weather->_sunrise));
-    tft.println("SUNSET: "+String(weather->_sunset));
+    // forecast = wclient.forecast_weather();
+    // weather = forecast->forecasted_weather;
 
-    forecast = wclient.forecast_weather();
-    weather = forecast->forecasted_weather;
+    // for (uint8_t i=0;i<8;i++)
+    // {
+    //     tft.setCursor(0,10);
+    //     tft.fillScreen(BACKGROUND_COLOR);
 
-    for (uint8_t i=0;i<8;i++)
-    {
-        tft.setCursor(0,10);
-        tft.fillScreen(TFT_BLACK);
+    //     tft.println("MAIN: "+weather->_main);
+    //     tft.println("ICON: "+weather->_icon);
+    //     tft.println("TEMP: "+String(weather->_temp));
+    //     tft.println("FEELS_LIKE: "+String(weather->_feels_like));
+    //     tft.println("PRESSURE: "+String(weather->_pressure));
+    //     tft.println("HUMIDITY: "+String(weather->_humidity));
+    //     tft.println("WIND_SPEED: "+String(weather->_wind_speed));
 
-        tft.println("MAIN: "+weather->_main);
-        tft.println("ICON: "+weather->_icon);
-        tft.println("TEMP: "+String(weather->_temp));
-        tft.println("FEELS_LIKE: "+String(weather->_feels_like));
-        tft.println("PRESSURE: "+String(weather->_pressure));
-        tft.println("HUMIDITY: "+String(weather->_humidity));
-        tft.println("WIND_SPEED: "+String(weather->_wind_speed));
+    //     weather++;
+    //     delay(2000);
+    // }
 
-        weather++;
-        delay(2000);
-    }
-    // http.begin(current_weather + key);
-    // http_code = http.GET();
-
-    // get_weather();
-
-    //draw_img(evive_in_hand, 100, 0);
+    Sunny sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    Sunny sun2(&tft, 100, 0,  75, BACKGROUND_COLOR);
+    Sunny sun3(&tft, 175, 0,  50, BACKGROUND_COLOR);
+    Sunny sun4(&tft, 225, 0,  25, BACKGROUND_COLOR);
+    sun1.draw();
+    sun2.draw();
+    sun3.draw();
+    sun4.draw();
 
     // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
 
-    // tft.pushImage(100,100,100,100, sunny_100x100);
 }
 
 
