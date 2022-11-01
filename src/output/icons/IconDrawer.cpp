@@ -12,7 +12,7 @@ Icon::Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t backgro
 void Sunny::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
-    _tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.6f, SUNNY, background_color);
+    _tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.50f, SUNNY, background_color);
 
     // 
     uint16_t 
@@ -23,8 +23,9 @@ void Sunny::draw()
         Bx = 0.95f*size + x,
         By = Ay; 
 
-    for (float angle=0; angle<2*PI; angle+=PI/4)
+    for (uint8_t i=0; i<9; i++)
     {
+        float angle = i * PI/4;
         uint16_t
             ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
             ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
