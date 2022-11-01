@@ -2,6 +2,7 @@
 #include "src/data_structures/Point.h"
 #include "src/output/icons.h"
 #include "src/output/sunny_100x100.h"
+#include "src/output/weather_client/WeatherClient.h"
 
 #include <TFT_eSPI.h> 
 #include <SPI.h>
@@ -50,6 +51,10 @@ uint8_t number_of_tries = 0;
 HTTPClient http;
 int16_t http_code;
 
+WeatherClient wclient(&http);
+Weather* weather;
+Forecast* forecast;
+
 void draw_img(const uint16_t * bitmap, uint16_t x, uint16_t y){
 
     uint16_t buffer=0;
@@ -73,7 +78,7 @@ void try_to_connect_to_wifi()
         tft.println("Connecting to WiFi...");
         number_of_tries++;
 
-        if (number_of_tries == 10){
+        if (number_of_tries == 6){
             tft.println("[-] Failed to connect to WiFi.");
             return;
         }
@@ -125,12 +130,48 @@ void setup()
     try_to_connect_to_wifi();
     tft.fillScreen(TFT_BLACK);
 
-    http.begin(current_weather + key);
-    http_code = http.GET();
+    http_code = wclient._init_("Oława");
 
-    get_weather();
+    tft.println("HTTP_CODE: "+String(http_code));
+    tft.println("LON: "+String(wclient.lon())+ "  LAT: "+String(wclient.lat()));
 
-    // draw_img(evive_in_hand, 100, 0);
+    weather = wclient.current_weather();
+
+    tft.println("MAIN: "+weather->_main);
+    tft.println("ICON: "+weather->_icon);
+    tft.println("TEMP: "+String(weather->_temp));
+    tft.println("FEELS_LIKE: "+String(weather->_feels_like));
+    tft.println("PRESSURE: "+String(weather->_pressure));
+    tft.println("HUMIDITY: "+String(weather->_humidity));
+    tft.println("WIND_SPEED: "+String(weather->_wind_speed));
+    tft.println("SUNRISE: "+String(weather->_sunrise));
+    tft.println("SUNSET: "+String(weather->_sunset));
+
+    forecast = wclient.forecast_weather();
+    weather = forecast->forecasted_weather;
+
+    for (uint8_t i=0;i<8;i++)
+    {
+        tft.setCursor(0,10);
+        tft.fillScreen(TFT_BLACK);
+
+        tft.println("MAIN: "+weather->_main);
+        tft.println("ICON: "+weather->_icon);
+        tft.println("TEMP: "+String(weather->_temp));
+        tft.println("FEELS_LIKE: "+String(weather->_feels_like));
+        tft.println("PRESSURE: "+String(weather->_pressure));
+        tft.println("HUMIDITY: "+String(weather->_humidity));
+        tft.println("WIND_SPEED: "+String(weather->_wind_speed));
+
+        weather++;
+        delay(2000);
+    }
+    // http.begin(current_weather + key);
+    // http_code = http.GET();
+
+    // get_weather();
+
+    //draw_img(evive_in_hand, 100, 0);
 
     // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
 
