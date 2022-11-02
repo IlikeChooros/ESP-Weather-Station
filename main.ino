@@ -10,8 +10,6 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define IMG_HEIGHT 150
-#define IMG_WIDTH 150
 #define BACKGROUND_COLOR 0x2124
 
 // Pobrac biblioteke : ArduinoJson
@@ -41,8 +39,8 @@ Point touch_point;
 
 bool touch_pressed = false;
 
-const char* ssid =  "Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password = "12345abc";//"6epTdSSVW22X"; // 269929817
+const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password = "269929817"; //"12345abc";//"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -55,20 +53,7 @@ WeatherClient wclient(&http);
 Weather* weather;
 Forecast* forecast;
 
-void draw_img(const uint16_t * bitmap, uint16_t x, uint16_t y){
-
-    uint16_t buffer=0;
-    for (uint8_t h=0;h<IMG_HEIGHT;h++)
-    {
-        for(uint8_t w=0;w<IMG_WIDTH;w++)
-        {
-            tft.drawPixel(x+w,y+h, pgm_read_word(bitmap + buffer));
-            buffer++;
-        }
-    }
-}
-
-void try_to_connect_to_wifi()
+bool try_to_connect_to_wifi()
 {
     tft.println("Connecting...");
 
@@ -80,11 +65,12 @@ void try_to_connect_to_wifi()
 
         if (number_of_tries == 6){
             tft.println("[-] Failed to connect to WiFi.");
-            return;
+            return false;
         }
     }
 
     tft.println("[+] Connected to the Wifi");
+    return true;
 }
 
 
@@ -137,24 +123,39 @@ void setup()
     //     delay(2000);
     // }
 
-    Sunny sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    Sunny sun2(&tft, 100, 0,  75, BACKGROUND_COLOR);
-    Sunny sun3(&tft, 175, 0,  50, BACKGROUND_COLOR);
-    Sunny sun4(&tft, 225, 0,  25, BACKGROUND_COLOR);
+    // Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    // Sun sun2(&tft, 100, 0,  75, BACKGROUND_COLOR);
+    // Sun sun3(&tft, 175, 0,  50, BACKGROUND_COLOR);
+    // Sun sun4(&tft, 225, 0,  25, BACKGROUND_COLOR);
+    // sun1.draw();
+    // sun2.draw();
+    // sun3.draw();
+    // sun4.draw();
+
+    // Clouds cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    // Clouds cl2 (&tft, 100,100,75, BACKGROUND_COLOR);
+    // Clouds cl3 (&tft, 175,100,50, BACKGROUND_COLOR);
+    // Clouds cl4 (&tft, 225,100,25, BACKGROUND_COLOR);
+
+    // cl1.draw();
+    // cl2.draw();
+    // cl3.draw();
+    // cl4.draw();
+
+    Rain sun1(&tft, 0, 0,  150, BACKGROUND_COLOR);
+    Rain sun2(&tft, 150, 0,  75, BACKGROUND_COLOR);
+    Rain sun3(&tft, 225, 0,  50, BACKGROUND_COLOR);
     sun1.draw();
     sun2.draw();
     sun3.draw();
-    sun4.draw();
 
-    Cloudy cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    Cloudy cl2 (&tft, 100,100,75, BACKGROUND_COLOR);
-    Cloudy cl3 (&tft, 175,100,50, BACKGROUND_COLOR);
-    Cloudy cl4 (&tft, 225,100,25, BACKGROUND_COLOR);
+    Storm cl1 (&tft, 0,125,150, BACKGROUND_COLOR);
+    Storm cl2 (&tft, 150,125,75, BACKGROUND_COLOR);
+    Storm cl3 (&tft, 225,125,50, BACKGROUND_COLOR);
 
     cl1.draw();
     cl2.draw();
     cl3.draw();
-    cl4.draw();
 
     // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
 }
