@@ -41,8 +41,8 @@ Point touch_point;
 
 bool touch_pressed = false;
 
-const char* ssid = "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password = "6epTdSSVW22X"; // 269929817
+const char* ssid =  "Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password = "12345abc";//"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -146,8 +146,17 @@ void setup()
     sun3.draw();
     sun4.draw();
 
-    // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
+    Cloudy cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    Cloudy cl2 (&tft, 100,100,75, BACKGROUND_COLOR);
+    Cloudy cl3 (&tft, 175,100,50, BACKGROUND_COLOR);
+    Cloudy cl4 (&tft, 225,100,25, BACKGROUND_COLOR);
 
+    cl1.draw();
+    cl2.draw();
+    cl3.draw();
+    cl4.draw();
+
+    // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
 }
 
 

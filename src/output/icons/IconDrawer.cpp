@@ -34,5 +34,23 @@ void Sunny::draw()
 
         _tft->drawWideLine(ax, ay,bx , by, 0.05f * size, SUNNY, background_color);
     }
+}
 
+void Cloudy::draw()
+{
+    // do zmiany y, by maksymalnie wykorzystac przestrzen i narysowac pod chumra deszcz
+    _tft->fillRect(x,y,size,size,background_color);
+
+    // circles on the right and left
+    _tft->fillSmoothCircle(x+0.2f*size, y + size*0.64f, 0.14f*size, CLOUDY, background_color);
+    _tft->fillSmoothCircle(x+0.8f*size, y + size*0.64f, 0.14f*size, CLOUDY, background_color);
+
+    // circle on the middle left
+    _tft->fillSmoothCircle(x+0.4f*size, y+0.6f*size, 0.18f*size, CLOUDY, background_color);
+
+    // circle on the middle right
+    _tft->fillSmoothCircle(x+0.65f*size, y+0.55f*size, 0.15f*size, CLOUDY, CLOUDY);
+
+    // rect, the filler
+    _tft->fillRoundRect(x+0.2f*size, y+size/2, 0.6f * size, 0.3f * size, 0.05f*size, CLOUDY);
 }

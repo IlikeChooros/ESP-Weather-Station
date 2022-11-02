@@ -9,6 +9,7 @@ class Forecast
 {
     public:
     Weather* forecasted_weather;
+    uint8_t number_of_forecasts;
 };
 
 #endif
