@@ -5,7 +5,7 @@
 #include <TFT_eSPI.h> 
 #include <SPI.h>
 
-void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color,uint16_t fade_color ,uint16_t background_color)
 {
     //Cloud drawing
     // circles on the right and left
@@ -20,6 +20,13 @@ void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint1
 
     // rect, the filler
     tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, color);
+
+    // 
+    tft->fillCircle(x+0.4f*size, y+0.4f*size, 0.2f*size, fade_color);
+    tft->fillCircle(x+0.65f*size, y+0.5f*size, 0.23f*size, fade_color);
+
+    tft->fillRect(x, y + 0.38f*size, size, 0.6f * size, background_color);
+
 }
 
 #endif

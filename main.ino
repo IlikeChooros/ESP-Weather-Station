@@ -142,16 +142,17 @@ void setup()
     // cl3.draw();
     // cl4.draw();
 
-    Rain sun1(&tft, 0, 0,  150, BACKGROUND_COLOR);
-    Rain sun2(&tft, 150, 0,  75, BACKGROUND_COLOR);
-    Rain sun3(&tft, 225, 0,  50, BACKGROUND_COLOR);
+    Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    Clouds sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
+    ManyClouds sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
     sun1.draw();
     sun2.draw();
     sun3.draw();
 
-    Storm cl1 (&tft, 0,125,150, BACKGROUND_COLOR);
-    Storm cl2 (&tft, 150,125,75, BACKGROUND_COLOR);
-    Storm cl3 (&tft, 225,125,50, BACKGROUND_COLOR);
+    Rain cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    BigRain cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
+    Storm cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
+
 
     cl1.draw();
     cl2.draw();
