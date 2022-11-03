@@ -41,18 +41,8 @@ void Clouds::draw()
     _tft->fillRect(x,y,size,size,background_color);
 
     //Cloud drawing
-    // circles on the right and left
-    _tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, CLOUDY, background_color);
-    _tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, CLOUDY, background_color);
 
-    // circle on the middle left
-    _tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, CLOUDY, background_color);
-
-    // circle on the middle right
-    _tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, CLOUDY, CLOUDY);
-
-    // rect, the filler
-    _tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, CLOUDY);
+    drawCloud(_tft, x,y,size, CLOUDY, background_color);
 }
 
 void ManyClouds::draw()
@@ -60,49 +50,20 @@ void ManyClouds::draw()
     _tft->fillRect(x,y,size,size,background_color);
 
     //on right
-    draw_cloud(x+0.3f*size,y+0.2f*size, 0.5f*size, MIDDLE_DARK_CLOUDS);
+    drawCloud(_tft,x+0.3f*size,y+0.2f*size, 0.5f*size, MIDDLE_DARK_CLOUDS, background_color);
 
     //on left
-    draw_cloud(x,y+0.25f*size, 0.4f*size, LIGHT_DARK_CLOUDS);
+    drawCloud(_tft, x,y+0.25f*size, 0.4f*size, LIGHT_DARK_CLOUDS, background_color);
 
     //bottom
-    draw_cloud(x, y+0.3f*size, 0.75f*size, CLOUDY);
-}
-
-void ManyClouds::draw_cloud(uint16_t x, uint16_t y, uint16_t size, uint16_t color)
-{
-    //Cloud drawing
-    // circles on the right and left
-    _tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, color, background_color);
-    _tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, color, background_color);
-
-    // circle on the middle left
-    _tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, color, background_color);
-
-    // circle on the middle right
-    _tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, color, color);
-
-    // rect, the filler
-    _tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, color);
+    drawCloud(_tft, x, y+0.3f*size, 0.75f*size, CLOUDY, background_color);
 }
 
 void Storm::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
     //Cloud drawing
-
-    // circles on the right and left
-    _tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, DARK_CLOUDS, background_color);
-    _tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, DARK_CLOUDS, background_color);
-
-    // circle on the middle left
-    _tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, DARK_CLOUDS, background_color);
-
-    // circle on the middle right
-    _tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, DARK_CLOUDS, DARK_CLOUDS);
-
-    // rect, the filler
-    _tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, DARK_CLOUDS);
+    drawCloud(_tft, x, y, size, DARK_CLOUDS, background_color);
 
     // lightning drawing
 
@@ -135,18 +96,7 @@ void Rain::draw()
     _tft->fillRect(x,y,size,size,background_color);
     //Cloud drawing
 
-    // circles on the right and left
-    _tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, LIGHT_DARK_CLOUDS, background_color);
-    _tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, LIGHT_DARK_CLOUDS, background_color);
-
-    // circle on the middle left
-    _tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, LIGHT_DARK_CLOUDS, background_color);
-
-    // circle on the middle right
-    _tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, LIGHT_DARK_CLOUDS, LIGHT_DARK_CLOUDS);
-
-    // rect, the filler
-    _tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, LIGHT_DARK_CLOUDS);
+    drawCloud(_tft, x, y, size, LIGHT_DARK_CLOUDS, background_color);
 
 
     draw_droplet(x + 0.6f*size, y+ 0.5f*size, 0.15f*size);
@@ -158,5 +108,5 @@ void Rain::draw()
 void Rain::draw_droplet(uint16_t x, uint16_t y, uint16_t size)
 {
     _tft->fillCircle(x + 0.5f*size, y + 0.7f*size, 0.25f*size, WATER);
-    _tft->fillTriangle(x+ 0.5f*size, y + 0.1f*size,    x+ 0.25f*size, y + 0.6*size,    x + 0.75f*size, y+ 0.6f * size, WATER);
+    _tft->fillTriangle(x+ 0.5f*size, y + 0.1f*size,    x+ 0.27f*size, y + 0.6*size,    x + 0.75f*size, y+ 0.6f * size, WATER);
 }

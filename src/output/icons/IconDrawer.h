@@ -5,6 +5,8 @@
 #include <TFT_eSPI.h> 
 #include <SPI.h>
 
+#include "drawCloud.h"
+
 #define SUNNY 0xF4E3
 #define CLOUDY 0x94B2
 #define LIGHT_DARK_CLOUDS 0x7BCF
@@ -42,7 +44,6 @@ class Clouds: public Icon
 
 class ManyClouds:public Icon
 {
-    void draw_cloud(uint16_t x, uint16_t y, uint16_t size, uint16_t color);
     public:
     ManyClouds(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
     void draw();
