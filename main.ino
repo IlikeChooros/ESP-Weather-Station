@@ -2,6 +2,7 @@
 #include "src/data_structures/Point.h"
 #include "src/output/icons/IconDrawer.h"
 #include "src/output/weather_client/WeatherClient.h"
+#include "src/output/CurrentWeatherScreen.h"
 
 #include <TFT_eSPI.h> 
 #include <SPI.h>
@@ -32,10 +33,9 @@
 // "visibility":10000,"wind":{"speed":1.79,"deg":196,"gust":3.33},"clouds":{"all":93},"dt":1667135121,"sys":
 // {"type":2,"id":2073402,"country":"PL","sunrise":1667108337,"sunset":1667143793},"timezone":3600,"id":7532481,"name":"Oława","cod":200}
 
+Point touch_point;
 
 TFT_eSPI tft = TFT_eSPI();
-
-Point touch_point;
 
 bool touch_pressed = false;
 
@@ -47,7 +47,7 @@ const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 uint8_t number_of_tries = 0;
 
 HTTPClient http;
-int16_t http_code;
+bool get_http;
 
 WeatherClient wclient(&http);
 Weather* weather;
@@ -89,9 +89,9 @@ void setup()
     try_to_connect_to_wifi();
     tft.fillScreen(BACKGROUND_COLOR);
 
-    // http_code = wclient._init_("Oława");
+    get_http = wclient._init_("Oława");
 
-    // weather = wclient.current_weather();
+    weather = wclient.current_weather();
 
     // tft.println("MAIN: "+weather->_main);
     // tft.println("ICON: "+weather->_icon);
@@ -142,21 +142,23 @@ void setup()
     // cl3.draw();
     // cl4.draw();
 
-    Moon sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    FewCloudsDay sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
-    MistDay sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
-    sun1.draw();
-    sun2.draw();
-    sun3.draw();
+    // Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    // ManyClouds sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
+    // Rain sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
+    // sun1.draw();
+    // sun2.draw();
+    // sun3.draw();
 
-    FewCloudsNight cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    MistNight cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
-    Snow cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
+    // BigRain cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    // Storm cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
+    // Snow cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
 
 
-    cl1.draw();
-    cl2.draw();
-    cl3.draw();
+    // cl1.draw();
+    // cl2.draw();
+    // cl3.draw();
+    CurrentWeatherScreen weather_screen(&tft);
+    weather_screen.draw(weather, BACKGROUND_COLOR);
 
 }
 

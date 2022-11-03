@@ -148,8 +148,10 @@ void Snow::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawCloud(_tft, x, y + 0.2f*size, size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
-    drawSnowflake(_tft, x+0.1f*size, y, size*0.8f, CLOUDY, SNOW_FLAKE, WATER);
+    drawCloud(_tft, x,y, size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
+
+    drawSnowflake(_tft, x + 0.3f*size, y+0.4f*size, size*0.4f, background_color, SNOW_FLAKE, WATER);
+    //drawSnowflake(_tft, x+0.1f*size, y, size*0.8f, CLOUDY, SNOW_FLAKE, WATER);
 }
 
 void MistNight::draw()

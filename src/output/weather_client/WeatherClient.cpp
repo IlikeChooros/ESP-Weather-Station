@@ -38,11 +38,13 @@ Weather* WeatherClient::current_weather()
 
     Weather* weather = new Weather;
 
+    Serial.println("HTTP: "+String(http_code));
+
     if (http_code == 200)
     {
         String payload = http->getString();
 
-        StaticJsonDocument<340> filter;
+        StaticJsonDocument<400> filter;
         filter["weather"][0]["main"] = true;
         filter["weather"][0]["icon"] = true;
         filter["main"]["temp"] = true;
@@ -52,8 +54,9 @@ Weather* WeatherClient::current_weather()
         filter["wind"]["speed"] = true;
         filter["sys"]["sunrise"] = true;
         filter["sys"]["sunset"] = true;
+        filter["dt"] = true;
 
-        StaticJsonDocument<340> doc;
+        StaticJsonDocument<400> doc;
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
         weather
@@ -65,7 +68,8 @@ Weather* WeatherClient::current_weather()
             ->temp(doc["main"]["temp"].as<double>())
             ->wind_speed(doc["wind"]["speed"].as<double>())
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
-            ->sunset(doc["sys"]["sunset"].as<uint32_t>());
+            ->sunset(doc["sys"]["sunset"].as<uint32_t>())
+            ->dt(doc["dt"].as<uint64_t>());
     }
     http->end();
     return weather;

@@ -1,10 +1,6 @@
 #ifndef ICON_DRAWER_H
 #define ICON_DRAWER_H
 
-#include <Arduino.h>
-#include <TFT_eSPI.h> 
-#include <SPI.h>
-
 #include "drawings.h"
 
 #define SUNNY 0xF4E3
