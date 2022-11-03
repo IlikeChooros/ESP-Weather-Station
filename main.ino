@@ -142,23 +142,22 @@ void setup()
     // cl3.draw();
     // cl4.draw();
 
-    Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    Clouds sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
-    ManyClouds sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
+    Moon sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    FewCloudsDay sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
+    MistDay sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
     sun1.draw();
     sun2.draw();
     sun3.draw();
 
-    Rain cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    BigRain cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
-    Storm cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
+    FewCloudsNight cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    MistNight cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
+    Snow cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
 
 
     cl1.draw();
     cl2.draw();
     cl3.draw();
 
-    // tft.drawBitmap(175, 0, sunny, 75,75, TFT_YELLOW,TFT_BLACK);
 }
 
 

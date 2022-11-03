@@ -12,37 +12,30 @@ Icon::Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t backgro
 void Sun::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
-    _tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.50f, SUNNY, background_color);
-
-    // 
-    uint16_t 
-        xc = x + size/2,
-        yc = y + size/2,
-        Ax = 0.85f * size + x,
-        Ay = y + size/2,
-        Bx = 0.95f*size + x,
-        By = Ay; 
-
-    for (uint8_t i=0; i<9; i++)
-    {
-        float angle = i * PI/4;
-        uint16_t
-            ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
-            ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
-            bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
-            by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
-
-        _tft->drawWideLine(ax, ay,bx , by, 0.05f * size, SUNNY, background_color);
-    }
+    drawSun(_tft, x, y, size, SUNNY, background_color);
 }
 
-void Clouds::draw()
+void Moon::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    //Cloud drawing
+    drawMoon(_tft,x,y,size, MOON, background_color);
+}
 
-    drawCloud(_tft, x,y,size, CLOUDY, LIGHT_DARK_CLOUDS,background_color);
+void FewCloudsDay::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawSun(_tft, x + 0.38f*size, y, size*0.6f, SUNNY, background_color);
+    drawCloud(_tft, x, y + 0.28f*size, 0.9f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
+}
+
+void FewCloudsNight::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawMoon(_tft, x + 0.5f*size, y, size*0.4f, MOON, background_color);
+    drawCloud(_tft, x, y + 0.28f*size, 0.9f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
 }
 
 void ManyClouds::draw()
@@ -98,23 +91,38 @@ void Rain::draw()
 
     drawCloud(_tft, x, y, size, CLOUDY,LIGHT_DARK_CLOUDS ,background_color);
 
-    draw_droplet(x + 0.25f*size, y+ 0.53f*size, 0.08f*size);
-    draw_droplet(x + 0.46f*size, y+ 0.48f*size, 0.1f*size);
-    draw_droplet(x + 0.27f*size, y+0.41f*size, 0.1f*size);
-    //draw_droplet(x + 0.55f*size, y+0.42f*size, 0.1f*size);
-    draw_droplet(x + 0.64f*size, y+0.38f*size, 0.15f*size);
-    draw_droplet(x + 0.73f*size, y+0.54f*size, 0.08f*size);
-    //draw_droplet(x+0.58f*size, y+ 0.52f*size, 0.1f*size);
-    draw_droplet(x+0.41f*size, y+ 0.58f*size, 0.1f*size);
-    draw_droplet(x+0.61f*size, y+ 0.6f*size, 0.1f*size);
+    uint16_t ax = x + 0.3f*size,
+            ay = y+0.45f*size,
+            bx = ax - 0.07f*size,
+            by = ay + 0.08f*size;
+
+    for (uint8_t a = 0;a<3;a++)
+    {
+        draw_droplet(ax,ay,bx,by, 0.03f*size);
+        ax += 0.2f*size;
+        bx += 0.2f*size;
+    }
+
+
+    ay += 0.11f*size;
+    ax = x+ 0.3f*size;
+    bx = ax - 0.07f*size,
+    by = ay + 0.08f*size;
+    for (uint8_t a = 0;a<3;a++)
+    {
+        draw_droplet(ax,ay,bx,by, 0.03f*size);
+        ax += 0.2f*size;
+        bx += 0.2f*size;
+    }
 }
 
-void Rain::draw_droplet(uint16_t x, uint16_t y, uint16_t size)
+void Rain::draw_droplet(uint16_t ax, uint16_t ay,uint16_t bx, uint16_t by ,uint16_t size)
 {
-    _tft->fillCircle(x + 0.5f*size, y + 0.7f*size, 0.25f*size, WATER);
+    //_tft->fillCircle(x + 0.5f*size, y + 0.7f*size, 0.25f*size, WATER);
     //_tft->fillTriangle(x+ 0.5f*size, y + 0.1f*size,    x+ 0.27f*size, y + 0.6*size,    x + 0.75f*size, y+ 0.6f * size, WATER);
-}
 
+    _tft->drawWideLine(ax,ay,bx,by,size, WATER, background_color);
+}
 
 void BigRain::draw()
 {
@@ -122,7 +130,6 @@ void BigRain::draw()
     //Cloud drawing
 
     drawCloud(_tft, x, y, size, LIGHT_DARK_CLOUDS,MIDDLE_DARK_CLOUDS ,background_color);
-
 
     uint16_t ax = x + 0.3f*size,
             ay = y+0.45f*size,
@@ -136,3 +143,28 @@ void BigRain::draw()
         bx += 0.2f*size;
     }
 }
+
+void Snow::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawCloud(_tft, x, y + 0.2f*size, size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
+    drawSnowflake(_tft, x+0.1f*size, y, size*0.8f, CLOUDY, SNOW_FLAKE, WATER);
+}
+
+void MistNight::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawMoon(_tft, x + 0.3f*size, y + 0.1f*size, size*0.5f, MOON, background_color);
+    drawMist(_tft, x+0.1f*size, y+ 0.2f*size, size*0.8f,MIST, background_color);
+}
+
+void MistDay::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawSun(_tft, x + 0.22f*size, y + 0.13f*size, size*0.55f, SUNNY, background_color);
+    drawMist(_tft, x+0.1f*size, y+ 0.17f*size, size*0.8f,MIST, background_color);
+}
+

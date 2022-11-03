@@ -1,0 +1,180 @@
+#ifndef DRAW_CLOUD_H
+#define DRAW_CLOUD_H
+
+#include <Arduino.h>
+#include <TFT_eSPI.h> 
+#include <SPI.h>
+
+void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color,uint16_t fade_color ,uint16_t background_color)
+{
+    //Cloud drawing
+    // circles on the right and left
+    tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, color, background_color);
+    tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, color, background_color);
+
+    // circle on the middle left
+    tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, color, background_color);
+
+    // circle on the middle right
+    tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, color, color);
+
+    // rect, the filler
+    tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, color);
+
+    // 
+    tft->fillCircle(x+0.4f*size, y+0.4f*size, 0.2f*size, fade_color);
+    tft->fillCircle(x+0.65f*size, y+0.5f*size, 0.23f*size, fade_color);
+
+    tft->fillRect(x, y + 0.38f*size, size, 0.4f * size, background_color);
+
+}
+
+
+void inline drawSun(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+{
+    tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.50f, color, background_color);
+
+    // 
+    uint16_t 
+        xc = x + size/2,
+        yc = y + size/2,
+        Ax = 0.85f * size + x,
+        Ay = y + size/2,
+        Bx = 0.95f*size + x,
+        By = Ay; 
+
+    for (uint8_t i=0; i<9; i++)
+    {
+        float angle = i * PI/4;
+        uint16_t
+            ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
+            ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
+            bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
+            by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
+
+        tft->drawWideLine(ax, ay,bx , by, 0.05f * size, color, background_color);
+    }
+}
+
+void inline drawMoon(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+{
+    tft->fillSmoothCircle(x+0.45f*size, y + 0.5f*size, 0.45f*size, color, background_color);
+    tft->fillSmoothCircle(x+0.65f*size, y + 0.42f*size, 0.4f*size, background_color, background_color);
+}
+
+void inline drawSnowflake(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t filler_circle_color , uint16_t color, uint16_t background_color)
+{
+    uint16_t Ax,Ay,Bx,By, xc = 0.5f*size + x, yc = 0.5f*size + y;
+
+
+    // 1st 'right up' part
+    Ax = x + 0.8f*size;
+    Bx = Ax + 0.15f*size;
+
+    Ay = y + 0.5f*size;
+    By = Ay + 0.15f*size;
+    for (uint8_t i=0; i<9; i++)
+    {
+        float angle = i * PI/4;
+        uint16_t
+            ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
+            ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
+            bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
+            by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
+
+        tft->drawWideLine(ax, ay,bx , by, 0.03f * size, color, background_color);
+    }
+
+    // 2nd 'right down' part
+    Ax = x + 0.8f*size;
+    Bx = Ax + 0.15f*size;
+
+    Ay = y + 0.5f*size;
+    By = Ay - 0.15f*size;
+    for (uint8_t i=0; i<9; i++)
+    {
+        float angle = i * PI/4;
+        uint16_t
+            ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
+            ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
+            bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
+            by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
+
+        tft->drawWideLine(ax, ay,bx , by, 0.03f * size, color, background_color);
+    }
+
+
+    // main framework
+
+    Ax = 0.61f * size + x;
+    Ay = y + size/2;
+    Bx = Ax + 0.35f*size;
+    By = Ay; 
+
+    for (uint8_t i=0; i<9; i++)
+    {
+        float angle = i * PI/4;
+        uint16_t
+            ax = (Ax - xc) * cosf(angle) - (Ay - yc) * sinf(angle) + xc,
+            ay = (Ax - xc) * sinf(angle) + (Ay - yc) * cosf(angle) + yc,
+            bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
+            by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
+
+        tft->drawWideLine(ax, ay,bx , by, 0.03f * size, color, background_color);
+    }
+ 
+    // middle circle
+    tft->fillSmoothCircle(x+0.5f*size, y+0.5f*size, 0.1f*size, color, background_color);
+    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.06f*size, filler_circle_color);
+}
+
+void inline drawMist (TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+{
+    // lines going from down to up
+    uint16_t ax = 0.3f*size + x,
+            ay = 0.9f*size + y,
+            bx = ax + 0.4f*size,
+            by = ay;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+
+    ay -= 0.1f*size;
+    by = ay;
+
+    ax -= 0.1f*size;
+    bx += 0.1f*size;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+
+
+    ay -= 0.1f*size;
+    by = ay;
+
+    ax = 0.05f*size + x;
+    bx = 0.65f*size + x;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+
+
+    ay -= 0.1f*size;
+    by = ay;
+
+    ax = 0.25f*size + x;
+    bx = 0.85f*size + x;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+
+
+    ay -= 0.1f*size;
+    by = ay;
+
+    ax = 0.07f*size + x;
+    bx = 0.61f*size + x;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+
+
+    ay -= 0.1f*size;
+    by = ay;
+
+    ax = 0.4f*size + x;
+    bx = 0.6f*size + x;
+    tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
+}
+
+#endif
