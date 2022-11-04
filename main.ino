@@ -91,7 +91,13 @@ void setup()
 
     get_http = wclient._init_("Oława");
 
-    weather = wclient.current_weather();
+    if (get_http)
+    {
+        weather = wclient.current_weather();
+        CurrentWeatherScreen weather_screen(&tft);
+        weather_screen.draw(weather, BACKGROUND_COLOR);
+    }
+    
 
     // tft.println("MAIN: "+weather->_main);
     // tft.println("ICON: "+weather->_icon);
@@ -157,8 +163,6 @@ void setup()
     // cl1.draw();
     // cl2.draw();
     // cl3.draw();
-    CurrentWeatherScreen weather_screen(&tft);
-    weather_screen.draw(weather, BACKGROUND_COLOR);
 
 }
 

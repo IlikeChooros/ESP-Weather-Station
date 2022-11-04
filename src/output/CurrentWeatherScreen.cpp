@@ -27,7 +27,7 @@ void CurrentWeatherScreen::draw(Weather* weather, uint16_t bg_c)
 
     _tft->println("");
     // dt conversion
-    configTime(3600, 3600, NTP_SERVER);
+    configTime(0, 3600, NTP_SERVER);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
