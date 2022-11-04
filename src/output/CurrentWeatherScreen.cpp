@@ -13,50 +13,52 @@ CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft)
     HSV* hsv = new HSV;
 
     hsv->hue = 0;
-    hsv->satrutaion = 83;
+    hsv->satrutaion = 43;
     hsv->value = 100;
 
-    uint8_t itr = 250 / TEMP_RANGE;
+    float itr = (float)250/TEMP_RANGE;
 
-    for (uint8_t t = TEMP_RANGE-1;t>=0; t--)
+    for (int8_t t = TEMP_RANGE-1;t>=0; t--)
     {
+        Serial.print(String(t) + ". ");
         text_colors[t] = HSV_RGB(*hsv);
         hsv->hue += itr;
+        Serial.println(String(text_colors[t]));
     }
 
+    delete hsv;
 }
 
 void CurrentWeatherScreen::draw(Weather* weather, uint16_t bg_c)
 {
+    _tft->fillScreen(bg_c);
     configTime(0, 3600, NTP_SERVER);
-    Icon* icon = iconMatcher(weather, _tft, 10,10, 150, bg_c);
+    Icon* icon = iconMatcher(weather->_icon, _tft, 5,30, 125, bg_c);
     icon->draw();
 
     // Fonts: 1,4,6,7,8
-
-    _tft->setCursor(140,20);
+    _tft->setCursor(150,70);
+    if (weather->_feels_like > 10 || weather->_feels_like < 0)
+    {
+        _tft->setCursor(130,70);
+    }
+    
     //_tft->setTextColor(TFT_WHITE);
     _tft->setTextFont(4);
     _tft->setTextSize(2);
 
-    uint16_t temp = (int16_t)weather->_feels_like + 30;
-    temp = temp > 70 ? 70 : temp;
+    int16_t temp = (int16_t)weather->_feels_like + 30;
+    temp = temp > TEMP_RANGE ? TEMP_RANGE : temp;
     temp = temp < 0 ? 0: temp;
+
     _tft->setTextColor(text_colors[temp]);
 
     _tft->println(String(weather->_feels_like) + " C");
 
 
-    temp = (int16_t)weather->_temp + 30;
-    temp = temp > 70 ? 70 : temp;
-    temp = temp < 0 ? 0: temp;
-    _tft->setTextColor(text_colors[temp]);
+    _tft->setTextColor(TFT_WHITE);
     _tft->setTextSize(1);
-    _tft->setCursor(150, 70);
-    _tft->println(String(weather->_temp)+" C");
-
-
-    _tft->println("");
+    _tft->setTextColor(MIST);
 
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
@@ -64,8 +66,8 @@ void CurrentWeatherScreen::draw(Weather* weather, uint16_t bg_c)
         _tft->print("ERROR");
     }
     else{
+        _tft->setCursor(60,170);
         _tft->println(&timeinfo, "%H:%M %d-%m-%Y");
     }
-
 
 }

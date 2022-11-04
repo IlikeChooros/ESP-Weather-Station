@@ -8,29 +8,27 @@
 #include <SPI.h>
 
 
-inline Icon* iconMatcher(Weather* weather, TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color)
+inline Icon* iconMatcher(String icon, TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color)
 {
-    String s = weather->_icon;
 
-
-    switch (s[1])
+    switch (icon[1])
     {
         case '1':
-            if (s[2] == 'd')
+            if (icon[2] == 'd')
             {
                 return new Sun(_tft, x, y, size, background_color); // 01d
             }
             return new Moon(_tft, x, y, size, background_color); // 01n
         case '2':
-            if (s[2]=='d')
+            if (icon[2]=='d')
             {
                 return new FewCloudsDay(_tft, x, y, size, background_color); // 02d
             }
             return new FewCloudsNight(_tft, x, y, size, background_color); // 02n
         case '3':
-            if (s[0]=='0')
+            if (icon[0]=='0')
             {
-                if(s[2]=='d')
+                if(icon[2]=='d')
                 {
                     return new CloudsDay(_tft, x, y, size, background_color); // 03d
                 }
@@ -42,11 +40,11 @@ inline Icon* iconMatcher(Weather* weather, TFT_eSPI *_tft, uint16_t x, uint16_t 
         case '9':
             return new Rain(_tft, x, y, size, background_color); // 9 d/n
         case '0':
-            if (s[0]=='1')
+            if (icon[0]=='1')
             {
                 return new BigRain(_tft, x, y, size, background_color);
             } 
-            if (s[2] == 'd')
+            if (icon[2] == 'd')
             {
                 return new MistDay(_tft, x, y, size, background_color);
             }

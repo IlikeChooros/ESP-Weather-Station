@@ -11,7 +11,7 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define BACKGROUND_COLOR 0x2124
+#define BACKGROUND_COLOR 0x10C4 //0x2945    //0x2124
 
 // Pobrac biblioteke : ArduinoJson
 // Pobrac konwerter: https://www.instructables.com/Converting-Images-to-Flash-Memory-Iconsimages-for-/
@@ -39,8 +39,8 @@ TFT_eSPI tft = TFT_eSPI();
 
 bool touch_pressed = false;
 
-const char* ssid =  "Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password =  "12345abc";   //"6epTdSSVW22X"; // 269929817
+const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "269929817";//"12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -82,7 +82,7 @@ void setup()
     tft.setRotation(1);
     tft.setTouch(calData);
 
-    tft.fillScreen(TFT_BLACK);
+    tft.fillScreen(BACKGROUND_COLOR);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 
@@ -91,13 +91,85 @@ void setup()
 
     get_http = wclient._init_("Oława");
 
+    CurrentWeatherScreen weather_screen(&tft);
     if (get_http)
     {
         weather = wclient.current_weather();
-        CurrentWeatherScreen weather_screen(&tft);
         weather_screen.draw(weather, BACKGROUND_COLOR);
     }
-    
+
+    // weather->_feels_like = 28;
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "01n";
+    // delay(2000);
+
+    // weather->_feels_like = 25;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "01d";
+    // delay(2000);
+
+    // weather->_feels_like = 20;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "02d";
+    // delay(2000);
+
+    // weather->_feels_like = 15;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "02n";
+    // delay(2000);
+
+    // weather->_feels_like =  10;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "03d";
+    // delay(2000);
+
+    // weather->_feels_like =  5;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "03n";
+    // delay(2000);
+
+    // weather->_feels_like =  0;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "04d";
+    // delay(2000);
+
+    // weather->_feels_like =  -5;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "09d";
+    // delay(2000);
+
+    // weather->_feels_like =  -10;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "10d";
+    // delay(2000);
+
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "13d";
+    // delay(2000);
+
+    // weather->_feels_like =  -15;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "50d";
+    // delay(2000);
+
+    // weather->_feels_like =  -20;
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather->_icon = "50n";
+    // delay(2000);
+
+
+    // weather_screen.draw(weather, BACKGROUND_COLOR);
 
     // tft.println("MAIN: "+weather->_main);
     // tft.println("ICON: "+weather->_icon);

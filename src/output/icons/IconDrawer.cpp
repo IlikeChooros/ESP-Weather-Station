@@ -12,7 +12,7 @@ Icon::Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t backgro
 void Sun::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
-    drawSun(_tft, x, y, size, SUNNY, background_color);
+    drawSun(_tft, x + 0.05f*size, y, size*0.9f, SUNNY, background_color);
 }
 
 void Moon::draw()
@@ -26,16 +26,16 @@ void FewCloudsDay::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawSun(_tft, x + 0.1f*size, y, size*0.8f, SUNNY, background_color);
-    drawCloud(_tft, x+0.1f*size, y + 0.55f*size, 0.55f*size, MIST, CLOUDY, background_color);
+    drawSun(_tft, x + 0.05f*size, y, size*0.9f, SUNNY, background_color);
+    drawCloud(_tft, x+0.2f*size, y + 0.63f*size, 0.6f*size, MIST, CLOUDY, background_color);
 }
 
 void FewCloudsNight::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawMoon(_tft, x + 0.15f*size, y, size*0.7f, MOON, background_color);
-    drawCloud(_tft, x+0.25f*size, y + 0.5f*size, 0.6f*size, MIST, CLOUDY, background_color);
+    drawMoon(_tft, x + 0.1f*size, y, size*0.8f, MOON, background_color);
+    drawCloud(_tft, x+0.15f*size, y + 0.63f*size, 0.6f*size, MIST, CLOUDY, background_color);
 }
 
 void CloudsDay::draw()
@@ -53,7 +53,7 @@ void CloudsNight::draw()
 
     drawMoon(_tft, x + 0.5f*size, y, size*0.4f, MOON, background_color);
     drawCloud(_tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
-    drawCloud(_tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color);
+    drawCloud(_tft, x, y + 0.23f*size, 0.9f*size, MIST, CLOUDY, background_color);
 }
 
 void ManyClouds::draw()
@@ -61,13 +61,13 @@ void ManyClouds::draw()
     _tft->fillRect(x,y,size,size,background_color);
 
     //on right
-    drawCloud(_tft,x+0.3f*size,y+0.2f*size, 0.5f*size, LIGHT_DARK_CLOUDS, MIDDLE_DARK_CLOUDS,background_color);
+    drawCloud(_tft,x+0.3f*size,y+0.1f*size, 0.7f*size, LIGHT_DARK_CLOUDS, MIDDLE_DARK_CLOUDS,background_color);
 
     //on left
-    drawCloud(_tft, x,y+0.25f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS,background_color);
+    drawCloud(_tft, x,y+0.2f*size, 0.6f*size, CLOUDY, LIGHT_DARK_CLOUDS,background_color);
 
     //bottom
-    drawCloud(_tft, x, y+0.3f*size, 0.75f*size, MIST, CLOUDY,background_color);
+    drawCloud(_tft, x, y+0.25f*size, 0.9f*size, MIST, CLOUDY,background_color);
 }
 
 void Storm::draw()
@@ -176,15 +176,15 @@ void MistNight::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawMoon(_tft, x + 0.3f*size, y + 0.1f*size, size*0.5f, MOON, background_color);
-    drawMist(_tft, x+0.1f*size, y+ 0.2f*size, size*0.8f,MIST, background_color);
+    drawMoon(_tft, x + 0.3f*size, y, size*0.65f, MOON, background_color);
+    drawMist(_tft, x+0.1f*size, y+ 0.1f*size, size*0.9f,MIST, background_color);
 }
 
 void MistDay::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawSun(_tft, x + 0.22f*size, y + 0.13f*size, size*0.55f, SUNNY, background_color);
-    drawMist(_tft, x+0.1f*size, y+ 0.17f*size, size*0.8f,MIST, background_color);
+    drawSun(_tft, x + 0.2f*size, y, size*0.65f, SUNNY, background_color);
+    drawMist(_tft, x+0.1f*size, y+ 0.1f*size, size*0.9f,MIST, background_color);
 }
 
