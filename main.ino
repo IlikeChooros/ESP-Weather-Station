@@ -39,8 +39,8 @@ TFT_eSPI tft = TFT_eSPI();
 
 bool touch_pressed = false;
 
-const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password = "269929817"; //"12345abc";//"6epTdSSVW22X"; // 269929817
+const char* ssid =  "Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -142,15 +142,15 @@ void setup()
     // cl3.draw();
     // cl4.draw();
 
-    // Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    // ManyClouds sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
-    // Rain sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
+    // CloudsDay sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
+    // CloudsNight sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
+    // ManyClouds sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
     // sun1.draw();
     // sun2.draw();
     // sun3.draw();
 
-    // BigRain cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    // Storm cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
+    // FewCloudsDay cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
+    // FewCloudsNight cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
     // Snow cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
 
 

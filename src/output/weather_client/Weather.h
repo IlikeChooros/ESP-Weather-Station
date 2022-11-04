@@ -16,7 +16,6 @@ class Weather
     uint16_t _pressure;
     uint32_t _sunrise,
             _sunset;
-    uint64_t _dt;
     
     Weather* main(String main);
     Weather* icon(String icon);
@@ -27,7 +26,7 @@ class Weather
     Weather* pressure(uint16_t pressure);
     Weather* sunrise(uint32_t sunrise);
     Weather* sunset(uint32_t sunset);
-    Weather* dt(uint64_t dt);
+
 };
 
 

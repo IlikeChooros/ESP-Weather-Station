@@ -56,6 +56,20 @@ class FewCloudsNight: public Icon
     void draw();
 };
 
+class CloudsDay: public Icon
+{
+    public:
+    CloudsDay(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
+    void draw();
+};
+
+class CloudsNight: public Icon
+{
+    public:
+    CloudsNight(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
+    void draw();
+};
+
 class ManyClouds:public Icon
 {
     public:
