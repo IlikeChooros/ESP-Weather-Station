@@ -20,10 +20,8 @@ CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft)
 
     for (int8_t t = TEMP_RANGE-1;t>=0; t--)
     {
-        Serial.print(String(t) + ". ");
         text_colors[t] = HSV_RGB(*hsv);
         hsv->hue += itr;
-        Serial.println(String(text_colors[t]));
     }
 
     delete hsv;
@@ -60,13 +58,14 @@ void CurrentWeatherScreen::draw(Weather* weather, uint16_t bg_c)
     _tft->setTextSize(1);
     _tft->setTextColor(MIST);
 
+
+    _tft->setCursor(60,170);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
         _tft->print("ERROR");
     }
     else{
-        _tft->setCursor(60,170);
         _tft->println(&timeinfo, "%H:%M %d-%m-%Y");
     }
 

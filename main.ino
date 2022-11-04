@@ -3,6 +3,7 @@
 #include "src/output/icons/IconDrawer.h"
 #include "src/output/weather_client/WeatherClient.h"
 #include "src/output/CurrentWeatherScreen.h"
+#include "src/input/TouchScreen.h"
 
 #include <TFT_eSPI.h> 
 #include <SPI.h>
@@ -52,6 +53,8 @@ bool get_http;
 WeatherClient wclient(&http);
 Weather* weather;
 Forecast* forecast;
+
+TouchScreen ts(&tft, calData);
 
 bool try_to_connect_to_wifi()
 {
@@ -240,5 +243,5 @@ void setup()
 
 void loop()
 {
-
+    ts.read();
 }

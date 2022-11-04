@@ -106,11 +106,6 @@ Forecast* WeatherClient::forecast_weather()
             }
 
 
-            Serial.println(doc["list"][i]["weather"][0]["main"].as<String>());
-            Serial.println(doc["list"][i]["weather"][0]["icon"].as<String>());
-            Serial.println(doc["list"][i]["main"]["temp"].as<String>());
-
-
             weather
                 ->feels_like(doc["list"][i]["main"]["feels_like"].as<double>())
                 ->main(doc["list"][i]["weather"][0]["main"].as<String>())
