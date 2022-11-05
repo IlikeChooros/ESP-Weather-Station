@@ -76,6 +76,26 @@ bool try_to_connect_to_wifi()
     return true;
 }
 
+void up()
+{
+    
+}
+
+void down()
+{
+    
+}
+
+void left()
+{
+    
+}
+
+void right()
+{
+    
+}
+
 
 void setup()
 {
@@ -88,6 +108,12 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
+
+    ts.on_down(down);
+    ts.on_left(left);
+    ts.on_right(right);
+    ts.on_up(up);
+
 
     try_to_connect_to_wifi();
     tft.fillScreen(BACKGROUND_COLOR);
