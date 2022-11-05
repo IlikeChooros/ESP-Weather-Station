@@ -55,7 +55,7 @@ void TouchScreen::read()
 
     else if (check_on_relase && millis() - time_passed > max_interval)
     {
-        if (counter > 5)
+        if (counter > 0)
         {
             Serial.println("");
             if (isHorizontal(x_change, y_change))
@@ -79,8 +79,8 @@ void TouchScreen::read()
                     this->_on_up();
                 }
             }
-            //Serial.println(" C: "+String(counter) + " Y_CH: "+String(y_change) + "  X_CH: "+String(x_change));
-            //Serial.println("");
+            Serial.println(" C: "+String(counter) + " Y_CH: "+String(y_change) + "  X_CH: "+String(x_change));
+            Serial.println("");
 
             check_on_relase = false;
         }

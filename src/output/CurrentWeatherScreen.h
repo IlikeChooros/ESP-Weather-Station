@@ -13,9 +13,12 @@ class CurrentWeatherScreen
 {
     uint16_t* text_colors;
     TFT_eSPI * _tft;
+
+    int16_t convert_to_idx(int16_t temp);
     public:
     CurrentWeatherScreen(TFT_eSPI * tft);
-    void draw(Weather* weather, uint16_t background_color);
+    void draw_main_screen(Weather* weather, uint16_t background_color);
+    void draw_desc(Weather* weather, uint16_t background_color);
 };
 
 

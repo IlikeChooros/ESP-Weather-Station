@@ -55,6 +55,9 @@ Weather* weather;
 Forecast* forecast;
 
 TouchScreen ts(&tft, calData);
+CurrentWeatherScreen weather_screen(&tft);
+
+int8_t screen_idx = 0;
 
 bool try_to_connect_to_wifi()
 {
@@ -78,12 +81,20 @@ bool try_to_connect_to_wifi()
 
 void up()
 {
-    
+    if (screen_idx == 1)
+    {
+        weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
+        screen_idx = 0;
+    }
 }
 
 void down()
 {
-    
+    if (screen_idx == 0)
+    {
+        weather_screen.draw_desc(weather, BACKGROUND_COLOR);
+        screen_idx = 1;
+    }
 }
 
 void left()
@@ -103,7 +114,6 @@ void setup()
     WiFi.begin(ssid, password);
     tft.init();
     tft.setRotation(1);
-    tft.setTouch(calData);
 
     tft.fillScreen(BACKGROUND_COLOR);
     tft.setTextColor(TFT_GREEN);
@@ -114,17 +124,21 @@ void setup()
     ts.on_right(right);
     ts.on_up(up);
 
-
     try_to_connect_to_wifi();
-    tft.fillScreen(BACKGROUND_COLOR);
 
     get_http = wclient._init_("Oława");
+    tft.println("GET_HTTP: "+String(get_http));
 
-    CurrentWeatherScreen weather_screen(&tft);
+    while(!get_http)
+    {
+        tft.println("Retrying.");
+        get_http = wclient._init_("Oława");
+    }
+
     if (get_http)
     {
         weather = wclient.current_weather();
-        weather_screen.draw(weather, BACKGROUND_COLOR);
+        weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     }
 
     // weather->_feels_like = 28;

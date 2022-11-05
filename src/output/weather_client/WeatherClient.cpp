@@ -10,6 +10,7 @@ bool WeatherClient::_init_(String city_name)
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
 
     int16_t http_code = http->GET();
+    Serial.println("HTTP: "+String(http_code));
     bool isSuccesful = http_code == 200;
     if (isSuccesful)
     {

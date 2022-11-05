@@ -4,10 +4,10 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 
-#define VERTICAL_VAL 25
-#define HORIZONTAL_VAL 25
+#define VERTICAL_VAL 15
+#define HORIZONTAL_VAL 20
 
-#define MIN_HORIZONTAL 25
+#define MIN_HORIZONTAL 30
 #define MIN_VERTICAL 25
 
 class TouchScreen
