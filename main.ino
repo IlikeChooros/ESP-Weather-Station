@@ -135,84 +135,82 @@ void setup()
         get_http = wclient._init_("Oława");
     }
 
-    if (get_http)
-    {
-        weather = wclient.current_weather();
-        weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    }
+    weather = wclient.current_weather();
+    weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
+    
 
     // weather->_feels_like = 28;
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "01n";
     // delay(2000);
 
     // weather->_feels_like = 25;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "01d";
     // delay(2000);
 
     // weather->_feels_like = 20;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "02d";
     // delay(2000);
 
     // weather->_feels_like = 15;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "02n";
     // delay(2000);
 
     // weather->_feels_like =  10;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "03d";
     // delay(2000);
 
     // weather->_feels_like =  5;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "03n";
     // delay(2000);
 
     // weather->_feels_like =  0;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "04d";
     // delay(2000);
 
     // weather->_feels_like =  -5;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "09d";
     // delay(2000);
 
     // weather->_feels_like =  -10;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "10d";
     // delay(2000);
 
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "13d";
     // delay(2000);
 
     // weather->_feels_like =  -15;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "50d";
     // delay(2000);
 
     // weather->_feels_like =  -20;
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "50n";
     // delay(2000);
 
 
-    // weather_screen.draw(weather, BACKGROUND_COLOR);
+    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
 
     // tft.println("MAIN: "+weather->_main);
     // tft.println("ICON: "+weather->_icon);

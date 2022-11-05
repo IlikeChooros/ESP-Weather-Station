@@ -29,33 +29,39 @@ void CurrentWeatherScreen::draw_main_screen(Weather* weather, uint16_t bg_c)
 {
     _tft->fillScreen(bg_c);
     configTime(0, 3600, NTP_SERVER);
-    Icon* icon = iconMatcher(weather->_icon, _tft, 5,30, 125, bg_c);
+    Icon* icon = iconMatcher(weather->_icon, _tft, 185,30, 125, bg_c);
     icon->draw();
 
-    // Fonts: 1,4,6,7,8
-    _tft->setCursor(150,70);
-    if (weather->_feels_like > 10 || weather->_feels_like < 0)
-    {
-        _tft->setCursor(130,70);
-    }
-    
-    //_tft->setTextColor(TFT_WHITE);
+    // Fonts: 1,2,4,6,7,8
+
+    _tft->setCursor(0,0);
     _tft->setTextFont(4);
+    _tft->setTextSize(1);
+
+    _tft->setTextColor(text_colors[convert_to_idx((int16_t)weather->_temp)]);
+
+    _tft->println("");
+
     _tft->setTextSize(2);
+    _tft->println(String(weather->_temp) + " C"); // TEMP
+    _tft->setTextFont(2);
+    _tft->setTextSize(1);
 
-    int16_t temp = convert_to_idx((int16_t)weather->_feels_like);
+    _tft->setTextColor(text_colors[convert_to_idx((int16_t)weather->_feels_like)]); // FEELS LIKE
+    _tft->println("  Feels like: "+String(weather->_feels_like)+ " C");
 
-    _tft->setTextColor(text_colors[temp]);
+    _tft->setTextColor(0x77F2);  
+    _tft->println("  "+String(weather->_wind_speed*3.6f)+" km/h"); // WIND SPEED
 
-    _tft->println(String(weather->_feels_like) + " C");
+    _tft->setTextColor(0xB41F); 
+    _tft->println("  "+String(weather->_pressure)+" hPa"); // PRESSURE
 
-
-    _tft->setTextColor(TFT_WHITE);
+    _tft->setTextFont(4);
     _tft->setTextSize(1);
     _tft->setTextColor(MIST);
 
 
-    _tft->setCursor(60,170);
+    _tft->setCursor(60,180);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
@@ -75,14 +81,11 @@ void CurrentWeatherScreen::draw_desc(Weather* weather, uint16_t bg_c)
     _tft->setTextFont(2);
     _tft->setTextSize(2);
     
-    int16_t temp = convert_to_idx((int16_t) weather->_temp);
 
-    _tft->setTextColor(text_colors[temp]);
+    _tft->setTextColor(text_colors[convert_to_idx((int16_t) weather->_temp)]);
     _tft->println("   TEMP: "+String(weather->_temp) + " C");
-    
-    temp = convert_to_idx((int16_t)weather->_feels_like);
 
-    _tft->setTextColor(text_colors[temp]);
+    _tft->setTextColor(text_colors[convert_to_idx((int16_t)weather->_feels_like)]);
     _tft->println("   FEELS LIKE: "+String(weather->_feels_like)+ " C");
 
     _tft->setTextColor(MIST);
