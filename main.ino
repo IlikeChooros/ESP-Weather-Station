@@ -131,44 +131,30 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
     weather = wclient.current_weather();
     weather_screen.draw(weather);
-    delay(3000);
-
-    tft.fillScreen(BACKGROUND_COLOR);
-    weather->_wind_speed = 10;
-    weather_screen.draw(weather);
-    delay(3000);
-
-    tft.fillScreen(BACKGROUND_COLOR);
-    weather->_wind_speed = 50;
-    weather_screen.draw(weather);
-    delay(3000);
     
 
-
+    // delay(2000);
     // weather->_feels_like = 28;
+    // weather->_temp = 28;
     // weather_screen.draw(weather);
     // weather->_icon = "01n";
     // delay(2000);
 
     // weather->_feels_like = 25;
-
+    // weather->_temp = 20;
     // weather_screen.draw(weather);
     // weather->_icon = "01n";
     // delay(2000);
 
     // weather->_feels_like = 20;
-
+    // weather->_temp = 18;
     // weather_screen.draw(weather);
     // weather->_icon = "50d";
     // delay(2000);
 
-    // weather->_feels_like = 15;
-
+    // weather->_feels_like = 4;
+    // weather->_temp = 5;
     // weather_screen.draw(weather);
-    // weather->_icon = "13n";
-    // delay(2000);
-
-    // weather->_feels_like =  10;
 
     // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
     // weather->_icon = "03d";

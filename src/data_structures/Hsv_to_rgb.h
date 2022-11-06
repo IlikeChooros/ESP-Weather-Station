@@ -1,6 +1,10 @@
 #ifndef HSV_TO_RGB_H
 #define HSV_TO_RGB_H
 
+#define TEMP_RANGE 70
+
+inline uint16_t* temp_text_colors;
+
 class HSV
 {
     public:
@@ -66,5 +70,33 @@ inline uint32_t HSV_RGB(HSV color)
     );
 }
 
+inline int16_t convert_to_idx(int16_t t)
+{
+    int16_t temp = t + 30;
+    temp = temp > TEMP_RANGE ? TEMP_RANGE : temp;
+    temp = temp < 0 ? 0: temp;
+    return temp;
+}
+
+inline void set_text_colors()
+{
+    temp_text_colors = new uint16_t [TEMP_RANGE];
+
+    HSV* hsv = new HSV;
+
+    hsv->hue = 0;
+    hsv->satrutaion = 43;
+    hsv->value = 100;
+
+    float itr = (float)250/TEMP_RANGE;
+
+    for (int8_t t = TEMP_RANGE-1;t>=0; t--)
+    {
+        temp_text_colors[t] = HSV_RGB(*hsv);
+        hsv->hue += itr;
+    }
+
+    delete hsv;
+}
 
 #endif
