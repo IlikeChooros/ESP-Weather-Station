@@ -28,6 +28,8 @@ class Icon
     uint16_t background_color;
 };
 
+
+
 class Sun: public Icon
 {
     public:
@@ -120,5 +122,24 @@ class MistNight: public Icon
     void draw();
 };
 
+class StrongWind: public Icon
+{
+    public:
+    StrongWind(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
+    void draw();
+};
 
+class Wind: public Icon
+{
+    public:
+    Wind(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
+    void draw();
+};
+
+class WeakWind: public Icon
+{
+    public:
+    WeakWind(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(_tft,x,y,size,background_color){}
+    void draw();
+};
 #endif

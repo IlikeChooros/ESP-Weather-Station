@@ -1,7 +1,7 @@
 #include "src/calibrate/calibrate_data.h"
 #include "src/data_structures/Point.h"
-#include "src/output/icons/IconDrawer.h"
-#include "src/output/weather_client/WeatherClient.h"
+#include "src/output/icons/Icons.h"
+#include "src/weather_client/WeatherClient.h"
 #include "src/output/CurrentWeatherScreen.h"
 #include "src/input/TouchScreen.h"
 
@@ -40,8 +40,8 @@ TFT_eSPI tft = TFT_eSPI();
 
 bool touch_pressed = false;
 
-const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password =  "269929817";//"12345abc";   //"6epTdSSVW22X"; // 269929817
+const char* ssid =  "NETIASPOT-2,4GHz-69C140"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "6epTdSSVW22X";//"12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -55,7 +55,7 @@ Weather* weather;
 Forecast* forecast;
 
 TouchScreen ts(&tft, calData);
-CurrentWeatherScreen weather_screen(&tft);
+CurrentWeatherScreen weather_screen(&tft, BACKGROUND_COLOR);
 
 int8_t screen_idx = 0;
 
@@ -81,20 +81,12 @@ bool try_to_connect_to_wifi()
 
 void up()
 {
-    if (screen_idx == 1)
-    {
-        weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-        screen_idx = 0;
-    }
+
 }
 
 void down()
 {
-    if (screen_idx == 0)
-    {
-        weather_screen.draw_desc(weather, BACKGROUND_COLOR);
-        screen_idx = 1;
-    }
+
 }
 
 void left()
@@ -126,40 +118,54 @@ void setup()
 
     try_to_connect_to_wifi();
 
-    get_http = wclient._init_("Oława");
+    get_http = wclient._init_("Wrocław");
     tft.println("GET_HTTP: "+String(get_http));
 
     while(!get_http)
     {
         tft.println("Retrying.");
-        get_http = wclient._init_("Oława");
+        get_http = wclient._init_("Wrocław");
+        delay(2000);
     }
 
+    tft.fillScreen(BACKGROUND_COLOR);
     weather = wclient.current_weather();
-    weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
+    weather_screen.draw(weather);
+    delay(3000);
+
+    tft.fillScreen(BACKGROUND_COLOR);
+    weather->_wind_speed = 10;
+    weather_screen.draw(weather);
+    delay(3000);
+
+    tft.fillScreen(BACKGROUND_COLOR);
+    weather->_wind_speed = 50;
+    weather_screen.draw(weather);
+    delay(3000);
     
 
+
     // weather->_feels_like = 28;
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
+    // weather_screen.draw(weather);
     // weather->_icon = "01n";
     // delay(2000);
 
     // weather->_feels_like = 25;
 
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "01d";
+    // weather_screen.draw(weather);
+    // weather->_icon = "01n";
     // delay(2000);
 
     // weather->_feels_like = 20;
 
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "02d";
+    // weather_screen.draw(weather);
+    // weather->_icon = "50d";
     // delay(2000);
 
     // weather->_feels_like = 15;
 
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "02n";
+    // weather_screen.draw(weather);
+    // weather->_icon = "13n";
     // delay(2000);
 
     // weather->_feels_like =  10;
@@ -281,5 +287,5 @@ void setup()
 
 void loop()
 {
-    ts.read();
+    //ts.read();
 }

@@ -1,9 +1,10 @@
 #include "CurrentWeatherScreen.h"
 
 
-CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft)
+CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c)
 {
     this->_tft = tft;
+    this->_bg_c = bg_c;
 
     // Temp range from 40+ to 30- (C)
     text_colors = new uint16_t [TEMP_RANGE];
@@ -23,14 +24,30 @@ CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft)
     }
 
     delete hsv;
+
+    weather_items = new WeatherItem*[NUMBER_OF_WEATHER_ITEMS] {
+        new WeatherIcon(tft,185,30, 125, bg_c),
+        new WindIcon(tft,0,180, 20, bg_c)
+    };
 }
 
-void CurrentWeatherScreen::draw_main_screen(Weather* weather, uint16_t bg_c)
+void CurrentWeatherScreen::draw(Weather* weather)
 {
-    _tft->fillScreen(bg_c);
-    configTime(0, 3600, NTP_SERVER);
-    Icon* icon = iconMatcher(weather->_icon, _tft, 185,30, 125, bg_c);
-    icon->draw();
+    configTime(3600, 0, NTP_SERVER);
+
+    // wind_icon->setWeather(weather);
+    // wind_icon->draw();
+
+    // weahter_icon->setWeather(weather);
+    // weahter_icon->draw();
+    
+    for (uint8_t i = 0; i<NUMBER_OF_WEATHER_ITEMS;i++)
+    {
+        weather_items[i]
+        ->setWeather(weather);
+        weather_items[i]
+        ->draw();
+    }
 
     // Fonts: 1,2,4,6,7,8
 
@@ -43,23 +60,24 @@ void CurrentWeatherScreen::draw_main_screen(Weather* weather, uint16_t bg_c)
     _tft->println("");
 
     _tft->setTextSize(2);
-    _tft->println(String(weather->_temp) + " C"); // TEMP
+    _tft->println(" "+String((uint16_t)round(weather->_temp)) +" "+String(DEGREE)+"C"); // TEMP
+
     _tft->setTextFont(2);
     _tft->setTextSize(1);
 
     _tft->setTextColor(text_colors[convert_to_idx((int16_t)weather->_feels_like)]); // FEELS LIKE
-    _tft->println("  Feels like: "+String(weather->_feels_like)+ " C");
+    _tft->println("   Feels like: "+String((uint16_t)round(weather->_feels_like))+ " "+String(DEGREE)+"C");
+
 
     _tft->setTextColor(0x77F2);  
-    _tft->println("  "+String(weather->_wind_speed*3.6f)+" km/h"); // WIND SPEED
+    _tft->println("   "+String((uint16_t)round(weather->_wind_speed*3.6f))+" km/h"); // WIND SPEED
 
     _tft->setTextColor(0xB41F); 
-    _tft->println("  "+String(weather->_pressure)+" hPa"); // PRESSURE
+    _tft->println("   "+String(weather->_pressure)+" hPa"); // PRESSURE
 
     _tft->setTextFont(4);
     _tft->setTextSize(1);
     _tft->setTextColor(MIST);
-
 
     _tft->setCursor(60,180);
     struct tm timeinfo;
@@ -71,31 +89,6 @@ void CurrentWeatherScreen::draw_main_screen(Weather* weather, uint16_t bg_c)
         _tft->println(&timeinfo, "%H:%M %d-%m-%Y");
     }
 
-}
-
-
-void CurrentWeatherScreen::draw_desc(Weather* weather, uint16_t bg_c)
-{
-    _tft->fillScreen(bg_c);
-    _tft->setCursor(0,40);
-    _tft->setTextFont(2);
-    _tft->setTextSize(2);
-    
-
-    _tft->setTextColor(text_colors[convert_to_idx((int16_t) weather->_temp)]);
-    _tft->println("   TEMP: "+String(weather->_temp) + " C");
-
-    _tft->setTextColor(text_colors[convert_to_idx((int16_t)weather->_feels_like)]);
-    _tft->println("   FEELS LIKE: "+String(weather->_feels_like)+ " C");
-
-    _tft->setTextColor(MIST);
-    _tft->println("   PRESSURE: "+String(weather->_pressure)+" hPa");
-
-    _tft->setTextColor(0x85FF);
-    _tft->println("   HUMIDITY: "+String(weather->_humidity)+" %");
-
-    _tft->setTextColor(0x77F2);
-    _tft->println("   WIND: "+String(weather->_wind_speed * 3.6f)+" km/h");
 }
 
 int16_t CurrentWeatherScreen::convert_to_idx(int16_t t)

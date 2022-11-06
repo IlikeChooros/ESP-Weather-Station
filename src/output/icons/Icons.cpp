@@ -1,4 +1,4 @@
-#include "IconDrawer.h"
+#include "Icons.h"
 
 Icon::Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color)
 {
@@ -188,3 +188,27 @@ void MistDay::draw()
     drawMist(_tft, x+0.1f*size, y+ 0.1f*size, size*0.9f,MIST, background_color);
 }
 
+void Wind::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawSingleWindString(_tft,x,y,size, 0.6f*size, 0.05f*size, TFT_WHITE, background_color, false);  
+    drawSingleWindString(_tft,x+0.1f*size, y+ 0.25f*size, 0.9f*size, 0.7f*size, 0.08f*size, TFT_WHITE, background_color, true);  
+}
+
+void WeakWind::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawSingleWindString(_tft,x,y,size, 0.5f*size, 0.08f*size, TFT_WHITE, background_color, false);  
+    drawSingleWindString(_tft,x+0.1f*size, y+ 0.35f*size, 0.6f*size, 0.36f*size, 0.08f*size, TFT_WHITE, background_color, true); 
+}
+
+void StrongWind::draw()
+{
+    _tft->fillRect(x,y,size,size,background_color);
+
+    drawSingleWindString(_tft,x,y,size, 0.5f*size, 0.08f*size, TFT_WHITE, background_color, false);  
+    drawSingleWindString(_tft,x+0.2f*size, y+ 0.25f*size, 0.9f*size, 0.7*size, 0.08f*size, TFT_WHITE, background_color, true); 
+    drawSingleWindString(_tft,x+0.1f*size, y+ 0.60f*size, 0.6f*size, 0.36f*size, 0.08f*size, TFT_WHITE, background_color, true); 
+}

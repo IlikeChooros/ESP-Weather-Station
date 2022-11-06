@@ -177,4 +177,23 @@ void inline drawMist (TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint1
     tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
 }
 
+void inline drawSingleWindString(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size ,uint16_t lenght, uint8_t thickness ,uint16_t color, uint16_t background_color, bool reversed)
+{
+  
+
+    if (!reversed)
+    {
+        tft->fillCircle(x + (size + lenght)*0.5f, y+0.3f*size, 0.2f*size, color);
+        tft->fillCircle(x + (size + lenght)*0.5f, y+0.3f*size,0.2f*size - thickness, background_color);
+        tft->fillRect(x+(size + lenght)*0.5f - 0.2f*size, y + 0.3f*size, 0.2f*size, 0.2f*size, background_color);
+    }
+    else{
+        tft->fillCircle(x + (size + lenght)*0.5f, y+0.7f*size, 0.2f*size, color);
+        tft->fillCircle(x + (size + lenght)*0.5f, y+0.7f*size,0.2f*size - thickness, background_color);
+        tft->fillRect(x+(size + lenght)*0.5f - 0.2f*size, y + 0.5f*size, 0.2f*size, 0.2f*size, background_color);
+
+    }
+    
+    tft->drawWideLine(x + (size - lenght)*0.5f, y+0.5f*size,x + (size + lenght)*0.5f, y+0.5f*size, thickness, color, background_color);
+}
 #endif
