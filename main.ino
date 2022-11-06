@@ -81,24 +81,23 @@ bool try_to_connect_to_wifi()
 
 void up()
 {
-
+    Serial.println("UP");
 }
 
 void down()
 {
-
+    Serial.println("DOWN");
 }
 
 void left()
 {
-    
+    Serial.println("LEFT");
 }
 
 void right()
 {
-    
+    Serial.println("RIGHT");
 }
-
 
 void setup()
 {
@@ -273,5 +272,5 @@ void setup()
 
 void loop()
 {
-    //ts.read();
+    ts.read();
 }
