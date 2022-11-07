@@ -1,5 +1,6 @@
 #include "TextItem.h"
 
+uint16_t* temp_colors = set_text_colors();
 
 void TextItem::draw()
 {
@@ -29,7 +30,7 @@ void TextTemp::setWeather(Weather* weather)
 {
     this->redraw = (int16_t)weather->_temp != this->_data;
     _data = (int16_t)weather->_temp;
-    this->color = temp_text_colors[convert_to_idx((int16_t)weather->_temp)];
+    this->color = get_text_color((int16_t) weather->_temp, temp_colors);
 }
 
 void TextPressure::setWeather(Weather* weather)
@@ -48,6 +49,6 @@ void TextFeelsLike::setWeather(Weather* weather)
 {
     this->redraw = (int16_t)weather->_feels_like != this->_data;
     _data = (int16_t)weather->_feels_like;
-    this->color = temp_text_colors[convert_to_idx((int16_t)weather->_feels_like)];
+    this->color = get_text_color((int16_t) weather->_feels_like, temp_colors);
 }
 

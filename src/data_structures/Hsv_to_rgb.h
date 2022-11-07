@@ -3,7 +3,7 @@
 
 #define TEMP_RANGE 70
 
-inline uint16_t* temp_text_colors;
+#include <Arduino.h>
 
 class HSV
 {
@@ -12,6 +12,16 @@ class HSV
     float satrutaion;
     float value;
 };
+
+// class TextColor
+// {
+//     uint16_t* temp_text_colors;
+//     public:
+//     void set_text_colors();
+//     uint16_t convert_to_idx(int16_t temp);
+//     uint16_t get_text_color(int16_t temp);
+
+// };
 
 inline uint32_t to_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -70,7 +80,7 @@ inline uint32_t HSV_RGB(HSV color)
     );
 }
 
-inline int16_t convert_to_idx(int16_t t)
+inline uint16_t convert_to_idx(int16_t t)
 {
     int16_t temp = t + 30;
     temp = temp > TEMP_RANGE ? TEMP_RANGE : temp;
@@ -78,10 +88,9 @@ inline int16_t convert_to_idx(int16_t t)
     return temp;
 }
 
-inline void set_text_colors()
+inline uint16_t* set_text_colors()
 {
-    temp_text_colors = new uint16_t [TEMP_RANGE];
-
+    uint16_t* temp_text_colors = new uint16_t [TEMP_RANGE];
     HSV* hsv = new HSV;
 
     hsv->hue = 0;
@@ -97,6 +106,12 @@ inline void set_text_colors()
     }
 
     delete hsv;
+    return temp_text_colors;
+}
+
+inline uint16_t get_text_color(int16_t temp, uint16_t* temp_text_colors)
+{
+    return temp_text_colors[convert_to_idx(temp)];
 }
 
 #endif

@@ -35,26 +35,32 @@ void TouchScreen::read()
     if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
     {
         _state=state;
-        if (y>TOUCH_VAL && y < 240 - TOUCH_VAL)
+
+        // if this is an realse, then igonre
+        if (!state)
         {
-            if (x<100)
+            _lastState = state;
+            return;
+        }
+
+        // dividing screen to 4 triangles
+        if (y > 0.75f*x)
+        {
+            if ( y < -0.75f*x + 240)
             {
                 this->_on_left();
             }
-            else if(x>320 - TOUCH_VAL)
-            {
-                this->_on_right();
+            else{
+                this->_on_down();
             }
         }
-        else if (x>TOUCH_VAL && x < 320 - TOUCH_VAL)
-        {
-            if (y < TOUCH_VAL)
+        else{
+            if ( y < -0.75f*x + 240)
             {
                 this->_on_up();
             }
-            else if(y > 240 - TOUCH_VAL)
-            {
-                this->_on_down();
+            else{
+                this->_on_right();
             }
         }
     }

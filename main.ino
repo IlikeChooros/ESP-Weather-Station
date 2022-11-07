@@ -1,3 +1,4 @@
+#include "src/data_structures/Hsv_to_rgb.h"
 #include "src/calibrate/calibrate_data.h"
 #include "src/data_structures/Point.h"
 #include "src/output/icons/Icons.h"
@@ -34,14 +35,10 @@
 // "visibility":10000,"wind":{"speed":1.79,"deg":196,"gust":3.33},"clouds":{"all":93},"dt":1667135121,"sys":
 // {"type":2,"id":2073402,"country":"PL","sunrise":1667108337,"sunset":1667143793},"timezone":3600,"id":7532481,"name":"Oława","cod":200}
 
-Point touch_point;
-
 TFT_eSPI tft = TFT_eSPI();
 
-bool touch_pressed = false;
-
-const char* ssid =  "NETIASPOT-2,4GHz-69C140"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password =  "6epTdSSVW22X";//"12345abc";   //"6epTdSSVW22X"; // 269929817
+const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -56,8 +53,6 @@ Forecast* forecast;
 
 TouchScreen ts(&tft, calData);
 CurrentWeatherScreen weather_screen(&tft, BACKGROUND_COLOR);
-
-int8_t screen_idx = 0;
 
 bool try_to_connect_to_wifi()
 {
@@ -115,7 +110,10 @@ void setup()
     ts.on_right(right);
     ts.on_up(up);
 
-    try_to_connect_to_wifi();
+    if(!try_to_connect_to_wifi())
+    {
+        return;
+    }
 
     get_http = wclient._init_("Wrocław");
     tft.println("GET_HTTP: "+String(get_http));
