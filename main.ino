@@ -4,6 +4,7 @@
 #include "src/output/icons/Icons.h"
 #include "src/weather_client/WeatherClient.h"
 #include "src/output/CurrentWeatherScreen.h"
+// #include "src/output/MainScreen.h"
 #include "src/output/Forecast12Screen.h"
 #include "src/input/TouchScreen.h"
 
@@ -15,6 +16,8 @@
 #include <ArduinoJson.h>
 
 #define BACKGROUND_COLOR 0x10C4
+#define X_SCREENS 2
+#define Y_SCREENS 1
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -41,8 +44,14 @@ enum Move_idx
 };
 
 TouchScreen ts(&tft, calData);
-CurrentWeatherScreen weather_screen(&tft, BACKGROUND_COLOR);
-Forecast12Screen forecast_screen(&tft, BACKGROUND_COLOR);
+
+MainScreen*** screens = new MainScreen**[X_SCREENS]{
+    new MainScreen* [Y_SCREENS] {new CurrentWeatherScreen(&tft, BACKGROUND_COLOR)},  // [0][0]
+    new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)}       // [1][0]
+};
+
+// CurrentWeatherScreen cw_screen (&tft, BACKGROUND_COLOR);
+// Forecast12Screen f12_screen(&tft, BACKGROUND_COLOR);
 
 Point screen_idx(0,0);
 
@@ -95,17 +104,19 @@ void move(uint8_t move)
             case LEFT:
                 if (screen_idx.x == 1)
                 {
-                    tft.fillScreen(BACKGROUND_COLOR);
-                    weather_screen.draw(weather, true);
                     screen_idx.x = 0;
+                    tft.fillScreen(BACKGROUND_COLOR);
+                    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+                    //bs[screen_idx.x]->draw(weather, true);
                 }
                 break;
             case RIGHT:
                 if (screen_idx.x == 0)
                 {
-                    tft.fillScreen(BACKGROUND_COLOR);
-                    forecast_screen.draw(forecast, true);
                     screen_idx.x = 1;
+                    tft.fillScreen(BACKGROUND_COLOR);
+                    screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
+                    //bs[screen_idx.x]->draw(forecast, true);
                 }
                 break;
             default:
@@ -152,9 +163,7 @@ void setup()
     forecast = wclient.update(forecast);
     weather = wclient.update(weather);
 
-    screen_idx.x = 1;
-    forecast_screen.draw(forecast, true);
-    // forecast_screen.draw(forecast);
+    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
     
 
     // delay(2000);

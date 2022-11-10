@@ -1,23 +1,5 @@
 #include "CurrentWeatherScreen.h"
 
-
-CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c)
-{
-    this->_tft = tft;
-    this->_bg_c = bg_c;
-
-    set_text_colors();
-
-    weather_items = new WeatherItem*[NUMBER_OF_WEATHER_ITEMS] {
-        new WeatherIcon(tft,185,30, 125, bg_c),
-        new WindIcon(tft, 5, 105, 20, bg_c),
-        new TextTemp(tft, 30, 30, 4, 2, TFT_WHITE, "%d `C" , bg_c),
-        new TextFeelsLike(tft, 35, 80, 2, 1, TFT_WHITE,"Feels like: %d `C", bg_c),
-        new TextWind(tft, 30, 105, 4, 1, 0x77F2, "%d km/h", bg_c),
-        new TextPressure(tft, 30, 130, 4, 1, 0xB41F, "%d hPa", bg_c)
-    };
-}
-
 void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
 {
     configTime(3600, 0, NTP_SERVER);
