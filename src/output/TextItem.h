@@ -48,6 +48,7 @@ class TextPressure: public TextItem
     void setWeather(Weather* weather);
 };
 
+
 class TextFeelsLike: public TextItem
 {
     public:
@@ -55,5 +56,11 @@ class TextFeelsLike: public TextItem
     void setWeather(Weather* weather);
 };
 
+class TextPop: public TextItem
+{
+    public:
+    TextPop(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    void setWeather(Weather* weather);
+};
 
 #endif

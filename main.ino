@@ -4,6 +4,7 @@
 #include "src/output/icons/Icons.h"
 #include "src/weather_client/WeatherClient.h"
 #include "src/output/CurrentWeatherScreen.h"
+#include "src/output/Forecast12Screen.h"
 #include "src/input/TouchScreen.h"
 
 #include <TFT_eSPI.h> 
@@ -53,6 +54,7 @@ Forecast* forecast;
 
 TouchScreen ts(&tft, calData);
 CurrentWeatherScreen weather_screen(&tft, BACKGROUND_COLOR);
+Forecast12Screen forecast_screen(&tft, BACKGROUND_COLOR);
 
 bool try_to_connect_to_wifi()
 {
@@ -115,33 +117,38 @@ void setup()
         return;
     }
 
-    get_http = wclient._init_("Wrocław");
+    get_http = wclient._init_("Oława");
     tft.println("GET_HTTP: "+String(get_http));
 
     while(!get_http)
     {
         tft.println("Retrying.");
-        get_http = wclient._init_("Wrocław");
-        delay(2000);
+        get_http = wclient._init_("Oława");
+        delay(3500);
     }
 
     tft.fillScreen(BACKGROUND_COLOR);
     weather = wclient.current_weather();
-    weather_screen.draw(weather);
+    // weather_screen.draw(weather);
+
+    forecast = wclient.forecast_weather();
+    forecast_screen.draw(forecast);
     
 
     // delay(2000);
+    // weather->_wind_speed=15;
     // weather->_feels_like = 28;
     // weather->_temp = 28;
     // weather_screen.draw(weather);
-    // weather->_icon = "01n";
+    // weather->_icon = "03d";
     // delay(2000);
 
     // weather->_feels_like = 25;
+    // weather->_wind_speed=21;
     // weather->_temp = 20;
+    // weather->_icon = "02d";
     // weather_screen.draw(weather);
-    // weather->_icon = "01n";
-    // delay(2000);
+    //delay(2000);
 
     // weather->_feels_like = 20;
     // weather->_temp = 18;

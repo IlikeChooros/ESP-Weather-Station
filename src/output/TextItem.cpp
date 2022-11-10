@@ -52,3 +52,8 @@ void TextFeelsLike::setWeather(Weather* weather)
     this->color = get_text_color((int16_t) weather->_feels_like, temp_colors);
 }
 
+void TextPop::setWeather(Weather* weather)
+{
+    this->redraw = (int16_t)100 * weather->_pop != this->_data;
+    _data = (int16_t) 100 * weather->_pop;
+}

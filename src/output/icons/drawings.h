@@ -196,4 +196,10 @@ void inline drawSingleWindString(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t 
     
     tft->drawWideLine(x + (size - lenght)*0.5f, y+0.5f*size,x + (size + lenght)*0.5f, y+0.5f*size, thickness, color, background_color);
 }
+
+void inline drawDroplet(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color)
+{
+    tft->fillCircle(x+size/2, y + size*0.7f, size*0.3f, color);
+    tft->fillTriangle(x+0.2f*size, y + 0.7f*size, x + 0.8f*size, y + 0.7f*size, x + 0.5f*size, y, color);
+}
 #endif

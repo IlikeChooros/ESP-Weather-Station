@@ -16,7 +16,6 @@
 class CurrentWeatherScreen
 {
     TFT_eSPI * _tft;
-
     WeatherItem** weather_items;
 
     uint16_t _bg_c;

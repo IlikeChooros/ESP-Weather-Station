@@ -53,7 +53,7 @@ void CloudsNight::draw()
 
     drawMoon(_tft, x + 0.5f*size, y, size*0.4f, MOON, background_color);
     drawCloud(_tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
-    drawCloud(_tft, x, y + 0.23f*size, 0.9f*size, MIST, CLOUDY, background_color);
+    drawCloud(_tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color);
 }
 
 void ManyClouds::draw()
@@ -211,4 +211,35 @@ void StrongWind::draw()
     drawSingleWindString(_tft,x,y,size, 0.5f*size, 0.08f*size, TFT_WHITE, background_color, false);  
     drawSingleWindString(_tft,x+0.2f*size, y+ 0.25f*size, 0.9f*size, 0.7*size, 0.08f*size, TFT_WHITE, background_color, true); 
     drawSingleWindString(_tft,x+0.1f*size, y+ 0.60f*size, 0.6f*size, 0.36f*size, 0.08f*size, TFT_WHITE, background_color, true); 
+}
+
+void Droplet_0::draw()
+{
+    drawDroplet(_tft,x,y,size,SNOW_FLAKE);
+    drawDroplet(_tft,x+0.18f*size, y + 0.25f*size, 0.7f*size, background_color);
+}
+
+void Droplet_30::draw()
+{
+    drawDroplet(_tft,x,y,size,SNOW_FLAKE);
+    drawDroplet(_tft,x+0.2f*size, y + 0.25f*size, 0.6f*size, background_color);
+}
+
+void Droplet_50::draw()
+{
+    drawDroplet(_tft,x,y,size,SNOW_FLAKE);
+    drawDroplet(_tft,x+0.18f*size, y + 0.22f*size, 0.7f*size, background_color);
+    _tft->fillRect(x+0.3f*size, y+0.65f*size, 0.4f*size, 0.35f*size, SNOW_FLAKE);
+}
+
+void Droplet_70::draw()
+{
+    drawDroplet(_tft,x,y,size,SNOW_FLAKE);
+    drawDroplet(_tft,x+0.18f*size, y + 0.2f*size, 0.7f*size, background_color);
+    _tft->fillRect(x+0.3f*size, y+0.5f*size, 0.4f*size, 0.45f*size, SNOW_FLAKE);
+}
+
+void Droplet_100::draw()
+{
+    drawDroplet(_tft,x,y,size,SNOW_FLAKE);
 }

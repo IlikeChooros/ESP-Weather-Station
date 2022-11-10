@@ -55,8 +55,9 @@ Weather* WeatherClient::current_weather()
         filter["wind"]["speed"] = true;
         filter["sys"]["sunrise"] = true;
         filter["sys"]["sunset"] = true;
+        filter["dt"]=true;
 
-        StaticJsonDocument<400> doc;
+        StaticJsonDocument<440> doc;
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
         weather
@@ -68,7 +69,8 @@ Weather* WeatherClient::current_weather()
             ->temp(doc["main"]["temp"].as<double>())
             ->wind_speed(doc["wind"]["speed"].as<double>())
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
-            ->sunset(doc["sys"]["sunset"].as<uint32_t>());
+            ->sunset(doc["sys"]["sunset"].as<uint32_t>())
+            ->dt(doc["dt"].as<uint32_t>());
     }
     http->end();
     return weather;
@@ -80,9 +82,7 @@ Forecast* WeatherClient::forecast_weather()
     int16_t http_code = http->GET();
 
     Forecast* forecast = new Forecast;
-    Weather* weather = new Weather [NUMBER_OF_HOURS_TO_FORECAST];
-
-
+    Weather** weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
 
     if (http_code == 200)
     {
@@ -90,6 +90,7 @@ Forecast* WeatherClient::forecast_weather()
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
         {
+            weather[i] = new Weather;
             filter["list"][i]["weather"][0]["main"] = true;
             filter["list"][i]["weather"][0]["icon"] = true;
             filter["list"][i]["main"]["temp"] = true;
@@ -97,6 +98,8 @@ Forecast* WeatherClient::forecast_weather()
             filter["list"][i]["main"]["pressure"] = true;
             filter["list"][i]["main"]["humidity"] = true;
             filter["list"][i]["wind"]["speed"] = true;
+            filter["list"][i]["dt"] = true;
+            filter["list"][i]["pop"] = true;
 
             DynamicJsonDocument doc(FORECAST_CAPACITY);
             DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
@@ -107,19 +110,19 @@ Forecast* WeatherClient::forecast_weather()
             }
 
 
-            weather
+            weather[i]
                 ->feels_like(doc["list"][i]["main"]["feels_like"].as<double>())
                 ->main(doc["list"][i]["weather"][0]["main"].as<String>())
                 ->icon(doc["list"][i]["weather"][0]["icon"].as<String>())
                 ->pressure(doc["list"][i]["main"]["pressure"].as<uint16_t>())
                 ->humidity(doc["list"][i]["main"]["humidity"].as<uint8_t>())
                 ->temp(doc["list"][i]["main"]["temp"].as<double>())
-                ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>());
-
-            weather++;
+                ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>())
+                ->pop(doc["list"][i]["pop"].as<double>())
+                ->dt(doc["list"][i]["dt"].as<uint32_t>());
         }
+        forecast->forecasted_weather = weather;
     }
-    forecast->forecasted_weather = weather - NUMBER_OF_HOURS_TO_FORECAST;
     http->end();
     return forecast;
 }

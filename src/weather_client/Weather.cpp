@@ -62,3 +62,17 @@ Weather* Weather::sunset(uint32_t sunset)
 
     return this;
 }
+
+Weather* Weather::dt(uint32_t dt)
+{
+    this->_dt = dt;
+
+    return this;
+}
+
+Weather* Weather::pop(double pop)
+{
+    this->_pop = pop;
+
+    return this;
+}
