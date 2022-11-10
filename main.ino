@@ -50,8 +50,6 @@ MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)}       // [1][0]
 };
 
-// CurrentWeatherScreen cw_screen (&tft, BACKGROUND_COLOR);
-// Forecast12Screen f12_screen(&tft, BACKGROUND_COLOR);
 
 Point screen_idx(0,0);
 
@@ -107,7 +105,6 @@ void move(uint8_t move)
                     screen_idx.x = 0;
                     tft.fillScreen(BACKGROUND_COLOR);
                     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-                    //bs[screen_idx.x]->draw(weather, true);
                 }
                 break;
             case RIGHT:
@@ -116,7 +113,6 @@ void move(uint8_t move)
                     screen_idx.x = 1;
                     tft.fillScreen(BACKGROUND_COLOR);
                     screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
-                    //bs[screen_idx.x]->draw(forecast, true);
                 }
                 break;
             default:
@@ -159,9 +155,6 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
     weather = wclient.current_weather();
     forecast = wclient.forecast_weather();
-
-    forecast = wclient.update(forecast);
-    weather = wclient.update(weather);
 
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
     
