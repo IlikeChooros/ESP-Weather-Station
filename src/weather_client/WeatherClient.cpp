@@ -81,11 +81,14 @@ Forecast* WeatherClient::forecast_weather()
     http->begin("https://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     int16_t http_code = http->GET();
 
-    Forecast* forecast = new Forecast;
-    Weather** weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
+    Forecast* forecast;
+    Weather** weather;
 
     if (http_code == 200)
     {
+        forecast = new Forecast;
+        weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
+        forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
         String payload = http->getString();
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
@@ -125,4 +128,39 @@ Forecast* WeatherClient::forecast_weather()
     }
     http->end();
     return forecast;
+}
+
+Weather* WeatherClient::update(Weather* weather)
+{
+    Weather* w;
+    if(weather)
+    {
+        delete weather;
+        w = current_weather();
+    }
+    return w;
+}
+
+Forecast* WeatherClient::update(Forecast* forecast)
+{
+    if(forecast)
+    {
+        Weather* w;
+        for (uint8_t i=0;i<forecast->number_of_forecasts;i++)
+        {
+            Serial.println(String(i)+" w = f->...");
+            w = forecast->forecasted_weather[i];
+            if(w)
+            {
+                Serial.println(String(i)+" (w == true)");
+                delete w;
+            }
+        }
+        Serial.println("deleting f...");
+        delete forecast;
+    }
+    Forecast* f = forecast_weather();
+    Serial.println("END");
+    return f;
+
 }

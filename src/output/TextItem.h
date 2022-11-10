@@ -18,7 +18,7 @@ class TextItem: public WeatherItem
         this->color = color;
         this->prev_data=0;
     }
-    void draw();
+    void draw(bool forceDraw);
 
     protected:
     int16_t _data;

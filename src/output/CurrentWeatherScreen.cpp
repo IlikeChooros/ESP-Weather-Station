@@ -18,7 +18,7 @@ CurrentWeatherScreen::CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c)
     };
 }
 
-void CurrentWeatherScreen::draw(Weather* weather)
+void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
 {
     configTime(3600, 0, NTP_SERVER);
     
@@ -27,7 +27,7 @@ void CurrentWeatherScreen::draw(Weather* weather)
         weather_items[i]
         ->setWeather(weather);
         weather_items[i]
-        ->draw();
+        ->draw(forceDraw);
     }
 
     // Fonts: 1,2,4,6,7,8
@@ -56,11 +56,11 @@ void CurrentWeatherScreen::draw(Weather* weather)
     // _tft->setTextColor(0xB41F); 
     // _tft->println("   "+String(weather->_pressure)+" hPa"); // PRESSURE
 
-    _tft->setTextFont(4);
-    _tft->setTextSize(1);
+    _tft->setTextFont(2);
+    _tft->setTextSize(2);
     _tft->setTextColor(MIST);
 
-    _tft->setCursor(60,180);
+    _tft->setCursor(50,180);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {

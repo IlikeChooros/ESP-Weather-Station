@@ -26,7 +26,7 @@ class Forecast12Screen
     ColumnItem* columnItems;
     public:
     Forecast12Screen(TFT_eSPI* tft, uint16_t bg_c);
-    void draw(Forecast* forecast);
+    void draw(Forecast* forecast, bool forceDraw);
 };
 
 #endif

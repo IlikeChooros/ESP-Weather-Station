@@ -20,7 +20,7 @@ class TimeItem: public WeatherItem
         this->color = color;
         prev_date = "";
     }
-    void draw();
+    void draw(bool forceDraw);
     void setWeather(Weather* weather);
 };
 

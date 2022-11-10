@@ -21,7 +21,7 @@ class CurrentWeatherScreen
     uint16_t _bg_c;
     public:
     CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c);
-    void draw(Weather* weather);
+    void draw(Weather* weather, bool forceDraw);
 };
 
 

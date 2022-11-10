@@ -23,7 +23,7 @@ class DropletItem: public WeatherItem
         this->size = size;
         this->pop = -1;
     }
-    void draw();
+    void draw(bool forceDraw);
     void setWeather(Weather* weather);
 };
 

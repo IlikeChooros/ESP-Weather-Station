@@ -20,7 +20,7 @@ class WeatherIcon: public WeatherItem
         this->size = size;
     }
     void setWeather(Weather* weather);
-    void draw();
+    void draw(bool forceDraw);
 };
 
 

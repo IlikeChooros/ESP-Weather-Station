@@ -23,6 +23,8 @@ class WeatherClient
     bool _init_(String city_name);
     Weather* current_weather();
     Forecast* forecast_weather();
+    Weather* update(Weather* w);
+    Forecast* update(Forecast* f);
 };
 
 #endif

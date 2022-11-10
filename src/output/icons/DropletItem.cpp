@@ -1,8 +1,8 @@
 #include "DropletItem.h"
 
-void DropletItem::draw()
+void DropletItem::draw(bool forceDraw)
 {
-    if (!redraw)
+    if (!forceDraw && !redraw)
     {
         return;
     }

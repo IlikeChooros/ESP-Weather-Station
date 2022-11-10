@@ -222,21 +222,26 @@ void Droplet_0::draw()
 void Droplet_30::draw()
 {
     drawDroplet(_tft,x,y,size,SNOW_FLAKE);
-    drawDroplet(_tft,x+0.2f*size, y + 0.25f*size, 0.6f*size, background_color);
+    drawDroplet(_tft,x+0.18f*size, y + 0.25f*size, 0.7f*size, background_color);
+    _tft->fillRect(x+0.3f*size, y+0.85f*size, 0.4f*size, 0.05f*size, SNOW_FLAKE);
+    _tft->fillRect(x+0.35f*size, y + 0.9f*size, 0.3f*size, 0.05f*size, SNOW_FLAKE);
+
 }
 
 void Droplet_50::draw()
 {
     drawDroplet(_tft,x,y,size,SNOW_FLAKE);
     drawDroplet(_tft,x+0.18f*size, y + 0.22f*size, 0.7f*size, background_color);
-    _tft->fillRect(x+0.3f*size, y+0.65f*size, 0.4f*size, 0.35f*size, SNOW_FLAKE);
+    _tft->fillRect(x+0.25f*size, y+0.65f*size, 0.5f*size, 0.2f*size, SNOW_FLAKE);
+    _tft->fillRect(x+0.3f*size, y+0.85f*size, 0.4f*size, 0.05f*size, SNOW_FLAKE);
+    _tft->fillRect(x+0.35f*size, y + 0.9f*size, 0.3f*size, 0.05f*size, SNOW_FLAKE);
 }
 
 void Droplet_70::draw()
 {
     drawDroplet(_tft,x,y,size,SNOW_FLAKE);
     drawDroplet(_tft,x+0.18f*size, y + 0.2f*size, 0.7f*size, background_color);
-    _tft->fillRect(x+0.3f*size, y+0.5f*size, 0.4f*size, 0.45f*size, SNOW_FLAKE);
+    _tft->fillCircle(x+size/2, y + size*0.7f, size*0.3f, SNOW_FLAKE);
 }
 
 void Droplet_100::draw()

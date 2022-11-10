@@ -33,9 +33,9 @@ void WindIcon::setWeather(Weather* weather)
     this->_icon = int_icon;
 }
 
-void WindIcon::draw()
+void WindIcon::draw(bool forceDraw)
 {
-    if (!this->_redraw)
+    if (!forceDraw && !this->_redraw)
     {
         return;
     }

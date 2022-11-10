@@ -14,27 +14,7 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define BACKGROUND_COLOR 0x10C4 //0x2945    //0x2124
-
-// Pobrac biblioteke : ArduinoJson
-// Pobrac konwerter: https://www.instructables.com/Converting-Images-to-Flash-Memory-Iconsimages-for-/
-// YT: How to program TTGO T-Display - PART3 (Images and Custom Fonts)
-// http://www.rinkydinkelectronics.com/t_imageconverter565.php
-// 1. Wpisz nazwę miasta
-// 2. Wyślij prośbę do: http://api.openweathermap.org/geo/1.0/direct?q=Oława&limit=1&appid=6a0b31b6c9c1f95d47860092dadc1f6c
-//                                                                     (miasto)
-// 3. [{"name":"Oława","local_names":{"pl":"Oława"},"lat":50.95709295,"lon":17.290269769664455,"country":"PL","state":"Lower Silesian Voivodeship"}]
-// Wybież lat i lon.
-// 4. Wyszukaj to:
-// https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=
-
-//https://api.openweathermap.org/data/2.5/forecast?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=6a0b31b6c9c1f95d47860092dadc1f6c
-//                                                    (lat z Oławy)    (lon z Oławy)
-// 5. Otrzymujesz to:
-// {"coord":{"lon":17.2903,"lat":50.9571},"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04d"}],
-// "base":"stations","main":{"temp":296.71,"feels_like":296.35,"temp_min":294.83,"temp_max":297.54,"pressure":1019,"humidity":47,"sea_level":1019,"grnd_level":1004},
-// "visibility":10000,"wind":{"speed":1.79,"deg":196,"gust":3.33},"clouds":{"all":93},"dt":1667135121,"sys":
-// {"type":2,"id":2073402,"country":"PL","sunrise":1667108337,"sunset":1667143793},"timezone":3600,"id":7532481,"name":"Oława","cod":200}
+#define BACKGROUND_COLOR 0x10C4
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -52,9 +32,19 @@ WeatherClient wclient(&http);
 Weather* weather;
 Forecast* forecast;
 
+enum Move_idx
+{
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT
+};
+
 TouchScreen ts(&tft, calData);
 CurrentWeatherScreen weather_screen(&tft, BACKGROUND_COLOR);
 Forecast12Screen forecast_screen(&tft, BACKGROUND_COLOR);
+
+Point screen_idx(0,0);
 
 bool try_to_connect_to_wifi()
 {
@@ -78,22 +68,50 @@ bool try_to_connect_to_wifi()
 
 void up()
 {
-    Serial.println("UP");
+
 }
 
 void down()
 {
-    Serial.println("DOWN");
+
 }
 
 void left()
 {
-    Serial.println("LEFT");
+    move(LEFT);
 }
 
 void right()
 {
-    Serial.println("RIGHT");
+    move(RIGHT);
+}
+
+void move(uint8_t move)
+{
+    if (screen_idx.y == 0)
+    {
+        switch(move)
+        {
+            case LEFT:
+                if (screen_idx.x == 1)
+                {
+                    tft.fillScreen(BACKGROUND_COLOR);
+                    weather_screen.draw(weather, true);
+                    screen_idx.x = 0;
+                }
+                break;
+            case RIGHT:
+                if (screen_idx.x == 0)
+                {
+                    tft.fillScreen(BACKGROUND_COLOR);
+                    forecast_screen.draw(forecast, true);
+                    screen_idx.x = 1;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 void setup()
@@ -129,10 +147,14 @@ void setup()
 
     tft.fillScreen(BACKGROUND_COLOR);
     weather = wclient.current_weather();
-    // weather_screen.draw(weather);
-
     forecast = wclient.forecast_weather();
-    forecast_screen.draw(forecast);
+
+    forecast = wclient.update(forecast);
+    weather = wclient.update(weather);
+
+    screen_idx.x = 1;
+    forecast_screen.draw(forecast, true);
+    // forecast_screen.draw(forecast);
     
 
     // delay(2000);

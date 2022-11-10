@@ -1,9 +1,9 @@
 #include "TimeItem.h"
 
 
-void TimeItem::draw()
+void TimeItem::draw(bool forceDraw)
 {
-    if (!redraw)
+    if (!redraw && !forceDraw)
     {
         return;
     }
