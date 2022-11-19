@@ -5,7 +5,7 @@
 
 #include "Weather.h"
 
-#define NUMBER_OF_HOURS_TO_FORECAST 4
+#define NUMBER_OF_HOURS_TO_FORECAST 40
 
 class Forecast
 {

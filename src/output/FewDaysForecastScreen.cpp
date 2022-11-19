@@ -1,33 +1,6 @@
-#include "TimeItem.h"
+#include "FewDaysForecastScreen.h"
 
-
-void TimeItem::draw(bool forceDraw)
-{
-    if (!redraw && !forceDraw)
-    {
-        return;
-    }
-
-    String date = unixTimeToHumanReadable(hourly);
-    this->_tft->setCursor(this->x, this->y);
-    this->_tft->setTextColor(this->bg_c);
-    this->_tft->setTextFont(this->font);
-    this->_tft->setTextSize(this->text_size);
-    this->_tft->print(prev_date);
-
-    this->_tft->setTextColor(color);
-    this->_tft->setCursor(x,y);
-    this->_tft->print(date);
-    prev_date = date;
-}
-
-void TimeItem::setWeather(Weather* weather)
-{
-    redraw = unix != weather->_dt;
-    this->unix = weather->_dt;
-}
-
-String TimeItem::unixTimeToHumanReadable(bool hourFormat)
+uint8_t get_day(uint64_t unix)
 {
     // Save the time in Human
     // readable format
@@ -118,29 +91,55 @@ String TimeItem::unixTimeToHumanReadable(bool hourFormat)
             date = daysOfMonth[month - 1];
         }
     }
- 
-    // Calculating HH:MM:YYYY
-    hours = extraTime / 3600;
-    minutes = (extraTime % 3600) / 60;
-    
-    if (hourFormat)
+    return date;
+}
+
+void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
+{
+    uint8_t current_day = get_day(forecast->forecasted_weather[0]->_dt);
+    uint8_t starting_itr = 1;
+    float* result;
+    for (; starting_itr<8; starting_itr++)
     {
-        ans += String(hours);
-        ans += ":";
-        if (minutes<10)
+        if (get_day(forecast->forecasted_weather[starting_itr]->_dt) == current_day + 1)
         {
-            ans+= "0";
+            break;
         }
-        ans += String(minutes);
     }
-    else
+    starting_itr += 4;
+    for (uint8_t i=0; i<NUMBER_OF_DAYS_TO_FORECAST; i++)
     {
-        ans += String(date);
-        ans += "-";
-        ans += String(month);
+        result = getMinMaxTemp_pop(forecast, i*8 + starting_itr - 4);
+        forecast->forecasted_weather[i*8 + starting_itr]->_pop = result[POP];
+        forecast->forecasted_weather[i*8 + starting_itr]->_temp = result[MAX_TEMP];
+        forecast->forecasted_weather[i*8 + starting_itr]->_feels_like = result[MIN_TEMP];
+
+        for (uint8_t j=0;j<NUMBER_OF_COLUMN_ITEMS;j++)
+        {
+            column_items[i].weather_items[j]->setWeather(forecast->forecasted_weather[i*8 + starting_itr]);
+            column_items[i].weather_items[j]->draw(forceDraw);
+        }
     }
-    
- 
-    // Return the time
-    return ans;
+    delete [] result;
+}
+
+float*  FewDaysForecastScreen::getMinMaxTemp_pop(Forecast* forecast, uint8_t start_idx)
+{
+    float* results = new float [3] {0,-100,100};
+
+    for (int8_t a = 0; a<8;a++)
+    {
+        results[POP] += forecast->forecasted_weather[(uint16_t) a + start_idx]->_pop;
+
+        if (forecast->forecasted_weather[(uint16_t) a + start_idx]->_temp > results[MAX_TEMP])
+        {
+            results[MAX_TEMP]= forecast->forecasted_weather[(uint16_t) a + start_idx]->_temp;
+        }
+        if (results[MIN_TEMP] > forecast->forecasted_weather[(uint16_t) a + start_idx]->_temp)
+        {
+            results[MIN_TEMP] = forecast->forecasted_weather[(uint16_t) a + start_idx]->_temp;
+        }
+    }
+    results[POP] /= 8;
+    return results;
 }

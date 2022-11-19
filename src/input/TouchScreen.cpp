@@ -34,6 +34,7 @@ void TouchScreen::read()
 
     if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
     {
+        //Serial.println("TOUCHING");
         _state=state;
 
         // if this is an realse, then igonre
@@ -48,18 +49,26 @@ void TouchScreen::read()
         {
             if ( y < -0.75f*x + 240)
             {
+                //Serial.println("LEFT");
+                //Serial.println("");
                 this->_on_left();
             }
             else{
+                //Serial.println("DOWN");
+                //Serial.println("");
                 this->_on_down();
             }
         }
         else{
             if ( y < -0.75f*x + 240)
             {
+                //Serial.println("UP");
+                //Serial.println("");
                 this->_on_up();
             }
             else{
+                //Serial.println("RIGHT");
+                //Serial.println("");
                 this->_on_right();
             }
         }

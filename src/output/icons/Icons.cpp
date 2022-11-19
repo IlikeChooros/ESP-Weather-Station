@@ -19,7 +19,7 @@ void Moon::draw()
 {
     _tft->fillRect(x,y,size,size,background_color);
 
-    drawMoon(_tft,x,y,size, MOON, background_color);
+    drawMoon(_tft,x+0.05f*size,y,size*0.9f, MOON, background_color);
 }
 
 void FewCloudsDay::draw()

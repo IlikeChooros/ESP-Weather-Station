@@ -143,6 +143,10 @@ Weather* WeatherClient::update(Weather* weather)
 
 Forecast* WeatherClient::update(Forecast* forecast)
 {
+    Serial.println("--------------------");
+    Serial.println("FREE RAM: "+String(ESP.getFreeHeap()));
+    Serial.println("--------------------");
+    delay(200);
     if(forecast)
     {
         Weather* w;
@@ -156,11 +160,28 @@ Forecast* WeatherClient::update(Forecast* forecast)
                 delete w;
             }
         }
+        delay(200);
+        Serial.println("AFTER DELETING WEAHTER:"+String(ESP.getFreeHeap()));
         Serial.println("deleting f...");
+        delete [] forecast->forecasted_weather;
+
+        delay(200);
+        Serial.println("AFTER DELETING [] WEAHTER:"+String(ESP.getFreeHeap()));
         delete forecast;
+
+        delay(200);
+        Serial.println("AFTER DELETING FORECAST:"+String(ESP.getFreeHeap()));
+
     }
     Forecast* f = forecast_weather();
-    Serial.println("END");
-    return f;
 
+    delay(200);
+    Serial.println("AFTER ADDING NEW FORECAST:"+String(ESP.getFreeHeap()));
+    Serial.println("END");
+    if (!f)
+    {
+        Serial.println("!f");
+    }
+    Serial.println("f == true");
+    return f;
 }

@@ -4,8 +4,9 @@
 #include "src/output/icons/Icons.h"
 #include "src/weather_client/WeatherClient.h"
 #include "src/output/CurrentWeatherScreen.h"
-// #include "src/output/MainScreen.h"
+#include "src/output/MainScreen.h"
 #include "src/output/Forecast12Screen.h"
+#include "src/output/FewDaysForecastScreen.h"
 #include "src/input/TouchScreen.h"
 
 #include <TFT_eSPI.h> 
@@ -16,8 +17,11 @@
 #include <ArduinoJson.h>
 
 #define BACKGROUND_COLOR 0x10C4
-#define X_SCREENS 2
+#define X_SCREENS 3
 #define Y_SCREENS 1
+#define SCREEN_LIST 2
+#define MINUTES_5 60000*5
+#define MINUTE 60000
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -43,11 +47,14 @@ enum Move_idx
     LEFT
 };
 
+uint32_t time_passed = 0;
+
 TouchScreen ts(&tft, calData);
 
 MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new CurrentWeatherScreen(&tft, BACKGROUND_COLOR)},  // [0][0]
-    new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)}       // [1][0]
+    new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)},       // [1][0]
+    new MainScreen* [Y_SCREENS] {new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)}
 };
 
 
@@ -55,20 +62,23 @@ Point screen_idx(0,0);
 
 bool try_to_connect_to_wifi()
 {
+    Serial.println("Connecting...");
     tft.println("Connecting...");
 
     while(WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
+        Serial.println("Connecting to WiFi...");
         tft.println("Connecting to WiFi...");
         number_of_tries++;
 
         if (number_of_tries == 6){
+            Serial.println("[-] Failed to connect to WiFi.");
             tft.println("[-] Failed to connect to WiFi.");
             return false;
         }
     }
-
+    Serial.println("[+] Connected to the Wifi");
     tft.println("[+] Connected to the Wifi");
     return true;
 }
@@ -104,14 +114,23 @@ void move(uint8_t move)
                 {
                     screen_idx.x = 0;
                     tft.fillScreen(BACKGROUND_COLOR);
+                    //weather = wclient.update(weather);
                     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+                }
+                else if (screen_idx.x == 2)
+                {
+                    tft.fillScreen(BACKGROUND_COLOR);
+                    screen_idx = 1;
+                    screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
+
                 }
                 break;
             case RIGHT:
-                if (screen_idx.x == 0)
+                if (screen_idx.x == 0 || screen_idx.x == 1)
                 {
-                    screen_idx.x = 1;
                     tft.fillScreen(BACKGROUND_COLOR);
+                    screen_idx.x++;
+                    //draw_update_forecast();
                     screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
                 }
                 break;
@@ -157,145 +176,6 @@ void setup()
     forecast = wclient.forecast_weather();
 
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-    
-
-    // delay(2000);
-    // weather->_wind_speed=15;
-    // weather->_feels_like = 28;
-    // weather->_temp = 28;
-    // weather_screen.draw(weather);
-    // weather->_icon = "03d";
-    // delay(2000);
-
-    // weather->_feels_like = 25;
-    // weather->_wind_speed=21;
-    // weather->_temp = 20;
-    // weather->_icon = "02d";
-    // weather_screen.draw(weather);
-    //delay(2000);
-
-    // weather->_feels_like = 20;
-    // weather->_temp = 18;
-    // weather_screen.draw(weather);
-    // weather->_icon = "50d";
-    // delay(2000);
-
-    // weather->_feels_like = 4;
-    // weather->_temp = 5;
-    // weather_screen.draw(weather);
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "03d";
-    // delay(2000);
-
-    // weather->_feels_like =  5;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "03n";
-    // delay(2000);
-
-    // weather->_feels_like =  0;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "04d";
-    // delay(2000);
-
-    // weather->_feels_like =  -5;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "09d";
-    // delay(2000);
-
-    // weather->_feels_like =  -10;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "10d";
-    // delay(2000);
-
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "13d";
-    // delay(2000);
-
-    // weather->_feels_like =  -15;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "50d";
-    // delay(2000);
-
-    // weather->_feels_like =  -20;
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-    // weather->_icon = "50n";
-    // delay(2000);
-
-
-    // weather_screen.draw_main_screen(weather, BACKGROUND_COLOR);
-
-    // tft.println("MAIN: "+weather->_main);
-    // tft.println("ICON: "+weather->_icon);
-    // tft.println("TEMP: "+String(weather->_temp));
-    // tft.println("FEELS_LIKE: "+String(weather->_feels_like));
-    // tft.println("PRESSURE: "+String(weather->_pressure));
-    // tft.println("HUMIDITY: "+String(weather->_humidity));
-    // tft.println("WIND_SPEED: "+String(weather->_wind_speed));
-    // tft.println("SUNRISE: "+String(weather->_sunrise));
-    // tft.println("SUNSET: "+String(weather->_sunset));
-
-    // forecast = wclient.forecast_weather();
-    // weather = forecast->forecasted_weather;
-
-    // for (uint8_t i=0;i<8;i++)
-    // {
-    //     tft.setCursor(0,10);
-    //     tft.fillScreen(BACKGROUND_COLOR);
-
-    //     tft.println("MAIN: "+weather->_main);
-    //     tft.println("ICON: "+weather->_icon);
-    //     tft.println("TEMP: "+String(weather->_temp));
-    //     tft.println("FEELS_LIKE: "+String(weather->_feels_like));
-    //     tft.println("PRESSURE: "+String(weather->_pressure));
-    //     tft.println("HUMIDITY: "+String(weather->_humidity));
-    //     tft.println("WIND_SPEED: "+String(weather->_wind_speed));
-
-    //     weather++;
-    //     delay(2000);
-    // }
-
-    // Sun sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    // Sun sun2(&tft, 100, 0,  75, BACKGROUND_COLOR);
-    // Sun sun3(&tft, 175, 0,  50, BACKGROUND_COLOR);
-    // Sun sun4(&tft, 225, 0,  25, BACKGROUND_COLOR);
-    // sun1.draw();
-    // sun2.draw();
-    // sun3.draw();
-    // sun4.draw();
-
-    // Clouds cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    // Clouds cl2 (&tft, 100,100,75, BACKGROUND_COLOR);
-    // Clouds cl3 (&tft, 175,100,50, BACKGROUND_COLOR);
-    // Clouds cl4 (&tft, 225,100,25, BACKGROUND_COLOR);
-
-    // cl1.draw();
-    // cl2.draw();
-    // cl3.draw();
-    // cl4.draw();
-
-    // CloudsDay sun1(&tft, 0, 0,  100, BACKGROUND_COLOR);
-    // CloudsNight sun2(&tft, 100, 0, 100, BACKGROUND_COLOR);
-    // ManyClouds sun3 (&tft, 200, 0, 100, BACKGROUND_COLOR);
-    // sun1.draw();
-    // sun2.draw();
-    // sun3.draw();
-
-    // FewCloudsDay cl1 (&tft, 0,100,100, BACKGROUND_COLOR);
-    // FewCloudsNight cl2 (&tft, 100,100,100, BACKGROUND_COLOR);
-    // Snow cl3 (&tft, 200,100,100, BACKGROUND_COLOR);
-
-
-    // cl1.draw();
-    // cl2.draw();
-    // cl3.draw();
 }
 
 

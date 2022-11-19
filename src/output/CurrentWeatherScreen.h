@@ -11,7 +11,7 @@
 #include "../data_structures/Hsv_to_rgb.h"
 
 #define NTP_SERVER "pool.ntp.org"
-#define DEGREE char(96)
+#define DEGREE '`'
 #define NUMBER_OF_WEATHER_ITEMS 6
 
 class CurrentWeatherScreen: public MainScreen
