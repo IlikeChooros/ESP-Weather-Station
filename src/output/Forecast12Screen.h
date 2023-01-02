@@ -48,7 +48,10 @@ class Forecast12Screen: public MainScreen
     {
         return;
     }
-
+    void refresh()
+    {
+        return;
+    }
 };
 
 #endif

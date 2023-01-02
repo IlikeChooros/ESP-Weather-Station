@@ -50,6 +50,10 @@ class FewDaysForecastScreen: public MainScreen
     void draw(Weather* weather, bool forceDraw){
         return;
     }
+    void refresh()
+    {
+        return;
+    }
 };
 
 

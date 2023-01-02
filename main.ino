@@ -47,7 +47,7 @@ enum Move_idx
     LEFT
 };
 
-uint32_t time_passed = 0;
+uint32_t lastTimeCheck = 0;
 
 TouchScreen ts(&tft, calData);
 
@@ -176,10 +176,18 @@ void setup()
     forecast = wclient.forecast_weather();
 
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+
 }
 
 
 void loop()
 {
     ts.read();
+
+    if (screen_idx.x == 0 && millis() - lastTimeCheck> MINUTE)
+    {
+        lastTimeCheck = millis();
+        // drawing main screen time data
+        screens[0][0]->refresh();
+    }
 }

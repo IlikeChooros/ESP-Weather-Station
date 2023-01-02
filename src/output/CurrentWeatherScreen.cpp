@@ -13,20 +13,27 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
     }
 
     // Fonts: 1,2,4,6,7,8
+    refresh();
+}
 
-    _tft->setTextFont(2);
-    _tft->setTextSize(2);
-    _tft->setTextColor(MIST);
+void CurrentWeatherScreen::refresh()
+{
+    _tft->fillRect(0,0,320,96,bg_c);
+    _tft->setTextFont(4);
+    _tft->setTextSize(1);
+    _tft->setTextColor(TFT_WHITE);
 
-    _tft->setCursor(50,180);
+    _tft->setCursor(40,10);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
         _tft->print("ERROR");
     }
     else{
-        _tft->println(&timeinfo, "%H:%M %d-%m-%Y");
+        _tft->println(&timeinfo, "%A -%e %b. %Y");
+        _tft->setTextFont(6);
+        _tft->setCursor(95,45);
+        _tft->print(&timeinfo, "%H:%M");
     }
-
 }
 

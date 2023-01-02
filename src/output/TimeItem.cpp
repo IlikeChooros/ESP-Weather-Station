@@ -121,7 +121,7 @@ String TimeItem::unixTimeToHumanReadable(bool hourFormat)
  
     // Calculating HH:MM:YYYY
     hours = extraTime / 3600;
-    minutes = (extraTime % 3600) / 60;
+    minutes = (extraTime % 3600) / 60;    
     
     if (hourFormat)
     {
