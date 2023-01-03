@@ -248,3 +248,19 @@ void Droplet_100::draw()
 {
     drawDroplet(_tft,x,y,size,SNOW_FLAKE);
 }
+
+void WiFiIcon::draw()
+{
+    // first line
+    _tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.5f*size, SNOW_FLAKE);
+    _tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.4f*size, background_color);
+    _tft->fillRect(x, y+0.3f*size,1.1f*size, 0.8f*size, background_color);
+
+    // second line
+    _tft->fillCircle(x+0.5f*size, y+0.55f*size, 0.3f*size, SNOW_FLAKE);
+    _tft->fillCircle(x+0.5f*size, y+0.55f*size, 0.2f*size, background_color);
+    _tft->fillRect(x,y+0.5f*size,1.1f*size,0.5f*size,background_color);
+
+    // center circle
+    _tft->fillCircle(x+0.5f*size, y+0.65*size, 0.1f*size, SNOW_FLAKE);
+}

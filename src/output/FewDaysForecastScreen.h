@@ -37,7 +37,7 @@ class FewDaysForecastScreen: public MainScreen
         {
             column_items[i].number_of_items = NUMBER_OF_COLUMN_ITEMS;
             column_items[i].weather_items = new WeatherItem* [NUMBER_OF_COLUMN_ITEMS]{
-                new TimeItem(_tft, i*column_width+10, 10, bg_c, MIST, 1,2, 0, false),
+                new TimeItem(_tft, i*column_width+10, 10, bg_c, MIST, 2,2, 0, false),
                 new WeatherIcon(_tft,i*column_width,40,column_width, this->bg_c),
                 new TextTemp(_tft, i*column_width+8, 40 + column_width, 4, 1, TFT_WHITE, "%d `C",bg_c),
                 new TextFeelsLike(_tft, i*column_width+10, 65 + column_width, 4,1, TFT_WHITE, "%d `C", bg_c),

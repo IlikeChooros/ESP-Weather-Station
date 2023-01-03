@@ -19,6 +19,8 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
 void CurrentWeatherScreen::refresh()
 {
     _tft->fillRect(0,0,320,96,bg_c);
+    this->wf->draw();
+
     _tft->setTextFont(4);
     _tft->setTextSize(1);
     _tft->setTextColor(TFT_WHITE);

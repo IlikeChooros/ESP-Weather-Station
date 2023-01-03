@@ -27,8 +27,20 @@ void TimeItem::setWeather(Weather* weather)
     this->unix = weather->_dt;
 }
 
+String TimeItem::get_weekday()
+{
+    String weekdays[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    float days = this->unix/24;
+    days /= 3600;
+    return weekdays[((uint32_t)days+3)%7];    
+}
+
 String TimeItem::unixTimeToHumanReadable(bool hourFormat)
 {
+    if (!hourFormat)
+    {
+        return get_weekday();
+    }
     // Save the time in Human
     // readable format
     String ans = "";
@@ -140,7 +152,6 @@ String TimeItem::unixTimeToHumanReadable(bool hourFormat)
         ans += String(month);
     }
     
- 
     // Return the time
     return ans;
 }

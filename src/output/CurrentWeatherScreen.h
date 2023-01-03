@@ -20,6 +20,7 @@
 class CurrentWeatherScreen: public MainScreen
 {
     WeatherItem** weather_items;
+    WiFiIcon* wf;
     public:
     CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c): MainScreen(tft,bg_c){
         set_text_colors();
@@ -31,7 +32,9 @@ class CurrentWeatherScreen: public MainScreen
             new TextFeelsLike(this->_tft, 35, 80+OFFSET, 2, 1, TFT_WHITE,"Feels like: %d `C", bg_c),
             new TextWind(this->_tft, 30, 105+OFFSET, 4, 1, 0x77F2, "%d km/h", bg_c),
             new TextPressure(this->_tft, 30, 130+OFFSET, 4, 1, 0xB41F, "%d hPa", bg_c)
-        };
+        }; 
+
+        wf = new WiFiIcon(this->_tft, 10,10,20,bg_c);
     }
     void draw(Weather* weather, bool forceDraw);
     void draw(Forecast* forecast, bool forceDraw)
