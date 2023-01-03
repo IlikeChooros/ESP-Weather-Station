@@ -119,8 +119,8 @@ void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
             column_items[i].weather_items[j]->setWeather(forecast->forecasted_weather[i*8 + starting_itr]);
             column_items[i].weather_items[j]->draw(forceDraw);
         }
+        delete [] result;
     }
-    delete [] result;
 }
 
 float*  FewDaysForecastScreen::getMinMaxTemp_pop(Forecast* forecast, uint8_t start_idx)

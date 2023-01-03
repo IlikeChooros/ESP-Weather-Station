@@ -7,6 +7,7 @@
 #include "src/output/MainScreen.h"
 #include "src/output/Forecast12Screen.h"
 #include "src/output/FewDaysForecastScreen.h"
+#include "src/output/icons/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
 #include <TFT_eSPI.h> 
@@ -56,7 +57,7 @@ MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)},       // [1][0]
     new MainScreen* [Y_SCREENS] {new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)}
 };
-
+ScreenPointItem sci(&tft, 150, 230, BACKGROUND_COLOR);
 
 Point screen_idx(0,0);
 
@@ -138,6 +139,8 @@ void move(uint8_t move)
                 break;
         }
     }
+
+    sci.draw(3,1,screen_idx.x+1,1);
 }
 
 void setup()
@@ -176,7 +179,7 @@ void setup()
     forecast = wclient.forecast_weather();
 
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-
+    sci.draw(3,1,1,1);
 }
 
 
