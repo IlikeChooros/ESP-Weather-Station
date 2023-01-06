@@ -222,7 +222,7 @@ void loop()
     if (screen_idx.x == 0 && millis() - lastTimeCheck> MINUTE)
     {
         // drawing main screen time data
-         Serial.println("After "+String((millis()-lastTimeCheck)/1000)+" sec. calling refresh()");
+        Serial.println("After "+String((millis()-lastTimeCheck)/1000)+" sec. calling refresh()");
         
         Serial.println("current_weather");
         wclient.current_weather(weather);
