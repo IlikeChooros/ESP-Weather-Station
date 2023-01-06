@@ -26,8 +26,8 @@
 
 TFT_eSPI tft = TFT_eSPI();
 
-const char* ssid =  "bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password =  "269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
+const char* ssid =  "NETIASPOT-2,4GHz-69C140"; //"bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "6epTdSSVW22X"; //"269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -158,16 +158,16 @@ void setup()
     Serial.begin(921600);
     WiFi.begin(ssid, password);
     tft.init();
-    tft.setRotation(1);
+    tft.setRotation(3);
 
     tft.fillScreen(BACKGROUND_COLOR);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 
-    ts.on_down(down);
-    ts.on_left(left);
-    ts.on_right(right);
-    ts.on_up(up);
+    ts.on_down(up);
+    ts.on_left(right);
+    ts.on_right(left);
+    ts.on_up(down);
 
     if(!try_to_connect_to_wifi())
     {

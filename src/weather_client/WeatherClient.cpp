@@ -38,18 +38,16 @@ bool WeatherClient::_init_(String city_name)
 void WeatherClient::current_weather(Weather* weather)
 {
     Serial.println("[/] Weather updating...");
-    http->begin("https://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
+    http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     Serial.println("HTTP->BEGIN()");
     
     int16_t http_code = http->GET();
-
     Serial.println("HTTP: "+String(http_code));
-
+    String payload = http->getString();
+    Serial.println("[+] Payload");
+    Serial.println(payload);
     if (http_code == 200)
     {
-
-        String payload = http->getString();
-        Serial.println("[+] Payload");
         DynamicJsonDocument filter(440);
         filter["weather"][0]["main"] = true;
         filter["weather"][0]["icon"] = true;
@@ -94,15 +92,16 @@ void WeatherClient::current_weather(Weather* weather)
 void WeatherClient::forecast_weather(Forecast* forecast)
 {
     Serial.println("[/] Weather updating...");
-    http->begin("https://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
+    http->begin("http://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     Serial.println("HTTP->BEGIN()");
     
     int16_t http_code = http->GET();
     Serial.println("HTTP: "+String(http_code));
+    String payload = http->getString();
+    Serial.println("[+] Payload");
+    Serial.println(payload);
     if (http_code == 200)
     {
-        String payload = http->getString();
-        Serial.println("[+] Payload");
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
         {
