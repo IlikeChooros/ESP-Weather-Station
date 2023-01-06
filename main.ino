@@ -21,7 +21,7 @@
 #define X_SCREENS 3
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
-#define MINUTES_5 60000*5
+#define MINUTES_5 300000
 #define MINUTE 60000
 
 TFT_eSPI tft = TFT_eSPI();
@@ -84,6 +84,12 @@ bool try_to_connect_to_wifi()
     return true;
 }
 
+void update_weather()
+{
+
+}
+
+
 void up()
 {
 
@@ -96,6 +102,7 @@ void down()
 
 void left()
 {
+    Serial.println("MOVE LEFT");
     move(LEFT);
 }
 
@@ -113,9 +120,12 @@ void move(uint8_t move)
             case LEFT:
                 if (screen_idx.x == 1)
                 {
+                    Serial.println("GOING TO CURRENT_DAY_WEATHER");
                     screen_idx.x = 0;
                     tft.fillScreen(BACKGROUND_COLOR);
                     //weather = wclient.update(weather);
+
+                    Serial.println("drawing...");
                     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
                 }
                 else if (screen_idx.x == 2)
@@ -175,8 +185,30 @@ void setup()
     }
 
     tft.fillScreen(BACKGROUND_COLOR);
-    weather = wclient.current_weather();
-    forecast = wclient.forecast_weather();
+
+    weather = new Weather;
+    Serial.println("weather");
+    heap_caps_check_integrity_all(true);
+    forecast = new Forecast;
+    Serial.println("forecast");
+    heap_caps_check_integrity_all(true);
+    forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
+    Serial.println("number_of_frecasts");
+    heap_caps_check_integrity_all(true);
+    forecast->forecasted_weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
+    for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++)
+    {
+        forecast->forecasted_weather[i] = new Weather;
+        Serial.println("forecast->forecast_weather "+String(i));
+        heap_caps_check_integrity_all(true);
+    }
+
+    wclient.current_weather(weather);
+    Serial.println("current_weather");
+    heap_caps_check_integrity_all(true);
+    wclient.forecast_weather(forecast);
+    Serial.println("forecast_weather");
+    heap_caps_check_integrity_all(true);
 
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
     sci.draw(3,1,1,1);
@@ -189,8 +221,24 @@ void loop()
 
     if (screen_idx.x == 0 && millis() - lastTimeCheck> MINUTE)
     {
-        lastTimeCheck = millis();
         // drawing main screen time data
-        screens[0][0]->refresh();
+         Serial.println("After "+String((millis()-lastTimeCheck)/1000)+" sec. calling refresh()");
+        
+        Serial.println("current_weather");
+        wclient.current_weather(weather);
+        
+        heap_caps_check_integrity_all(true);
+        Serial.println("------------------");
+        Serial.println("forecast");
+        wclient.forecast_weather(forecast);
+
+
+        heap_caps_check_integrity_all(true);
+
+        Serial.println("drawing main screen...");
+        screens[0][0]->draw(weather, true);
+
+        Serial.println("Weather updated: "+String(ESP.getFreeHeap()));
+        lastTimeCheck = millis();
     }
 }

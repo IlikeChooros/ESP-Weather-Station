@@ -31,21 +31,26 @@ bool WeatherClient::_init_(String city_name)
     return isSuccesful;
 }
 
-
-Weather* WeatherClient::current_weather()
+//-----------------------------------
+// Must get already initcialized object
+// 1. Weather weather = new Weather
+//-----------------------------------
+void WeatherClient::current_weather(Weather* weather)
 {
+    Serial.println("[/] Weather updating...");
     http->begin("https://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
+    Serial.println("HTTP->BEGIN()");
+    
     int16_t http_code = http->GET();
-
-    Weather* weather = new Weather;
 
     Serial.println("HTTP: "+String(http_code));
 
     if (http_code == 200)
     {
-        String payload = http->getString();
 
-        StaticJsonDocument<400> filter;
+        String payload = http->getString();
+        Serial.println("[+] Payload");
+        DynamicJsonDocument filter(440);
         filter["weather"][0]["main"] = true;
         filter["weather"][0]["icon"] = true;
         filter["main"]["temp"] = true;
@@ -57,9 +62,10 @@ Weather* WeatherClient::current_weather()
         filter["sys"]["sunset"] = true;
         filter["dt"]=true;
 
-        StaticJsonDocument<440> doc;
+        Serial.println("[+] filter");
+        DynamicJsonDocument doc(440);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
+        Serial.println("[+] deserializedJson");
         weather
             ->feels_like(doc["main"]["feels_like"].as<double>())
             ->main(doc["weather"][0]["main"].as<String>())
@@ -71,29 +77,35 @@ Weather* WeatherClient::current_weather()
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
             ->sunset(doc["sys"]["sunset"].as<uint32_t>())
             ->dt(doc["dt"].as<uint32_t>());
+        Serial.println("[+] weather");
+        doc.clear();
+        filter.clear();
+        Serial.println("[+] cleared memory");
     }
     http->end();
-    return weather;
+    Serial.println("[+] END");
 }
 
-Forecast* WeatherClient::forecast_weather()
+//----------------------------------
+// 1. Forecast must be init -> new Forecast
+// 2. forecasted_weather must be init -> forecast->forecasted_weather = new ...
+// 3. forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
+//----------------------------------
+void WeatherClient::forecast_weather(Forecast* forecast)
 {
+    Serial.println("[/] Weather updating...");
     http->begin("https://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
+    Serial.println("HTTP->BEGIN()");
+    
     int16_t http_code = http->GET();
-
-    Forecast* forecast;
-    Weather** weather;
-
+    Serial.println("HTTP: "+String(http_code));
     if (http_code == 200)
     {
-        forecast = new Forecast;
-        weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
-        forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
         String payload = http->getString();
+        Serial.println("[+] Payload");
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
         {
-            weather[i] = new Weather;
             filter["list"][i]["weather"][0]["main"] = true;
             filter["list"][i]["weather"][0]["icon"] = true;
             filter["list"][i]["main"]["temp"] = true;
@@ -104,16 +116,18 @@ Forecast* WeatherClient::forecast_weather()
             filter["list"][i]["dt"] = true;
             filter["list"][i]["pop"] = true;
 
+            Serial.println("[+] filter" + String(i));
+
             DynamicJsonDocument doc(FORECAST_CAPACITY);
             DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
+            Serial.println("[+] deserializedJson");
+            // if (err) {
+            // Serial.print(F("deserializeJson() failed with code "));
+            // Serial.println(err.f_str());
+            // }
 
-            if (err) {
-            Serial.print(F("deserializeJson() failed with code "));
-            Serial.println(err.f_str());
-            }
 
-
-            weather[i]
+            forecast->forecasted_weather[i]
                 ->feels_like(doc["list"][i]["main"]["feels_like"].as<double>())
                 ->main(doc["list"][i]["weather"][0]["main"].as<String>())
                 ->icon(doc["list"][i]["weather"][0]["icon"].as<String>())
@@ -123,65 +137,12 @@ Forecast* WeatherClient::forecast_weather()
                 ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>())
                 ->pop(doc["list"][i]["pop"].as<double>())
                 ->dt(doc["list"][i]["dt"].as<uint32_t>());
+
+            Serial.println("[+] forecast");
         }
-        forecast->forecasted_weather = weather;
+        filter.clear();
+        Serial.println("[+] cleared memory");
     }
     http->end();
-    return forecast;
-}
-
-Weather* WeatherClient::update(Weather* weather)
-{
-    Weather* w;
-    if(weather)
-    {
-        delete weather;
-        w = current_weather();
-    }
-    return w;
-}
-
-Forecast* WeatherClient::update(Forecast* forecast)
-{
-    Serial.println("--------------------");
-    Serial.println("FREE RAM: "+String(ESP.getFreeHeap()));
-    Serial.println("--------------------");
-    delay(200);
-    if(forecast)
-    {
-        Weather* w;
-        for (uint8_t i=0;i<forecast->number_of_forecasts;i++)
-        {
-            Serial.println(String(i)+" w = f->...");
-            w = forecast->forecasted_weather[i];
-            if(w)
-            {
-                Serial.println(String(i)+" (w == true)");
-                delete w;
-            }
-        }
-        delay(200);
-        Serial.println("AFTER DELETING WEAHTER:"+String(ESP.getFreeHeap()));
-        Serial.println("deleting f...");
-        delete [] forecast->forecasted_weather;
-
-        delay(200);
-        Serial.println("AFTER DELETING [] WEAHTER:"+String(ESP.getFreeHeap()));
-        delete forecast;
-
-        delay(200);
-        Serial.println("AFTER DELETING FORECAST:"+String(ESP.getFreeHeap()));
-
-    }
-    Forecast* f = forecast_weather();
-
-    delay(200);
-    Serial.println("AFTER ADDING NEW FORECAST:"+String(ESP.getFreeHeap()));
-    Serial.println("END");
-    if (!f)
-    {
-        Serial.println("!f");
-    }
-    Serial.println("f == true");
-    return f;
+    Serial.println("[+] END");
 }

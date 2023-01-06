@@ -42,7 +42,7 @@ class FewDaysForecastScreen: public MainScreen
                 new TextTemp(_tft, i*column_width+8, 40 + column_width, 4, 1, TFT_WHITE, "%d `C",bg_c),
                 new TextFeelsLike(_tft, i*column_width+10, 65 + column_width, 4,1, TFT_WHITE, "%d `C", bg_c),
                 new TextPop(_tft, i*column_width+25, 85 + column_width + 5, 2,1,WATER, "%d %%", bg_c),
-                new DropletItem(_tft,i*column_width+5, 85 + column_width, 20, bg_c)
+                new DropletItem(_tft,i*column_width+5, 90 + column_width, 20, bg_c)
             };
         }
     }

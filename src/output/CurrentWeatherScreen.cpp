@@ -4,8 +4,10 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
 {
     configTime(3600, 0, NTP_SERVER);
     
+    Serial.println("Starting iterations...");
     for (uint8_t i = 0; i<NUMBER_OF_WEATHER_ITEMS;i++)
     {
+        Serial.println(String(i));
         weather_items[i]
         ->setWeather(weather);
         weather_items[i]
@@ -13,6 +15,8 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
     }
 
     // Fonts: 1,2,4,6,7,8
+
+    Serial.println("refresh()");
     refresh();
 }
 
@@ -25,17 +29,19 @@ void CurrentWeatherScreen::refresh()
     _tft->setTextSize(1);
     _tft->setTextColor(TFT_WHITE);
 
-    _tft->setCursor(40,10);
+    _tft->setCursor(30,10);
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
         _tft->print("ERROR");
     }
     else{
-        _tft->println(&timeinfo, "%A -%e %b. %Y");
+        _tft->print(&timeinfo, "%A -%e %b %Y");
         _tft->setTextFont(6);
         _tft->setCursor(95,45);
         _tft->print(&timeinfo, "%H:%M");
     }
+
+    Serial.println("[+] Succesfully drew screen");
 }
 

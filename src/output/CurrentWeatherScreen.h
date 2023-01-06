@@ -34,7 +34,7 @@ class CurrentWeatherScreen: public MainScreen
             new TextPressure(this->_tft, 30, 130+OFFSET, 4, 1, 0xB41F, "%d hPa", bg_c)
         }; 
 
-        wf = new WiFiIcon(this->_tft, 10,10,20,bg_c);
+        wf = new WiFiIcon(this->_tft, 5,10,15,bg_c);
     }
     void draw(Weather* weather, bool forceDraw);
     void draw(Forecast* forecast, bool forceDraw)

@@ -21,10 +21,8 @@ class WeatherClient
     public:
     WeatherClient(HTTPClient * http);
     bool _init_(String city_name);
-    Weather* current_weather();
-    Forecast* forecast_weather();
-    Weather* update(Weather* w);
-    Forecast* update(Forecast* f);
+    void current_weather(Weather* weather);
+    void forecast_weather(Forecast* forecast);
 };
 
 #endif
