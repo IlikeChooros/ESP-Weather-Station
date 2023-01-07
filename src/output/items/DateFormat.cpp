@@ -15,12 +15,12 @@ struct tm DateFormat::get_date()
     return *this->timeinfo;
 }
 
-void DateFormat::add_second()
+bool DateFormat::add_second()
 {
     timeinfo->tm_sec++;
     if (timeinfo->tm_sec != 60)
     {
-        return;
+        return false;
     }
     // seconds == 60, so incrementing minute by 1, doing the same for everything else
 
@@ -29,20 +29,20 @@ void DateFormat::add_second()
 
     if (timeinfo->tm_min % UPDATE_TIME == 0 && getLocalTime(timeinfo))
     {
-        return;
+        return false;
     }
     // If there was a connection error to the ntp server, continue updating date on its own
 
     if (timeinfo->tm_min != 60)
     {
-        return;
+        return false;
     }
     timeinfo->tm_min = 0;
     timeinfo->tm_hour++;
 
     if (timeinfo->tm_hour != 24)
     {
-        return;
+        return false;
     }
 
     timeinfo->tm_hour = 0;
@@ -58,7 +58,7 @@ void DateFormat::add_second()
     }
     if (timeinfo->tm_mday <= days_in_month[timeinfo->tm_mon])
     {
-        return;
+        return true;
     }
 
     timeinfo->tm_mon++;
@@ -66,11 +66,13 @@ void DateFormat::add_second()
 
     if (timeinfo->tm_mon <= 12)
     {
-        return;
+        return true;
     }
 
     timeinfo->tm_mon = 0;
     timeinfo->tm_year++;
+
+    return true;
 }
 
 String DateFormat::formatDateInfo()

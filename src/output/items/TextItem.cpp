@@ -41,7 +41,7 @@ void TextPressure::setWeather(Weather* weather)
 
 void TextWind::setWeather(Weather* weather)
 {
-    this->redraw = (int16_t)weather->_wind_speed*3.6f != this->_data;
+    this->redraw = (int16_t) (weather->_wind_speed*3.6f) != this->_data;
     _data = (int16_t) ((float) (weather->_wind_speed*3.6f));
 }
 
