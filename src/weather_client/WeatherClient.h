@@ -18,11 +18,16 @@ class WeatherClient
             _lon;
 
     HTTPClient* http;
-    public:
-    WeatherClient(HTTPClient * http);
+
+    uint32_t cacheTime;
+    int32_t lastWeatherCheck;
+    int32_t lastForecastCheck;
+
+public:
+    WeatherClient(HTTPClient *http, uint32_t cacheTime);
     bool _init_(String city_name);
-    void current_weather(Weather* weather);
-    void forecast_weather(Forecast* forecast);
+    void current_weather(Weather *weather);
+    void forecast_weather(Forecast *forecast);
 };
 
 #endif

@@ -3,10 +3,10 @@
 #include "src/data_structures/Point.h"
 #include "src/output/icons/Icons.h"
 #include "src/weather_client/WeatherClient.h"
-#include "src/output/CurrentWeatherScreen.h"
-#include "src/output/MainScreen.h"
-#include "src/output/Forecast12Screen.h"
-#include "src/output/FewDaysForecastScreen.h"
+#include "src/output/screens/CurrentWeatherScreen.h"
+#include "src/output/screens/MainScreen.h"
+#include "src/output/screens/Forecast12Screen.h"
+#include "src/output/screens/FewDaysForecastScreen.h"
 #include "src/output/icons/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
@@ -21,8 +21,9 @@
 #define X_SCREENS 3
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
-#define MINUTES_5 300000
+#define MINUTES_15 900000
 #define MINUTE 60000
+#define SECOND 1000
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -36,7 +37,7 @@ uint8_t number_of_tries = 0;
 HTTPClient http;
 bool get_http;
 
-WeatherClient wclient(&http);
+WeatherClient wclient(&http, MINUTES_15);
 Weather* weather;
 Forecast* forecast;
 
@@ -49,6 +50,7 @@ enum Move_idx
 };
 
 uint32_t lastTimeCheck = 0;
+uint32_t last_15_minCheck = 0;
 
 TouchScreen ts(&tft, calData);
 
@@ -102,7 +104,6 @@ void down()
 
 void left()
 {
-    Serial.println("MOVE LEFT");
     move(LEFT);
 }
 
@@ -118,35 +119,23 @@ void move(uint8_t move)
         switch(move)
         {
             case LEFT:
-                if (screen_idx.x == 1)
-                {
-                    Serial.println("GOING TO CURRENT_DAY_WEATHER");
-                    screen_idx.x = 0;
-                    tft.fillScreen(BACKGROUND_COLOR);
-                    //weather = wclient.update(weather);
-
-                    Serial.println("drawing...");
-                    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-                }
-                else if (screen_idx.x == 2)
-                {
-                    tft.fillScreen(BACKGROUND_COLOR);
-                    screen_idx = 1;
-                    screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
-
-                }
+                screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : 2;
                 break;
             case RIGHT:
-                if (screen_idx.x == 0 || screen_idx.x == 1)
-                {
-                    tft.fillScreen(BACKGROUND_COLOR);
-                    screen_idx.x++;
-                    //draw_update_forecast();
-                    screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
-                }
+                screen_idx.x = screen_idx.x < 2 ? screen_idx.x + 1: 0;
                 break;
             default:
                 break;
+        }
+        if (screen_idx.x == 0)
+        {
+            tft.fillScreen(BACKGROUND_COLOR);
+            screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+        }
+        else
+        {
+            tft.fillScreen(BACKGROUND_COLOR);
+            screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
         }
     }
 
@@ -174,7 +163,7 @@ void setup()
         return;
     }
 
-    get_http = wclient._init_("Oława");
+    get_http = wclient._init_("Wrocław");
     tft.println("GET_HTTP: "+String(get_http));
 
     while(!get_http)
@@ -187,29 +176,19 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
 
     weather = new Weather;
-    Serial.println("weather");
-    heap_caps_check_integrity_all(true);
     forecast = new Forecast;
-    Serial.println("forecast");
-    heap_caps_check_integrity_all(true);
     forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
-    Serial.println("number_of_frecasts");
-    heap_caps_check_integrity_all(true);
     forecast->forecasted_weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
     for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++)
     {
         forecast->forecasted_weather[i] = new Weather;
-        Serial.println("forecast->forecast_weather "+String(i));
-        heap_caps_check_integrity_all(true);
     }
 
     wclient.current_weather(weather);
-    Serial.println("current_weather");
-    heap_caps_check_integrity_all(true);
     wclient.forecast_weather(forecast);
-    Serial.println("forecast_weather");
-    heap_caps_check_integrity_all(true);
 
+    screens[0][0]->init();
+    Serial.println("screens[][] draw");
     screens[screen_idx.x][screen_idx.y]->draw(weather, true);
     sci.draw(3,1,1,1);
 }
@@ -219,26 +198,16 @@ void loop()
 {
     ts.read();
 
-    if (screen_idx.x == 0 && millis() - lastTimeCheck> MINUTE)
+    if (millis() - lastTimeCheck> SECOND)
     {
-        // drawing main screen time data
-        Serial.println("After "+String((millis()-lastTimeCheck)/1000)+" sec. calling refresh()");
-        
-        Serial.println("current_weather");
         wclient.current_weather(weather);
-        
-        heap_caps_check_integrity_all(true);
-        Serial.println("------------------");
-        Serial.println("forecast");
         wclient.forecast_weather(forecast);
-
-
-        heap_caps_check_integrity_all(true);
-
-        Serial.println("drawing main screen...");
-        screens[0][0]->draw(weather, true);
-
-        Serial.println("Weather updated: "+String(ESP.getFreeHeap()));
+        // drawing main screen time data
+        screens[0][0]->refresh();
+        if (screen_idx.x == 0)
+        {
+            screens[0][0]->draw(weather, false);
+        }
         lastTimeCheck = millis();
     }
 }

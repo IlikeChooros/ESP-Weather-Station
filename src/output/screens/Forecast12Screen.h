@@ -2,17 +2,15 @@
 #define FORECAST_12_SCREEN_H
 
 #include "MainScreen.h"
-#include "ColumnItem.h"
-#include "../weather_client/Forecast.h"
-#include "WeatherItem.h"
-#include "TextItem.h"
-#include "TimeItem.h"
-#include "icons/DropletItem.h"
-#include "icons/WeatherIcon.h"
-#include "icons/WindIcon.h"
-#include "icons/Icons.h"
-#include "../weather_client/Weather.h"
-#include "../data_structures/Hsv_to_rgb.h"
+#include "../../weather_client/Forecast.h"
+#include "../../weather_client/Weather.h"
+#include "../items/ColumnItem.h"
+#include "../items/TextItem.h"
+#include "../items/TimeItem.h"
+#include "../icons/DropletItem.h"
+#include "../icons/WeatherIcon.h"
+#include "../icons/Icons.h"
+#include "../../data_structures/Hsv_to_rgb.h"
 
 #define NUMBER_OF_COLUMN_ITEMS 6
 #define HOURS_TO_12_FORECAST 4
@@ -50,6 +48,9 @@ class Forecast12Screen: public MainScreen
     }
     void refresh()
     {
+        return;
+    }
+    void init() {
         return;
     }
 };

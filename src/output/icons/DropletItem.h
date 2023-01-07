@@ -1,7 +1,7 @@
 #ifndef DROPLET_ITEM_H
 #define DROPLET_ITEM_H
 
-#include "../WeatherItem.h"
+#include "../items/WeatherItem.h"
 #include "Icons.h"
 
 #define NO_RAIN 0

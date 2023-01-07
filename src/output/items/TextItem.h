@@ -2,7 +2,7 @@
 #define TEXT_ITEM_H
 
 #include "WeatherItem.h"
-#include "../data_structures/Hsv_to_rgb.h"
+#include "../../data_structures/Hsv_to_rgb.h"
 
 class TextItem: public WeatherItem
 {   

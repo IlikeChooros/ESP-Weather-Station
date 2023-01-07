@@ -1,8 +1,13 @@
 #include "WeatherClient.h"
 
-WeatherClient::WeatherClient(HTTPClient* http)
+//--------------------------
+// 1. http = new HTPP
+// 2. cacheTime in millis
+//--------------------------
+WeatherClient::WeatherClient(HTTPClient* http, uint32_t cacheTime)
 {
     this->http = http;
+    this->cacheTime = cacheTime;
 }
 
 bool WeatherClient::_init_(String city_name)
@@ -10,7 +15,6 @@ bool WeatherClient::_init_(String city_name)
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
 
     int16_t http_code = http->GET();
-    Serial.println("HTTP: "+String(http_code));
     bool isSuccesful = http_code == 200;
     if (isSuccesful)
     {
@@ -28,6 +32,9 @@ bool WeatherClient::_init_(String city_name)
     }
 
     http->end();
+
+    lastWeatherCheck = -2*cacheTime;
+    lastForecastCheck = -2*cacheTime;
     return isSuccesful;
 }
 
@@ -37,15 +44,15 @@ bool WeatherClient::_init_(String city_name)
 //-----------------------------------
 void WeatherClient::current_weather(Weather* weather)
 {
-    Serial.println("[/] Weather updating...");
+    if (millis() - lastWeatherCheck < cacheTime)
+    {
+        return;
+    }
+
     http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
-    Serial.println("HTTP->BEGIN()");
     
     int16_t http_code = http->GET();
-    Serial.println("HTTP: "+String(http_code));
     String payload = http->getString();
-    Serial.println("[+] Payload");
-    Serial.println(payload);
     if (http_code == 200)
     {
         DynamicJsonDocument filter(440);
@@ -60,10 +67,8 @@ void WeatherClient::current_weather(Weather* weather)
         filter["sys"]["sunset"] = true;
         filter["dt"]=true;
 
-        Serial.println("[+] filter");
         DynamicJsonDocument doc(440);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-        Serial.println("[+] deserializedJson");
         weather
             ->feels_like(doc["main"]["feels_like"].as<double>())
             ->main(doc["weather"][0]["main"].as<String>())
@@ -75,13 +80,11 @@ void WeatherClient::current_weather(Weather* weather)
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
             ->sunset(doc["sys"]["sunset"].as<uint32_t>())
             ->dt(doc["dt"].as<uint32_t>());
-        Serial.println("[+] weather");
         doc.clear();
         filter.clear();
-        Serial.println("[+] cleared memory");
     }
     http->end();
-    Serial.println("[+] END");
+    lastWeatherCheck = millis();
 }
 
 //----------------------------------
@@ -91,15 +94,15 @@ void WeatherClient::current_weather(Weather* weather)
 //----------------------------------
 void WeatherClient::forecast_weather(Forecast* forecast)
 {
-    Serial.println("[/] Weather updating...");
+    if (millis() - lastForecastCheck < cacheTime)
+    {
+        return;
+    }
+
     http->begin("http://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
-    Serial.println("HTTP->BEGIN()");
     
     int16_t http_code = http->GET();
-    Serial.println("HTTP: "+String(http_code));
     String payload = http->getString();
-    Serial.println("[+] Payload");
-    Serial.println(payload);
     if (http_code == 200)
     {
         DynamicJsonDocument filter(FORECAST_CAPACITY);
@@ -115,15 +118,8 @@ void WeatherClient::forecast_weather(Forecast* forecast)
             filter["list"][i]["dt"] = true;
             filter["list"][i]["pop"] = true;
 
-            Serial.println("[+] filter" + String(i));
-
             DynamicJsonDocument doc(FORECAST_CAPACITY);
             DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-            Serial.println("[+] deserializedJson");
-            // if (err) {
-            // Serial.print(F("deserializeJson() failed with code "));
-            // Serial.println(err.f_str());
-            // }
 
 
             forecast->forecasted_weather[i]
@@ -136,12 +132,9 @@ void WeatherClient::forecast_weather(Forecast* forecast)
                 ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>())
                 ->pop(doc["list"][i]["pop"].as<double>())
                 ->dt(doc["list"][i]["dt"].as<uint32_t>());
-
-            Serial.println("[+] forecast");
         }
         filter.clear();
-        Serial.println("[+] cleared memory");
     }
     http->end();
-    Serial.println("[+] END");
+    lastForecastCheck = millis();
 }

@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h> 
 #include <SPI.h>
-#include "../weather_client/Weather.h"
+#include "../../weather_client/Weather.h"
 
 
 class WeatherItem

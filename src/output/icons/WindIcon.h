@@ -2,7 +2,7 @@
 #define CUSTOM_ICONS_H
 
 #include "Icons.h"
-#include "../WeatherItem.h"
+#include "../items/WeatherItem.h"
 
 #include <TFT_eSPI.h> 
 #include <SPI.h>

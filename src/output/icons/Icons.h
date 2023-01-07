@@ -13,6 +13,7 @@
 #define WATER 0x051D
 #define SNOW_FLAKE 0x8E7F
 #define MIST 0xDEFB
+#define WIFI_BG 0x9790
 
 class Icon
 {
