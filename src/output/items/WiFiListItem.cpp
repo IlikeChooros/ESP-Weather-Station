@@ -1,30 +1,8 @@
 #include "WiFiListItem.h"
 
-WiFiListItem::WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, uint16_t bg_c)
-{
-    this->tft = tft;
-    this->x = x;
-    this->y = y;
-    this->ssid = ssid;
-    this->width = width;
-    this->height = height;
-    this->bg_c = bg_c;
-    this->strenght = -50;
-}
-
-void WiFiListItem::set_strenght(int8_t str)
-{
-    this->strenght = str;
-}
-
-int8_t WiFiListItem::get_strenght()
+int16_t WiFiListItem::get_int()
 {
     return this->strenght;
-}
-
-TouchButton* WiFiListItem::get_button()
-{
-    return new TouchButton(x,y,width,height);
 }
 
 void WiFiListItem::draw()

@@ -9,28 +9,29 @@
 
 #define BUTTON_BG 0x52AA
 
-class WiFiListItem
+class WiFiListItem: public TouchButton
 {
     TFT_eSPI* tft;
-
-    TouchButton* button;
 
     String ssid;
     int8_t strenght;
 
-    int16_t x;
-    int16_t y;
-    int16_t width;
-    int16_t height;
-
     uint16_t bg_c;
 
     public:
-    WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, uint16_t bg_c);
+    WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, int8_t strenght, uint16_t bg_c): TouchButton(x,y,width,height)
+    {
+        this->tft = tft;
+        this->ssid = ssid;
+        this->bg_c = bg_c;
+        this->strenght = strenght;
+    }
     void draw();
-    void set_strenght(int8_t strenght);
-    TouchButton* get_button();
-    int8_t get_strenght();
+    int16_t get_int();
+    String get_str()
+    {
+        return "";
+    }
 };
 
 #endif

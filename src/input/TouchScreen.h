@@ -37,12 +37,11 @@ class TouchScreen
     public:
     TouchScreen(TFT_eSPI *tft ,uint16_t* touchData);
     void read();
-    void read_buttons();
+    int16_t* read_buttons();
     void on_left(void(*)(void));
     void on_right(void(*)(void));
     void on_up(void(*)(void));
     void on_down(void(*)(void));
-    void load_buttons(TouchButton** buttons, uint8_t number_of_buttons);
 };
 
 

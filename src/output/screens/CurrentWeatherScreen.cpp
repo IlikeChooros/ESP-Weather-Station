@@ -15,7 +15,6 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
         wifi->draw();
     }
 
-    Serial.println("date->draw()");
     date->draw(forceDraw);
     // Fonts: 1,2,4,6,7,8
 }

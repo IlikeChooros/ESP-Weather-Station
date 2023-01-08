@@ -193,8 +193,7 @@ void setup()
     screens[0][0]->init();
 
     Serial.println("SCANNING");
-    
-    ts.load_buttons(wifi_screen.scan(print_touch),wifi_screen.get_number_of_networks());
+    wifi_screen.scan(print_touch);
     Serial.println("DRAWING");
     wifi_screen.draw();
 
@@ -205,16 +204,20 @@ void setup()
 
 void loop()
 {
+    int16_t* pos = ts.read_buttons();
 
-    ts.read_buttons();
+    if(pos)
+    {
+        wifi_screen.check(pos);
+    }
+
 
     if (millis() - lastTimeCheck > MINUTE)
     {
         wifi_screen.clear_buttons();
-        ts.load_buttons(wifi_screen.scan(print_touch),wifi_screen.get_number_of_networks());
+        wifi_screen.scan(print_touch);
         tft.fillScreen(BACKGROUND_COLOR);
         wifi_screen.draw();
-
         lastTimeCheck = millis();
     }
     

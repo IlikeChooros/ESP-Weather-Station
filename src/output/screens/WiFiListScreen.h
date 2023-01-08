@@ -1,31 +1,28 @@
 #ifndef WIFI_LIST_SCREEN_H
 #define WIFI_LIST_SCREEN_H
 
-#include "TFT_eSPI.h"
-#include "SPI.h"
-#include "Arduino.h"
 #include <WiFi.h>
 
 #include "../items/WiFiListItem.h"
+#include "WiFiScreen.h"
 
 #define HEIGHT 30
 #define WIDTH 280
 #define OFFSET 5
 
-class WiFiListScreen
+class WiFiListScreen: public WiFiScreen
 {
     bool scroll;
-    WiFiListItem** wifis;
-    TouchButton** buttons;
+    TouchButton** wifis;
     uint8_t number_of_networks;
-    TFT_eSPI* tft;
-    uint16_t bg_c;
     public:
-    WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c);
-    TouchButton** scan(void(*)(void));
+    WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c): WiFiScreen(tft, bg_c){
+        WiFi.mode(WIFI_STA);
+        WiFi.disconnect();
+    }
+    void scan(void(*)(void));
     void draw();
-    bool get_scroll();
-    uint8_t get_number_of_networks();
+    void check(int16_t* pos);
     void clear_buttons();
 };
 

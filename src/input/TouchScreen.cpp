@@ -114,16 +114,7 @@ void TouchScreen::on_up(void(*up)(void))
     this->_on_up = up;
 }
 
-//-----------------------------------
-// Buttons must be alread initialized
-//-----------------------------------
-void TouchScreen::load_buttons(TouchButton** buttons, uint8_t number_of_buttons)
-{
-    this->buttons = buttons;
-    this->number_of_buttons = number_of_buttons;
-}
-
-void TouchScreen::read_buttons()
+int16_t* TouchScreen::read_buttons()
 {
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
@@ -141,14 +132,17 @@ void TouchScreen::read_buttons()
         if (!state)
         {
             _lastState = state;
-            return;
+            return 0;
         }
 
+        return new int16_t [2] {x,y};
 
-        for (uint8_t i=0;i<number_of_buttons;i++)
-        {
-            buttons[i]->check(x,y);
-        }
+
+        // for (uint8_t i=0;i<number_of_buttons;i++)
+        // {
+        //     buttons[i]->check(x,y);
+        // }
     }
     _lastState = state;
+    return 0;
 }

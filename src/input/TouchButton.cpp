@@ -2,21 +2,10 @@
 
 TouchButton::TouchButton(int16_t x, int16_t y, int16_t width, int16_t height)
 {
-    data = new int16_t [4];
-    data[X] = x;
-    data[Y] = y;
-    data[WID] = width;
-    data[HEI] = height;
-}
-
-int16_t* TouchButton::get_data()
-{
-    return data;
-}
-
-void TouchButton::clear()
-{
-    delete [] this->data;
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
 }
 
 void TouchButton::set_on_press(void(*func_on_press)(void))
@@ -24,13 +13,15 @@ void TouchButton::set_on_press(void(*func_on_press)(void))
     this->on_press = func_on_press;
 }
 
-void TouchButton::check(int16_t x, int16_t y)
+bool TouchButton::check(int16_t x, int16_t y)
 {
-    if( (x >= data[X]) && (x <= data[X] + data[WID]))
+    if( (x >= this->x) && (x <= this->x + height))
     {
-        if ((y>= data[Y]) && (y <= data[Y] + data[HEI]))
+        if ((y>= this->y) && (y <= this->y + height))
         {
             this->on_press();
+            return true;
         }
     }
+    return false;
 }
