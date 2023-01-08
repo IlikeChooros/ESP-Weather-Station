@@ -208,7 +208,9 @@ void loop()
 
     if(pos)
     {
+        Serial.println("if (pos)");
         wifi_screen.check(pos);
+        delete [] pos;
     }
 
 

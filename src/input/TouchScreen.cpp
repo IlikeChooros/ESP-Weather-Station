@@ -136,12 +136,6 @@ int16_t* TouchScreen::read_buttons()
         }
 
         return new int16_t [2] {x,y};
-
-
-        // for (uint8_t i=0;i<number_of_buttons;i++)
-        // {
-        //     buttons[i]->check(x,y);
-        // }
     }
     _lastState = state;
     return 0;

@@ -15,10 +15,11 @@ void TouchButton::set_on_press(void(*func_on_press)(void))
 
 bool TouchButton::check(int16_t x, int16_t y)
 {
-    if( (x >= this->x) && (x <= this->x + height))
+    if( (x >= this->x) && (x <= this->x + width))
     {
-        if ((y>= this->y) && (y <= this->y + height))
+        if ((y >= this->y) && (y <= this->y + height))
         {
+            on_touch();
             this->on_press();
             return true;
         }

@@ -7,6 +7,7 @@
 //----------------------------
 void WiFiListScreen::scan(void(*on_press)(void))
 {
+    onRelease = false;
     number_of_networks = WiFi.scanNetworks();
     wifis = 0;
 
@@ -23,6 +24,7 @@ void WiFiListScreen::scan(void(*on_press)(void))
     {
         Serial.println(String(i)+" SSID "+String(WiFi.SSID(i))+" STRENGHT "+String(WiFi.RSSI(i)));
         wifis[i] = new WiFiListItem(tft, x, y + (i%6) *HEIGHT + OFFSET, WIDTH, HEIGHT, WiFi.SSID(i), WiFi.RSSI(i), bg_c);
+        wifis[i]->set_on_press(on_press);
     }
 
     Serial.println("SCAN END");
@@ -30,10 +32,25 @@ void WiFiListScreen::scan(void(*on_press)(void))
 
 void WiFiListScreen::check(int16_t* pos)
 {
+    inThisItr = false;
     uint8_t d = number_of_networks < 6 ? number_of_networks : 6;
+    Serial.println("WiFiListScreen::check()  d = "+String(d)+"  pos: "+String(pos[0])+ " "+String(pos[1]));
     for (uint8_t i=0; i<d; i++)
     {
-        wifis[i]->check(pos[0], pos[1]);
+        if (onRelease&&!inThisItr)
+        {
+            wifis[onReleaseIdx]->draw();
+            onRelease = false;
+        }
+
+        if (wifis[i]->check(pos[0], pos[1]))
+        {
+            Serial.println("IDX: "+String(i));
+            //wifis[i]->on_touch();
+            onRelease = true;
+            inThisItr = true;
+            onReleaseIdx = i;
+        }
     }
 }
 

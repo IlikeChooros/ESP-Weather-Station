@@ -23,6 +23,7 @@ class KeypadButton: public TouchButton
         this->name = name;
     }
     void draw();
+    void on_touch();
     String get_str();
     int16_t get_int(){
         return 0;

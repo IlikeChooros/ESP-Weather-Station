@@ -15,10 +15,17 @@ class WiFiListScreen: public WiFiScreen
     bool scroll;
     TouchButton** wifis;
     uint8_t number_of_networks;
+
+    bool onRelease;
+    bool inThisItr;
+    uint8_t onReleaseIdx;
     public:
     WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c): WiFiScreen(tft, bg_c){
         WiFi.mode(WIFI_STA);
         WiFi.disconnect();
+        onRelease = false;
+        inThisItr = false;
+        onReleaseIdx = 0;
     }
     void scan(void(*)(void));
     void draw();

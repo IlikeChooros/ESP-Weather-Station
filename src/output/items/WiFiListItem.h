@@ -28,6 +28,7 @@ class WiFiListItem: public TouchButton
     }
     void draw();
     int16_t get_int();
+    void on_touch();
     String get_str()
     {
         return "";

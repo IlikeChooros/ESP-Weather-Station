@@ -16,6 +16,7 @@ class TouchButton
     void set_on_press(void(*)(void));
     bool check(int16_t x, int16_t y);
     virtual void draw() = 0;
+    virtual void on_touch() = 0;
     virtual String get_str() = 0;
     virtual int16_t get_int() = 0;
 
