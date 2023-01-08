@@ -4,6 +4,8 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 
+#include "TouchButton.h"
+
 #define VERTICAL_VAL 15
 #define HORIZONTAL_VAL 20
 
@@ -17,6 +19,9 @@ class TouchScreen
     TFT_eSPI* _tft;
     uint32_t time_passed;
     uint16_t max_interval;
+
+    TouchButton** buttons;
+    uint8_t number_of_buttons;
 
     bool _lastState;
     bool _state;
@@ -32,10 +37,12 @@ class TouchScreen
     public:
     TouchScreen(TFT_eSPI *tft ,uint16_t* touchData);
     void read();
+    void read_buttons();
     void on_left(void(*)(void));
     void on_right(void(*)(void));
     void on_up(void(*)(void));
     void on_down(void(*)(void));
+    void load_buttons(TouchButton** buttons, uint8_t number_of_buttons);
 };
 
 

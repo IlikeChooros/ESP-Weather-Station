@@ -7,8 +7,10 @@
 #include "src/output/screens/MainScreen.h"
 #include "src/output/screens/Forecast12Screen.h"
 #include "src/output/screens/FewDaysForecastScreen.h"
+#include "src/output/screens/WiFiListScreen.h"
 #include "src/output/icons/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
+
 
 #include <TFT_eSPI.h> 
 #include <SPI.h>
@@ -27,8 +29,8 @@
 
 TFT_eSPI tft = TFT_eSPI();
 
-const char* ssid =  "NETIASPOT-2,4GHz-69C140"; //"bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-const char* password =  "6epTdSSVW22X"; //"269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
+const char* ssid =  "bc772c"; //"bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
+const char* password =  "269929817"; //"269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
 const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
 const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
@@ -60,6 +62,7 @@ MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)}
 };
 ScreenPointItem sci(&tft, 150, 230, BACKGROUND_COLOR);
+WiFiListScreen wifi_screen(&tft, BACKGROUND_COLOR);
 
 Point screen_idx(0,0);
 
@@ -86,9 +89,9 @@ bool try_to_connect_to_wifi()
     return true;
 }
 
-void update_weather()
+void print_touch()
 {
-
+    Serial.println("TOUCHING!!!");
 }
 
 
@@ -153,17 +156,17 @@ void setup()
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 
-    ts.on_down(up);
-    ts.on_left(right);
-    ts.on_right(left);
-    ts.on_up(down);
+    ts.on_down(down);
+    ts.on_left(left);
+    ts.on_right(right);
+    ts.on_up(up);
 
     if(!try_to_connect_to_wifi())
     {
         return;
     }
 
-    get_http = wclient._init_("Wrocław");
+    get_http = wclient._init_("Oława");
     tft.println("GET_HTTP: "+String(get_http));
 
     while(!get_http)
@@ -188,26 +191,45 @@ void setup()
     wclient.forecast_weather(forecast);
 
     screens[0][0]->init();
-    Serial.println("screens[][] draw");
-    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-    sci.draw(3,1,1,1);
+
+    Serial.println("SCANNING");
+    
+    ts.load_buttons(wifi_screen.scan(print_touch),wifi_screen.get_number_of_networks());
+    Serial.println("DRAWING");
+    wifi_screen.draw();
+
+    //screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+    //sci.draw(3,1,1,1);
 }
 
 
 void loop()
 {
-    ts.read();
 
-    if (millis() - lastTimeCheck> SECOND)
+    ts.read_buttons();
+
+    if (millis() - lastTimeCheck > MINUTE)
     {
-        wclient.current_weather(weather);
-        wclient.forecast_weather(forecast);
-        // drawing main screen time data
-        screens[0][0]->refresh();
-        if (screen_idx.x == 0)
-        {
-            screens[0][0]->draw(weather, false);
-        }
+        wifi_screen.clear_buttons();
+        ts.load_buttons(wifi_screen.scan(print_touch),wifi_screen.get_number_of_networks());
+        tft.fillScreen(BACKGROUND_COLOR);
+        wifi_screen.draw();
+
         lastTimeCheck = millis();
     }
+    
+    // ts.read();
+
+    // if (millis() - lastTimeCheck> SECOND)
+    // {
+    //     wclient.current_weather(weather);
+    //     wclient.forecast_weather(forecast);
+    //     // drawing main screen time data
+    //     screens[0][0]->refresh();
+    //     if (screen_idx.x == 0)
+    //     {
+    //         screens[0][0]->draw(weather, false);
+    //     }
+    //     lastTimeCheck = millis();
+    // }
 }

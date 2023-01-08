@@ -113,3 +113,42 @@ void TouchScreen::on_up(void(*up)(void))
 {
     this->_on_up = up;
 }
+
+//-----------------------------------
+// Buttons must be alread initialized
+//-----------------------------------
+void TouchScreen::load_buttons(TouchButton** buttons, uint8_t number_of_buttons)
+{
+    this->buttons = buttons;
+    this->number_of_buttons = number_of_buttons;
+}
+
+void TouchScreen::read_buttons()
+{
+    uint16_t x=0,y=0;
+    bool state = _tft->getTouch(&x,&y);
+    
+    if (_lastState!=state)
+    {
+        _lastDebounceTime = millis();
+    }
+
+    if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
+    {
+        _state=state;
+
+        // if this is an realse, then igonre
+        if (!state)
+        {
+            _lastState = state;
+            return;
+        }
+
+
+        for (uint8_t i=0;i<number_of_buttons;i++)
+        {
+            buttons[i]->check(x,y);
+        }
+    }
+    _lastState = state;
+}
