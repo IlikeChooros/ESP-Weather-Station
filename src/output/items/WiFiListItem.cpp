@@ -10,10 +10,21 @@ void WiFiListItem::draw()
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(2);
     tft->setTextFont(2);
-    tft->fillRect(x,y,width,height,BUTTON_BG);
+    tft->fillRect(x,y,width,height,color);
     tft->drawRect(x,y,width,height,TFT_LIGHTGREY);
-    tft->setCursor(x+0.05f*width, y);
-    tft->print(ssid);
+    tft->setCursor(x+0.05f*width, y+0.05f*height);
+
+    String temp;
+    if (ssid.length()<16)
+    {
+        temp = ssid;
+    }
+    else{
+        temp = ssid.substring(ssid.length()-16,ssid.length()-1);
+        temp += "...";
+    }
+
+    tft->print(temp);
 
     // strenght (-30 to 0)
     if (strenght > -45)

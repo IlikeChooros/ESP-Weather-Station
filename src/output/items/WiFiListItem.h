@@ -31,7 +31,7 @@ class WiFiListItem: public TouchButton
     void on_touch();
     String get_str()
     {
-        return "";
+        return ssid;
     }
 };
 

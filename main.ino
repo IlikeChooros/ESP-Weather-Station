@@ -8,6 +8,7 @@
 #include "src/output/screens/Forecast12Screen.h"
 #include "src/output/screens/FewDaysForecastScreen.h"
 #include "src/output/screens/WiFiListScreen.h"
+#include "src/output/screens/PasswordInputScreen.h"
 #include "src/output/icons/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
@@ -62,9 +63,17 @@ MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)}
 };
 ScreenPointItem sci(&tft, 150, 230, BACKGROUND_COLOR);
-WiFiListScreen wifi_screen(&tft, BACKGROUND_COLOR);
+
+void refresh();
+
+WiFiScreen** wifi_screens = new WiFiScreen* [2]{
+    new WiFiListScreen (&tft, BACKGROUND_COLOR, refresh),
+    new PasswordInputScreen(&tft, BACKGROUND_COLOR)
+};
+
 
 Point screen_idx(0,0);
+uint8_t wifi_screen_idx = 0;
 
 bool try_to_connect_to_wifi()
 {
@@ -94,6 +103,12 @@ void print_touch()
     Serial.println("TOUCHING!!!");
 }
 
+void refresh()
+{
+    wifi_screens[0]->clear_buttons();
+    wifi_screens[0]->scan();
+    wifi_screens[0]->draw();
+}
 
 void up()
 {
@@ -145,6 +160,38 @@ void move(uint8_t move)
     sci.draw(3,1,screen_idx.x+1,1);
 }
 
+bool wifi_setup()
+{
+    int16_t* pos = ts.read_buttons();
+
+    if(pos)
+    {
+        Serial.println("if (pos)");
+        wifi_screens[wifi_screen_idx]->check(pos);
+        if (wifi_screens[wifi_screen_idx]->change())
+        {
+            wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
+
+            tft.fillScreen(BACKGROUND_COLOR);
+            if (wifi_screen_idx)
+            {
+                if (wifi_screens[1]->load_main())
+                {
+                    Serial.println("RETURN TRUE");
+                    return true;
+                }
+                wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
+            }
+            else{
+                wifi_screens[wifi_screen_idx]->draw();
+            }
+        }
+        delete [] pos;
+        Serial.println("FREE MEM: "+String(ESP.getFreeHeap())+" Bytes  == " + String(ESP.getFreeHeap()/1024)+" kB");
+    }
+    return false;
+}
+
 void setup()
 {
     Serial.begin(921600);
@@ -193,48 +240,31 @@ void setup()
     screens[0][0]->init();
 
     Serial.println("SCANNING");
-    wifi_screen.scan(print_touch);
+    wifi_screens[0]->scan();
     Serial.println("DRAWING");
-    wifi_screen.draw();
+    wifi_screens[0]->draw();
 
-    //screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-    //sci.draw(3,1,1,1);
+    while(!wifi_setup()){}
+
+    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+    sci.draw(3,1,1,1);
 }
 
 
 void loop()
 {
-    int16_t* pos = ts.read_buttons();
+    ts.read();
 
-    if(pos)
+    if (millis() - lastTimeCheck> SECOND)
     {
-        Serial.println("if (pos)");
-        wifi_screen.check(pos);
-        delete [] pos;
-    }
-
-
-    if (millis() - lastTimeCheck > MINUTE)
-    {
-        wifi_screen.clear_buttons();
-        wifi_screen.scan(print_touch);
-        tft.fillScreen(BACKGROUND_COLOR);
-        wifi_screen.draw();
+        wclient.current_weather(weather);
+        wclient.forecast_weather(forecast);
+        // drawing main screen time data
+        screens[0][0]->refresh();
+        if (screen_idx.x == 0)
+        {
+            screens[0][0]->draw(weather, false);
+        }
         lastTimeCheck = millis();
     }
-    
-    // ts.read();
-
-    // if (millis() - lastTimeCheck> SECOND)
-    // {
-    //     wclient.current_weather(weather);
-    //     wclient.forecast_weather(forecast);
-    //     // drawing main screen time data
-    //     screens[0][0]->refresh();
-    //     if (screen_idx.x == 0)
-    //     {
-    //         screens[0][0]->draw(weather, false);
-    //     }
-    //     lastTimeCheck = millis();
-    // }
 }
