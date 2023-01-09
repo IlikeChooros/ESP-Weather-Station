@@ -28,6 +28,8 @@ class PasswordInputScreen: public WiFiScreen
 
     String wifi_name;
 
+    uint8_t counter;
+
     bool change_;
     bool load_main_;
 
@@ -43,6 +45,8 @@ class PasswordInputScreen: public WiFiScreen
         String main_qwerty_C [24] = {"Q", "W", "E" ,"R", "T","Y","U" ,"<<",     "A", "S", "D","F","G","H","J", "^",     "Z", "X","C","V", "B","N","M","O"};
         String numbers_C [24] = {"I", "P", "K", "L", "0", "1", "2", "<<",   "3","4","5","6","7","8","9", "^",    "!", "?", "$", "%", "^", "&","*","@"};
         String special [24] = {"(", ")", "[", "]", "{", "}", ";", "<<",   ":","'","\"",",",".","<",">", "\\",    "|", "+", "-", "#", "", "","",""};
+
+        counter =0;
 
         change_ = false;
         load_main_ = false;
@@ -81,10 +85,7 @@ class PasswordInputScreen: public WiFiScreen
     void draw(String wifi_name);
     void check(int16_t* pos);
     bool change();
-    String get_str()
-    {
-        return "";
-    }
+    String get_str();
     void scan()
     {
         return;

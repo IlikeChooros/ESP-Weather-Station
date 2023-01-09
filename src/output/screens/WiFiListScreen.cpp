@@ -1,19 +1,19 @@
 #include "WiFiListScreen.h"
 
 //----------------------------
-// The argument is a function, which will be
-// called when a wifi button will be pressed
-// returns button list for touch screen
+// Scans 
 //----------------------------
 void WiFiListScreen::scan()
 {
     change_ = false;
     onRelease = false;
+
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
     number_of_networks = WiFi.scanNetworks();
     wifis = 0;
 
-    Serial.println("NETWORKS: "+String(number_of_networks));
-    if (!number_of_networks)
+    if (number_of_networks <= 0)
     {
         return;
     }
@@ -25,11 +25,8 @@ void WiFiListScreen::scan()
     
     for (uint8_t i=0;i<number_of_networks;i++)
     {
-        Serial.println(String(i)+" SSID "+String(WiFi.SSID(i))+" STRENGHT "+String(WiFi.RSSI(i)));
         wifis[i] = new WiFiListItem(tft, x, y + (i%6) *(HEIGHT+OFFSET), WIDTH, HEIGHT, WiFi.SSID(i), WiFi.RSSI(i), bg_c);
     }
-
-    Serial.println("SCAN END");
 }
 
 void WiFiListScreen::check(int16_t* pos)

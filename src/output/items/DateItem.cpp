@@ -23,7 +23,6 @@ DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t
 
 void DateItem::init()
 {
-    //getLocalTime(&prev_time_info);
     if (!getLocalTime(&timeinfo))
     {
         timeinfo.tm_hour = 12;

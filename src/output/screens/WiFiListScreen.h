@@ -17,7 +17,7 @@ class WiFiListScreen: public WiFiScreen
     TouchButton** wifis;
     TouchButton* refresh_button;
 
-    uint8_t number_of_networks;
+    int8_t number_of_networks;
 
     String picked_wifi;
 
@@ -27,7 +27,6 @@ class WiFiListScreen: public WiFiScreen
     public:
     WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c, void(*refresh_func)(void)): WiFiScreen(tft, bg_c){
         WiFi.mode(WIFI_STA);
-        WiFi.disconnect();
         onRelease = false;
         change_ = false;
         onReleaseIdx = 0;

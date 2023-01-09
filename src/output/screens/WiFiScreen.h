@@ -17,6 +17,7 @@ class WiFiScreen
     virtual void clear_buttons() = 0;
     virtual bool change() = 0;
     virtual bool load_main() = 0;
+    
 
     protected:
     int16_t bg_c;

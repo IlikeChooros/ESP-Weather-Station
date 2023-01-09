@@ -106,47 +106,62 @@ void PasswordInputScreen::enter_pwd()
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, pass);
 
-    tft->fillRect(70, 70, 180, 100, TFT_DARKGREY);
-    tft->drawRect(70, 70, 180, 100, TFT_WHITE);
+    tft->fillRect(55, 70, 210, 100, TFT_DARKGREY);
+    tft->drawRect(55, 70, 210, 100, TFT_WHITE);
 
     tft->setTextSize(1);
     tft->setTextFont(2);
     tft->setTextColor(TFT_GREEN);
-    tft->setCursor(100, 75);
+    tft->setCursor(90, 75);
     tft->print("Connecting to:");
 
     tft->drawCentreString(ssid, 160, 95, 2);
     tft->setCursor(120, 120);
 
     tft->setTextSize(3);
-    tft->setTextColor(TFT_DARKCYAN);
+    tft->setTextColor(TFT_DARKGREEN);
     uint8_t number_of_tries = 0;
 
+    uint32_t timer = millis();
     while(WiFi.status() != WL_CONNECTED)
     {
-        delay(1000);
-        tft->print(".");
-        number_of_tries++;
+        if (millis() - timer > 1000)
+        {
+            tft->print(".");
+            number_of_tries++;
 
-        if (number_of_tries == 7){
-            tft->setTextSize(1);
-            tft->setTextColor(TFT_RED);
-            tft->drawCentreString("[-] Failed.", 160, 115, 2);
-            delay(1000);
-            delete [] ssid;
-            delete [] pass;
+            if (number_of_tries == 9){
+                tft->setTextSize(1);
+                tft->setTextColor(TFT_RED);
+                tft->drawCentreString("Failed.", 160, 115, 2);
+                delay(1000);
+                delete [] ssid;
+                delete [] pass;
 
-            tft->fillScreen(bg_c);
-            draw(wifi_name);
-            return;
+                tft->fillScreen(bg_c);
+                draw(wifi_name);
+                return;
+            }
+            timer = millis();
         }
+        
     }
 
     delete [] ssid;
     delete [] pass;
 
-    Serial.println("CONNECTED TO WIFI");
     load_main_ = true;
+}
+
+String PasswordInputScreen::get_str()
+{   
+    counter++;
+    if (counter%2 == 1)
+    {
+        return wifi_name;
+    }
+
+    return inputfield->get_input();
 }
 
 bool PasswordInputScreen::load_main()
@@ -156,8 +171,6 @@ bool PasswordInputScreen::load_main()
 
 void PasswordInputScreen::caps()
 {
-    Serial.println("CAPS");
-
     if (current_keypad == MAIN_QWERTY_CAPS)
     {
         current_keypad = 1;

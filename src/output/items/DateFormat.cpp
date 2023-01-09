@@ -2,6 +2,7 @@
 
 void DateFormat::init()
 {
+    this->getUpdate = true;
     configTime(3600, 0, NTP_SERVER);
 }
 
@@ -18,6 +19,11 @@ struct tm DateFormat::get_date()
 bool DateFormat::add_second()
 {
     timeinfo->tm_sec++;
+    if (this->getUpdate && timeinfo->tm_sec%10 == 0)
+    {
+        getUpdate = !getLocalTime(timeinfo);
+        return !getUpdate;
+    }
     if (timeinfo->tm_sec != 60)
     {
         return false;
@@ -32,7 +38,7 @@ bool DateFormat::add_second()
         return false;
     }
     // If there was a connection error to the ntp server, continue updating date on its own
-
+    getUpdate = true;
     if (timeinfo->tm_min != 60)
     {
         return false;

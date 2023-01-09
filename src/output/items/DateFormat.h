@@ -11,6 +11,7 @@
 class DateFormat
 {
     struct tm* timeinfo;
+    bool getUpdate;
     public:
     void init();
     bool add_second();

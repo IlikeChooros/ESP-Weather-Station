@@ -22,12 +22,12 @@ void InputField::draw()
     tft->setCursor(x,y);
 
     String temp;
-    if (this->input.length()<16)
+    if (this->input.length()<14)
     {
         temp = input;
     }
     else{
-        temp = input.substring(input.length()-15,input.length()-1);
+        temp = input.substring(input.length()-13,input.length()-1);
     }
     Serial.println("INPUT: "+input + " TEMP: "+temp);
     tft->print(temp);
