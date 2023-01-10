@@ -110,9 +110,14 @@ void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
     for (uint8_t i=0; i<NUMBER_OF_DAYS_TO_FORECAST; i++)
     {
         result = getMinMaxTemp_pop(forecast, i*8 + starting_itr - 4);
-        forecast->forecasted_weather[i*8 + starting_itr]->_pop = result[POP];
-        forecast->forecasted_weather[i*8 + starting_itr]->_temp = result[MAX_TEMP];
-        forecast->forecasted_weather[i*8 + starting_itr]->_feels_like = result[MIN_TEMP];
+        forecast->forecasted_weather[i*8 + starting_itr]->pop(result[POP]);
+        forecast->forecasted_weather[i*8 + starting_itr]->temp((double)result[MAX_TEMP]);
+        forecast->forecasted_weather[i*8 + starting_itr]->feels_like((double)result[MIN_TEMP]);
+
+        if (result[POP]>0.49f)
+        {
+            forecast->forecasted_weather[i*8 + starting_itr]->icon("09d");
+        }
 
         for (uint8_t j=0;j<NUMBER_OF_COLUMN_ITEMS;j++)
         {

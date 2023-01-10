@@ -251,7 +251,6 @@ void Droplet_100::draw()
 
 void WiFiIconStrong::draw()
 {
-    Serial.println("DRAWING WIFI ICON");
     drawWifi(tft,x,y,size, WIFI_BG, background_color);
 }
 
@@ -268,6 +267,6 @@ void WiFiIconWeak::draw()
 void WiFiIconLost::draw()
 {
     drawWifi(tft,x,y,size, TFT_RED, background_color);
-    tft->drawLine(x+size, y, x+size, y+0.8f*size, TFT_RED);
-    tft->fillCircle(x+size, y+size, 0.1f*size, TFT_RED);
+    tft->drawLine(x+size, y, x+size, y+0.55f*size, TFT_RED);
+    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, TFT_RED);
 }

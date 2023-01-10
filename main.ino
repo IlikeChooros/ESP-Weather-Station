@@ -12,7 +12,6 @@
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
-
 #include <EEPROM.h>
 #include <TFT_eSPI.h> 
 #include <SPI.h>
@@ -21,8 +20,9 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define EEPROM_SIZE 12*sizeof(String)+sizeof(uint8_t)
+#define EEPROM_SIZE 13*sizeof(String)+sizeof(uint8_t)
 
+#define CITY_NAME "Oława"
 #define BACKGROUND_COLOR 0x10C4
 #define X_SCREENS 3
 #define Y_SCREENS 1
@@ -74,25 +74,38 @@ uint8_t wifi_screen_idx = 0;
 
 bool try_to_connect_to_wifi(String wifi_ssid)
 {
-    // Serial.println("Connecting...");
     tft.println("Connecting to WiFi: "+wifi_ssid+" ");
 
+    number_of_tries = 0;
     while(WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
-        Serial.print(".");
         tft.print(".");
         number_of_tries++;
 
         if (number_of_tries == 8){
             tft.println("");
-            // Serial.println("[-] Failed to connect to WiFi.");
             tft.println("[-] Failed to connect to WiFi.");
             return false;
         }
     }
-    // Serial.println("[+] Connected to the Wifi");
+    tft.println("");
     tft.println("[+] Connected to the Wifi");
+    return true;
+}
+
+bool connect_to_wifi_silently()
+{
+    number_of_tries = 0;
+    while(WiFi.status() != WL_CONNECTED)
+    {
+        delay(1000);
+        number_of_tries++;
+
+        if (number_of_tries == 8){
+            return false;
+        }
+    }
     return true;
 }
 
@@ -159,17 +172,17 @@ void wifi_setup()
     }
 }
 
-void initial_network_connection(int8_t number_of_networks)
+void initial_network_connection(int8_t number_of_networks, bool verbose)
 {
     //******************************
     // Read from EEPROM saved wifis
     //
-    uint8_t count = EEPROM.read(10);
-
-    Serial.println("COUNT: "+String(count));
 
     uint32_t address = 10;
+    uint8_t count = EEPROM.read(address);
+    Serial.println(String(count));
     address += sizeof(uint8_t);
+
     String saved_ssid, saved_psw;
 
     for (uint8_t i=0; i<count; i++)
@@ -178,11 +191,9 @@ void initial_network_connection(int8_t number_of_networks)
         address += sizeof(saved_ssid);
         saved_psw = EEPROM.readString(address);
         address += sizeof(saved_psw);
-
-        Serial.println(String(i) + ". "+saved_ssid + " "+saved_psw);
-
+        Serial.println(String(i) + ". SSID "+saved_ssid + " PASS "+saved_psw);
         // Compare all found network ssid's to saved one
-        // If they are the same, connect to this WiFi
+        // If wifi names are the same, connect to this WiFi
         for (int8_t j=0; j<number_of_networks; j++)
         {
             if (WiFi.SSID(j) == saved_ssid)
@@ -196,15 +207,34 @@ void initial_network_connection(int8_t number_of_networks)
                 
                 WiFi.begin(temp_ssid, temp_psw);
 
-                // If successfully connected to wifi
-                if(try_to_connect_to_wifi(temp_ssid))
+                
+                if(verbose)
                 {
-                    return;
+                    // If successfully connected to wifi
+                    if(try_to_connect_to_wifi(temp_ssid))
+                    {
+                        delete [] temp_ssid;
+                        delete [] temp_psw;
+                        return;
+                    }
                 }
 
-                delete [] temp_ssid;
-                delete [] temp_psw;
+                else{
+                    if(connect_to_wifi_silently())
+                    {
+                        delete [] temp_ssid;
+                        delete [] temp_psw;
+                        return;
+                    }
+                }
+            
             }
+        }
+
+        if (i == 5)
+        {
+            tft.fillScreen(BACKGROUND_COLOR);
+            tft.setCursor(0,0);
         }
     }
 }
@@ -220,7 +250,6 @@ void setup()
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 
-
     //******************************
     // Scanning for newtorks
     //
@@ -232,7 +261,7 @@ void setup()
 
     if (number_of_networks > 0)
     {
-        initial_network_connection(number_of_networks);
+        initial_network_connection(number_of_networks, true);
     }
 
     ts.on_left(left);
@@ -279,13 +308,13 @@ void setup()
         }
     }
 
-    get_http = wclient._init_("Oława");
+    get_http = wclient._init_(CITY_NAME);
     tft.println("GET_HTTP: "+String(get_http));
 
     while(!get_http)
     {
         tft.println("Retrying wclient init...");
-        get_http = wclient._init_("Oława");
+        get_http = wclient._init_(CITY_NAME);
         delay(3500);
     }
 
@@ -308,7 +337,7 @@ void setup()
     // will try to get it again
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
     {
-        tft.println("Failed to obtain data");
+        tft.println("Failed to obtain data, try restarting ESP");
         delay(1000);
 
         // ESP should already have got WiFi ssid and password,
@@ -316,7 +345,7 @@ void setup()
         if (WiFi.status() != WL_CONNECTED)
         {
             WiFi.mode(WIFI_STA);
-            initial_network_connection(number_of_networks);
+            initial_network_connection(number_of_networks, true);
         }
     }
 
@@ -346,5 +375,18 @@ void loop()
         screens[screen_idx.x][0]->draw(forecast,false);
         
         lastTimeCheck = millis();
+
+
+        // Try to regain wifi connection, if lost
+        if (WiFi.status() != WL_CONNECTED)
+        {
+            WiFi.mode(WIFI_STA);
+            int8_t number_of_networks = WiFi.scanNetworks();
+            if (number_of_networks < 1)
+            {
+                return;
+            }
+            initial_network_connection(number_of_networks, false);
+        }
     }
 }

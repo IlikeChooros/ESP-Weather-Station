@@ -33,7 +33,6 @@ void TouchScreen::read()
 
     if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
     {
-        //Serial.println("TOUCHING");
         _state=state;
 
         // if this is an realse, then igonre
