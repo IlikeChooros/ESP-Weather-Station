@@ -38,22 +38,28 @@ bool WeatherClient::_init_(String city_name)
     return isSuccesful;
 }
 
-//-----------------------------------
+//-------------------------------------------------------------
 // Must get already initcialized object
 // 1. Weather weather = new Weather
-//-----------------------------------
-void WeatherClient::current_weather(Weather* weather)
+// Returns boolean wheter obtaining weather info was successful
+//--------------------------------------------------------------
+bool WeatherClient::current_weather(Weather* weather)
 {
     if (millis() - lastWeatherCheck < cacheTime)
     {
-        return;
+        return false;
     }
-
+    
     http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
     int16_t http_code = http->GET();
     String payload = http->getString();
-    if (http_code == 200)
+
+    // Serial.println("PAYLOAD: "+payload);
+
+    bool isSuccessfull = http_code == 200;
+
+    if (isSuccessfull)
     {
         DynamicJsonDocument filter(440);
         filter["weather"][0]["main"] = true;
@@ -85,25 +91,33 @@ void WeatherClient::current_weather(Weather* weather)
     }
     http->end();
     lastWeatherCheck = millis();
+
+    return isSuccessfull;
 }
 
 //----------------------------------
 // 1. Forecast must be init -> new Forecast
 // 2. forecasted_weather must be init -> forecast->forecasted_weather = new ...
 // 3. forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
+// Returns boolean wheter obtaining weather info was successful
 //----------------------------------
-void WeatherClient::forecast_weather(Forecast* forecast)
+bool WeatherClient::forecast_weather(Forecast* forecast)
 {
     if (millis() - lastForecastCheck < cacheTime)
     {
-        return;
+        return false;
     }
 
     http->begin("http://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
     int16_t http_code = http->GET();
     String payload = http->getString();
-    if (http_code == 200)
+
+    // Serial.println("PAYLOAD: "+payload);
+
+    bool isSuccessfull = http_code == 200;
+
+    if (isSuccessfull)
     {
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
@@ -137,4 +151,6 @@ void WeatherClient::forecast_weather(Forecast* forecast)
     }
     http->end();
     lastForecastCheck = millis();
+
+    return isSuccessfull;
 }

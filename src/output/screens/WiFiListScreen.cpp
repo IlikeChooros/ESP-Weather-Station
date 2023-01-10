@@ -1,8 +1,11 @@
 #include "WiFiListScreen.h"
 
-//----------------------------
-// Scans 
-//----------------------------
+//-----------------------------------
+// Scans for WiFis, creates new WiFi
+// List Objects with WiFis data
+// make sure to call clear_buttons()
+// before using it
+//----------------------------------
 void WiFiListScreen::scan()
 {
     change_ = false;
@@ -76,9 +79,12 @@ void WiFiListScreen::draw()
     refresh_button->draw();
 }
 
+//*****************************
+// Deletes all WiFi List Items
+//*****************************
 void WiFiListScreen::clear_buttons()
 {
-    if (!number_of_networks)
+    if (number_of_networks<1)
     {
         return;
     }

@@ -13,7 +13,7 @@ class DateFormat
     struct tm* timeinfo;
     bool getUpdate;
     public:
-    void init();
+    void init(bool getUpdate);
     bool add_second();
     void set_date(struct tm* timeinfo);
     struct tm get_date();

@@ -11,9 +11,12 @@ ScreenPointItem::ScreenPointItem(TFT_eSPI *tft, uint16_t x, uint16_t y, uint16_t
     colors[1] = GREY_SCREEN_POINT;
     colors[2] = DARK_SCREEN_POINT;
 }
-//--------------------------------------
+
+//****************************************
 // currentX,Y as 1,2,3,...
-//--------------------------------------
+// Draws little dots on screen indicating
+// Screen position
+//****************************************
 void ScreenPointItem::draw(uint8_t numberOfAllInX, uint8_t numberOfAllInY, uint8_t currentX, uint8_t currentY)
 {
     _tft->drawRect(x,y,3*SIZE_POINT,SIZE_POINT*0.4f,bg_c);

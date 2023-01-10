@@ -1,6 +1,7 @@
 #ifndef WIFI_SCREEN_H
 #define WIFI_SCREEN_H
 
+#include <WiFi.h>
 #include "Arduino.h"
 #include "TFT_eSPI.h"
 #include "SPI.h"

@@ -17,7 +17,7 @@
 class TouchScreen
 {
     TFT_eSPI* _tft;
-    uint32_t time_passed;
+    
     uint16_t max_interval;
 
     TouchButton** buttons;
@@ -25,7 +25,7 @@ class TouchScreen
 
     bool _lastState;
     bool _state;
-    uint32_t _lastDebounceTime;
+    uint64_t _lastDebounceTime;
 
     bool isVertical(int16_t d_x, int16_t d_y);
     bool isHorizontal(int16_t d_x, int16_t d_y);
@@ -37,7 +37,7 @@ class TouchScreen
     public:
     TouchScreen(TFT_eSPI *tft ,uint16_t* touchData);
     void read();
-    int16_t* read_buttons();
+    int16_t* read_touch();
     void on_left(void(*)(void));
     void on_right(void(*)(void));
     void on_up(void(*)(void));

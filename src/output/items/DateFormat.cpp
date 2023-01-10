@@ -1,8 +1,8 @@
 #include "DateFormat.h"
 
-void DateFormat::init()
+void DateFormat::init(bool getUpdate)
 {
-    this->getUpdate = true;
+    this->getUpdate = getUpdate;
     configTime(3600, 0, NTP_SERVER);
 }
 
@@ -38,7 +38,7 @@ bool DateFormat::add_second()
         return false;
     }
     // If there was a connection error to the ntp server, continue updating date on its own
-    getUpdate = true;
+    
     if (timeinfo->tm_min != 60)
     {
         return false;

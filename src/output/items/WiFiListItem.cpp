@@ -15,12 +15,12 @@ void WiFiListItem::draw()
     tft->setCursor(x+0.05f*width, y+0.05f*height);
 
     String temp;
-    if (ssid.length()<16)
+    if (ssid.length()<15)
     {
         temp = ssid;
     }
     else{
-        temp = ssid.substring(ssid.length()-16,ssid.length()-1);
+        temp = ssid.substring(0,14);
         temp += "...";
     }
 

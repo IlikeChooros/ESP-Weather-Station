@@ -1,8 +1,6 @@
 #ifndef WIFI_LIST_SCREEN_H
 #define WIFI_LIST_SCREEN_H
 
-#include <WiFi.h>
-
 #include "../items/WiFiListItem.h"
 #include "../items/KeypadButton.h"
 #include "WiFiScreen.h"
@@ -38,7 +36,8 @@ class WiFiListScreen: public WiFiScreen
 
     void scan();
     void draw();
-    void draw(String wifi_name){
+    void draw(String wifi_name)
+    {
         return;
     }
     String get_str()

@@ -12,8 +12,7 @@ DigitObject::DigitObject(TFT_eSPI *tft, int16_t x, int16_t y, uint8_t size, uint
     prevDigit = 0;
 }
 
-// -----------------------
-// returns x vector 
+
 void DigitObject::draw(int8_t digit, bool forceDraw)
 {
     if (!forceDraw && digit == prevDigit)

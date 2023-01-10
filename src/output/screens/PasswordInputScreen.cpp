@@ -122,7 +122,7 @@ void PasswordInputScreen::enter_pwd()
     tft->setTextColor(TFT_DARKGREEN);
     uint8_t number_of_tries = 0;
 
-    uint32_t timer = millis();
+    uint64_t timer = millis();
     while(WiFi.status() != WL_CONNECTED)
     {
         if (millis() - timer > 1000)

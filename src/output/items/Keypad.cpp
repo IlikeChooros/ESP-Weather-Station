@@ -1,10 +1,11 @@
 #include "Keypad.h"
 
-//-----------------------
-// button_data -> 12 buttons
-// 3:3:4
-// idx = 0 -> left_slider
-// idx = 13 -> right_slider
+//**********************************
+// Creates keypad with: 
+// 24 small buttons
+// 1 Space button
+// 2 Sliders on edges of the screen
+//**********************************
 Keypad::Keypad(TFT_eSPI* tft, String* button_data, String left_slider, String right_slider)
 {
     sliders = new KeypadButton* [2]{
@@ -38,13 +39,15 @@ Keypad::Keypad(TFT_eSPI* tft, String* button_data, String left_slider, String ri
     }
 }
 
+//*****************************
+// Returns keypad button String
+// data -> its "name"
+//*****************************
 String Keypad::get_button_str(uint8_t idx)
 {
     return buttons[idx]->get_str();
 }
-//------------------------
-// Idx = <1;12>
-//------------------------
+
 void Keypad::set_on_press(void(*on_press)(void), uint8_t idx)
 {
     buttons[idx]->set_on_press(on_press);

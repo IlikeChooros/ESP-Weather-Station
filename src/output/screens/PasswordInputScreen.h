@@ -1,7 +1,6 @@
 #ifndef PASSWORD_INPUT_SCREEN_H
 #define PASSWORD_INPUT_SCREEN_H
 
-#include <WiFi.h>
 #include "WiFiScreen.h"
 
 #include "../items/Keypad.h"

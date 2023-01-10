@@ -23,6 +23,7 @@ DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t
 
 void DateItem::init()
 {
+    bool update = false;
     if (!getLocalTime(&timeinfo))
     {
         timeinfo.tm_hour = 12;
@@ -33,8 +34,9 @@ void DateItem::init()
         timeinfo.tm_mon = 0;
         timeinfo.tm_wday = 0;
         Serial.println("Failed to obtain time");
+        update = true;
     }
-    dateFormat->init();
+    dateFormat->init(update);
     dateFormat->set_date(&timeinfo);
     prev_time_info = timeinfo;
 }
@@ -69,6 +71,11 @@ void DateItem::draw(bool forceDraw)
     }
 }
 
+//********************************
+// Adds 1 second to its time info,
+// To work correctly should be called
+// every second
+//********************************
 void DateItem::add_second()
 {
     prev_time_info = timeinfo;

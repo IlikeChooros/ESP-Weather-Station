@@ -10,7 +10,6 @@ TouchScreen::TouchScreen(TFT_eSPI* tft, uint16_t* data)
     this->_tft = tft;
     _tft->setTouch(data);
     max_interval = 20;
-    time_passed = 0;
     _state = false;
     _lastState = false;
     _lastDebounceTime = 0;
@@ -49,26 +48,18 @@ void TouchScreen::read()
         {
             if ( y < -0.75f*x + 240)
             {
-                //Serial.println("LEFT");
-                //Serial.println("");
                 this->_on_left();
             }
             else{
-                //Serial.println("DOWN");
-                //Serial.println("");
                 this->_on_down();
             }
         }
         else{
             if ( y < -0.75f*x + 240)
             {
-                //Serial.println("UP");
-                //Serial.println("");
                 this->_on_up();
             }
             else{
-                //Serial.println("RIGHT");
-                //Serial.println("");
                 this->_on_right();
             }
         }
@@ -114,7 +105,7 @@ void TouchScreen::on_up(void(*up)(void))
     this->_on_up = up;
 }
 
-int16_t* TouchScreen::read_buttons()
+int16_t* TouchScreen::read_touch()
 {
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);

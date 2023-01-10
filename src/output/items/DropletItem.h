@@ -1,8 +1,8 @@
 #ifndef DROPLET_ITEM_H
 #define DROPLET_ITEM_H
 
-#include "../items/WeatherItem.h"
-#include "Icons.h"
+#include "WeatherItem.h"
+#include "../icons/Icons.h"
 
 #define NO_RAIN 0
 #define UNLIKELY_RAIN 1

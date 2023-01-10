@@ -6,7 +6,7 @@
 #include "../../weather_client/Forecast.h"
 #include "../items/TextItem.h"
 #include "../items/TimeItem.h"
-#include "../icons/DropletItem.h"
+#include "../items/DropletItem.h"
 #include "../icons/WeatherIcon.h"
 #include "../icons/WindIcon.h"
 #include "../icons/Icons.h"
@@ -47,7 +47,8 @@ class FewDaysForecastScreen: public MainScreen
         }
     }
     void draw(Forecast* forecast, bool forceDraw);
-    void draw(Weather* weather, bool forceDraw){
+    void draw(Weather* weather, bool forceDraw)
+    {
         return;
     }
     void refresh()

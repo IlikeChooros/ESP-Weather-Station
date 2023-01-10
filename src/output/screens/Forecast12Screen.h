@@ -7,7 +7,7 @@
 #include "../items/ColumnItem.h"
 #include "../items/TextItem.h"
 #include "../items/TimeItem.h"
-#include "../icons/DropletItem.h"
+#include "../items/DropletItem.h"
 #include "../icons/WeatherIcon.h"
 #include "../icons/Icons.h"
 #include "../../data_structures/Hsv_to_rgb.h"

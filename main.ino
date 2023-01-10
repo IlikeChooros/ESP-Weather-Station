@@ -9,7 +9,7 @@
 #include "src/output/screens/FewDaysForecastScreen.h"
 #include "src/output/screens/WiFiListScreen.h"
 #include "src/output/screens/PasswordInputScreen.h"
-#include "src/output/icons/ScreenPointItem.h"
+#include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
 
@@ -21,7 +21,7 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define EEPROM_SIZE 6*sizeof(String)+sizeof(uint8_t)
+#define EEPROM_SIZE 12*sizeof(String)+sizeof(uint8_t)
 
 #define BACKGROUND_COLOR 0x10C4
 #define X_SCREENS 3
@@ -32,11 +32,6 @@
 #define SECOND 1000
 
 TFT_eSPI tft = TFT_eSPI();
-
-//const char* ssid =  "bc772c"; //"bc772c"; //"Black Shark";   // "NETIASPOT-2,4GHz-69C140"; // bc772c
-//const char* password =  "269929817"; //"269929817"; //"12345abc";   //"6epTdSSVW22X"; // 269929817
-const String current_weather = "https://api.openweathermap.org/data/2.5/weather?lat=50.95709295&lon=17.290269769664455&units=metric&lang=pl&appid=";
-const String key = "6a0b31b6c9c1f95d47860092dadc1f6c";
 
 uint8_t number_of_tries = 0;
 
@@ -55,8 +50,7 @@ enum Move_idx
     LEFT
 };
 
-uint32_t lastTimeCheck = 0;
-uint32_t last_15_minCheck = 0;
+uint64_t lastTimeCheck = 0;
 
 TouchScreen ts(&tft, calData);
 
@@ -80,30 +74,26 @@ uint8_t wifi_screen_idx = 0;
 
 bool try_to_connect_to_wifi(String wifi_ssid)
 {
-    Serial.println("Connecting...");
+    // Serial.println("Connecting...");
     tft.println("Connecting to WiFi: "+wifi_ssid+" ");
 
     while(WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
         Serial.print(".");
-        tft.println(".");
+        tft.print(".");
         number_of_tries++;
 
-        if (number_of_tries == 6){
-            Serial.println("[-] Failed to connect to WiFi.");
+        if (number_of_tries == 8){
+            tft.println("");
+            // Serial.println("[-] Failed to connect to WiFi.");
             tft.println("[-] Failed to connect to WiFi.");
             return false;
         }
     }
-    Serial.println("[+] Connected to the Wifi");
+    // Serial.println("[+] Connected to the Wifi");
     tft.println("[+] Connected to the Wifi");
     return true;
-}
-
-void print_touch()
-{
-    Serial.println("TOUCHING!!!");
 }
 
 void refresh()
@@ -111,16 +101,6 @@ void refresh()
     wifi_screens[0]->clear_buttons();
     wifi_screens[0]->scan();
     wifi_screens[0]->draw();
-}
-
-void up()
-{
-
-}
-
-void down()
-{
-
 }
 
 void left()
@@ -140,24 +120,19 @@ void move(uint8_t move)
         switch(move)
         {
             case LEFT:
-                screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : 2;
+                screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : X_SCREENS-1;
                 break;
             case RIGHT:
-                screen_idx.x = screen_idx.x < 2 ? screen_idx.x + 1: 0;
+                screen_idx.x = screen_idx.x < X_SCREENS-1 ? screen_idx.x + 1: 0;
                 break;
             default:
                 break;
         }
-        if (screen_idx.x == 0)
-        {
-            tft.fillScreen(BACKGROUND_COLOR);
-            screens[screen_idx.x][screen_idx.y]->draw(weather, true);
-        }
-        else
-        {
-            tft.fillScreen(BACKGROUND_COLOR);
-            screens[screen_idx.x][screen_idx.y]->draw(forecast, true);
-        }
+        tft.fillScreen(BACKGROUND_COLOR);
+
+        // It wont hurt to call both methods on the same screen object
+        screens[screen_idx.x][0]->draw(weather, true);
+        screens[screen_idx.x][0]->draw(forecast, true);
     }
 
     sci.draw(3,1,screen_idx.x+1,1);
@@ -165,7 +140,7 @@ void move(uint8_t move)
 
 void wifi_setup()
 {
-    int16_t* pos = ts.read_buttons();
+    int16_t* pos = ts.read_touch();
 
     if(pos)
     {
@@ -175,15 +150,62 @@ void wifi_setup()
             wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
 
             tft.fillScreen(BACKGROUND_COLOR);
-            if (wifi_screen_idx)
-            {
-                wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
-            }
-            else{
-                wifi_screens[wifi_screen_idx]->draw();
-            }
+
+            wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
+            wifi_screens[wifi_screen_idx]->draw();
+            
         }
         delete [] pos;
+    }
+}
+
+void initial_network_connection(int8_t number_of_networks)
+{
+    //******************************
+    // Read from EEPROM saved wifis
+    //
+    uint8_t count = EEPROM.read(10);
+
+    Serial.println("COUNT: "+String(count));
+
+    uint32_t address = 10;
+    address += sizeof(uint8_t);
+    String saved_ssid, saved_psw;
+
+    for (uint8_t i=0; i<count; i++)
+    {
+        saved_ssid = EEPROM.readString(address);
+        address += sizeof(saved_ssid);
+        saved_psw = EEPROM.readString(address);
+        address += sizeof(saved_psw);
+
+        Serial.println(String(i) + ". "+saved_ssid + " "+saved_psw);
+
+        // Compare all found network ssid's to saved one
+        // If they are the same, connect to this WiFi
+        for (int8_t j=0; j<number_of_networks; j++)
+        {
+            if (WiFi.SSID(j) == saved_ssid)
+            {
+                char* temp_ssid = new char[saved_ssid.length()+1];
+                char* temp_psw = new char[saved_psw.length()+1];
+                
+                saved_ssid.toCharArray(temp_ssid, saved_ssid.length()+1);
+                saved_psw.toCharArray(temp_psw, saved_psw.length()+1);
+
+                
+                WiFi.begin(temp_ssid, temp_psw);
+
+                // If successfully connected to wifi
+                if(try_to_connect_to_wifi(temp_ssid))
+                {
+                    return;
+                }
+
+                delete [] temp_ssid;
+                delete [] temp_psw;
+            }
+        }
     }
 }
 
@@ -198,48 +220,33 @@ void setup()
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 
+
     //******************************
-    // Read from EEPROM saved wifis
+    // Scanning for newtorks
     //
-    uint8_t count = EEPROM.read(10);
+    tft.setCursor(0,0);
+    tft.println("Looking for saved WiFi...");
 
-    uint32_t address = 10;
-    address += sizeof(uint8_t);
-    String saved_ssid, saved_psw;
+    WiFi.mode(WIFI_STA);
+    int8_t number_of_networks = WiFi.scanNetworks();
 
-    for (uint8_t i=0; i<count; i++)
+    if (number_of_networks > 0)
     {
-        saved_ssid = EEPROM.readString(address);
-        address += sizeof(saved_ssid);
-        saved_psw = EEPROM.readString(address);
-        address += sizeof(saved_psw);
-
-        char* temp_ssid = new char[saved_ssid.length()+1];
-        char* temp_psw = new char[saved_psw.length()+1];
-        
-        saved_ssid.toCharArray(temp_ssid, saved_ssid.length()+1);
-        saved_psw.toCharArray(temp_psw, saved_psw.length()+1);
-
-        WiFi.mode(WIFI_STA);
-        WiFi.begin(temp_ssid, temp_psw);
-
-        if(try_to_connect_to_wifi(temp_ssid))
-        {
-            break;
-        }
+        initial_network_connection(number_of_networks);
     }
 
-
-    ts.on_down(down);
     ts.on_left(left);
     ts.on_right(right);
-    ts.on_up(up);
 
     //******************************
     //  Force a connection to WiFi
     //
     if(WiFi.status() != WL_CONNECTED)
     {
+        tft.println("Couldnt connect to WiFi.");
+        tft.println("Scanning WiFis...");
+
+        tft.fillScreen(BACKGROUND_COLOR);
         wifi_screens[0]->scan();
         wifi_screens[0]->draw();
 
@@ -247,20 +254,29 @@ void setup()
 
         String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
 
-        address = 10;
-        count = EEPROM.read(address);
+        //*********************************
+        // Saving entered network to EEPROM
+        //
+        uint8_t count = EEPROM.read(10);
+        uint32_t address = 10;
         address+=sizeof(uint8_t);
-        EEPROM.writeString(address, temp_ssid);
-        EEPROM.commit();
 
-        address += sizeof(temp_ssid);
-        EEPROM.writeString(address, temp_pwd);
-        EEPROM.commit();
+        address += count *2*(sizeof(String));
+        if (address < 512)
+        {
+            Serial.println("Address fine: "+String(address));
+            EEPROM.writeString(address, temp_ssid);
+            EEPROM.commit();
 
-        address += sizeof(temp_pwd);
-        count++;
-        EEPROM.write(10, count);
-        EEPROM.commit();
+            address += sizeof(temp_ssid);
+            EEPROM.writeString(address, temp_pwd);
+            EEPROM.commit();
+
+            address += sizeof(temp_pwd);
+            count++;
+            EEPROM.write(10, count);
+            EEPROM.commit();
+        }
     }
 
     get_http = wclient._init_("Oława");
@@ -284,15 +300,32 @@ void setup()
         forecast->forecasted_weather[i] = new Weather;
     }
 
-    wclient.current_weather(weather);
-    wclient.forecast_weather(forecast);
+    tft.setCursor(0,0);
+    tft.setTextColor(TFT_GREEN);
+    tft.setTextSize(1);
+
+    // If any of them failed to get weather data, 
+    // will try to get it again
+    while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
+    {
+        tft.println("Failed to obtain data");
+        delay(1000);
+
+        // ESP should already have got WiFi ssid and password,
+        // so it will try to regain connection and try again
+        if (WiFi.status() != WL_CONNECTED)
+        {
+            WiFi.mode(WIFI_STA);
+            initial_network_connection(number_of_networks);
+        }
+    }
 
     screens[0][0]->init();
 
     EEPROM.end();
 
     tft.fillScreen(BACKGROUND_COLOR);
-    screens[screen_idx.x][screen_idx.y]->draw(weather, true);
+    screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
 }
 
@@ -301,16 +334,17 @@ void loop()
 {
     ts.read();
 
-    if (millis() - lastTimeCheck> SECOND)
+    if (millis() - lastTimeCheck>= SECOND)
     {
         wclient.current_weather(weather);
         wclient.forecast_weather(forecast);
-        // drawing main screen time data
+
+        // adding 1 second to ESP time
         screens[0][0]->refresh();
-        if (screen_idx.x == 0)
-        {
-            screens[0][0]->draw(weather, false);
-        }
+        
+        screens[screen_idx.x][0]->draw(weather,false);
+        screens[screen_idx.x][0]->draw(forecast,false);
+        
         lastTimeCheck = millis();
     }
 }
