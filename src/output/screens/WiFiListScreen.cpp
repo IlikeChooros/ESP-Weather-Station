@@ -52,6 +52,7 @@ void WiFiListScreen::check(int16_t* pos)
         }
     }
 
+    // Already got refresh function
     refresh_button->check(pos[0], pos[1]);
 }
 

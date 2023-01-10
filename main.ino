@@ -245,9 +245,9 @@ void setup()
     {
         tft.println("Couldnt connect to WiFi.");
         tft.println("Scanning WiFis...");
+        wifi_screens[0]->scan();
 
         tft.fillScreen(BACKGROUND_COLOR);
-        wifi_screens[0]->scan();
         wifi_screens[0]->draw();
 
         while(!wifi_screens[1]->load_main()){wifi_setup();}
@@ -262,9 +262,9 @@ void setup()
         address+=sizeof(uint8_t);
 
         address += count *2*(sizeof(String));
-        if (address < 512)
+        if (address <= 512-2*sizeof(String))
         {
-            Serial.println("Address fine: "+String(address));
+            // Serial.println("Address fine: "+String(address));
             EEPROM.writeString(address, temp_ssid);
             EEPROM.commit();
 
@@ -284,7 +284,7 @@ void setup()
 
     while(!get_http)
     {
-        tft.println("Retrying.");
+        tft.println("Retrying wclient init...");
         get_http = wclient._init_("Oława");
         delay(3500);
     }

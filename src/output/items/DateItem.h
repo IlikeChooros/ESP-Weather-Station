@@ -18,8 +18,6 @@ class DateItem
     struct tm timeinfo;
     struct tm prev_time_info;
 
-    bool updateDate;
-
     DateFormat* dateFormat;
 
     DigitSection** digitsec;

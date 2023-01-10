@@ -51,8 +51,12 @@ void PasswordInputScreen::check(int16_t* pos)
                 inputfield->add_input(keypads[current_keypad]->get_button_str(idx-1));
                 break;
         }
-        re_draw();
-        last_pressed = idx;
+
+        if (idx != last_pressed)
+        {
+            re_draw();
+            last_pressed = idx;
+        }
         return;
     }
 
@@ -102,7 +106,6 @@ void PasswordInputScreen::enter_pwd()
     password.toCharArray(pass, password.length()+1);
     wifi_name.toCharArray(ssid, wifi_name.length()+1);
 
-    Serial.println("ssid: "+String(ssid)+ "  pass: "+String(pass)+ "  len: "+String(wifi_name.length())+"  "+String(password.length()));
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, pass);
 
@@ -116,10 +119,11 @@ void PasswordInputScreen::enter_pwd()
     tft->print("Connecting to:");
 
     tft->drawCentreString(ssid, 160, 95, 2);
-    tft->setCursor(120, 120);
 
+    tft->setCursor(100, 120);
     tft->setTextSize(3);
     tft->setTextColor(TFT_DARKGREEN);
+    
     uint8_t number_of_tries = 0;
 
     uint64_t timer = millis();

@@ -5,9 +5,9 @@
 #include "../items/WeatherItem.h"
 #include "../items/TextItem.h"
 #include "../items/DateItem.h"
+#include "../items/WiFiItem.h"
 #include "../icons/WeatherIcon.h"
 #include "../icons/WindIcon.h"
-#include "../icons/Icons.h"
 #include "../../weather_client/Weather.h"
 #include "../../data_structures/Hsv_to_rgb.h"
 
@@ -21,7 +21,7 @@
 class CurrentWeatherScreen: public MainScreen
 {
     WeatherItem** weather_items;
-    WiFiIcon* wifi;
+    WiFiItem* wifi;
     DateItem* date;
 
     public:
@@ -37,7 +37,7 @@ class CurrentWeatherScreen: public MainScreen
             new TextPressure(this->_tft, 30, 130+OFFSET, 4, 1, 0xB41F, "%d hPa", bg_c)
         }; 
 
-        wifi = new WiFiIcon(this->_tft, 10,10,15,bg_c);
+        wifi = new WiFiItem(this->_tft, 10,10,15,bg_c);
         date = new DateItem(this->_tft, 160, 10 , 45, bg_c);
     }
     void draw(Weather* weather, bool forceDraw);

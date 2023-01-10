@@ -27,7 +27,7 @@ void InputField::draw()
         temp = input;
     }
     else{
-        temp = input.substring(input.length()-13,input.length()-1);
+        temp = input.substring(input.length()-13,input.length());
     }
     tft->print(temp);
 }

@@ -10,11 +10,7 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
         ->draw(forceDraw);
     }
 
-    if (forceDraw)
-    {
-        wifi->draw();
-    }
-
+    wifi->draw(forceDraw);
     date->draw(forceDraw);
     // Fonts: 1,2,4,6,7,8
 }

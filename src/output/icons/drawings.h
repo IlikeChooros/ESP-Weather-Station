@@ -202,4 +202,20 @@ void inline drawDroplet(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uin
     tft->fillCircle(x+size/2, y + size*0.7f, size*0.3f, color);
     tft->fillTriangle(x+0.2f*size, y + 0.7f*size, x + 0.8f*size, y + 0.7f*size, x + 0.5f*size, y, color);
 }
+
+void inline drawWifi(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+{
+    // first line
+    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, color);
+    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.4f * size, background_color);
+    tft->fillRect(x, y + 0.3f * size, 1.1f * size, 0.8f * size, background_color);
+
+    // second line
+    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, color);
+    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.2f * size, background_color);
+    tft->fillRect(x, y + 0.5f * size, 1.1f * size, 0.5f * size, background_color);
+
+    // center circle
+    tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, color);
+}
 #endif

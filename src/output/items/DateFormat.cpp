@@ -38,7 +38,7 @@ bool DateFormat::add_second()
         return false;
     }
     // If there was a connection error to the ntp server, continue updating date on its own
-    
+
     if (timeinfo->tm_min != 60)
     {
         return false;

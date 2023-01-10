@@ -56,7 +56,7 @@ void DateItem::draw(bool forceDraw)
     digitsec[MINUTES]->draw(timeinfo.tm_min, forceDraw);
     digitsec[SECONDS]->draw(timeinfo.tm_sec, forceDraw);
 
-    if (updateDate || forceDraw)
+    if (forceDraw)
     {
         tft->drawCentreString(dateFormat->formatDateInfo(), center_x, y_full_date, 4);
     }
@@ -64,7 +64,7 @@ void DateItem::draw(bool forceDraw)
     
     dateFormat->set_date(&timeinfo);
 
-    if (updateDate || forceDraw)
+    if (forceDraw)
     {
         tft->setTextColor(TFT_WHITE);
         tft->drawCentreString(dateFormat->formatDateInfo(), center_x, y_full_date, 4);
@@ -79,6 +79,11 @@ void DateItem::draw(bool forceDraw)
 void DateItem::add_second()
 {
     prev_time_info = timeinfo;
-    updateDate = dateFormat->add_second();
+    if (dateFormat->add_second())
+    {
+        timeinfo = dateFormat->get_date();
+        draw(true);
+        return;
+    } 
     timeinfo = dateFormat->get_date();
 }

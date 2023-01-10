@@ -55,8 +55,6 @@ bool WeatherClient::current_weather(Weather* weather)
     int16_t http_code = http->GET();
     String payload = http->getString();
 
-    // Serial.println("PAYLOAD: "+payload);
-
     bool isSuccessfull = http_code == 200;
 
     if (isSuccessfull)
@@ -112,8 +110,6 @@ bool WeatherClient::forecast_weather(Forecast* forecast)
     
     int16_t http_code = http->GET();
     String payload = http->getString();
-
-    // Serial.println("PAYLOAD: "+payload);
 
     bool isSuccessfull = http_code == 200;
 
