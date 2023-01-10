@@ -36,7 +36,8 @@ void DateItem::init()
         Serial.println("Failed to obtain time");
         update = true;
     }
-    dateFormat->init(update);
+    dateFormat->init();
+    dateFormat->set_update(update);
     dateFormat->set_date(&timeinfo);
     prev_time_info = timeinfo;
 }
@@ -47,21 +48,21 @@ void DateItem::init()
 void DateItem::draw(bool forceDraw)
 {
     // Clearing previous date 
-    tft->setTextSize(1);
-    tft->setTextColor(bg_c);
-
     dateFormat->set_date(&prev_time_info);
 
     digitsec[HOURS]->draw(timeinfo.tm_hour, forceDraw);
     digitsec[MINUTES]->draw(timeinfo.tm_min, forceDraw);
     digitsec[SECONDS]->draw(timeinfo.tm_sec, forceDraw);
 
+    tft->setTextSize(1);
+    tft->setTextColor(bg_c);
     if (forceDraw)
     {
         tft->drawCentreString(dateFormat->formatDateInfo(), center_x, y_full_date, 4);
     }
     
     
+    // Drawing new one
     dateFormat->set_date(&timeinfo);
 
     if (forceDraw)
@@ -76,9 +77,15 @@ void DateItem::draw(bool forceDraw)
 // To work correctly should be called
 // every second
 //********************************
-void DateItem::add_second()
+void DateItem::add_second(bool getUpdate)
 {
     prev_time_info = timeinfo;
+
+    if (getUpdate)
+    {
+        dateFormat->set_update(true);
+    }
+
     if (dateFormat->add_second())
     {
         timeinfo = dateFormat->get_date();

@@ -51,7 +51,7 @@ class FewDaysForecastScreen: public MainScreen
     {
         return;
     }
-    void refresh()
+    void refresh(bool forceUpdate)
     {
         return;
     }

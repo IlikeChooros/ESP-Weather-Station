@@ -32,7 +32,7 @@ public:
     DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t y_hour, int16_t bg_c);
     void init();
     void draw(bool forceDraw);
-    void add_second();
+    void add_second(bool getUpdate);
 };
 
 

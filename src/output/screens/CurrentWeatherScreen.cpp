@@ -14,8 +14,8 @@ void CurrentWeatherScreen::draw(Weather* weather, bool forceDraw)
     date->draw(forceDraw);
     // Fonts: 1,2,4,6,7,8
 }
-void CurrentWeatherScreen::refresh()
+void CurrentWeatherScreen::refresh(bool forceUpdate)
 {
-    date->add_second();
+    date->add_second(forceUpdate);
 }
 

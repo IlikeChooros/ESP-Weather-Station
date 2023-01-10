@@ -20,6 +20,8 @@ void WiFiItem::draw(bool forceDraw)
         delete icon;
         return;
     }
+
+    tft->fillRect(x,y,1.2f*size,1.2f*size, background_color);
     icon->draw();
     delete icon;
 }

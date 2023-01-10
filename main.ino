@@ -96,16 +96,25 @@ bool try_to_connect_to_wifi(String wifi_ssid)
 
 bool connect_to_wifi_silently()
 {
+    uint64_t timer = millis();
     number_of_tries = 0;
+    Serial.print("Connecting");
     while(WiFi.status() != WL_CONNECTED)
     {
-        delay(1000);
-        number_of_tries++;
+        if (millis() - timer > 1000)
+        {
+            number_of_tries++;
+            Serial.print(".");
 
-        if (number_of_tries == 8){
-            return false;
+            if (number_of_tries == 8){
+                Serial.println("Failed");
+                return false;
+            }
+            timer = millis();
         }
     }
+
+    Serial.println("Success");
     return true;
 }
 
@@ -178,6 +187,7 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
     // Read from EEPROM saved wifis
     //
 
+    EEPROM.begin(EEPROM_SIZE);
     uint32_t address = 10;
     uint8_t count = EEPROM.read(address);
     Serial.println(String(count));
@@ -206,7 +216,7 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
 
                 
                 WiFi.begin(temp_ssid, temp_psw);
-
+                String("WIFI BEGIN: "+saved_ssid + " "+saved_psw);
                 
                 if(verbose)
                 {
@@ -215,6 +225,8 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
                     {
                         delete [] temp_ssid;
                         delete [] temp_psw;
+
+                        EEPROM.end();
                         return;
                     }
                 }
@@ -224,6 +236,8 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
                     {
                         delete [] temp_ssid;
                         delete [] temp_psw;
+
+                        EEPROM.end();
                         return;
                     }
                 }
@@ -237,11 +251,12 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
             tft.setCursor(0,0);
         }
     }
+
+    EEPROM.end();
 }
 
 void setup()
 {
-    EEPROM.begin(EEPROM_SIZE);
     Serial.begin(921600);
     tft.init();
     tft.setRotation(3);
@@ -286,6 +301,8 @@ void setup()
         //*********************************
         // Saving entered network to EEPROM
         //
+
+        EEPROM.begin(EEPROM_SIZE);
         uint8_t count = EEPROM.read(10);
         uint32_t address = 10;
         address+=sizeof(uint8_t);
@@ -306,6 +323,8 @@ void setup()
             EEPROM.write(10, count);
             EEPROM.commit();
         }
+
+        EEPROM.end();
     }
 
     get_http = wclient._init_(CITY_NAME);
@@ -345,13 +364,14 @@ void setup()
         if (WiFi.status() != WL_CONNECTED)
         {
             WiFi.mode(WIFI_STA);
+            WiFi.disconnect();
             initial_network_connection(number_of_networks, true);
         }
     }
 
     screens[0][0]->init();
 
-    EEPROM.end();
+    
 
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0][0]->draw(weather, true);
@@ -369,7 +389,7 @@ void loop()
         wclient.forecast_weather(forecast);
 
         // adding 1 second to ESP time
-        screens[0][0]->refresh();
+        screens[0][0]->refresh(false);
         
         screens[screen_idx.x][0]->draw(weather,false);
         screens[screen_idx.x][0]->draw(forecast,false);
@@ -381,12 +401,16 @@ void loop()
         if (WiFi.status() != WL_CONNECTED)
         {
             WiFi.mode(WIFI_STA);
+            WiFi.disconnect();
             int8_t number_of_networks = WiFi.scanNetworks();
+
+            Serial.println("NUMBER_OF_NETWORKS: "+String(number_of_networks));
             if (number_of_networks < 1)
             {
                 return;
             }
             initial_network_connection(number_of_networks, false);
+            screens[0][0]->refresh(true);
         }
     }
 }

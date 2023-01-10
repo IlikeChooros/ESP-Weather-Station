@@ -46,7 +46,7 @@ class Forecast12Screen: public MainScreen
     {
         return;
     }
-    void refresh()
+    void refresh(bool forceUpdate)
     {
         return;
     }

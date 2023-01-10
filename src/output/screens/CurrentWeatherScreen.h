@@ -46,7 +46,7 @@ class CurrentWeatherScreen: public MainScreen
         return;
     }
 
-    void refresh();
+    void refresh(bool forceUpdate);
     void init() {
         date->init();
     }

@@ -1,6 +1,6 @@
 #include "DateFormat.h"
 
-void DateFormat::init(bool getUpdate)
+void DateFormat::init()
 {
     this->getUpdate = getUpdate;
     configTime(3600, 0, NTP_SERVER);
@@ -16,10 +16,20 @@ struct tm DateFormat::get_date()
     return *this->timeinfo;
 }
 
+bool DateFormat::set_update(bool update)
+{
+    getUpdate = update;
+}
+
+
+//****************************
+// returns true if date has
+// to be redrawn
+//****************************
 bool DateFormat::add_second()
 {
     timeinfo->tm_sec++;
-    if (this->getUpdate && timeinfo->tm_sec%10 == 0)
+    if (this->getUpdate)
     {
         getUpdate = !getLocalTime(timeinfo);
         return !getUpdate;

@@ -13,9 +13,10 @@ class DateFormat
     struct tm* timeinfo;
     bool getUpdate;
     public:
-    void init(bool getUpdate);
+    void init();
     bool add_second();
     void set_date(struct tm* timeinfo);
+    bool set_update(bool update);
     struct tm get_date();
     String formatDateInfo();
     String formatTimeInfo();
