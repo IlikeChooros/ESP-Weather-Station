@@ -293,46 +293,6 @@ void force_wifi_connection()
     EEPROM.end();
 }
 
-void initial_network_connection(int8_t number_of_networks)
-{
-    for (uint8_t i=0; i<numberOfSavedWifis; i++)
-    {
-        // Compare all found network ssid's to saved one
-        // If wifi names are the same, connect to this WiFi
-        for (int8_t j=0; j<number_of_networks; j++)
-        {
-            if (WiFi.SSID(j) == saved_wifi_info[i][0])
-            {
-                char* temp_ssid;
-                char* temp_psw;
-                
-                char_to_wifi_info(temp_ssid, temp_psw, i);
-
-                WiFi.begin(temp_ssid, temp_psw);
-                
-                // If successfully connected to wifi
-                if(try_to_connect_to_wifi(temp_ssid))
-                {
-                    delete [] temp_ssid;
-                    delete [] temp_psw;
-
-                    EEPROM.end();
-                    return;
-                }
-        
-            }
-        }
-
-        if (i == 4)
-        {
-            tft.fillScreen(BACKGROUND_COLOR);
-            tft.setCursor(0,0);
-        }
-    }
-
-    EEPROM.end();
-}
-
 void setup()
 {
     Serial.begin(921600);
@@ -345,14 +305,8 @@ void setup()
     reset_tft();
     load_saved_wifis();
     WiFi.mode(WIFI_STA);
-    int8_t number_of_networks; //= WiFi.scanNetworks();
-
+    int8_t number_of_networks; 
     wifi_screens[0]->init();
-
-    // if (number_of_networks > 0)
-    // {
-    //     initial_network_connection(number_of_networks);
-    // }
 
     ts.on_left(left);
     ts.on_right(right);
