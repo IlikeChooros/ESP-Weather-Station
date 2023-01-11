@@ -18,7 +18,6 @@
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
 #define MINUTES_15 900000
-#define MINUTE_2 120000
 #define SECOND_5 5000
 #define SECOND 1000
 
@@ -43,7 +42,7 @@ enum Move_idx
 
 uint64_t lastTimeCheck = 0;
 bool lostConnectionNow = true;
-int64_t wifiUpdateTimeCheck = -MINUTE_2;
+int64_t wifiUpdateTimeCheck = -SECOND_5;
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
 String** saved_wifi_info = 0;
@@ -228,7 +227,7 @@ void force_wifi_connection()
     //****************************
     // Already connected to WiFi 
     // without entering password
-    if (temp_ssid == "" || temp_pwd == "")
+    if (!wifi_screens[1]->load_main() || (temp_ssid == "" || temp_pwd == "") )
     {
         return;
     }
@@ -302,6 +301,10 @@ void setup()
     //******************************
     // Scanning for newtorks
     //
+
+    EEPROM.begin(EEPROM_SIZE);
+    EEPROM.write(10,3);
+    EEPROM.commit();
     reset_tft();
     load_saved_wifis();
     WiFi.mode(WIFI_STA);
