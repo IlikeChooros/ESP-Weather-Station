@@ -33,7 +33,6 @@ void DateItem::init()
         timeinfo.tm_year = 123;
         timeinfo.tm_mon = 0;
         timeinfo.tm_wday = 0;
-        Serial.println("Failed to obtain time");
         update = true;
     }
     dateFormat->init();

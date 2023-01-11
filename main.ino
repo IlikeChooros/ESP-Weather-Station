@@ -18,7 +18,8 @@
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
 #define MINUTES_15 900000
-#define MINUTE 60000
+#define MINUTE_2 120000
+#define SECOND_5 5000
 #define SECOND 1000
 
 TFT_eSPI tft = TFT_eSPI();
@@ -41,6 +42,11 @@ enum Move_idx
 };
 
 uint64_t lastTimeCheck = 0;
+bool lostConnectionNow = true;
+int64_t wifiUpdateTimeCheck = -MINUTE_2;
+int8_t savedWiFiIdx = 0;
+int8_t numberOfSavedWifis = 0;
+String** saved_wifi_info = 0;
 
 TouchScreen ts(&tft, calData);
 
@@ -62,10 +68,17 @@ WiFiScreen** wifi_screens = new WiFiScreen* [2]{
 Point screen_idx(0,0);
 uint8_t wifi_screen_idx = 0;
 
+void reset_tft()
+{
+    tft.fillScreen(BACKGROUND_COLOR);
+    tft.setCursor(0,0);
+    tft.setTextColor(TFT_GREEN);
+    tft.setTextSize(1);
+}
+
 bool try_to_connect_to_wifi(String wifi_ssid)
 {
     tft.println("Connecting to WiFi: "+wifi_ssid+" ");
-
     number_of_tries = 0;
     while(WiFi.status() != WL_CONNECTED)
     {
@@ -84,29 +97,57 @@ bool try_to_connect_to_wifi(String wifi_ssid)
     return true;
 }
 
-bool connect_to_wifi_silently()
+void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
 {
-    uint64_t timer = millis();
-    number_of_tries = 0;
-    // Serial.print("Connecting");
-    while(WiFi.status() != WL_CONNECTED)
-    {
-        if (millis() - timer > 1000)
-        {
-            number_of_tries++;
-            // Serial.print(".");
+    ssid = new char [saved_wifi_info[idx][0].length()+1];
+    pass = new char [saved_wifi_info[idx][1].length()+1];
 
-            if (number_of_tries == 8){
-                // Serial.println("Failed");
-                return false;
-            }
-            timer = millis();
-        }
+    saved_wifi_info[idx][0].toCharArray(ssid, saved_wifi_info[idx][0].length()+1);
+    saved_wifi_info[idx][1].toCharArray(pass, saved_wifi_info[idx][1].length()+1);
+}
+
+void reconnect_to_wifi()
+{
+
+    if (millis() - wifiUpdateTimeCheck > SECOND_5)
+    {
+        WiFi.disconnect();
+        WiFi.reconnect();
+        wifiUpdateTimeCheck = millis();
+    }
+}
+
+void load_saved_wifis()
+{
+    //******************************
+    // Read from EEPROM saved wifis
+    //
+    EEPROM.begin(EEPROM_SIZE);
+    numberOfSavedWifis = EEPROM.read(10);
+    uint32_t address = 10;
+    address += sizeof(uint8_t);
+
+    if (numberOfSavedWifis)
+    {
+        saved_wifi_info = new String* [numberOfSavedWifis];
     }
 
-    // Serial.println("Success");
-    return true;
+    String saved_ssid, saved_psw;
+
+    for (uint8_t i=0; i<numberOfSavedWifis; i++)
+    {
+        saved_ssid = EEPROM.readString(address);
+        address += sizeof(saved_ssid);
+        saved_psw = EEPROM.readString(address);
+        address += sizeof(saved_psw);
+        saved_wifi_info[i] = new String[2]{
+            saved_ssid,
+            saved_psw
+        };
+    }
+    EEPROM.end();
 }
+
 
 void refresh()
 {
@@ -171,71 +212,118 @@ void wifi_setup()
     }
 }
 
-void initial_network_connection(int8_t number_of_networks, bool verbose)
+void force_wifi_connection()
 {
-    //******************************
-    // Read from EEPROM saved wifis
-    //
+    tft.println("Scanning WiFis...");
 
+    wifi_screens[0]->scan();
+
+    tft.fillScreen(BACKGROUND_COLOR);
+    wifi_screens[0]->draw();
+
+    while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
+
+    String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
+
+    //****************************
+    // Already connected to WiFi 
+    // without entering password
+    if (temp_ssid == "" || temp_pwd == "")
+    {
+        return;
+    }
+    //******************************************
+    // Checking if entered wifi ssid
+    // is already saved, if so updating password
     EEPROM.begin(EEPROM_SIZE);
     uint32_t address = 10;
-    uint8_t count = EEPROM.read(address);
-    // .println(String(count));
-    address += sizeof(uint8_t);
-
-    String saved_ssid, saved_psw;
-
-    for (uint8_t i=0; i<count; i++)
+    address+=sizeof(uint8_t);
+    
+    for (uint8_t i=0; i<numberOfSavedWifis; i++)
     {
-        saved_ssid = EEPROM.readString(address);
-        address += sizeof(saved_ssid);
-        saved_psw = EEPROM.readString(address);
-        address += sizeof(saved_psw);
-        // Serial.println(String(i) + ". SSID "+saved_ssid + " PASS "+saved_psw);
+        if (saved_wifi_info[i][0] == temp_ssid)
+        {
+            address += (2*i + 1)*sizeof(String);
+
+            EEPROM.writeString(address, temp_pwd);
+            EEPROM.commit();
+            EEPROM.end();
+
+            saved_wifi_info[i][1] = temp_pwd;
+            return;
+        }
+    }
+
+
+    //*********************************
+    // Saving entered network to EEPROM
+    //
+    address += numberOfSavedWifis*2*sizeof(String);
+    if (address <= 512-2*sizeof(String))
+    {
+        EEPROM.writeString(address, temp_ssid);
+        EEPROM.commit();
+
+        address += sizeof(temp_ssid);
+        EEPROM.writeString(address, temp_pwd);
+        EEPROM.commit();
+
+        address += sizeof(temp_pwd);
+        numberOfSavedWifis++;
+        EEPROM.write(10, numberOfSavedWifis);
+        EEPROM.commit();
+    }
+
+    //**************************
+    // Updating saved_wifi_info
+    //
+    if (numberOfSavedWifis-1 == 0)
+    {
+        EEPROM.end();
+        return;
+    }
+
+    for (int8_t i=0; i<numberOfSavedWifis-1;i++)
+    {
+        delete [] saved_wifi_info[i];
+    }
+    delete [] saved_wifi_info;
+
+    load_saved_wifis();
+    EEPROM.end();
+}
+
+void initial_network_connection(int8_t number_of_networks)
+{
+    for (uint8_t i=0; i<numberOfSavedWifis; i++)
+    {
         // Compare all found network ssid's to saved one
         // If wifi names are the same, connect to this WiFi
         for (int8_t j=0; j<number_of_networks; j++)
         {
-            if (WiFi.SSID(j) == saved_ssid)
+            if (WiFi.SSID(j) == saved_wifi_info[i][0])
             {
-                char* temp_ssid = new char[saved_ssid.length()+1];
-                char* temp_psw = new char[saved_psw.length()+1];
+                char* temp_ssid;
+                char* temp_psw;
                 
-                saved_ssid.toCharArray(temp_ssid, saved_ssid.length()+1);
-                saved_psw.toCharArray(temp_psw, saved_psw.length()+1);
+                char_to_wifi_info(temp_ssid, temp_psw, i);
 
-                
                 WiFi.begin(temp_ssid, temp_psw);
-                String("WIFI BEGIN: "+saved_ssid + " "+saved_psw);
                 
-                if(verbose)
+                // If successfully connected to wifi
+                if(try_to_connect_to_wifi(temp_ssid))
                 {
-                    // If successfully connected to wifi
-                    if(try_to_connect_to_wifi(temp_ssid))
-                    {
-                        delete [] temp_ssid;
-                        delete [] temp_psw;
+                    delete [] temp_ssid;
+                    delete [] temp_psw;
 
-                        EEPROM.end();
-                        return;
-                    }
+                    EEPROM.end();
+                    return;
                 }
-
-                else{
-                    if(connect_to_wifi_silently())
-                    {
-                        delete [] temp_ssid;
-                        delete [] temp_psw;
-
-                        EEPROM.end();
-                        return;
-                    }
-                }
-            
+        
             }
         }
 
-        if (i == 5)
+        if (i == 4)
         {
             tft.fillScreen(BACKGROUND_COLOR);
             tft.setCursor(0,0);
@@ -251,24 +339,19 @@ void setup()
     tft.init();
     tft.setRotation(3);
 
-    tft.fillScreen(BACKGROUND_COLOR);
-    tft.setTextColor(TFT_GREEN);
-    tft.setTextSize(1);
-
     //******************************
     // Scanning for newtorks
     //
-    tft.setCursor(0,0);
-    tft.println("Looking for saved WiFi...");
-
+    reset_tft();
+    load_saved_wifis();
     WiFi.mode(WIFI_STA);
-    int8_t number_of_networks = WiFi.scanNetworks();
+    int8_t number_of_networks; //= WiFi.scanNetworks();
 
     wifi_screens[0]->init();
 
     // if (number_of_networks > 0)
     // {
-    //     initial_network_connection(number_of_networks, true);
+    //     initial_network_connection(number_of_networks);
     // }
 
     ts.on_left(left);
@@ -277,49 +360,11 @@ void setup()
     //******************************
     //  Force a connection to WiFi
     //
-    if(WiFi.status() != WL_CONNECTED)
-    {
-        tft.println("Couldnt connect to WiFi.");
-        tft.println("Scanning WiFis...");
+    force_wifi_connection();
 
-        wifi_screens[0]->scan();
-
-        tft.fillScreen(BACKGROUND_COLOR);
-        wifi_screens[0]->draw();
-
-        while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
-
-        String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
-
-        //*********************************
-        // Saving entered network to EEPROM
-        //
-
-        EEPROM.begin(EEPROM_SIZE);
-        uint8_t count = EEPROM.read(10);
-        uint32_t address = 10;
-        address+=sizeof(uint8_t);
-
-        address += count *2*(sizeof(String));
-        if (address <= 512-2*sizeof(String))
-        {
-            // Serial.println("Address fine: "+String(address));
-            EEPROM.writeString(address, temp_ssid);
-            EEPROM.commit();
-
-            address += sizeof(temp_ssid);
-            EEPROM.writeString(address, temp_pwd);
-            EEPROM.commit();
-
-            address += sizeof(temp_pwd);
-            count++;
-            EEPROM.write(10, count);
-            EEPROM.commit();
-        }
-
-        EEPROM.end();
-    }
-
+    //****************************
+    // initialize weather client
+    reset_tft();
     get_http = wclient._init_(CITY_NAME);
     tft.println("GET_HTTP: "+String(get_http));
 
@@ -330,8 +375,6 @@ void setup()
         delay(3500);
     }
 
-    tft.fillScreen(BACKGROUND_COLOR);
-
     weather = new Weather;
     forecast = new Forecast;
     forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
@@ -341,35 +384,28 @@ void setup()
         forecast->forecasted_weather[i] = new Weather;
     }
 
-    tft.setCursor(0,0);
-    tft.setTextColor(TFT_GREEN);
-    tft.setTextSize(1);
-
+    reset_tft();
     // If any of them failed to get weather data, 
     // will try to get it again
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
     {
         tft.println("Failed to obtain data, try restarting ESP");
-        delay(1000);
 
         // ESP should already have got WiFi ssid and password,
         // so it will try to regain connection and try again
+        // to get weather data
         if (WiFi.status() != WL_CONNECTED)
         {
-            WiFi.mode(WIFI_STA);
-            WiFi.disconnect();
-            number_of_networks = WiFi.scanNetworks();
-            initial_network_connection(number_of_networks, true);
+            reconnect_to_wifi();
         }
     }
 
     screens[0][0]->init();
 
-    
-
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
+    lostConnectionNow = false;
 }
 
 
@@ -377,34 +413,25 @@ void loop()
 {
     ts.read();
 
-    if (millis() - lastTimeCheck>= SECOND)
+    if (millis() - lastTimeCheck < SECOND)
     {
-        wclient.current_weather(weather);
-        wclient.forecast_weather(forecast);
+        return;
+    }
 
-        // adding 1 second to ESP time
-        screens[0][0]->refresh(false);
-        
-        screens[screen_idx.x][0]->draw(weather,false);
-        screens[screen_idx.x][0]->draw(forecast,false);
-        
-        lastTimeCheck = millis();
+    wclient.current_weather(weather);
+    wclient.forecast_weather(forecast);
 
+    // adding 1 second to ESP time
+    screens[0][0]->refresh(false);
+    
+    screens[screen_idx.x][0]->draw(weather,false);
+    screens[screen_idx.x][0]->draw(forecast,false);
+    
+    lastTimeCheck = millis();
 
-        // Try to regain wifi connection, if lost
-        if (WiFi.status() != WL_CONNECTED)
-        {
-            WiFi.mode(WIFI_STA);
-            WiFi.disconnect();
-            int8_t number_of_networks = WiFi.scanNetworks();
-
-            // Serial.println("NUMBER_OF_NETWORKS: "+String(number_of_networks));
-            if (number_of_networks < 1)
-            {
-                return;
-            }
-            initial_network_connection(number_of_networks, false);
-            screens[0][0]->refresh(true);
-        }
+    // Try to regain wifi connection, if lost
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        reconnect_to_wifi();
     }
 }

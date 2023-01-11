@@ -75,6 +75,8 @@ class PasswordInputScreen: public WiFiScreen
         keypads[3]->set_color(TFT_DARKCYAN ,15);
         keypads[4]->set_color(TFT_DARKCYAN ,15);
         current_keypad = 1;
+
+        wifi_name = "";
     }
 
     void draw()

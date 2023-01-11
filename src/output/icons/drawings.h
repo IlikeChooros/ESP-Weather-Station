@@ -1,5 +1,5 @@
-#ifndef DRAW_CLOUD_H
-#define DRAW_CLOUD_H
+#ifndef DRAWINGS_H
+#define DRAWINGS_H
 
 #include <Arduino.h>
 #include <TFT_eSPI.h> 
