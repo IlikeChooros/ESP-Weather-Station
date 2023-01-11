@@ -12,7 +12,7 @@
 
 class Keypad
 {
-    TouchButton** buttons;
+    KeypadButton** buttons;
     KeypadButton** sliders;
 
     public:

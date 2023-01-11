@@ -12,16 +12,6 @@
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
-#include <EEPROM.h>
-#include <TFT_eSPI.h> 
-#include <SPI.h>
-
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
-
-#define EEPROM_SIZE 13*sizeof(String)+sizeof(uint8_t)
-
 #define CITY_NAME "Oława"
 #define BACKGROUND_COLOR 0x10C4
 #define X_SCREENS 3
@@ -98,23 +88,23 @@ bool connect_to_wifi_silently()
 {
     uint64_t timer = millis();
     number_of_tries = 0;
-    Serial.print("Connecting");
+    // Serial.print("Connecting");
     while(WiFi.status() != WL_CONNECTED)
     {
         if (millis() - timer > 1000)
         {
             number_of_tries++;
-            Serial.print(".");
+            // Serial.print(".");
 
             if (number_of_tries == 8){
-                Serial.println("Failed");
+                // Serial.println("Failed");
                 return false;
             }
             timer = millis();
         }
     }
 
-    Serial.println("Success");
+    // Serial.println("Success");
     return true;
 }
 
@@ -190,7 +180,7 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
     EEPROM.begin(EEPROM_SIZE);
     uint32_t address = 10;
     uint8_t count = EEPROM.read(address);
-    Serial.println(String(count));
+    // .println(String(count));
     address += sizeof(uint8_t);
 
     String saved_ssid, saved_psw;
@@ -201,7 +191,7 @@ void initial_network_connection(int8_t number_of_networks, bool verbose)
         address += sizeof(saved_ssid);
         saved_psw = EEPROM.readString(address);
         address += sizeof(saved_psw);
-        Serial.println(String(i) + ". SSID "+saved_ssid + " PASS "+saved_psw);
+        // Serial.println(String(i) + ". SSID "+saved_ssid + " PASS "+saved_psw);
         // Compare all found network ssid's to saved one
         // If wifi names are the same, connect to this WiFi
         for (int8_t j=0; j<number_of_networks; j++)
@@ -274,10 +264,12 @@ void setup()
     WiFi.mode(WIFI_STA);
     int8_t number_of_networks = WiFi.scanNetworks();
 
-    if (number_of_networks > 0)
-    {
-        initial_network_connection(number_of_networks, true);
-    }
+    wifi_screens[0]->init();
+
+    // if (number_of_networks > 0)
+    // {
+    //     initial_network_connection(number_of_networks, true);
+    // }
 
     ts.on_left(left);
     ts.on_right(right);
@@ -289,12 +281,13 @@ void setup()
     {
         tft.println("Couldnt connect to WiFi.");
         tft.println("Scanning WiFis...");
+
         wifi_screens[0]->scan();
 
         tft.fillScreen(BACKGROUND_COLOR);
         wifi_screens[0]->draw();
 
-        while(!wifi_screens[1]->load_main()){wifi_setup();}
+        while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
 
         String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
 
@@ -365,6 +358,7 @@ void setup()
         {
             WiFi.mode(WIFI_STA);
             WiFi.disconnect();
+            number_of_networks = WiFi.scanNetworks();
             initial_network_connection(number_of_networks, true);
         }
     }
@@ -404,7 +398,7 @@ void loop()
             WiFi.disconnect();
             int8_t number_of_networks = WiFi.scanNetworks();
 
-            Serial.println("NUMBER_OF_NETWORKS: "+String(number_of_networks));
+            // Serial.println("NUMBER_OF_NETWORKS: "+String(number_of_networks));
             if (number_of_networks < 1)
             {
                 return;

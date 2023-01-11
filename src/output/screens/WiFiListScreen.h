@@ -11,8 +11,7 @@
 
 class WiFiListScreen: public WiFiScreen
 {
-    bool scroll;
-    TouchButton** wifis;
+    WiFiListItem** wifis;
     TouchButton* refresh_button;
 
     int8_t number_of_networks;
@@ -20,14 +19,18 @@ class WiFiListScreen: public WiFiScreen
     String picked_wifi;
 
     bool change_;
-    bool onRelease;
-    uint8_t onReleaseIdx;
+    bool load_main_;
+
+    String** saved_wifi_info;
+    uint8_t number_of_saved_wifis;
+
+    void read_from_eeprom_wifis();
+    void connect_to_wifi();
     public:
     WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c, void(*refresh_func)(void)): WiFiScreen(tft, bg_c){
         WiFi.mode(WIFI_STA);
-        onRelease = false;
         change_ = false;
-        onReleaseIdx = 0;
+        load_main_ = false;
 
         refresh_button = new KeypadButton(tft, 285, 10, 30, 30, "O");
         refresh_button->set_color(TFT_DARKGREEN);
@@ -36,6 +39,7 @@ class WiFiListScreen: public WiFiScreen
 
     void scan();
     void draw();
+    void init();
     void draw(String wifi_name)
     {
         return;
@@ -48,7 +52,7 @@ class WiFiListScreen: public WiFiScreen
     void clear_buttons();
     bool change();
     bool load_main(){
-        return false;
+        return this->load_main_;
     }
 };
 

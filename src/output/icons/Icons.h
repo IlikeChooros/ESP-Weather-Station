@@ -206,4 +206,41 @@ class WiFiIconLost: public Icon
     WiFiIconLost(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
     void draw();
 };
+
+class LockerLocked: public Icon
+{
+    public:
+    LockerLocked(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
+    void draw();
+};
+
+class LockerOpened: public Icon
+{
+    public:
+    LockerOpened(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
+    void draw();
+};
+
+
+class WiFiStrenghtStrong: public Icon
+{
+    public:
+    WiFiStrenghtStrong(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
+    void draw();
+};
+
+class WiFiStrenghtMedium: public Icon
+{
+    public:
+    WiFiStrenghtMedium(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
+    void draw();
+};
+
+class WiFiStrenghtWeak: public Icon
+{
+    public:
+    WiFiStrenghtWeak(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
+    void draw();
+};
+
 #endif

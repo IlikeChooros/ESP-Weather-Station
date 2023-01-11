@@ -28,9 +28,6 @@ class KeypadButton: public TouchButton
     void on_touch();
     void set_wrap();
     String get_str();
-    int16_t get_int(){
-        return 0;
-    }
 };
 
 

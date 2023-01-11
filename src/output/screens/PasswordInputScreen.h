@@ -85,12 +85,17 @@ class PasswordInputScreen: public WiFiScreen
     void check(int16_t* pos);
     bool change();
     String get_str();
+    void clear_buttons();
+    bool load_main();
     void scan()
     {
         return;
     }
-    void clear_buttons();
-    bool load_main();
+    void init()
+    {
+        return;
+    }
+    
 };
 
 #endif

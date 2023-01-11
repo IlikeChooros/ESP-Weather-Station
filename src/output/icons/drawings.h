@@ -218,4 +218,30 @@ void inline drawWifi(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16
     // center circle
     tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, color);
 }
+
+void inline drawLockOpened(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+{
+    tft->fillRect(x,y,size,size,background_color);
+
+    tft->fillCircle(x+0.3f*size, y+0.3f*size, 0.25f*size, color);
+    tft->fillCircle(x+0.3f*size, y+0.3f*size, 0.2f*size, background_color);
+
+    tft->drawCircle(x+0.3f*size, y+0.3f*size, 0.2f*size, color);
+
+    tft->fillRect(x, y+0.3f*size, size, 0.3f*size, background_color);
+
+    tft->fillRect(x+0.4f*size,y+0.3f*size,0.5f*size, 0.6f*size, color);
+}
+
+void inline drawLockLocked(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+{
+    tft->fillRect(x,y,size,size,background_color);
+
+    tft->fillCircle(x+0.7f*size, y+0.3f*size, 0.25f*size, color);
+    tft->fillCircle(x+0.7f*size, y+0.3f*size, 0.2f*size, background_color);
+
+    tft->fillRect(x, y+0.3f*size, size, 0.2f*size, background_color);    
+
+    tft->fillRect(x+0.4f*size,y+0.3f*size,0.6f*size, 0.7f*size, color);
+}
 #endif

@@ -251,22 +251,76 @@ void Droplet_100::draw()
 
 void WiFiIconStrong::draw()
 {
+    tft->fillRect(x,y,1.05f*size,size, background_color);
+    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
+    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
+
     drawWifi(tft,x,y,size, WIFI_BG, background_color);
 }
 
 void WiFiIconMedium::draw()
 {
+    tft->fillRect(x,y,1.05f*size,size, background_color);
+    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
+    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
+
     drawWifi(tft,x,y,size, TFT_ORANGE, background_color);
 }
 
 void WiFiIconWeak::draw()
 {
+    tft->fillRect(x,y,1.05f*size,size, background_color);
+    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
+    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
+
     drawWifi(tft,x,y,size, TFT_RED, background_color);
 }
 
 void WiFiIconLost::draw()
 {
+    tft->fillRect(x,y,1.05f*size,size, background_color);
+    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
+    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
+
     drawWifi(tft,x,y,size, TFT_RED, background_color);
     tft->drawLine(x+size, y, x+size, y+0.55f*size, TFT_RED);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, TFT_RED);
+}
+
+void LockerOpened::draw()
+{
+    drawLockOpened(tft,x,y,size, TFT_GREEN,background_color);
+}
+
+void LockerLocked::draw()
+{
+    drawLockLocked(tft,x,y,size, TFT_RED,background_color);
+}
+
+void WiFiStrenghtStrong::draw()
+{
+    tft->fillRect(x,y,size*0.8f,size,background_color);
+
+    tft->fillRect(x,y, size*0.2f, size, TFT_GREEN);
+
+    tft->fillRect(x+0.3f*size,y, size*0.2f, size, TFT_GREEN);
+
+    tft->fillRect(x+0.6f*size,y, size*0.2f, size, TFT_GREEN);
+
+}
+
+void WiFiStrenghtMedium::draw()
+{
+    tft->fillRect(x,y,size*0.5f,size,background_color);
+
+    tft->fillRect(x,y, size*0.2f, size, TFT_ORANGE);
+
+    tft->fillRect(x+0.3f*size,y, size*0.2f, size, TFT_ORANGE);
+}
+
+void WiFiStrenghtWeak::draw()
+{
+    tft->fillRect(x,y,size*0.2f,size,background_color);
+
+    tft->fillRect(x,y, size*0.2f, size, TFT_RED);
 }

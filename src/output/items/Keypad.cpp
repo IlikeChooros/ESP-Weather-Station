@@ -19,7 +19,7 @@ Keypad::Keypad(TFT_eSPI* tft, String* button_data, String left_slider, String ri
     sliders[0]->set_wrap();
     sliders[1]->set_wrap();
 
-    buttons = new TouchButton*[NUMBER_OF_KEYPAD_BUTTONS];
+    buttons = new KeypadButton*[NUMBER_OF_KEYPAD_BUTTONS];
     buttons[NUMBER_OF_KEYPAD_BUTTONS-1] = new KeypadButton(
         tft, 70, 207, 180, 30, " "
     );

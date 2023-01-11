@@ -7,6 +7,8 @@
 
 #include "../../input/TouchButton.h"
 
+#include "WiFiStrenghtItem.h"
+
 #define BUTTON_BG 0x52AA
 
 class WiFiListItem: public TouchButton
@@ -18,21 +20,27 @@ class WiFiListItem: public TouchButton
 
     uint16_t bg_c;
 
+    bool password_saved;
+
     public:
-    WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, int8_t strenght, uint16_t bg_c): TouchButton(x,y,width,height)
+    WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, bool password_saved ,int8_t strenght, uint16_t bg_c): TouchButton(x,y,width,height)
     {
         this->tft = tft;
         this->ssid = ssid;
         this->bg_c = bg_c;
         this->strenght = strenght;
+        this->password_saved = password_saved;
     }
     void draw();
-    int16_t get_int();
-    void on_touch();
-    String get_str()
+    int8_t get_strenght();
+    bool is_saved();
+    String get_ssid();
+    void on_touch()
     {
-        return ssid;
+        return;
     }
+    
+
 };
 
 #endif
