@@ -21,12 +21,18 @@ _Note: You can use other ESP versions, although it has to have WiFi module and m
 **Needed external libraries:**
 > * **TFT_eSPI**
 
-If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
-
-In order to run this code:
-> 1. Create a folder, name it however you want 
-> 1. Download this code to newly created folder
-> 1. 
-> * use [Arduino IDE](https://www.arduino.cc/en/software).
-> * 
-> * rename file 'main.ino' to '
+### In order to run this code:
+> 1. Create an account on [openwathermap](https://openweathermap.org/) and generate your API key
+> 1. Download this code anywhere you want
+> 1. Unzip it
+> 1. Go to folder 'ESP-Weather-Station-master'
+> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino'
+>  1. If you dont have already installed Arduino IDE,
+[download it](https://www.arduino.cc/en/software).
+>  1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
+>  1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
+> 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
+> 1. Change:  `#define CITY_NAME "YOUR CITY NAME"`
+> 1. Go to file: `src/weather_client/WeatherClient.h`
+> 1. Change: `#define APPID "YOUR API KEY"`
+> 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
