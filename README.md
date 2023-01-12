@@ -21,7 +21,12 @@ _Note: You can use other ESP versions, although it has to have WiFi module and m
 **Needed external libraries:**
 > * **TFT_eSPI**
 
-If you have any trouble **connecting the display** to ESP or **downloading the library** check [this](https://youtu.be/rq5yPJbX_uk) tutorial. 
+If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
 
-In order to run this programme use [Arduino IDE](https://www.arduino.cc/en/software).
-
+In order to run this code:
+> 1. Create a folder, name it however you want 
+> 1. Download this code to newly created folder
+> 1. 
+> * use [Arduino IDE](https://www.arduino.cc/en/software).
+> * 
+> * rename file 'main.ino' to '
