@@ -2,7 +2,7 @@
 
 ## TOE
 * [Introduction](#introduction)
-* [Launch](#launch)
+* [Setup](#setup)
 
 ## Introduction
 
