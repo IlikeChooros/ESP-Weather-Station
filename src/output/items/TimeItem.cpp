@@ -8,7 +8,7 @@ void TimeItem::draw(bool forceDraw)
         return;
     }
 
-    String date = unixTimeToHumanReadable(hourly);
+    String date = get_date_format(hourly);
     this->_tft->setCursor(this->x, this->y);
     this->_tft->setTextColor(this->bg_c);
     this->_tft->setTextFont(this->font);
@@ -21,10 +21,37 @@ void TimeItem::draw(bool forceDraw)
     prev_date = date;
 }
 
+String TimeItem::get_date_format(bool hourFormat)
+{
+    if (hourFormat)
+    {
+        return get_hour_format();
+    }
+    return get_weekday();
+}
+
 void TimeItem::setWeather(Weather* weather)
 {
     redraw = unix != weather->_dt;
     this->unix = weather->_dt;
+}
+
+String TimeItem::get_hour_format()
+{
+    uint32_t time = unix % (24 * 60 * 60);
+    uint8_t hour = time / 3600,
+            min = (time % 3600) / 60;
+    String hour_format = "";
+
+    hour_format += String(hour);
+    hour_format += ":";
+    if (min<10)
+    {
+        hour_format+= "0";
+    }
+    hour_format += String(min);
+
+    return hour_format;
 }
 
 String TimeItem::get_weekday()
@@ -33,125 +60,4 @@ String TimeItem::get_weekday()
     float days = this->unix/24;
     days /= 3600;
     return weekdays[((uint32_t)days+3)%7];    
-}
-
-String TimeItem::unixTimeToHumanReadable(bool hourFormat)
-{
-    if (!hourFormat)
-    {
-        return get_weekday();
-    }
-    // Save the time in Human
-    // readable format
-    String ans = "";
- 
-    // Number of days in month
-    // in normal year
-    int daysOfMonth[] = { 31, 28, 31, 30, 31, 30,
-                          31, 31, 30, 31, 30, 31 };
- 
-    long int currYear, daysTillNow, extraTime, extraDays,
-        index, date, month, hours, minutes,
-        flag = 0;
- 
-    // Calculate total days unix time T
-    daysTillNow = unix / (24 * 60 * 60);
-    extraTime = unix % (24 * 60 * 60);
-    currYear = 1970;
- 
-    // Calculating current year
-    while (true) {
-        if (currYear % 400 == 0
-            || (currYear % 4 == 0 && currYear % 100 != 0)) {
-            if (daysTillNow < 366) {
-                break;
-            }
-            daysTillNow -= 366;
-        }
-        else {
-            if (daysTillNow < 365) {
-                break;
-            }
-            daysTillNow -= 365;
-        }
-        currYear += 1;
-    }
-    // Updating extradays because it
-    // will give days till previous day
-    // and we have include current day
-    extraDays = daysTillNow + 1;
- 
-    if (currYear % 400 == 0
-        || (currYear % 4 == 0 && currYear % 100 != 0))
-        flag = 1;
- 
-    // Calculating MONTH and DATE
-    month = 0, index = 0;
-    if (flag == 1) {
-        while (true) {
- 
-            if (index == 1) {
-                if (extraDays - 29 < 0)
-                    break;
-                month += 1;
-                extraDays -= 29;
-            }
-            else {
-                if (extraDays - daysOfMonth[index] < 0) {
-                    break;
-                }
-                month += 1;
-                extraDays -= daysOfMonth[index];
-            }
-            index += 1;
-        }
-    }
-    else {
-        while (true) {
- 
-            if (extraDays - daysOfMonth[index] < 0) {
-                break;
-            }
-            month += 1;
-            extraDays -= daysOfMonth[index];
-            index += 1;
-        }
-    }
- 
-    // Current Month
-    if (extraDays > 0) {
-        month += 1;
-        date = extraDays;
-    }
-    else {
-        if (month == 2 && flag == 1)
-            date = 29;
-        else {
-            date = daysOfMonth[month - 1];
-        }
-    }
- 
-    // Calculating HH:MM:YYYY
-    hours = extraTime / 3600;
-    minutes = (extraTime % 3600) / 60;    
-    
-    if (hourFormat)
-    {
-        ans += String(hours);
-        ans += ":";
-        if (minutes<10)
-        {
-            ans+= "0";
-        }
-        ans += String(minutes);
-    }
-    else
-    {
-        ans += String(date);
-        ans += "-";
-        ans += String(month);
-    }
-    
-    // Return the time
-    return ans;
 }
