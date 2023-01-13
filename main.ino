@@ -18,7 +18,7 @@
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
 #define MINUTES_15 900000
-#define SECOND_5 5000
+#define SECOND_10 10000
 #define SECOND 1000
 
 TFT_eSPI tft = TFT_eSPI();
@@ -42,7 +42,7 @@ enum Move_idx
 
 uint64_t lastTimeCheck = 0;
 bool lostConnectionNow = true;
-int64_t wifiUpdateTimeCheck = -SECOND_5;
+int64_t wifiUpdateTimeCheck = -SECOND_10;
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
 String** saved_wifi_info = 0;
@@ -108,7 +108,7 @@ void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
 void reconnect_to_wifi()
 {
 
-    if (millis() - wifiUpdateTimeCheck > SECOND_5)
+    if (millis() - wifiUpdateTimeCheck > SECOND_10)
     {
         WiFi.disconnect();
         WiFi.reconnect();

@@ -156,7 +156,6 @@ void WiFiListScreen::draw()
     {
         wifis[i]->draw();
     }
-
     refresh_button->draw();
 }
 
