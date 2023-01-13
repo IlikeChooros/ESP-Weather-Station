@@ -1,6 +1,6 @@
 # ESP Weather Station
 
-## TOE
+## TOC
 * [Introduction](#introduction)
 * [Setup](#setup)
 
@@ -16,7 +16,7 @@ To run this project you will need some essential parts and libraries.
 > * **ESP 32 WROOM-32**
 > * **TFT display 240x320 with ILI9341 driver**
 
-_Note: You can use other ESP versions, although it has to have WiFi module and minimum size of flash memory 4MB (project uses ~990 kB of flash memory). Other displays may be used as well but they must operate with ILI9341 dirver and have touch functionality, nevertheless some icons might look wierd with different resolutions._
+_Note: You can use other ESP versions, although it has to have WiFi module and minimum size of flash memory 4MB (project uses ~990 kB of flash memory). Other displays may be used as well but they must operate with TFT_eSPI library and have touch functionality, nevertheless some icons might look wierd with different resolutions._
 
 **Needed external libraries:**
 > * **TFT_eSPI**
