@@ -79,6 +79,7 @@ void WiFiListScreen::connect_to_wifi()
     {
         if (saved_wifi_info[i][0] == picked_wifi)
         {
+            Serial.println("WIFI_LIST: WIFI SAVED: "+saved_wifi_info[i][0]+"  "+saved_wifi_info[i][1]);
             psw = saved_wifi_info[i][1];
             break;
         }
@@ -93,6 +94,7 @@ void WiFiListScreen::connect_to_wifi()
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, pass);
 
+    Serial.println("DRAW CONNECTING TO WIFI");
     load_main_ = draw_connecting_to_wifi(picked_wifi, ssid, pass);
     change_ = !load_main_;
 }
@@ -106,11 +108,10 @@ void WiFiListScreen::connect_to_wifi()
 void WiFiListScreen::read_from_eeprom_wifis()
 {
     EEPROM.begin(EEPROM_SIZE);
-    uint32_t address = 10;
-    uint8_t count = EEPROM.read(address);
+    uint8_t count = EEPROM.read(10);
     this->number_of_saved_wifis = count;
-    address += sizeof(uint8_t);
-
+    uint16_t address = 11;
+    Serial.println("count: "+String(number_of_saved_wifis));
     if (count)
     {
         saved_wifi_info = new String* [count];
@@ -122,15 +123,15 @@ void WiFiListScreen::read_from_eeprom_wifis()
     for (uint8_t i=0; i<count; i++)
     {
         saved_ssid = EEPROM.readString(address);
-        address += sizeof(saved_ssid);
+        address += MAX_SSID_LENGHT;
         saved_psw = EEPROM.readString(address);
-        address += sizeof(saved_psw);
+        address += MAX_PASSWORD_LENGHT;
 
         saved_wifi_info[i] = new String[2]{
             saved_ssid,
             saved_psw
         };
-
+        Serial.println(String(i)+". "+saved_ssid + " "+saved_psw);
     }
 
     EEPROM.end();
