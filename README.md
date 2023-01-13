@@ -27,10 +27,10 @@ _Note: You can use other ESP versions, although it has to have WiFi module and m
 > 1. Unzip it
 > 1. Go to folder 'ESP-Weather-Station-master'
 > 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino'
->  1. If you dont have already installed Arduino IDE,
+>    1. If you dont have already installed Arduino IDE,
 [download it](https://www.arduino.cc/en/software).
->  1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
->  1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
+>    1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
+>    1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
 > 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
 > 1. Change:  `#define CITY_NAME "YOUR CITY NAME"`
 > 1. Go to file: `src/weather_client/WeatherClient.h`
