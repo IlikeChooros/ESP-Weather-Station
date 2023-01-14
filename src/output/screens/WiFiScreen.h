@@ -7,7 +7,10 @@
 #include "TFT_eSPI.h"
 #include "SPI.h"
 
-#define EEPROM_SIZE 13*sizeof(String)+sizeof(uint8_t)
+#define EEPROM_SIZE 512
+#define MAX_PASSWORD_LENGHT 31
+#define MAX_SSID_LENGHT 26 
+
 
 class WiFiScreen
 {

@@ -18,7 +18,7 @@
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
 #define MINUTES_15 900000
-#define SECOND_5 5000
+#define SECOND_10 10000
 #define SECOND 1000
 
 TFT_eSPI tft = TFT_eSPI();
@@ -42,7 +42,7 @@ enum Move_idx
 
 uint64_t lastTimeCheck = 0;
 bool lostConnectionNow = true;
-int64_t wifiUpdateTimeCheck = -SECOND_5;
+int64_t wifiUpdateTimeCheck = -SECOND_10;
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
 String** saved_wifi_info = 0;
@@ -66,6 +66,15 @@ WiFiScreen** wifi_screens = new WiFiScreen* [2]{
 
 Point screen_idx(0,0);
 uint8_t wifi_screen_idx = 0;
+
+void eeprom_earse(uint16_t starting_address, uint16_t ending_address)
+{
+    for (;starting_address<ending_address; starting_address++)
+    {
+        EEPROM.write(starting_address, 0);
+    }
+    EEPROM.commit();
+}
 
 void reset_tft()
 {
@@ -108,7 +117,7 @@ void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
 void reconnect_to_wifi()
 {
 
-    if (millis() - wifiUpdateTimeCheck > SECOND_5)
+    if (millis() - wifiUpdateTimeCheck > SECOND_10)
     {
         WiFi.disconnect();
         WiFi.reconnect();
@@ -120,11 +129,15 @@ void load_saved_wifis()
 {
     //******************************
     // Read from EEPROM saved wifis
-    //
+    // address = 10 -> number of networks
+    // address <11, 11+MAX_SSID_LEN (37)) -> 1. ssid 
+    // address <37, 38 + MAX_PASSWORD_LEN (58)) -> 1. password
+    // ...
+    // address < (prev_address)+1 = x, x + MAX_SSID_LEN> -> k. ssid
+
     EEPROM.begin(EEPROM_SIZE);
     numberOfSavedWifis = EEPROM.read(10);
-    uint32_t address = 10;
-    address += sizeof(uint8_t);
+    uint16_t address = 11;
 
     if (numberOfSavedWifis)
     {
@@ -136,9 +149,9 @@ void load_saved_wifis()
     for (uint8_t i=0; i<numberOfSavedWifis; i++)
     {
         saved_ssid = EEPROM.readString(address);
-        address += sizeof(saved_ssid);
+        address += MAX_SSID_LENGHT;
         saved_psw = EEPROM.readString(address);
-        address += sizeof(saved_psw);
+        address += MAX_PASSWORD_LENGHT;
         saved_wifi_info[i] = new String[2]{
             saved_ssid,
             saved_psw
@@ -223,7 +236,7 @@ void force_wifi_connection()
     while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
 
     String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
-
+    Serial.println("TEMP_SSID "+temp_ssid + " PASS "+temp_pwd);
     //****************************
     // Already connected to WiFi 
     // without entering password
@@ -231,21 +244,30 @@ void force_wifi_connection()
     {
         return;
     }
+
+    Serial.println("Not empty");
     //******************************************
     // Checking if entered wifi ssid
     // is already saved, if so updating password
     EEPROM.begin(EEPROM_SIZE);
-    uint32_t address = 10;
-    address+=sizeof(uint8_t);
-    
+    uint16_t address = 11;
     for (uint8_t i=0; i<numberOfSavedWifis; i++)
     {
-        if (saved_wifi_info[i][0] == temp_ssid)
+        if (saved_wifi_info[i][0] == temp_ssid && temp_pwd.length() < MAX_PASSWORD_LENGHT)
         {
-            address += (2*i + 1)*sizeof(String);
+            address += i*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT)+MAX_SSID_LENGHT;
+            Serial.println("ALREADY SAVED: "+String((uint8_t)(address-MAX_SSID_LENGHT))+ " SSID: "+saved_wifi_info[i][0] +
+            "  READ: >"+EEPROM.readString(address-MAX_SSID_LENGHT)+"< >"+EEPROM.readString(address)+"<");
 
+            if (EEPROM.readString(address).length() > temp_pwd.length())
+            {
+                eeprom_earse(address + temp_pwd.length(), address + EEPROM.readString(address).length());
+            }
+            
             EEPROM.writeString(address, temp_pwd);
             EEPROM.commit();
+
+            Serial.println("UPDATED "+EEPROM.readString(address));
             EEPROM.end();
 
             saved_wifi_info[i][1] = temp_pwd;
@@ -257,17 +279,16 @@ void force_wifi_connection()
     //*********************************
     // Saving entered network to EEPROM
     //
-    address += numberOfSavedWifis*2*sizeof(String);
-    if (address <= 512-2*sizeof(String))
+    Serial.println("NEW NETWORK");
+    address += numberOfSavedWifis*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT);
+    if (address <= 512-MAX_PASSWORD_LENGHT-MAX_SSID_LENGHT && temp_ssid.length() < MAX_SSID_LENGHT && temp_pwd.length() < MAX_SSID_LENGHT)
     {
         EEPROM.writeString(address, temp_ssid);
-        EEPROM.commit();
 
-        address += sizeof(temp_ssid);
+        address += MAX_SSID_LENGHT;
         EEPROM.writeString(address, temp_pwd);
-        EEPROM.commit();
 
-        address += sizeof(temp_pwd);
+        address += MAX_PASSWORD_LENGHT;
         numberOfSavedWifis++;
         EEPROM.write(10, numberOfSavedWifis);
         EEPROM.commit();
@@ -288,8 +309,8 @@ void force_wifi_connection()
     }
     delete [] saved_wifi_info;
 
-    load_saved_wifis();
     EEPROM.end();
+    load_saved_wifis();
 }
 
 void setup()
@@ -301,13 +322,11 @@ void setup()
     //******************************
     // Scanning for newtorks
     //
-
-    EEPROM.begin(EEPROM_SIZE);
-    EEPROM.write(10,3);
-    EEPROM.commit();
+    // EEPROM.begin(EEPROM_SIZE);
+    // eeprom_earse(10, 50);
+    // EEPROM.end();
     reset_tft();
     load_saved_wifis();
-    WiFi.mode(WIFI_STA);
     int8_t number_of_networks; 
     wifi_screens[0]->init();
 
@@ -317,8 +336,10 @@ void setup()
     //******************************
     //  Force a connection to WiFi
     //
+    Serial.println("FORCE WIFI");
     force_wifi_connection();
 
+    Serial.println("FORCED WIFI");
     //****************************
     // initialize weather client
     reset_tft();
