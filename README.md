@@ -62,7 +62,7 @@ By clicking on the side buttons the keyboard layout will change, all keyboards h
 ![keyboard_sp](https://user-images.githubusercontent.com/105538405/212467608-4e71c476-52c1-47e2-acfa-aa8bd53c0ddc.jpg)
 
 
-After successfully establishing a connection with WiFi, you should see the screen displaying current weather data. In this part of the program, you gained access to 3 screens displaying different information about current and forcasted weather data. The first one is on the display by default, the second one is 12 hour forcast, and last one 4 next days. To move between these screens just touch left or right side of the screen *(Screen here is divided to 4 triangles).*
+After successfully establishing a connection with WiFi, you should see the screen displaying current weather data. In this part of the program, you gained access to 3 screens displaying different information about current and forcasted weather data. The first one is on the display by default, the second one is 12 hour forcast, and last one 4 next days. To move between these screens just touch left or right side of the screen.
 
 ![current_weather_1](https://user-images.githubusercontent.com/105538405/212467656-d0ad6456-5909-45ae-9ec4-e7c52c17eece.jpg)
 
