@@ -33,7 +33,7 @@ To run this project you will need some essential parts and libraries.
 > 1. Download this code anywhere you want
 > 1. Unzip it
 > 1. Go to folder 'ESP-Weather-Station-master'
-> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino'
+> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino' *(You can rename it howevery you want, but folder's name has to be the same as .ino file)*
 >    1. If you dont have already installed Arduino IDE,
 [download it](https://www.arduino.cc/en/software).
 >    1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
@@ -78,7 +78,52 @@ After successfully establishing a connection with WiFi, you should see the scree
 1. Saving WiFi data
 > If your wifi's ssid is shorter than `MAX_SSID_LENGHT` *(By default 26, so up to 25 of characters is accepted)*, and password shorter than `MAX_PASSWORD_LENGHT` *(by default 31)* your wifi's data will be saved to EEPROM. You can change default values in the file ".../ESP-Weather-Station/src/output/screens/WiFiScreen.h", nevertheless the bigger these values get the less networks could be saved as the EEPROM has access to only 512 bytes of memory. By default maximum number of saved networks is: 8 *( x = (512 - 10) / (31+26) ~= 8.8 , 512-10 -> addresses below 10 aren't used)*.
 
-1. WiFi reconnection
+2. WiFi reconnection
 > If the ESP loses connection to previously saved WiFi, it will try to reconnect to that WiFi. Note that in weather screens you cannot change networks.
 
+3. Weather data update
+> Weather data is updated every 15 minutes, just like the time *(although the time object will try in different time: every time when the hour hits: XX:00, XX:15, XX:30, XX:45)*, but if the device loses the connection to WiFi when trying to update the weather data, it won't cause any exceptions or crash, displayed data will be just stay the same and the program will try to update data again in next 15 minutes.
+
 ## Troubleshooting
+
+ * [After connected to wifi](#after-connected-to-wifi)
+ * [Reset saved wifis]()
+
+
+
+### After connected to wifi
+Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
+  * if connected via already saved wifi data, try clearing the wifi data from eeprom
+  * check your wifi connetion on other wireless devices, do they have access to the internet
+  * try resetarting ESP
+  * try restarting router
+
+### Reset saved wifis
+To reset all saved wifis data, put this code at the beggining of the void setup() in main.ino *(ESP-Weather-Station-master.ino, or howevery you named .ino file)*:
+```
+...
+
+void setup()
+{
+    EEPROM.begin(EEPROM_SIZE);
+    eeprom_earse(10, 487); 
+    EEPROM.end();
+    
+    Serial.begin(921600);
+    tft.init();
+    tft.setRotation(3);
+
+    //******************************
+    // Scanning for newtorks
+    //
+    reset_tft();
+    load_saved_wifis();
+    int8_t number_of_networks; 
+    
+    ...
+}
+```
+The number 487 isn't obligatory you can calculate on you own how many cells need to be earased. This formula might help you:
+
+
+` End-address = 11 + number-of-saved-networks * (MAX_SSID_LENGHT + MAX_PASSWORD_LENGHT)`
