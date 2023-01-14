@@ -86,12 +86,11 @@ After successfully establishing a connection with WiFi, you should see the scree
 
 ## Troubleshooting
 
- * [After connected to wifi](#after-connected-to-wifi)
- * [Reset saved wifis]()
+ * [Esp resets after connecting to wifi](#esp-resets-after-connecting-to-wifi)
+ * [Reset saved wifis](#reset-saved-wifis)
 
 
-
-### After connected to wifi
+### Esp resets after connecting to wifi
 Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
   * if connected via already saved wifi data, try clearing the wifi data from eeprom
   * check your wifi connetion on other wireless devices, do they have access to the internet
