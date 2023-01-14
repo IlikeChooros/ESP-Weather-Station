@@ -4,22 +4,29 @@
 // 1. http = new HTPP
 // 2. cacheTime in millis
 //--------------------------
-WeatherClient::WeatherClient(HTTPClient* http, uint32_t cacheTime)
+WeatherClient::WeatherClient(HTTPClient* http, int32_t cacheTime)
 {
     this->http = http;
     this->cacheTime = cacheTime;
+    this->lastWeatherCheck = -this->cacheTime;
+    this->lastForecastCheck = -this->cacheTime;
 }
 
 bool WeatherClient::_init_(String city_name)
 {
+    Serial.println("INIT");
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
-
+    Serial.println("BEGIN");
     int16_t http_code = http->GET();
+    Serial.println("HTTP GET: "+String(http_code));
+    String payload = http->getString();
+    Serial.println("GET_STR");
+    Serial.println(payload);
     bool isSuccesful = http_code == 200;
+
     if (isSuccesful)
     {
-        String payload = http->getString();
-
+        Serial.println(" IS SUS");
         StaticJsonDocument<100> filter;
         filter[0]["lat"] = true;
         filter[0]["lon"] = true;
@@ -30,11 +37,10 @@ bool WeatherClient::_init_(String city_name)
         _lat = doc[0]["lat"].as<double>();
         _lon = doc[0]["lon"].as<double>();
     }
-
+    Serial.println("HTTP END");
     http->end();
 
-    lastWeatherCheck = -2*cacheTime;
-    lastForecastCheck = -2*cacheTime;
+    Serial.println(" RETURN ");
     return isSuccesful;
 }
 
@@ -49,16 +55,18 @@ bool WeatherClient::current_weather(Weather* weather)
     {
         return false;
     }
-    
+    Serial.println("BEGIN");
     http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
     int16_t http_code = http->GET();
+    Serial.println("HTTP GET: "+String(http_code));
     String payload = http->getString();
-
+    Serial.println("GET_STR");
     bool isSuccessfull = http_code == 200;
 
     if (isSuccessfull)
     {
+        Serial.println("IS SUC");
         DynamicJsonDocument filter(440);
         filter["weather"][0]["main"] = true;
         filter["weather"][0]["icon"] = true;
@@ -89,7 +97,7 @@ bool WeatherClient::current_weather(Weather* weather)
     }
     http->end();
     lastWeatherCheck = millis();
-
+    Serial.println("HTTP END");
     return isSuccessfull;
 }
 
@@ -105,16 +113,20 @@ bool WeatherClient::forecast_weather(Forecast* forecast)
     {
         return false;
     }
-
+    Serial.println("BEIGN");
     http->begin("http://api.openweathermap.org/data/2.5/forecast?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
+    Serial.println("GET");
     int16_t http_code = http->GET();
+    Serial.println(String(http_code));
     String payload = http->getString();
+    Serial.println(payload);
 
     bool isSuccessfull = http_code == 200;
 
     if (isSuccessfull)
     {
+        Serial.println("IS SUC");
         DynamicJsonDocument filter(FORECAST_CAPACITY);
         for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST;i++)
         {
@@ -147,6 +159,6 @@ bool WeatherClient::forecast_weather(Forecast* forecast)
     }
     http->end();
     lastForecastCheck = millis();
-
+    Serial.println("END");
     return isSuccessfull;
 }

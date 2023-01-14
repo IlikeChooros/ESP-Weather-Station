@@ -41,7 +41,6 @@ enum Move_idx
 };
 
 uint64_t lastTimeCheck = 0;
-bool lostConnectionNow = true;
 int64_t wifiUpdateTimeCheck = -SECOND_10;
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
@@ -343,28 +342,34 @@ void setup()
     //****************************
     // initialize weather client
     reset_tft();
-    get_http = wclient._init_(CITY_NAME);
-    tft.println("GET_HTTP: "+String(get_http));
 
+    get_http = wclient._init_(CITY_NAME);
+    // tft.println("GET_HTTP: "+String(get_http));
+    Serial.println("RETURNED");
     while(!get_http)
     {
         tft.println("Retrying wclient init...");
-        get_http = wclient._init_(CITY_NAME);
         delay(3500);
+        get_http = wclient._init_(CITY_NAME);
     }
-
+    Serial.println("NEW WEATHER");
     weather = new Weather;
+     Serial.println("NEW FORECAST");
     forecast = new Forecast;
+     Serial.println("numberof  ");
     forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
+     Serial.println("new Weather*");
     forecast->forecasted_weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
     for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++)
     {
+        Serial.println(String(i)+". NEW WEATHER");
         forecast->forecasted_weather[i] = new Weather;
     }
-
+     Serial.println("rst tft");
     reset_tft();
     // If any of them failed to get weather data, 
     // will try to get it again
+    Serial.println("while(!)");
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
     {
         tft.println("Failed to obtain data, try restarting ESP");
@@ -372,18 +377,23 @@ void setup()
         // ESP should already have got WiFi ssid and password,
         // so it will try to regain connection and try again
         // to get weather data
+        Serial.println("WAIT...");
+        delay(2000);
         if (WiFi.status() != WL_CONNECTED)
         {
             reconnect_to_wifi();
         }
     }
 
-    screens[0][0]->init();
+    Serial.println("screens init");
 
+    screens[0][0]->init();
+    Serial.println("after screens init");
     tft.fillScreen(BACKGROUND_COLOR);
+
+    Serial.println("screens draw");
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
-    lostConnectionNow = false;
 }
 
 

@@ -48,6 +48,7 @@ class CurrentWeatherScreen: public MainScreen
 
     void refresh(bool forceUpdate);
     void init() {
+        Serial.println("current w init");
         date->init();
     }
 };

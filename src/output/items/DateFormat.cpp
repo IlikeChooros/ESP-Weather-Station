@@ -2,8 +2,8 @@
 
 void DateFormat::init()
 {
-    this->getUpdate = getUpdate;
-    configTime(3600, 0, NTP_SERVER);
+    Serial.println("date format init");
+    this->getUpdate = false;
 }
 
 void DateFormat::set_date(struct tm* timeinfo)
@@ -16,9 +16,9 @@ struct tm DateFormat::get_date()
     return *this->timeinfo;
 }
 
-bool DateFormat::set_update(bool update)
+void DateFormat::set_update(bool update)
 {
-    getUpdate = update;
+    this->getUpdate = update;
 }
 
 

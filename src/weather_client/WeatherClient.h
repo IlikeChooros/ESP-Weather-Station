@@ -24,7 +24,7 @@ class WeatherClient
     int64_t lastForecastCheck;
 
 public:
-    WeatherClient(HTTPClient *http, uint32_t cacheTime);
+    WeatherClient(HTTPClient *http, int32_t cacheTime);
     bool _init_(String city_name);
     bool current_weather(Weather *weather);
     bool forecast_weather(Forecast *forecast);

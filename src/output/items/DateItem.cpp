@@ -10,7 +10,6 @@ DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t
     this->y_hour = y_hour;
     this->tft = tft;
     this->bg_c = bg_c;
-    configTime(3600, 0, NTP_SERVER);
     dateFormat = new DateFormat;
 
     digitsec = new DigitSection *[3]
@@ -23,9 +22,12 @@ DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t
 
 void DateItem::init()
 {
+    Serial.println("date item init");
     bool update = false;
+    configTime(3600, 0, NTP_SERVER);
     if (!getLocalTime(&timeinfo))
     {
+        Serial.println("! get local time");
         timeinfo.tm_hour = 12;
         timeinfo.tm_mday = 7;
         timeinfo.tm_min = 0;
@@ -35,10 +37,15 @@ void DateItem::init()
         timeinfo.tm_wday = 0;
         update = true;
     }
+    Serial.println("after if");
     dateFormat->init();
+    Serial.println("after date format init");
     dateFormat->set_update(update);
+    Serial.println("st_update");
     dateFormat->set_date(&timeinfo);
+    Serial.println("set_date");
     prev_time_info = timeinfo;
+
 }
 
 //---------------------------------------------
