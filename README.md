@@ -1,5 +1,7 @@
 # ESP Weather Station
 
+![current_weather_epic](https://user-images.githubusercontent.com/105538405/212467629-f2da405b-54b6-440a-89d4-0aa28646bf5c.jpg)
+
 ## TOC
 * [Introduction](#introduction)
 * [Setup](#setup)
@@ -9,9 +11,6 @@
 * [Troubleshooting](#troubleshooting)
 
 ## Introduction
-
-![current_weather_epic](https://user-images.githubusercontent.com/105538405/212467629-f2da405b-54b6-440a-89d4-0aa28646bf5c.jpg)
-
 
 This project displays forcasted and current weather. Data is obtained via [openwathermap](https://openweathermap.org/) API. The forcasted weather is displayed in 12 hour and next 4 days format.
 
