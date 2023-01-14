@@ -3,8 +3,15 @@
 ## TOC
 * [Introduction](#introduction)
 * [Setup](#setup)
+* [Run the code](#in-order-to-run-this-code)
+* [Step by step explanation](#step-by-step-explanation)
+* [Features](#features)
+* [Troubleshooting](#troubleshooting)
 
 ## Introduction
+
+![current_weather_epic](https://user-images.githubusercontent.com/105538405/212467629-f2da405b-54b6-440a-89d4-0aa28646bf5c.jpg)
+
 
 This project displays forcasted and current weather. Data is obtained via [openwathermap](https://openweathermap.org/) API. The forcasted weather is displayed in 12 hour and next 4 days format.
 
@@ -41,25 +48,31 @@ To run this project you will need some essential parts and libraries.
 The first screen on the display you will encounter, if the code was uploaded successfuly, is the WiFi setup sceen. You will see up to 6 nearest networks.
 
 
-![6325fd8f-5e84-4d8d-9abd-29f9547381c9](https://user-images.githubusercontent.com/105538405/212464475-03b5aa8c-2edd-44cf-9841-bf62ab713760.jpg)
+![wifi_list](https://user-images.githubusercontent.com/105538405/212466454-dd5ad657-6b39-4cf0-aaae-0a8937f14cf4.jpg)
 
 
 By picking any of them the screen will change to the one with keyboard.
 By clicking on the side buttons the keyboard layout will change, all keyboards have red delete button `"<<"` and 2 of them have cyan capslock button `"^"`. In the upper part of this screen, there is an input field, to its left green upload button `"+"`, which will try to establish a connection with desired wifi. In the left corner of the screen there is red `"X"` button which will return you to the previous screen. If you successfuly connect to wifi, this wifi's ssid and password will be saved to eeprom, so in after reseting the ESP you won't have to type in password for the saved WiFi.
 
-img keyboards
+![keyboard_qwerty](https://user-images.githubusercontent.com/105538405/212467582-f848e80f-9ab1-4fac-8fc0-808f602952c7.jpg)
 
-img
 
-img
+![keyboard_123](https://user-images.githubusercontent.com/105538405/212467603-5dc8e03d-f016-4fa4-8a71-63c17641e651.jpg)
+
+
+![keyboard_sp](https://user-images.githubusercontent.com/105538405/212467608-4e71c476-52c1-47e2-acfa-aa8bd53c0ddc.jpg)
+
 
 After successfully establishing a connection with WiFi, you should see the screen displaying current weather data. In this part of the program, you gained access to 3 screens displaying different information about current and forcasted weather data. The first one is on the display by default, the second one is 12 hour forcast, and last one 4 next days. To move between these screens just touch left or right side of the screen *(Screen here is divided to 4 triangles).*
 
-img current weather
+![current_weather_1](https://user-images.githubusercontent.com/105538405/212467656-d0ad6456-5909-45ae-9ec4-e7c52c17eece.jpg)
 
-img 12 h
 
-img 4 ddays
+![12_hours](https://user-images.githubusercontent.com/105538405/212467667-8c485dde-8ef6-4340-b162-08b4aa65419e.jpg)
+
+
+![4_days](https://user-images.githubusercontent.com/105538405/212467674-78a28e62-fbc7-4b57-984c-397aefbd344b.jpg)
+
 
 ## Features
 1. Saving WiFi data
