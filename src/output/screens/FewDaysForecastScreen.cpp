@@ -28,11 +28,6 @@ void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
         forecast->forecasted_weather[i*8 + starting_itr]->temp((double)result[MAX_TEMP]);
         forecast->forecasted_weather[i*8 + starting_itr]->feels_like((double)result[MIN_TEMP]);
 
-        if (result[POP]>0.49f)
-        {
-            forecast->forecasted_weather[i*8 + starting_itr]->icon("09d");
-        }
-
         for (uint8_t j=0;j<NUMBER_OF_COLUMN_ITEMS;j++)
         {
             column_items[i].weather_items[j]->setWeather(forecast->forecasted_weather[i*8 + starting_itr]);
