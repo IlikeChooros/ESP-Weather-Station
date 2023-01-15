@@ -1,6 +1,6 @@
 # ESP Weather Station
 
-![current_weather_epic](https://user-images.githubusercontent.com/105538405/212467629-f2da405b-54b6-440a-89d4-0aa28646bf5c.jpg)
+![IMG_20230115_155913_1](https://user-images.githubusercontent.com/105538405/212566195-31139a7d-e5f9-481c-8577-69b2f22defe8.jpg)
 
 ## TOC
 * [Introduction](#introduction)
@@ -26,6 +26,7 @@ To run this project you will need some essential parts and libraries.
 
 **Needed external libraries:**
 > * **TFT_eSPI**
+> * **ArduinoJson**
 
 ### In order to run this code:
 > 1. Create an account on [openwathermap](https://openweathermap.org/) and generate your API key
@@ -51,7 +52,7 @@ The first screen on the display you will encounter, if the code was uploaded suc
 
 
 By picking any of them the screen will change to the one with keyboard.
-By clicking on the side buttons the keyboard layout will change, all keyboards have red delete button `"<<"` and 2 of them have cyan capslock button `"^"`. In the upper part of this screen, there is an input field, to its left green upload button `"+"`, which will try to establish a connection with desired wifi. In the left corner of the screen there is red `"X"` button which will return you to the previous screen. If you successfuly connect to wifi, this wifi's ssid and password will be saved to eeprom, so in after reseting the ESP you won't have to type in password for the saved WiFi.
+By clicking on the side buttons the keyboard layout will change, all keyboards have red delete button `"<<"` and 2 of them have cyan capslock button `"^"`. In the upper part of this screen, there is an input field, to its left green upload button `"+"`, which will try to establish a connection with desired wifi. In the left corner of the screen there is red `"X"` button which will return you to the previous screen. If you successfuly connect to wifi, this wifi's ssid and password will be saved to eeprom, so after reseting the ESP you won't have to type in password for the saved WiFi.
 
 ![keyboard_qwerty](https://user-images.githubusercontent.com/105538405/212467582-f848e80f-9ab1-4fac-8fc0-808f602952c7.jpg)
 
@@ -62,15 +63,16 @@ By clicking on the side buttons the keyboard layout will change, all keyboards h
 ![keyboard_sp](https://user-images.githubusercontent.com/105538405/212467608-4e71c476-52c1-47e2-acfa-aa8bd53c0ddc.jpg)
 
 
-After successfully establishing a connection with WiFi, you should see the screen displaying current weather data. In this part of the program, you gained access to 3 screens displaying different information about current and forcasted weather data. The first one is on the display by default, the second one is 12 hour forcast, and last one 4 next days. To move between these screens just touch left or right side of the screen.
-
-![current_weather_1](https://user-images.githubusercontent.com/105538405/212467656-d0ad6456-5909-45ae-9ec4-e7c52c17eece.jpg)
+After successfully establishing a connection with WiFi, you should see the screen displaying current weather data. In this part of the program, you gained access to 3 screens displaying different information about current and forecasted weather data. The first one is on the display by default, the second one is 12 hour forecast, and last one 4 next days. To move between these screens just touch left or right side of the screen.
 
 
-![12_hours](https://user-images.githubusercontent.com/105538405/212467667-8c485dde-8ef6-4340-b162-08b4aa65419e.jpg)
+![curr_w](https://user-images.githubusercontent.com/105538405/212566214-04356cb4-5c64-4cd3-8bde-1f114c00ff1f.jpg)
 
 
-![4_days](https://user-images.githubusercontent.com/105538405/212467674-78a28e62-fbc7-4b57-984c-397aefbd344b.jpg)
+![12_for](https://user-images.githubusercontent.com/105538405/212566216-54f9b155-5386-4fdd-ab0c-d20eeee62e1f.jpg)
+
+
+![4_days](https://user-images.githubusercontent.com/105538405/212566224-2cdfbbbd-c670-481d-a65b-75f84f80bc1e.jpg)
 
 
 ## Features
