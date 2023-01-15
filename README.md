@@ -26,6 +26,7 @@ To run this project you will need some essential parts and libraries.
 
 **Needed external libraries:**
 > * **TFT_eSPI**
+> * **ArduinoJson**
 
 ### In order to run this code:
 > 1. Create an account on [openwathermap](https://openweathermap.org/) and generate your API key
@@ -51,7 +52,7 @@ The first screen on the display you will encounter, if the code was uploaded suc
 
 
 By picking any of them the screen will change to the one with keyboard.
-By clicking on the side buttons the keyboard layout will change, all keyboards have red delete button `"<<"` and 2 of them have cyan capslock button `"^"`. In the upper part of this screen, there is an input field, to its left green upload button `"+"`, which will try to establish a connection with desired wifi. In the left corner of the screen there is red `"X"` button which will return you to the previous screen. If you successfuly connect to wifi, this wifi's ssid and password will be saved to eeprom, so in after reseting the ESP you won't have to type in password for the saved WiFi.
+By clicking on the side buttons the keyboard layout will change, all keyboards have red delete button `"<<"` and 2 of them have cyan capslock button `"^"`. In the upper part of this screen, there is an input field, to its left green upload button `"+"`, which will try to establish a connection with desired wifi. In the left corner of the screen there is red `"X"` button which will return you to the previous screen. If you successfuly connect to wifi, this wifi's ssid and password will be saved to eeprom, so after reseting the ESP you won't have to type in password for the saved WiFi.
 
 ![keyboard_qwerty](https://user-images.githubusercontent.com/105538405/212467582-f848e80f-9ab1-4fac-8fc0-808f602952c7.jpg)
 
