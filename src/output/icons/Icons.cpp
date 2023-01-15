@@ -190,7 +190,7 @@ void MistDay::draw()
 
 void Wind::draw()
 {
-    tft->fillRect(x,y,size,size,background_color);
+    tft->fillRect(x,y,size*1.3f,size*1.3f,background_color);
 
     drawSingleWindString(tft,x,y,size, 0.6f*size, 0.05f*size, TFT_WHITE, background_color, false);  
     drawSingleWindString(tft,x+0.1f*size, y+ 0.25f*size, 0.9f*size, 0.7f*size, 0.08f*size, TFT_WHITE, background_color, true);  
@@ -198,7 +198,7 @@ void Wind::draw()
 
 void WeakWind::draw()
 {
-    tft->fillRect(x,y,size,size,background_color);
+    tft->fillRect(x,y,size*1.3f,size*1.3f,background_color);
 
     drawSingleWindString(tft,x,y,size, 0.5f*size, 0.08f*size, TFT_WHITE, background_color, false);  
     drawSingleWindString(tft,x+0.1f*size, y+ 0.35f*size, 0.6f*size, 0.36f*size, 0.08f*size, TFT_WHITE, background_color, true); 
@@ -206,7 +206,7 @@ void WeakWind::draw()
 
 void StrongWind::draw()
 {
-    tft->fillRect(x,y,size,size,background_color);
+    tft->fillRect(x,y,size*1.3f,size*1.3f,background_color);
 
     drawSingleWindString(tft,x,y,size, 0.5f*size, 0.08f*size, TFT_WHITE, background_color, false);  
     drawSingleWindString(tft,x+0.2f*size, y+ 0.25f*size, 0.9f*size, 0.7*size, 0.08f*size, TFT_WHITE, background_color, true); 

@@ -27,7 +27,9 @@ Icon* WeatherIcon::iconMatcher()
         case 9:
             return new Rain(_tft, x, y, size, bg_c);  // 9 d/n
         case 10:
-                return new BigRain(_tft, x, y, size, bg_c); 
+                return new BigRain(_tft, x, y, size, bg_c); // 10 d/n 
+        case 11:
+            return new Storm(_tft, x,y,size,bg_c); // 11 d/n
         case 13:
             return new Snow(_tft, x, y, size, bg_c);  // 13 d/n
         default:

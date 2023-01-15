@@ -39,7 +39,6 @@ void WindIcon::draw(bool forceDraw)
     {
         return;
     }
-
     Icon* icon = iconMatcher();
     icon->draw();
     delete icon;

@@ -10,12 +10,12 @@ uint8_t get_day(uint64_t unix)
 void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
 {
     uint8_t current_day = get_day(forecast->forecasted_weather[0]->_dt);
+    uint8_t match_day = current_day < 6 ? current_day+1 : 0;
     uint8_t starting_itr = 1;
     float* result;
     for (; starting_itr<8; starting_itr++)
     {
-
-        if (get_day(forecast->forecasted_weather[starting_itr]->_dt) == current_day + 1)
+        if (get_day(forecast->forecasted_weather[starting_itr]->_dt) == match_day)
         {
             break;
         }

@@ -41,7 +41,6 @@ enum Move_idx
 };
 
 uint64_t lastTimeCheck = 0;
-bool lostConnectionNow = true;
 int64_t wifiUpdateTimeCheck = -SECOND_10;
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
@@ -67,6 +66,10 @@ WiFiScreen** wifi_screens = new WiFiScreen* [2]{
 Point screen_idx(0,0);
 uint8_t wifi_screen_idx = 0;
 
+int32_t time_weather = -4000;
+uint8_t idx = 0;
+uint8_t for_idx = 0;
+
 void eeprom_earse(uint16_t starting_address, uint16_t ending_address)
 {
     for (;starting_address<ending_address; starting_address++)
@@ -82,27 +85,6 @@ void reset_tft()
     tft.setCursor(0,0);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
-}
-
-bool try_to_connect_to_wifi(String wifi_ssid)
-{
-    tft.println("Connecting to WiFi: "+wifi_ssid+" ");
-    number_of_tries = 0;
-    while(WiFi.status() != WL_CONNECTED)
-    {
-        delay(1000);
-        tft.print(".");
-        number_of_tries++;
-
-        if (number_of_tries == 8){
-            tft.println("");
-            tft.println("[-] Failed to connect to WiFi.");
-            return false;
-        }
-    }
-    tft.println("");
-    tft.println("[+] Connected to the Wifi");
-    return true;
 }
 
 void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
@@ -236,7 +218,6 @@ void force_wifi_connection()
     while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
 
     String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
-    Serial.println("TEMP_SSID "+temp_ssid + " PASS "+temp_pwd);
     //****************************
     // Already connected to WiFi 
     // without entering password
@@ -244,8 +225,6 @@ void force_wifi_connection()
     {
         return;
     }
-
-    Serial.println("Not empty");
     //******************************************
     // Checking if entered wifi ssid
     // is already saved, if so updating password
@@ -256,8 +235,6 @@ void force_wifi_connection()
         if (saved_wifi_info[i][0] == temp_ssid && temp_pwd.length() < MAX_PASSWORD_LENGHT)
         {
             address += i*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT)+MAX_SSID_LENGHT;
-            Serial.println("ALREADY SAVED: "+String((uint8_t)(address-MAX_SSID_LENGHT))+ " SSID: "+saved_wifi_info[i][0] +
-            "  READ: >"+EEPROM.readString(address-MAX_SSID_LENGHT)+"< >"+EEPROM.readString(address)+"<");
 
             if (EEPROM.readString(address).length() > temp_pwd.length())
             {
@@ -267,7 +244,6 @@ void force_wifi_connection()
             EEPROM.writeString(address, temp_pwd);
             EEPROM.commit();
 
-            Serial.println("UPDATED "+EEPROM.readString(address));
             EEPROM.end();
 
             saved_wifi_info[i][1] = temp_pwd;
@@ -279,7 +255,6 @@ void force_wifi_connection()
     //*********************************
     // Saving entered network to EEPROM
     //
-    Serial.println("NEW NETWORK");
     address += numberOfSavedWifis*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT);
     if (address <= 512-MAX_PASSWORD_LENGHT-MAX_SSID_LENGHT && temp_ssid.length() < MAX_SSID_LENGHT && temp_pwd.length() < MAX_SSID_LENGHT)
     {
@@ -323,7 +298,7 @@ void setup()
     // Scanning for newtorks
     //
     // EEPROM.begin(EEPROM_SIZE);
-    // eeprom_earse(10, 50);
+    // eeprom_earse(10, 150);
     // EEPROM.end();
     reset_tft();
     load_saved_wifis();
@@ -336,10 +311,8 @@ void setup()
     //******************************
     //  Force a connection to WiFi
     //
-    Serial.println("FORCE WIFI");
     force_wifi_connection();
 
-    Serial.println("FORCED WIFI");
     //****************************
     // initialize weather client
     reset_tft();
@@ -376,6 +349,7 @@ void setup()
         {
             reconnect_to_wifi();
         }
+        delay(3000);
     }
 
     screens[0][0]->init();
@@ -383,7 +357,6 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
-    lostConnectionNow = false;
 }
 
 
@@ -395,7 +368,6 @@ void loop()
     {
         return;
     }
-
     wclient.current_weather(weather);
     wclient.forecast_weather(forecast);
 

@@ -19,7 +19,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
     tft->setTextColor(TFT_GREEN);
     tft->setCursor(90, 75);
     tft->print("Connecting to:");
-    Serial.print("Connecting to:");
 
     tft->drawCentreString(ssid, 160, 95, 2);
     Serial.print(ssid);
@@ -31,13 +30,11 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
     uint8_t number_of_tries = 0;
 
     uint32_t timer = millis();
-    Serial.println("TIMER: "+String(timer));
 
     while(WiFi.status() != WL_CONNECTED)
     {
         if (millis() - timer > 1000)
         {
-            Serial.println(". "+String(number_of_tries));
             tft->print(".");
             number_of_tries++;
 
@@ -58,8 +55,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
         }
         
     }
-
-    Serial.println("CONNECTED TO WIFI");
 
     delete [] ssid;
     delete [] pass;
