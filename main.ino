@@ -9,6 +9,7 @@
 #include "src/output/screens/FewDaysForecastScreen.h"
 #include "src/output/screens/WiFiListScreen.h"
 #include "src/output/screens/PasswordInputScreen.h"
+#include "src/output/screens/ChartScreen.h"
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
@@ -48,6 +49,13 @@ String** saved_wifi_info = 0;
 
 TouchScreen ts(&tft, calData);
 
+WeatherDataCollector* collector = new WeatherDataCollector(3);
+
+Vector<uint16_t> colors;
+Vector<WeatherData> test_vec;
+
+ChartScreen* chart_screen = new ChartScreen(&tft, BACKGROUND_COLOR, colors);
+
 MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new CurrentWeatherScreen(&tft, BACKGROUND_COLOR)},  // [0][0]
     new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)},       // [1][0]
@@ -66,7 +74,6 @@ WiFiScreen** wifi_screens = new WiFiScreen* [2]{
 Point screen_idx(0,0);
 uint8_t wifi_screen_idx = 0;
 
-int32_t time_weather = -4000;
 uint8_t idx = 0;
 uint8_t for_idx = 0;
 
@@ -160,6 +167,16 @@ void right()
     move(RIGHT);
 }
 
+void up()
+{
+    move(UP);
+}
+
+void down()
+{
+    move(DOWN);
+}
+
 void move(uint8_t move)
 {
     if (screen_idx.y == 0)
@@ -172,16 +189,48 @@ void move(uint8_t move)
             case RIGHT:
                 screen_idx.x = screen_idx.x < X_SCREENS-1 ? screen_idx.x + 1: 0;
                 break;
+            case UP:
+                screen_idx.y = 1;
+                break;
+            case DOWN:
+                screen_idx.y = 1;
+                break;
             default:
                 break;
         }
         tft.fillScreen(BACKGROUND_COLOR);
 
-        // It wont hurt to call both methods on the same screen object
+        if (screen_idx.y == 0)
+        {
+            // It wont hurt to call both methods on the same screen object
+            screens[screen_idx.x][0]->draw(weather, true);
+            screens[screen_idx.x][0]->draw(forecast, true);
+        }
+        else
+        {
+            chart_screen->draw(collector->get_data(0), true);
+        }
+    }
+
+    else if (screen_idx.y == 1)
+    {
+        switch(move)
+        {
+            case UP:
+                screen_idx.y = 0;
+                break;
+            case DOWN:
+                screen_idx.y = 0;
+                break;
+            case LEFT:
+            case RIGHT:
+                break;
+        }
+
+        tft.fillScreen(BACKGROUND_COLOR);
         screens[screen_idx.x][0]->draw(weather, true);
         screens[screen_idx.x][0]->draw(forecast, true);
     }
-
     sci.draw(3,1,screen_idx.x+1,1);
 }
 
@@ -307,6 +356,8 @@ void setup()
 
     ts.on_left(left);
     ts.on_right(right);
+    ts.on_down(down);
+    ts.on_up(up);
 
     //******************************
     //  Force a connection to WiFi
@@ -357,6 +408,8 @@ void setup()
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
+
+    collector->collect_all(forecast, 0, 0);
 }
 
 
@@ -374,10 +427,16 @@ void loop()
     // adding 1 second to ESP time
     screens[0][0]->refresh(false);
     
-    screens[screen_idx.x][0]->draw(weather,false);
-    screens[screen_idx.x][0]->draw(forecast,false);
+    if (screen_idx.y == 0)
+    {
+        screens[screen_idx.x][0]->draw(weather,false);
+        screens[screen_idx.x][0]->draw(forecast,false);
+    }
+    
     
     lastTimeCheck = millis();
+
+    collector->collect(weather, 1);
 
     // Try to regain wifi connection, if lost
     if (WiFi.status() != WL_CONNECTED)

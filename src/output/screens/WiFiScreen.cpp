@@ -21,7 +21,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
     tft->print("Connecting to:");
 
     tft->drawCentreString(ssid, 160, 95, 2);
-    Serial.print(ssid);
 
     tft->setCursor(100, 120);
     tft->setTextSize(3);

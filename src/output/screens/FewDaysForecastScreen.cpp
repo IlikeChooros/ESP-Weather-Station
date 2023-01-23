@@ -1,12 +1,5 @@
 #include "FewDaysForecastScreen.h"
 
-uint8_t get_day(uint64_t unix)
-{
-    uint64_t date = unix/(3600*24);
-    date = (date+3)%7;
-    return (uint8_t)date;
-}
-
 void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
 {
     uint8_t current_day = get_day(forecast->forecasted_weather[0]->_dt);
@@ -39,7 +32,7 @@ void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
 
 float*  FewDaysForecastScreen::getMinMaxTemp_pop(Forecast* forecast, uint8_t start_idx)
 {
-    float* results = new float [3] {0,-100,100};
+    float* results = new float [3] {0.0f,-100.0f,100.0f};
 
     for (int8_t a = 0; a<8;a++)
     {

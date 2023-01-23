@@ -20,6 +20,11 @@ void DateFormat::set_update(bool update)
     getUpdate = update;
 }
 
+bool DateFormat::get_update()
+{
+    return this->getUpdate;
+}
+
 
 //****************************
 // returns true if date has

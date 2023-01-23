@@ -1,5 +1,4 @@
-#ifndef DATE_FORMAT_H
-#define DATE_FORMAT_H
+#pragma once
 
 #include "Arduino.h"
 #include "TFT_eSPI.h" // for struct tm
@@ -18,8 +17,7 @@ class DateFormat
     void set_date(struct tm* timeinfo);
     void set_update(bool update);
     struct tm get_date();
+    bool get_update();
     String formatDateInfo();
     String formatTimeInfo();
 };
-
-#endif

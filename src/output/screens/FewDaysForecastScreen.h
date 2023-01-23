@@ -12,6 +12,7 @@
 #include "../icons/Icons.h"
 #include "../../weather_client/Weather.h"
 #include "../../data_structures/Hsv_to_rgb.h"
+#include "../../data_structures/get_day.h"
 
 #define NUMBER_OF_COLUMN_ITEMS 6
 #define NUMBER_OF_DAYS_TO_FORECAST 4
