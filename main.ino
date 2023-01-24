@@ -52,7 +52,6 @@ TouchScreen ts(&tft, calData);
 WeatherDataCollector* collector = new WeatherDataCollector(3);
 
 Vector<uint16_t> colors;
-Vector<WeatherData> test_vec;
 
 ChartScreen* chart_screen = new ChartScreen(&tft, BACKGROUND_COLOR, colors);
 
@@ -149,7 +148,6 @@ void load_saved_wifis()
     EEPROM.end();
 }
 
-
 void refresh()
 {
     wifi_screens[0]->clear_buttons();
@@ -205,10 +203,11 @@ void move(uint8_t move)
             // It wont hurt to call both methods on the same screen object
             screens[screen_idx.x][0]->draw(weather, true);
             screens[screen_idx.x][0]->draw(forecast, true);
+            sci.draw(3,1,screen_idx.x+1,1);
         }
         else
         {
-            chart_screen->draw(collector->get_data(0), true);
+            chart_screen->draw(collector->get_data(0), collector->get_min_max(0), true);
         }
     }
 
@@ -230,8 +229,9 @@ void move(uint8_t move)
         tft.fillScreen(BACKGROUND_COLOR);
         screens[screen_idx.x][0]->draw(weather, true);
         screens[screen_idx.x][0]->draw(forecast, true);
+        sci.draw(3,1,screen_idx.x+1,1);
     }
-    sci.draw(3,1,screen_idx.x+1,1);
+    
 }
 
 void wifi_setup()

@@ -17,14 +17,30 @@ class ChartScreen
     ChartItem **charts;
     void draw_bg();
     public:
-    ChartScreen(TFT_eSPI *tft, uint16_t bg_c, Vector<uint16_t>& chart_colors):
-    tft(tft), bg_c(bg_c), chart_colors(chart_colors) 
+
+    ChartScreen(
+        TFT_eSPI *tft,
+        uint16_t bg_c,
+        Vector<uint16_t>& chart_colors
+    ): tft(tft), bg_c(bg_c), chart_colors(chart_colors) 
     {
         charts = new ChartItem* [2]{
-            new ChartFrameVFull(tft, TFT_DARKGREY, 1, -10, 10),
-            new LineCharTemp(tft, TFT_YELLOW, 1, -10, 10)
+            new ChartFrameVFull(tft, TFT_DARKGREY),
+            new LineCharTemp(tft, TFT_YELLOW)
         };
 
     }
-    void draw(Vector<WeatherData>& data, bool forceDraw);
+
+    /**
+     * @brief Draws the chart on to the TFT screen
+     * 
+     * @param data Obtained data via WeatherDataCollector
+     * @param forceDraw Boolean value to draw forcefully objects in this 
+     *                  screen
+     */
+    void draw(
+        Vector<WeatherData>& data,
+        int8_t* min_max,
+        bool forceDraw
+    );
 };

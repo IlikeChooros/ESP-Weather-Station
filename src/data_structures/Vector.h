@@ -33,15 +33,61 @@ class Vector
         delete [] buffer;
     }
 
-    void push_back(T value);
-    void pop_back();
-    bool is_empty();
-    void emplace(short idx, T value);
-    short size();
-    T& at(short idx);
-    T* buffer_();
-    short capacity_();
+    /**
+     * @brief Adds new value to the end of Vector
+     * 
+     * @param value 
+     */
+    void
+    push_back(T value);
 
+    /**
+     * @brief Deletes last element
+     * 
+     */
+    void
+    pop_back() noexcept;
+
+    /**
+     * @brief Checks wheter Vector is empty
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool
+    is_empty() noexcept;
+
+    /**
+     * @brief Changes previous value at idx to value
+     * 
+     * @param idx 
+     * @param value 
+     */
+    void 
+    emplace(short idx, T value);
+
+    /**
+     * @brief Returns current lenght of Vector
+     * 
+     * @return short 
+     */
+    short 
+    size() noexcept;
+
+    /**
+     * @brief 
+     * 
+     * @param idx 
+     * @return T& 
+     */
+    T& 
+    at(short idx);
+
+    T* 
+    buffer_() noexcept;
+
+    short 
+    capacity_() noexcept;
 
     T& operator[] (short idx);
     Vector& operator=(Vector& vec);

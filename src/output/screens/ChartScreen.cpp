@@ -1,6 +1,6 @@
 #include "ChartScreen.h"
 
-void ChartScreen::draw(Vector<WeatherData>& data, bool forceDraw)
+void ChartScreen::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDraw)
 {
     if (data.size() == 1 || data.is_empty())
     {
@@ -12,14 +12,18 @@ void ChartScreen::draw(Vector<WeatherData>& data, bool forceDraw)
         draw_bg();
     }
 
+    int8_t max_value = -min_max[0] > min_max[1] ? -min_max[0] + 2 :  min_max[1] + 2;
+    Serial.println("MAX: "+String(max_value) + "  "+String(-max_value));
     for (uint8_t i=0; i<2; i++)
     {
+        charts[i]->set_min_max(-max_value, max_value);
         charts[i]->set_data(data);
         charts[i]->draw(true);
     }
 }
 
-void ChartScreen::draw_bg()
+void
+ChartScreen::draw_bg()
 {
     tft->fillScreen(bg_c);
 

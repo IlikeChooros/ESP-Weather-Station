@@ -26,8 +26,6 @@ void Vector<T>::resizeIfNeccessary()
     {
         return;
     }
-
-    Serial.println("RESIZE: "+String(lenght) + "  "+String(capacity));
     capacity += CAPACITY;
     setNewBuffer();
 } 
@@ -53,7 +51,7 @@ void Vector<T>::push_back(T value)
 }   
 
 template <class T>
-void Vector<T>::pop_back()
+void Vector<T>::pop_back() noexcept
 {
     clearMemoryIfNeccessary();
     lenght = lenght > 0 ? lenght - 1 : 0;
@@ -67,13 +65,13 @@ void Vector<T>::emplace(short idx, T value)
 } 
 
 template <class T>
-bool Vector<T>::is_empty()
+bool Vector<T>::is_empty() noexcept
 {
     return lenght == 0;
 }
 
 template <class T>
-short Vector<T>::size()
+short Vector<T>::size() noexcept
 {
     return lenght;
 }
@@ -132,13 +130,13 @@ Vector<T>& Vector<T>::operator=(Vector<T>& vec)
 }
 
 template <class T>
-T* Vector<T>::buffer_()
+T* Vector<T>::buffer_() noexcept
 {
     return buffer;
 }
 
 template <class T>
-short Vector<T>::capacity_()
+short Vector<T>::capacity_() noexcept
 {
     return capacity;
 }

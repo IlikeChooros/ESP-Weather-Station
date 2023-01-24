@@ -1,6 +1,6 @@
 #include "ChartFrame.h"
 
-void draw_arrow_up(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, uint16_t height, uint8_t arrow_lenght, uint16_t color)
+void draw_arrow_up(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 height, ui8 arrow_lenght, ui16 color)
 {
     tft->drawFastVLine(starting_x, starting_y-height, height, color);
 
@@ -9,7 +9,7 @@ void draw_arrow_up(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, uint
     tft->drawLine(starting_x + SQRT_2_DIV_2*arrow_lenght, y, starting_x, starting_y - height, color);
 }
 
-void draw_arrow_down(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, uint16_t height, uint8_t arrow_lenght, uint16_t color)
+void draw_arrow_down(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 height, ui8 arrow_lenght, ui16 color)
 {
     tft->drawFastVLine(starting_x, starting_y, height, color);
 
@@ -18,7 +18,7 @@ void draw_arrow_down(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, ui
     tft->drawLine(starting_x + SQRT_2_DIV_2*arrow_lenght, y, starting_x, starting_y + height, color);
 }
 
-void draw_arrow_left(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, uint16_t width, uint8_t arrow_lenght, uint16_t color)
+void draw_arrow_left(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 width, ui8 arrow_lenght, ui16 color)
 {
     tft->drawFastHLine(starting_x, starting_y, width, color);
 
@@ -28,7 +28,8 @@ void draw_arrow_left(TFT_eSPI* tft, uint16_t starting_x, uint16_t starting_y, ui
 }
 
 
-void ChartFrameVFull::draw(bool forceDraw)
+void
+ChartFrameVFull::draw(bool forceDraw)
 {
     if (!forceDraw)
     {
@@ -40,37 +41,43 @@ void ChartFrameVFull::draw(bool forceDraw)
     tft->drawFastVLine(STARTING_X, MIDDLE_Y, MAX_NEGATIVE, color);
 
     // drawing scale
-    float itr_pos = MAX_POSITIVE*0.2f;
-    float itr_neg = MAX_NEGATIVE*0.2f;
-
-    float y_pos_positive = MIDDLE_Y;
-    float y_pos_negative = MIDDLE_Y;
-
     float value = 0;
     float neg_value = 0;
 
-    float neg_value_itr = min_value*0.18f;
-    float value_itr = max_value*0.18f;
+    float neg_value_itr = -1;
+    float value_itr = 1;
 
 
-    tft->setCursor(0, MIDDLE_Y);
+    tft->setCursor(11, MIDDLE_Y);
     tft->setTextFont(1);
     tft->setTextSize(1);
     tft->setTextColor(color);
     tft->print(0);
 
-    for (uint8_t i=0; i< NUMBER_OF_SECTIONS; i++)
+    i16 y;
+    for (ui8 i=0; i< number_of_sections; i++)
     {
         neg_value += neg_value_itr;
         value += value_itr;
 
-        y_pos_negative += itr_neg;
-        y_pos_positive -= itr_pos;
+        y = get_y(neg_value);
+        // if (y < MIN_HEIGHT_ || y > MAX_HEIGHT_)
+        // {
+        //     return;
+        // }
+        tft->drawCentreString(String((i8)neg_value), 8, y, 1);
 
-        tft->setCursor(0, y_pos_negative);
-        tft->print((int8_t)neg_value);
-
-        tft->setCursor(0, y_pos_positive);
-        tft->print((int8_t)value);
+        y = get_y(value);
+        // if (y < MIN_HEIGHT_ || y > MAX_HEIGHT_)
+        // {
+        //     return;
+        // }
+        tft->drawCentreString(String((i8)value), 8, y, 1);
     }
+}
+
+ui16
+ChartFrameVFull::get_y(i16 data)
+{
+    return data > 0 ? (MIDDLE_Y - data*scale_positive) : (MIDDLE_Y - data*scale_negative);
 }
