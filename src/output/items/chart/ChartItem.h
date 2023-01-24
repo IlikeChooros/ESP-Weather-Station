@@ -9,13 +9,11 @@
 #include "../../../weather_client/WeatherData.h"
 
 #define MIDDLE_Y 120
-#define STARTING_X 16
-#define MAX_POSITIVE 90
-#define MAX_NEGATIVE 90
+#define STARTING_X 14
+#define MAX_POSITIVE 100
+#define MAX_NEGATIVE 100
 #define HOURS_PIXELS 36
 #define MINUTES_5_PIXELS 1
-#define MIN_HEIGHT_ 30
-#define MAX_HEIGHT_ 210
 
 using i16 = int16_t;
 using ui16 = uint16_t;
@@ -29,6 +27,7 @@ class ChartItem
     uint8_t pixel_offset;
     int16_t min_value;
     int16_t max_value;
+    uint16_t starting_x_;
     TFT_eSPI *tft;
     Vector<WeatherData> data;
 
@@ -36,8 +35,10 @@ class ChartItem
 
     explicit ChartItem(
         TFT_eSPI *tft,
-        uint16_t color
-    ): tft(tft), color(color) {}
+        uint16_t color,
+        uint16_t starting_x
+    ): tft(tft), color(color),
+    starting_x_(starting_x) {}
 
     virtual void set_data(
         Vector<WeatherData>& data

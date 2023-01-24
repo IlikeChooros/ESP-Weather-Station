@@ -37,42 +37,33 @@ ChartFrameVFull::draw(bool forceDraw)
     }
 
     // drawing arrow
-    draw_arrow_up(this->tft, STARTING_X, MIDDLE_Y, MAX_POSITIVE, 5, color);
-    tft->drawFastVLine(STARTING_X, MIDDLE_Y, MAX_NEGATIVE, color);
+    draw_arrow_up(this->tft, starting_x_, MIDDLE_Y, MAX_POSITIVE, 5, color);
+    tft->drawFastVLine(starting_x_, MIDDLE_Y, MAX_NEGATIVE, color);
 
-    // drawing scale
+
+    // drawing scale numbers
     float value = 0;
     float neg_value = 0;
 
-    float neg_value_itr = -1;
-    float value_itr = 1;
+    float neg_value_itr = min_value/number_of_sections;
+    float value_itr = max_value/number_of_sections;
 
 
-    tft->setCursor(11, MIDDLE_Y);
     tft->setTextFont(1);
     tft->setTextSize(1);
     tft->setTextColor(color);
-    tft->print(0);
+    tft->drawCentreString(String(0), starting_x_-STARTING_X/2, MIDDLE_Y-3, 1);
 
-    i16 y;
+    tft->setCursor(starting_x_, MIDDLE_Y - MAX_POSITIVE - 8);
+    tft->print(name);
+
     for (ui8 i=0; i< number_of_sections; i++)
     {
         neg_value += neg_value_itr;
         value += value_itr;
 
-        y = get_y(neg_value);
-        // if (y < MIN_HEIGHT_ || y > MAX_HEIGHT_)
-        // {
-        //     return;
-        // }
-        tft->drawCentreString(String((i8)neg_value), 8, y, 1);
-
-        y = get_y(value);
-        // if (y < MIN_HEIGHT_ || y > MAX_HEIGHT_)
-        // {
-        //     return;
-        // }
-        tft->drawCentreString(String((i8)value), 8, y, 1);
+        tft->drawCentreString(String((i8)neg_value), 8, get_y(neg_value), 1);
+        tft->drawCentreString(String((i8)value), 8, get_y(value), 1);
     }
 }
 
@@ -80,4 +71,70 @@ ui16
 ChartFrameVFull::get_y(i16 data)
 {
     return data > 0 ? (MIDDLE_Y - data*scale_positive) : (MIDDLE_Y - data*scale_negative);
+}
+
+ui16
+ChartFrameVUp::get_y(i16 data)
+{
+    return MIDDLE_Y - data*scale;
+}
+
+void
+ChartFrameVUp::draw(bool forceDraw)
+{
+    if (!forceDraw)
+    {
+        return;
+    }
+
+    // drawing arrow
+    draw_arrow_up(this->tft, starting_x_, MIDDLE_Y, MAX_POSITIVE, 5, color);
+
+    // drawing scale numbers
+    float value = 0;
+
+    float value_itr = max_value/number_of_sections;
+
+    tft->setTextFont(1);
+    tft->setTextSize(1);
+    tft->setTextColor(color);
+    tft->drawCentreString(String(0), starting_x_+STARTING_X/2+2, MIDDLE_Y-7, 1);
+
+    tft->setCursor(starting_x_, MIDDLE_Y - MAX_POSITIVE - 8);
+    tft->print(name);
+
+    for (ui8 i=0; i< number_of_sections; i++)
+    {
+        value += value_itr;
+        tft->drawCentreString(String((i8)value), starting_x_+STARTING_X/2+2, get_y(value), 1);
+    }
+}
+
+
+
+void ChartFrameTime::draw(bool forceDraw)
+{
+    if(!forceDraw)
+    {
+        return;
+    }
+
+    tft->drawFastHLine(STARTING_X, MIDDLE_Y, 288, color);
+
+    String hours [9] = {"0:00", "3:00", "6:00", "9:00", "12:00",
+                        "15:00", "18:00", "21:00", "24:00"};
+
+    ui16 x = STARTING_X,y = MIDDLE_Y+3;
+
+    tft->setTextFont(1);
+    tft->setTextSize(1);
+    tft->setTextColor(color);
+    tft->setCursor(x+1, y);
+    tft->print(hours[0]);
+
+    for (ui8 i=1; i<9; i++)
+    {
+        x += HOURS_PIXELS;
+        tft->drawCentreString(hours[i], x+1, y, 1);
+    }
 }

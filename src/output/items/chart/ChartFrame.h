@@ -11,6 +11,8 @@ class ChartFrameVFull: public ChartItem
     float scale_negative;
     i8 number_of_sections;
 
+    String name;
+
     public:
     /**
      * @brief Construct a new Chart Frame V Full object
@@ -20,12 +22,11 @@ class ChartFrameVFull: public ChartItem
      */
     ChartFrameVFull(
         TFT_eSPI *tft,
-        uint16_t color
-    ): ChartItem(tft, color) 
-    {
-        scale_positive = (float)((MIDDLE_Y - MAX_POSITIVE)/max_value);
-        scale_negative = min_value < 0 ? -(float)((MIDDLE_Y - MAX_NEGATIVE)/min_value) :(float)((MIDDLE_Y - MAX_NEGATIVE)/min_value);
-    }
+        uint16_t color,
+        uint16_t starting_x,
+        String name
+    ): ChartItem(tft, color, starting_x) 
+    {this->name = name;}
 
     /**
      * @brief Draws chart frame.
@@ -64,76 +65,59 @@ class ChartFrameVFull: public ChartItem
 
 class ChartFrameVUp: public ChartItem
 {
-    Vector<WeatherData> data;
     float scale;
+    i8 number_of_sections;
+    String name;
     public:
-
     ChartFrameVUp(
         TFT_eSPI *tft,
-        uint16_t color
-    ): ChartItem(tft, color)
-    {
-        this->scale = (float)((MIDDLE_Y - MAX_POSITIVE)/max_value); 
-    }
+        uint16_t color,
+        uint16_t starting_x,
+        String name
+    ): ChartItem(tft, color, starting_x) 
+    {this->name = name;}
 
     void
     draw(bool forceDraw);
 
     void
-    set_data(Vector<WeatherData>& data);
+    set_data(Vector<WeatherData>& data) {return;}
 
     void set_min_max(
         int16_t min,
         int16_t max
-    );
-};
-
-class ChartFrameVDown: public ChartItem
-{
-    Vector<WeatherData> data;
-    float scale;
-    public:
-
-    ChartFrameVDown(
-        TFT_eSPI *tft,
-        uint16_t color
-    ): ChartItem(tft, color) 
+    )
     {
-        this->scale = (float)((MIDDLE_Y + MAX_NEGATIVE)/min_value); 
+        max_value = max;
+        min_value = min;
+        this->scale = (float)(MAX_POSITIVE/max_value); 
+        number_of_sections = (max - min)/2 > 5 ? 5 : (max - min)/2; 
     }
-    void
-    draw(bool forceDraw);
 
-    void
-    set_data(Vector<WeatherData>& data);
-
-    void set_min_max(
-        int16_t min,
-        int16_t max
+    ui16
+    get_y(
+        i16 data
     );
 };
 
-class ChartFrameHLeft: public ChartItem
+class ChartFrameTime
 {
-    Vector<WeatherData> data;
-    float scale;
-    public:
+    TFT_eSPI *tft;
+    ui16 color;
 
-    ChartFrameHLeft(
+    public:
+    ChartFrameTime(
         TFT_eSPI *tft,
         uint16_t color
-    ): ChartItem(tft, color)
+    ): tft(tft), color(color)
     {}
 
+    /**
+     * @brief Draws time frame
+     * 
+     * @param forceDraw 
+     */
     void
     draw(bool forceDraw);
-
-    void
-    set_data(Vector<WeatherData>& data);
-
-    void set_min_max(
-        int16_t min,
-        int16_t max
-    );
 };
 

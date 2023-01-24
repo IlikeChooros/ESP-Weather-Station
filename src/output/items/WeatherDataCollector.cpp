@@ -16,6 +16,7 @@ void WeatherDataCollector::collect(Weather* weather, ui8 idx)
     ->dt(weather->_dt)
     ->humidity(weather->_humidity)
     ->temp((i8)weather->_temp)
+    ->feels_like((i8)weather->_feels_like)
     ->pop(100 * weather->_pop);
     data[idx].push_back(*temp);
     delete temp;
@@ -49,7 +50,7 @@ WeatherDataCollector::collect_all(
     ui8 starting_idx=1;
     while(current_day == get_day(forecast->forecasted_weather[starting_idx]->_dt)) {starting_idx++;}
     starting_idx += 8*day_offset;
-    collect_data(forecast, idx, starting_idx, starting_idx+8);
+    collect_data(forecast, idx, starting_idx, starting_idx+9);
 }
 
 void
@@ -69,6 +70,7 @@ WeatherDataCollector::collect_data(
         ->dt(forecast->forecasted_weather[i]->_dt)
         ->humidity(forecast->forecasted_weather[i]->_humidity)
         ->pop(forecast->forecasted_weather[i]->_pop)
+        ->feels_like(forecast->forecasted_weather[i]->_feels_like)
         ->temp(forecast->forecasted_weather[i]->_temp);
 
         data[idx].push_back(*wdata);

@@ -34,7 +34,7 @@ class Vector
     }
 
     /**
-     * @brief Adds new value to the end of Vector
+     * @brief Adds new value to the end of the Vector
      * 
      * @param value 
      */
@@ -49,7 +49,7 @@ class Vector
     pop_back() noexcept;
 
     /**
-     * @brief Checks wheter Vector is empty
+     * @brief Checks wheter the Vector is empty
      * 
      * @return true 
      * @return false 
@@ -67,9 +67,9 @@ class Vector
     emplace(short idx, T value);
 
     /**
-     * @brief Returns current lenght of Vector
+     * @brief Returns current lenght of the Vector
      * 
-     * @return short 
+     * @return short  
      */
     short 
     size() noexcept;

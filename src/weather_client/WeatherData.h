@@ -6,8 +6,10 @@ class WeatherData
 {
     uint64_t dt_;
     int8_t temp_;
+    int8_t feels_like_;
     int8_t humidity_;
     int8_t pop_;
+
 
     public:
 
@@ -25,6 +27,14 @@ class WeatherData
     }
     int8_t temp(){
         return this->temp_;
+    }
+
+    WeatherData* feels_like(int8_t feels_like){
+        this->feels_like_ = feels_like;
+        return this;
+    }
+    int8_t feels_like(){
+        return this->feels_like_;
     }
 
     WeatherData* humidity(int8_t hum){
