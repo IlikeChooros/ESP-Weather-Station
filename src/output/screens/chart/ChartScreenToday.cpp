@@ -36,7 +36,6 @@ void
 ChartScreenToday::draw_name(Vector<WeatherData>& data)
 {
     for (uint8_t i=0; i<4; i++) {chart_names[i]->draw();}
-    if (data.is_empty()) {return;}
 
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(1);

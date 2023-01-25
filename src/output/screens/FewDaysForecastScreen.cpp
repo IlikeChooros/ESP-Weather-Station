@@ -3,16 +3,9 @@
 void FewDaysForecastScreen::draw(Forecast* forecast, bool forceDraw)
 {
     uint8_t current_day = get_day(forecast->forecasted_weather[0]->_dt);
-    uint8_t match_day = current_day < 6 ? current_day+1 : 0;
     uint8_t starting_itr = 1;
     float* result;
-    for (; starting_itr<8; starting_itr++)
-    {
-        if (get_day(forecast->forecasted_weather[starting_itr]->_dt) == match_day)
-        {
-            break;
-        }
-    }
+    while(current_day == get_day(forecast->forecasted_weather[starting_itr]->_dt)) {starting_itr++;}
     starting_itr += 4;
     for (uint8_t i=0; i<NUMBER_OF_DAYS_TO_FORECAST; i++)
     {

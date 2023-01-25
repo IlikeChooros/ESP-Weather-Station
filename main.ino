@@ -467,7 +467,7 @@ void loop()
     
     lastTimeCheck = millis();
 
-    if (millis() - lastCollectorCheck > MIN_5)
+    if (millis() - lastCollectorCheck > 60000)
     {
         collector->collect(weather, TODAY);
         collector->collect(forecast, NEXT_12_HOURS);

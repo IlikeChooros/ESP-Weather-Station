@@ -2,14 +2,17 @@
 
 #include "ChartItem.h"
 
+
+#define POP_IDX 0 
+#define TEMP_IDX 1
+#define FEELS_IDX 2
+#define HUM_IDX 3
+
 class LineCharTemp: public ChartItem
 {
 
     float scale_positive;
     float scale_negative;
-
-    uint16_t
-    get_y(int16_t data);
 
     public:
     LineCharTemp(
@@ -44,9 +47,6 @@ class LineChartFeelsLike: public ChartItem
     float scale_positive;
     float scale_negative;
 
-    uint16_t
-    get_y(int16_t data);
-
     public:
     LineChartFeelsLike(
         TFT_eSPI *tft,
@@ -78,9 +78,6 @@ class LineChartHumidity: public ChartItem
 {
     float scale;
 
-    uint16_t
-    get_y(int16_t data);
-
     public:
     LineChartHumidity(
         TFT_eSPI *tft,
@@ -110,9 +107,6 @@ class LineChartHumidity: public ChartItem
 class LineChartPop: public ChartItem
 {
     float scale;
-
-    uint16_t
-    get_y(int16_t data);
 
     public:
     LineChartPop(

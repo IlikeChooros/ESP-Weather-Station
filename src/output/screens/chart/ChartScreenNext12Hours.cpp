@@ -2,17 +2,17 @@
 
 void ChartScreenNext12Hours::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDraw)
 {
-    if (data.size() == 1 || data.is_empty())
-    {
-        return;
-    }
-
     if(forceDraw)
     {
         draw_bg();
         draw_name(data);
     }
     chart_time->draw(forceDraw);
+
+    if (data.size() <= 1)
+    {
+        return;
+    }
 
     int8_t max_value = -min_max[0] > min_max[1] ? -min_max[0] + 3 :  min_max[1] + 3;
 
@@ -34,7 +34,6 @@ void
 ChartScreenNext12Hours::draw_name(Vector<WeatherData>& data)
 {
     for (uint8_t i=0; i<4; i++) {chart_names[i]->draw();}
-    if (data.is_empty()) {return;}
 
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(1);

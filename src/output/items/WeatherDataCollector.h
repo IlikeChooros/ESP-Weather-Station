@@ -13,6 +13,7 @@
 
 using ui8 = uint8_t;
 using i8 = int8_t;
+using ui16 = uint16_t;
 
 class WeatherDataCollector
 {
