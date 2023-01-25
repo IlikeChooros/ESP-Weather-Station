@@ -45,7 +45,6 @@ template <class T>
 void Vector<T>::push_back(T value)
 {
     resizeIfNeccessary();
-    Serial.println("bufer[len] = T value");
     buffer[lenght] = value;
     lenght++; 
 }   
