@@ -12,7 +12,7 @@
 #define STARTING_X 14
 #define MAX_POSITIVE 100
 #define MAX_NEGATIVE 100
-#define HOURS_PIXELS 36
+#define HOURS_PIXELS 12
 #define MINUTES_5_PIXELS 1
 
 using i16 = int16_t;

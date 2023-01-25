@@ -3,24 +3,41 @@
 #include "src/data_structures/Point.h"
 #include "src/output/icons/Icons.h"
 #include "src/weather_client/WeatherClient.h"
+
+//-----------------------------------------
+// Weather screens
 #include "src/output/screens/CurrentWeatherScreen.h"
-#include "src/output/screens/MainScreen.h"
 #include "src/output/screens/Forecast12Screen.h"
 #include "src/output/screens/FewDaysForecastScreen.h"
+
+//-----------------------------------------
+// WiFi setup screens
 #include "src/output/screens/WiFiListScreen.h"
 #include "src/output/screens/PasswordInputScreen.h"
-#include "src/output/screens/ChartScreen.h"
+
+//-----------------------------------------
+// Chart screens
+#include "src/output/screens/chart/ChartScreenNextDays.h"
+#include "src/output/screens/chart/ChartScreenNext12Hours.h"
+#include "src/output/screens/chart/ChartScreenToday.h"
+
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
 #define CITY_NAME "Oława"
 #define BACKGROUND_COLOR 0x10C4
+#define X_1_SCREENS 3
 #define X_SCREENS 3
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
 #define MINUTES_15 900000
 #define SECOND_10 10000
 #define SECOND 1000
+
+// Collector define
+#define TODAY 0
+#define NEXT_12_HOURS 1
+#define TOMMOWROW 2
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -42,18 +59,23 @@ enum Move_idx
 };
 
 uint64_t lastTimeCheck = 0;
+uint64_t lastCollectorCheck = 0;
 int64_t wifiUpdateTimeCheck = -SECOND_10;
+
 int8_t savedWiFiIdx = 0;
 int8_t numberOfSavedWifis = 0;
 String** saved_wifi_info = 0;
 
 TouchScreen ts(&tft, calData);
 
-WeatherDataCollector* collector = new WeatherDataCollector(3);
+WeatherDataCollector* collector = new WeatherDataCollector(X_1_SCREENS);
 
-Vector<uint16_t> colors;
+ChartScreens** chart_screens = new ChartScreens* [X_1_SCREENS]{
+    new ChartScreenToday(&tft, BACKGROUND_COLOR),
+    new ChartScreenNext12Hours(&tft, BACKGROUND_COLOR),
+    new ChartScreenNextDays(&tft, BACKGROUND_COLOR)
+};
 
-ChartScreen* chart_screen = new ChartScreen(&tft, BACKGROUND_COLOR, colors);
 
 MainScreen*** screens = new MainScreen**[X_SCREENS]{
     new MainScreen* [Y_SCREENS] {new CurrentWeatherScreen(&tft, BACKGROUND_COLOR)},  // [0][0]
@@ -175,39 +197,44 @@ void down()
     move(DOWN);
 }
 
+void draw_weather_screens()
+{
+    // It wont hurt to call both methods on the same screen object
+    screens[screen_idx.x][0]->draw(weather, true);
+    screens[screen_idx.x][0]->draw(forecast, true);
+    sci.draw(3,1,screen_idx.x+1,1);
+}
+
+void draw_chart_screens(uint8_t collector_idx)
+{
+    chart_screens[screen_idx.x]->draw(collector->get_data(collector_idx), collector->get_min_max(collector_idx), true);
+}
+
 void move(uint8_t move)
 {
+    uint8_t collector_idx = 0;
+
+    tft.fillScreen(BACKGROUND_COLOR);
     if (screen_idx.y == 0)
     {
         switch(move)
         {
             case LEFT:
                 screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : X_SCREENS-1;
+                draw_weather_screens();
                 break;
             case RIGHT:
                 screen_idx.x = screen_idx.x < X_SCREENS-1 ? screen_idx.x + 1: 0;
+                draw_weather_screens();
                 break;
             case UP:
                 screen_idx.y = 1;
+                draw_chart_screens(screen_idx.x);
                 break;
             case DOWN:
-                screen_idx.y = 1;
                 break;
             default:
                 break;
-        }
-        tft.fillScreen(BACKGROUND_COLOR);
-
-        if (screen_idx.y == 0)
-        {
-            // It wont hurt to call both methods on the same screen object
-            screens[screen_idx.x][0]->draw(weather, true);
-            screens[screen_idx.x][0]->draw(forecast, true);
-            sci.draw(3,1,screen_idx.x+1,1);
-        }
-        else
-        {
-            chart_screen->draw(collector->get_data(0), collector->get_min_max(0), true);
         }
     }
 
@@ -217,21 +244,24 @@ void move(uint8_t move)
         {
             case UP:
                 screen_idx.y = 0;
+                screen_idx.x = 0;
+                draw_weather_screens();
                 break;
             case DOWN:
                 screen_idx.y = 0;
+                screen_idx.x = 0;
+                draw_weather_screens();
                 break;
             case LEFT:
+                screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : X_1_SCREENS-1;
+                draw_chart_screens(screen_idx.x);
+                break;
             case RIGHT:
+                screen_idx.x = screen_idx.x < X_1_SCREENS-1 ? screen_idx.x + 1: 0;
+                draw_chart_screens(screen_idx.x);
                 break;
         }
-
-        tft.fillScreen(BACKGROUND_COLOR);
-        screens[screen_idx.x][0]->draw(weather, true);
-        screens[screen_idx.x][0]->draw(forecast, true);
-        sci.draw(3,1,screen_idx.x+1,1);
     }
-    
 }
 
 void wifi_setup()
@@ -409,7 +439,9 @@ void setup()
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
 
-    collector->collect_all(forecast, 0, 0);
+    collector->collect_all(forecast, TOMMOWROW, 0);
+    collector->collect(forecast, NEXT_12_HOURS);
+    collector->collect(weather, TODAY);
 }
 
 
@@ -433,11 +465,16 @@ void loop()
         screens[screen_idx.x][0]->draw(forecast,false);
     }
     
-    
     lastTimeCheck = millis();
 
-    collector->collect(weather, 1);
-
+    if (millis() - lastCollectorCheck > MIN_5)
+    {
+        collector->collect(weather, TODAY);
+        collector->collect(forecast, NEXT_12_HOURS);
+        collector->collect_all(forecast, TOMMOWROW, 0);
+        lastCollectorCheck = millis();
+    }
+    
     // Try to regain wifi connection, if lost
     if (WiFi.status() != WL_CONNECTED)
     {

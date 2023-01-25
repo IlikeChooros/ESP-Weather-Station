@@ -13,6 +13,11 @@ class ChartFrameVFull: public ChartItem
 
     String name;
 
+    ui16
+    get_y(
+        i16 data
+    );
+
     public:
     /**
      * @brief Construct a new Chart Frame V Full object
@@ -56,18 +61,20 @@ class ChartFrameVFull: public ChartItem
         scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
         number_of_sections = (max - min)/2;
     }
-
-    ui16
-    get_y(
-        i16 data
-    );
 };
 
 class ChartFrameVUp: public ChartItem
 {
     float scale;
     i8 number_of_sections;
+
     String name;
+
+    ui16
+    get_y(
+        i16 data
+    );
+
     public:
     ChartFrameVUp(
         TFT_eSPI *tft,
@@ -93,11 +100,6 @@ class ChartFrameVUp: public ChartItem
         this->scale = (float)(MAX_POSITIVE/max_value); 
         number_of_sections = (max - min)/2 > 5 ? 5 : (max - min)/2; 
     }
-
-    ui16
-    get_y(
-        i16 data
-    );
 };
 
 class ChartFrameTime

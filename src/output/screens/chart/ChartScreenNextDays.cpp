@@ -1,6 +1,6 @@
-#include "ChartScreen.h"
+#include "ChartScreenNextDays.h"
 
-void ChartScreen::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDraw)
+void ChartScreenNextDays::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDraw)
 {
     if (data.size() == 1 || data.is_empty())
     {
@@ -10,6 +10,7 @@ void ChartScreen::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDra
     if(forceDraw)
     {
         draw_bg();
+        draw_name(data);
     }
     chart_time->draw(forceDraw);
 
@@ -22,7 +23,6 @@ void ChartScreen::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDra
     charts[4]->set_min_max(-max_value, max_value);
     charts[5]->set_min_max(-max_value, max_value);
 
-    Serial.println("MAX: "+String(max_value) + "  "+String(-max_value));
     for (uint8_t i=0; i<6; i++)
     {
         charts[i]->set_data(data);
@@ -31,25 +31,12 @@ void ChartScreen::draw(Vector<WeatherData>& data, int8_t* min_max, bool forceDra
 }
 
 void
-ChartScreen::draw_bg()
+ChartScreenNextDays::draw_name(Vector<WeatherData>& data)
 {
-    tft->fillScreen(bg_c);
+    for (uint8_t i=0; i<4; i++) {chart_names[i]->draw();}
+    if (data.is_empty()) {return;}
 
-    // Lines
-    int16_t x_itr = 320 / 5,
-            y_itr = 240 / 4;
-    int16_t x = x_itr,
-            y = y_itr;
-
-    for (uint8_t i=1 ; i<5; i++)
-    {
-        tft->drawFastVLine(x, 0, 240, TFT_NAVY);
-
-        if (i<4)
-        {
-            tft->drawFastHLine(0, y, 320, TFT_NAVY);
-        }
-        x+=x_itr;
-        y+=y_itr;
-    }
+    tft->setTextColor(TFT_WHITE);
+    tft->setTextSize(1);
+    tft->drawCentreString(get_date_string(data.at(0).dt()), 60, 0, 2);
 }

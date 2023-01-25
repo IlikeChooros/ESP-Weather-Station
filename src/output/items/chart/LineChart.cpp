@@ -7,24 +7,31 @@ LineCharTemp::draw(bool forceDraw)
     i16 prev_x = dt->hour * HOURS_PIXELS + dt->min * MINUTES_5_PIXELS + starting_x_,
     prev_y = get_y(data.at(0).temp()), x, y;
     delete dt;
-    for(ui8 i=1; i<data.size(); i++)
+
+    uint64_t lastCheck = data.at(0).dt();
+
+    for(ui16 i=1; i<data.size(); i++)
     {
         x = prev_x + pixel_offset;
         y = get_y(data.at(i).temp());
 
         tft->drawLine(prev_x, prev_y, x,y, color);
 
-        if (data.at(i-1).dt() - data.at(i).dt() > 3600)
-        {
-            tft->setCursor(x, y+3);
-            tft->setTextColor(color);
-            tft->setTextSize(1);
-            tft->setTextFont(1);
-            tft->print(data.at(i).temp());
-        }
-
         prev_x = x;
         prev_y = y;
+
+        if (data.at(i).dt() - lastCheck < 10800) // 3 hours
+        {
+            continue;
+        }
+
+        tft->setCursor(x, y+3);
+        tft->setTextColor(color);
+        tft->setTextSize(1);
+        tft->setTextFont(1);
+        tft->print(data.at(i).temp());
+
+        lastCheck = data.at(i).dt();
     }
 }
 
@@ -36,7 +43,7 @@ LineCharTemp::set_data(Vector<WeatherData>& data)
     {
         return;
     }
-    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? HOURS_PIXELS : MINUTES_5_PIXELS; 
+    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? 3*HOURS_PIXELS : MINUTES_5_PIXELS; 
 }
 
 ui16
@@ -54,24 +61,31 @@ LineChartFeelsLike::draw(bool forceDraw)
     i16 prev_x = dt->hour * HOURS_PIXELS + dt->min * MINUTES_5_PIXELS + starting_x_,
     prev_y = get_y(data.at(0).feels_like()), x, y;
     delete dt;
-    for(ui8 i=1; i<data.size(); i++)
+
+    uint64_t lastCheck = data.at(0).dt();
+
+    for(ui16 i=1; i<data.size(); i++)
     {
         x = prev_x + pixel_offset;
         y = get_y(data.at(i).feels_like());
 
         tft->drawLine(prev_x, prev_y, x,y, color);
 
-        if (data.at(i-1).dt() - data.at(i).dt() > 3600)
-        {
-            tft->setCursor(x, y-10);
-            tft->setTextColor(color);
-            tft->setTextSize(1);
-            tft->setTextFont(1);
-            tft->print(data.at(i).feels_like());
-        }
-
         prev_x = x;
         prev_y = y;
+
+        if (data.at(i).dt() - lastCheck < 10800) // 3 hours
+        {
+            continue;
+        }
+
+        tft->setCursor(x, y-10);
+        tft->setTextColor(color);
+        tft->setTextSize(1);
+        tft->setTextFont(1);
+        tft->print(data.at(i).feels_like());
+
+        lastCheck = data.at(i).dt();
     }
 }
 
@@ -83,7 +97,7 @@ LineChartFeelsLike::set_data(Vector<WeatherData>& data)
     {
         return;
     }
-    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? HOURS_PIXELS : MINUTES_5_PIXELS; 
+    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? 3*HOURS_PIXELS : MINUTES_5_PIXELS; 
 }
 
 ui16
@@ -101,22 +115,29 @@ LineChartPop::draw(bool forceDraw)
     i16 prev_x = dt->hour * HOURS_PIXELS + dt->min * MINUTES_5_PIXELS + starting_x_,
     prev_y = get_y(data.at(0).pop()), x, y;
     delete dt;
-    for(ui8 i=1; i<data.size(); i++)
+
+    uint64_t lastCheck = data.at(0).dt();
+
+    for(ui16 i=1; i<data.size(); i++)
     {
         x = prev_x + pixel_offset;
         y = get_y(data.at(i).pop());
 
         tft->drawLine(prev_x, prev_y, x,y, color);
 
-        if (data.at(i-1).dt() - data.at(i).dt() > 3600)
-        {
-            tft->setTextColor(color);
-            tft->setTextSize(1);
-            tft->drawCentreString(String(data.at(i).pop()), x-1, y-10, 1);
-        }
-
         prev_x = x;
         prev_y = y;
+
+        if (data.at(i).dt() - lastCheck < 10800) // 3 hours
+        {
+            continue;
+        }
+
+        tft->setTextColor(color);
+        tft->setTextSize(1);
+        tft->drawCentreString(String(data.at(i).pop()), x-1, y-10, 1);
+
+        lastCheck = data.at(i).dt();
     }
 }
 
@@ -128,7 +149,7 @@ LineChartPop::set_data(Vector<WeatherData>& data)
     {
         return;
     }
-    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? HOURS_PIXELS : MINUTES_5_PIXELS; 
+    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? 3*HOURS_PIXELS : MINUTES_5_PIXELS; 
 }
 
 ui16
@@ -146,24 +167,31 @@ LineChartHumidity::draw(bool forceDraw)
     i16 prev_x = dt->hour * HOURS_PIXELS + dt->min * MINUTES_5_PIXELS + starting_x_,
     prev_y = get_y(data.at(0).humidity()), x, y;
     delete dt;
-    for(ui8 i=1; i<data.size(); i++)
+
+    uint64_t lastCheck = data.at(0).dt();
+
+    for(ui16 i=1; i<data.size(); i++)
     {
         x = prev_x + pixel_offset;
         y = get_y(data.at(i).humidity());
 
         tft->drawLine(prev_x, prev_y, x,y, color);
 
-        if (data.at(i-1).dt() - data.at(i).dt() > 3600)
-        {
-            tft->setCursor(x, y+3);
-            tft->setTextColor(color);
-            tft->setTextSize(1);
-            tft->setTextFont(1);
-            tft->print(data.at(i).humidity());
-        }
-
         prev_x = x;
         prev_y = y;
+
+        if (data.at(i).dt() - lastCheck < 10800) // 3 hours
+        {
+            continue;
+        }
+
+        tft->setCursor(x, y+3);
+        tft->setTextColor(color);
+        tft->setTextSize(1);
+        tft->setTextFont(1);
+        tft->print(data.at(i).humidity());
+
+        lastCheck = data.at(i).dt();
     }
 }
 
@@ -175,7 +203,7 @@ LineChartHumidity::set_data(Vector<WeatherData>& data)
     {
         return;
     }
-    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? HOURS_PIXELS : MINUTES_5_PIXELS; 
+    pixel_offset = data.at(1).dt() - data.at(0).dt() > 3600 ? 3*HOURS_PIXELS : MINUTES_5_PIXELS; 
 }
 
 ui16

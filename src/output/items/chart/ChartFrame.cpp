@@ -98,7 +98,7 @@ ChartFrameVUp::draw(bool forceDraw)
     tft->setTextFont(1);
     tft->setTextSize(1);
     tft->setTextColor(color);
-    tft->drawCentreString(String(0), starting_x_+STARTING_X/2+2, MIDDLE_Y-7, 1);
+    tft->drawCentreString(String(0), starting_x_+STARTING_X/2+3, MIDDLE_Y-7, 1);
 
     tft->setCursor(starting_x_, MIDDLE_Y - MAX_POSITIVE - 8);
     tft->print(name);
@@ -106,7 +106,7 @@ ChartFrameVUp::draw(bool forceDraw)
     for (ui8 i=0; i< number_of_sections; i++)
     {
         value += value_itr;
-        tft->drawCentreString(String((i8)value), starting_x_+STARTING_X/2+2, get_y(value), 1);
+        tft->drawCentreString(String((i8)value), starting_x_+STARTING_X/2+4, get_y(value), 1);
     }
 }
 
@@ -121,20 +121,17 @@ void ChartFrameTime::draw(bool forceDraw)
 
     tft->drawFastHLine(STARTING_X, MIDDLE_Y, 288, color);
 
-    String hours [9] = {"0:00", "3:00", "6:00", "9:00", "12:00",
-                        "15:00", "18:00", "21:00", "24:00"};
+    String hours [7] = {"3:00", "6:00", "9:00", "12:00",
+                        "15:00", "18:00", "21:00"};
 
     ui16 x = STARTING_X,y = MIDDLE_Y+3;
-
-    tft->setTextFont(1);
+    
     tft->setTextSize(1);
     tft->setTextColor(color);
-    tft->setCursor(x+1, y);
-    tft->print(hours[0]);
 
-    for (ui8 i=1; i<9; i++)
+    for (ui8 i=0; i<7; i++)
     {
-        x += HOURS_PIXELS;
-        tft->drawCentreString(hours[i], x+1, y, 1);
+        x += 3*HOURS_PIXELS;
+        tft->drawCentreString(hours[i], x, y, 1);
     }
 }
