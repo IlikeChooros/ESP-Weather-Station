@@ -6,8 +6,19 @@ WeatherDataCollector::get_data(ui8 idx)
     return data[idx];
 }
 
+void 
+WeatherDataCollector::init(
+    Weather* weather
+)
+{
+    this->current_day_ = get_day(weather->_dt);
+}
+
 void
-WeatherDataCollector::check_min_max(int8_t data, uint8_t idx)
+WeatherDataCollector::check_min_max(
+    int8_t data, 
+    uint8_t idx
+)
 {
     if (min_max[idx][0] > data)
     {
@@ -20,8 +31,18 @@ WeatherDataCollector::check_min_max(int8_t data, uint8_t idx)
 }
 
 void
-WeatherDataCollector::collect(Weather* weather, ui8 idx)
+WeatherDataCollector::collect(
+    Weather* weather, 
+    ui8 idx
+)
 {
+    if (current_day_ != get_day(weather->_dt))
+    {
+        clear_mem(idx);
+        min_max[idx][0] = -1;
+        min_max[idx][1] = 1;
+        current_day_ = get_day(weather->_dt);
+    }
     WeatherData* wdata(static_cast<WeatherData*>(::operator new(sizeof(WeatherData))));
     wdata
     ->dt(weather->_dt)
@@ -99,13 +120,17 @@ WeatherDataCollector::collect_data(
 }
 
 i8*
-WeatherDataCollector::get_min_max(ui8 idx)
+WeatherDataCollector::get_min_max(
+    ui8 idx
+)
 {
     return this->min_max[idx];
 }
 
 void
-WeatherDataCollector::clear_mem(ui8 idx)
+WeatherDataCollector::clear_mem(
+    ui8 idx
+)
 {
     while (!data[idx].is_empty())
     {

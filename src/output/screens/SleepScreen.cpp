@@ -73,9 +73,6 @@ SleepScreen::reset()
         rects.pop_back();
     }
 
-    uint16_t x = esp_random()%(tft->width()+1),
-             y = esp_random()%(tft->height()+1);
-
     for (uint8_t i=0; i<NUMBER_OF_RECTS; i++)
     {
         RandomFigure* rect(static_cast<RandomFigure*>(::operator new(sizeof(RandomFigure))));
@@ -85,8 +82,8 @@ SleepScreen::reset()
         ->tft(tft)
         ->height(4)
         ->width(4)
-        ->x(x)
-        ->y(y)
+        ->x(esp_random()%(tft->width()+1))
+        ->y(esp_random()%(tft->height()+1))
         ->rest();
         rects.push_back(*rect);
         delete rect;

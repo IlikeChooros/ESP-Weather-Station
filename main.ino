@@ -39,7 +39,6 @@
 // Collector define
 #define TODAY 0
 #define NEXT_12_HOURS 1
-#define TOMMOWROW 2
 
 TFT_eSPI tft = TFT_eSPI();
 

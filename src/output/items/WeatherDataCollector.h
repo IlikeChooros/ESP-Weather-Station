@@ -20,6 +20,7 @@ class WeatherDataCollector
     Vector<WeatherData> *data;
 
     i8** min_max;
+    ui8 current_day_;
 
     void
     check_min_max(int8_t data, uint8_t idx);
@@ -40,6 +41,15 @@ class WeatherDataCollector
             min_max[i] = new i8 [2]{0,0};
         }
     }
+
+    /**
+     * @brief Initializes the object, setting starting day
+     * 
+     */
+    void 
+    init(
+        Weather* weather
+    );
 
     void
     collect(
