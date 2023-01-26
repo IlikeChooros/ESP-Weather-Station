@@ -2,17 +2,17 @@
 #define FEW_DAYS_FORECAST_SCREEN_H
 
 #include "MainScreen.h"
-#include "../items/ColumnItem.h"
-#include "../../weather_client/Forecast.h"
-#include "../items/TextItem.h"
-#include "../items/TimeItem.h"
-#include "../items/DropletItem.h"
-#include "../icons/WeatherIcon.h"
-#include "../icons/WindIcon.h"
-#include "../icons/Icons.h"
-#include "../../weather_client/Weather.h"
-#include "../../data_structures/Hsv_to_rgb.h"
-#include "../../data_structures/get_day.h"
+#include "../../items/ColumnItem.h"
+#include "../../../weather_client/Forecast.h"
+#include "../../items/TextItem.h"
+#include "../../items/TimeItem.h"
+#include "../../items/DropletItem.h"
+#include "../../icons/WeatherIcon.h"
+#include "../../icons/WindIcon.h"
+#include "../../icons/Icons.h"
+#include "../../../weather_client/Weather.h"
+#include "../../../data_structures/Hsv_to_rgb.h"
+#include "../../../data_structures/get_day.h"
 
 #define NUMBER_OF_COLUMN_ITEMS 6
 #define NUMBER_OF_DAYS_TO_FORECAST 4

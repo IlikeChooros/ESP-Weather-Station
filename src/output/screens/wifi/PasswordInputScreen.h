@@ -3,8 +3,8 @@
 
 #include "WiFiScreen.h"
 
-#include "../items/Keypad.h"
-#include "../items/InputField.h"
+#include "../../items/keypad/Keypad.h"
+#include "../../items/InputField.h"
 
 #define LEFT_KEYBUTTON 0
 #define RIGHT_KEYBUTTON 1

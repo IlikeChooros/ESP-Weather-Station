@@ -32,10 +32,6 @@ RandomFigure::draw_by_idx()
             tft_->fillRect(x_, y_, width_, height_, color_);
             tft_->fillRect(prev_x_, prev_y_, width_, height_, bg_c_);
             return;
-        case LINE_IDX:
-            tft_->drawLine(prev_x_, prev_y_, prev_x_ + width_, prev_y_ + height_, color_);
-            tft_->drawLine(x_, y_, x_ + width_, y_ + height_, color_);
-            return;
         default:
             tft_->fillCircle(x_, y_, width_, color_);
             tft_->fillCircle(prev_x_, prev_y_, width_, bg_c_);
@@ -87,8 +83,8 @@ SleepScreen::reset()
         ->bg_c(bg_c)
         ->color()
         ->tft(tft)
-        ->height(20)
-        ->width(20)
+        ->height(8)
+        ->width(8)
         ->x(x)
         ->y(y)
         ->rest();

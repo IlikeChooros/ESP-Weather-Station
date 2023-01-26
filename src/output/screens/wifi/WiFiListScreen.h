@@ -1,8 +1,8 @@
 #ifndef WIFI_LIST_SCREEN_H
 #define WIFI_LIST_SCREEN_H
 
-#include "../items/WiFiListItem.h"
-#include "../items/KeypadButton.h"
+#include "../../items/wifi/WiFiListItem.h"
+#include "../../items/keypad/KeypadButton.h"
 #include "WiFiScreen.h"
 
 #define HEIGHT 30

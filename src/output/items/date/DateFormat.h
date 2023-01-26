@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Arduino.h"
-#include "TFT_eSPI.h" // for struct tm
-#include "SPI.h"
 
 #define UPDATE_TIME 15 // in minutes
 #define NTP_SERVER "pool.ntp.org"

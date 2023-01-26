@@ -5,8 +5,8 @@
 #include <SPI.h>
 #include <Arduino.h>
 
-#include "../../weather_client/Forecast.h"
-#include "../../weather_client/Weather.h"
+#include "../../../weather_client/Forecast.h"
+#include "../../../weather_client/Weather.h"
 
 class MainScreen
 {

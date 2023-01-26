@@ -2,15 +2,15 @@
 #define FORECAST_12_SCREEN_H
 
 #include "MainScreen.h"
-#include "../../weather_client/Forecast.h"
-#include "../../weather_client/Weather.h"
-#include "../items/ColumnItem.h"
-#include "../items/TextItem.h"
-#include "../items/TimeItem.h"
-#include "../items/DropletItem.h"
-#include "../icons/WeatherIcon.h"
-#include "../icons/Icons.h"
-#include "../../data_structures/Hsv_to_rgb.h"
+#include "../../../weather_client/Forecast.h"
+#include "../../../weather_client/Weather.h"
+#include "../../items/ColumnItem.h"
+#include "../../items/TextItem.h"
+#include "../../items/TimeItem.h"
+#include "../../items/DropletItem.h"
+#include "../../icons/WeatherIcon.h"
+#include "../../icons/Icons.h"
+#include "../../../data_structures/Hsv_to_rgb.h"
 
 #define NUMBER_OF_COLUMN_ITEMS 6
 #define HOURS_TO_12_FORECAST 4

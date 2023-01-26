@@ -1,7 +1,7 @@
 #ifndef WIFI_ITEM_H
 #define WIFI_ITEM_H
 
-#include "../icons/Icons.h"
+#include "../../icons/Icons.h"
 #include <WiFi.h>
 
 #define STRONG_WIFI 0

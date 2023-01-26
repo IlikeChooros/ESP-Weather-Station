@@ -6,14 +6,14 @@
 
 //-----------------------------------------
 // Weather screens
-#include "src/output/screens/CurrentWeatherScreen.h"
-#include "src/output/screens/Forecast12Screen.h"
-#include "src/output/screens/FewDaysForecastScreen.h"
+#include "src/output/screens/weather/CurrentWeatherScreen.h"
+#include "src/output/screens/weather/Forecast12Screen.h"
+#include "src/output/screens/weather/FewDaysForecastScreen.h"
 
 //-----------------------------------------
 // WiFi setup screens
-#include "src/output/screens/WiFiListScreen.h"
-#include "src/output/screens/PasswordInputScreen.h"
+#include "src/output/screens/wifi/WiFiListScreen.h"
+#include "src/output/screens/wifi/PasswordInputScreen.h"
 
 //-----------------------------------------
 // Chart screens
@@ -85,10 +85,10 @@ ChartScreens** chart_screens = new ChartScreens* [X_1_SCREENS]{
 };
 
 
-MainScreen*** screens = new MainScreen**[X_SCREENS]{
-    new MainScreen* [Y_SCREENS] {new CurrentWeatherScreen(&tft, BACKGROUND_COLOR)},  // [0][0]
-    new MainScreen* [Y_SCREENS] {new Forecast12Screen(&tft, BACKGROUND_COLOR)},       // [1][0]
-    new MainScreen* [Y_SCREENS] {new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)}
+MainScreen** screens = new MainScreen*[X_SCREENS]{
+    new CurrentWeatherScreen(&tft, BACKGROUND_COLOR),  // [0][0]
+    new Forecast12Screen(&tft, BACKGROUND_COLOR),       // [1][0]
+    new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)
 };
 ScreenPointItem sci(&tft, 150, 230, BACKGROUND_COLOR);
 
@@ -109,8 +109,8 @@ uint8_t for_idx = 0;
 void draw_weather_screens()
 {
     // It wont hurt to call both methods on the same screen object
-    screens[screen_idx.x][0]->draw(weather, true);
-    screens[screen_idx.x][0]->draw(forecast, true);
+    screens[screen_idx.x]->draw(weather, true);
+    screens[screen_idx.x]->draw(forecast, true);
     sci.draw(X_SCREENS, 2, screen_idx.x+1, screen_idx.y+1);
 }
 
@@ -131,7 +131,7 @@ void get_esp_info()
     wclient.forecast_weather(forecast);
 
     // adding 1 second to ESP time
-    screens[0][0]->refresh(false);
+    screens[0]->refresh(false);
 
     // Try to regain wifi connection, if lost
     if (WiFi.status() != WL_CONNECTED)
@@ -495,10 +495,10 @@ void setup()
         delay(3000);
     }
 
-    screens[0][0]->init();
+    screens[0]->init();
 
     tft.fillScreen(BACKGROUND_COLOR);
-    screens[0][0]->draw(weather, true);
+    screens[0]->draw(weather, true);
     sci.draw(3,1,1,1);
 
     collect_data();
@@ -511,7 +511,7 @@ void loop()
     get_esp_info();
     if (screen_idx.y == 0)
     {
-        screens[screen_idx.x][0]->draw(weather,false);
-        screens[screen_idx.x][0]->draw(forecast,false);
+        screens[screen_idx.x]->draw(weather,false);
+        screens[screen_idx.x]->draw(forecast,false);
     }
 }

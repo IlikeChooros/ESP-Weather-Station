@@ -2,14 +2,14 @@
 #define CURRENT_WEATHER_SCREEN_H
 
 #include "MainScreen.h"
-#include "../items/WeatherItem.h"
-#include "../items/TextItem.h"
-#include "../items/DateItem.h"
-#include "../items/WiFiItem.h"
-#include "../icons/WeatherIcon.h"
-#include "../icons/WindIcon.h"
-#include "../../weather_client/Weather.h"
-#include "../../data_structures/Hsv_to_rgb.h"
+#include "../../items/WeatherItem.h"
+#include "../../items/TextItem.h"
+#include "../../items/date/DateItem.h"
+#include "../../items/wifi/WiFiItem.h"
+#include "../../icons/WeatherIcon.h"
+#include "../../icons/WindIcon.h"
+#include "../../../weather_client/Weather.h"
+#include "../../../data_structures/Hsv_to_rgb.h"
 
 
 #define DEGREE '`'

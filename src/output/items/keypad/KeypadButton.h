@@ -1,7 +1,7 @@
 #ifndef BUTTON_ITEM_H
 #define BUTTON_ITEM_H
 
-#include "../../input/TouchButton.h"
+#include "../../../input/TouchButton.h"
 
 #include "TFT_eSPI.h"
 #include "SPI.h"

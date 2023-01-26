@@ -15,9 +15,8 @@
 #define TRIANGLE_IDX 0
 #define RECTANGLE_IDX 1
 #define CIRCLE_IDX 2
-#define LINE_IDX 3
-#define L_IDX 4
-#define MOON_IDX 5
+#define L_IDX 3
+#define MOON_IDX 4
 
 class RandomFigure
 {
@@ -86,16 +85,16 @@ class RandomFigure
         this->prev_x_ = x_;
         this->prev_y_ = y_;
         this->time_ = 0;
-        this->idx_ = esp_random()%6;
+        this->idx_ = esp_random()%5;
         this->offset_x_ = 0;
         this->offset_y_ = 0;
 
         if (idx_ == CIRCLE_IDX)
         {
-            height_ /=2;
             width_ /=2;
+            height_ = width_;
             offset_x_ = width_;
-            offset_y_ = height_;
+            offset_y_ = width_;
         }
         return this;
     }

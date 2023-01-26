@@ -6,7 +6,7 @@
 #include "Arduino.h"
 
 #include "DateFormat.h"
-#include "DigitSection.h"
+#include "../digits/DigitSection.h"
 
 #define HOURS 0
 #define MINUTES 1

@@ -1,7 +1,7 @@
 #ifndef WIFI_STRENGHT_ITEM_H
 #define WIFI_STRENGHT_ITEM_H
 
-#include "../icons/Icons.h"
+#include "../../icons/Icons.h"
 
 class WiFiStrenghtItem
 {
