@@ -49,10 +49,8 @@ class Vector
     pop_back() noexcept;
 
     /**
-     * @brief Checks wheter the Vector is empty
-     * 
-     * @return true 
-     * @return false 
+     * @brief Checks wheter the Vector is empty,
+     * size == 0
      */
     bool
     is_empty() noexcept;

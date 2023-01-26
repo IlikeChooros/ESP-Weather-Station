@@ -37,5 +37,5 @@ ChartScreenNext12Hours::draw_name(Vector<WeatherData>& data)
 
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(1);
-    tft->drawCentreString("Next 12 hours", 90, 0, 2);
+    tft->drawCentreString("Rest of the day", 80, 0, 2);
 }

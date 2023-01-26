@@ -21,12 +21,14 @@
 #include "src/output/screens/chart/ChartScreenNext12Hours.h"
 #include "src/output/screens/chart/ChartScreenToday.h"
 
+#include "src/output/screens/SleepScreen.h"
+
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
 #define CITY_NAME "Oława"
 #define BACKGROUND_COLOR 0x10C4
-#define X_1_SCREENS 3
+#define X_1_SCREENS 6
 #define X_SCREENS 3
 #define Y_SCREENS 1
 #define SCREEN_LIST 2
@@ -70,9 +72,15 @@ TouchScreen ts(&tft, calData);
 
 WeatherDataCollector* collector = new WeatherDataCollector(X_1_SCREENS);
 
+bool is_asleep = false;
+SleepScreen* sleep_screen = new SleepScreen(&tft, TFT_BLACK);
+
 ChartScreens** chart_screens = new ChartScreens* [X_1_SCREENS]{
     new ChartScreenToday(&tft, BACKGROUND_COLOR),
     new ChartScreenNext12Hours(&tft, BACKGROUND_COLOR),
+    new ChartScreenNextDays(&tft, BACKGROUND_COLOR),
+    new ChartScreenNextDays(&tft, BACKGROUND_COLOR),
+    new ChartScreenNextDays(&tft, BACKGROUND_COLOR),
     new ChartScreenNextDays(&tft, BACKGROUND_COLOR)
 };
 
@@ -97,6 +105,84 @@ uint8_t wifi_screen_idx = 0;
 
 uint8_t idx = 0;
 uint8_t for_idx = 0;
+
+void draw_weather_screens()
+{
+    // It wont hurt to call both methods on the same screen object
+    screens[screen_idx.x][0]->draw(weather, true);
+    screens[screen_idx.x][0]->draw(forecast, true);
+    sci.draw(X_SCREENS, 2, screen_idx.x+1, screen_idx.y+1);
+}
+
+void draw_chart_screens(uint8_t collector_idx)
+{
+    chart_screens[screen_idx.x]->draw(collector->get_data(collector_idx), collector->get_min_max(collector_idx), true);
+    sci.draw(X_1_SCREENS, 2, screen_idx.x+1, screen_idx.y+1);
+}
+
+void get_esp_info()
+{
+    if (millis() - lastTimeCheck < SECOND)
+    {
+        return;
+    }
+
+    wclient.current_weather(weather);
+    wclient.forecast_weather(forecast);
+
+    // adding 1 second to ESP time
+    screens[0][0]->refresh(false);
+
+    // Try to regain wifi connection, if lost
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        reconnect_to_wifi();
+    }
+
+    // Collector
+    if (millis() - lastCollectorCheck > MIN_5)
+    {
+        collect_data();
+        lastCollectorCheck = millis();
+    }
+
+    lastTimeCheck = millis();
+}
+
+void wakeup()
+{
+    tft.fillScreen(BACKGROUND_COLOR);
+    screen_idx.x = 0;
+    screen_idx.y = 0;
+    draw_weather_screens();
+    is_asleep = false;
+    sleep_screen->reset();
+}
+
+void sleep()
+{
+    tft.fillScreen(TFT_BLACK);
+    is_asleep = true;
+
+    while(is_asleep)
+    {
+        sleep_screen->draw();
+        ts.read();
+        get_esp_info();
+    }
+}
+
+void collect_data()
+{
+    collector->collect(weather, TODAY);
+    collector->collect(forecast, NEXT_12_HOURS);
+    uint8_t day_idx = 2, day_offset = 0;
+    while (day_idx < X_1_SCREENS) {
+        collector->collect_all(forecast, day_idx,  day_offset);
+        day_idx++; 
+        day_offset++;
+    }
+}
 
 void eeprom_earse(uint16_t starting_address, uint16_t ending_address)
 {
@@ -126,7 +212,6 @@ void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
 
 void reconnect_to_wifi()
 {
-
     if (millis() - wifiUpdateTimeCheck > SECOND_10)
     {
         WiFi.disconnect();
@@ -197,19 +282,6 @@ void down()
     move(DOWN);
 }
 
-void draw_weather_screens()
-{
-    // It wont hurt to call both methods on the same screen object
-    screens[screen_idx.x][0]->draw(weather, true);
-    screens[screen_idx.x][0]->draw(forecast, true);
-    sci.draw(3,1,screen_idx.x+1,1);
-}
-
-void draw_chart_screens(uint8_t collector_idx)
-{
-    chart_screens[screen_idx.x]->draw(collector->get_data(collector_idx), collector->get_min_max(collector_idx), true);
-}
-
 void move(uint8_t move)
 {
     uint8_t collector_idx = 0;
@@ -232,6 +304,8 @@ void move(uint8_t move)
                 draw_chart_screens(screen_idx.x);
                 break;
             case DOWN:
+                screen_idx.y = 1;
+                draw_chart_screens(screen_idx.x);
                 break;
             default:
                 break;
@@ -244,12 +318,12 @@ void move(uint8_t move)
         {
             case UP:
                 screen_idx.y = 0;
-                screen_idx.x = 0;
+                screen_idx.x = screen_idx.x < X_SCREENS ? screen_idx.x : 0;
                 draw_weather_screens();
                 break;
             case DOWN:
                 screen_idx.y = 0;
-                screen_idx.x = 0;
+                screen_idx.x = screen_idx.x < X_SCREENS ? screen_idx.x : 0;
                 draw_weather_screens();
                 break;
             case LEFT:
@@ -373,9 +447,6 @@ void setup()
     tft.init();
     tft.setRotation(3);
 
-    //******************************
-    // Scanning for newtorks
-    //
     // EEPROM.begin(EEPROM_SIZE);
     // eeprom_earse(10, 150);
     // EEPROM.end();
@@ -388,14 +459,11 @@ void setup()
     ts.on_right(right);
     ts.on_down(down);
     ts.on_up(up);
+    ts.on_sleep(sleep);
+    ts.on_wakeup(wakeup);
 
-    //******************************
-    //  Force a connection to WiFi
-    //
     force_wifi_connection();
 
-    //****************************
-    // initialize weather client
     reset_tft();
     get_http = wclient._init_(CITY_NAME);
     tft.println("GET_HTTP: "+String(get_http));
@@ -417,15 +485,9 @@ void setup()
     }
 
     reset_tft();
-    // If any of them failed to get weather data, 
-    // will try to get it again
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
     {
         tft.println("Failed to obtain data, try restarting ESP");
-
-        // ESP should already have got WiFi ssid and password,
-        // so it will try to regain connection and try again
-        // to get weather data
         if (WiFi.status() != WL_CONNECTED)
         {
             reconnect_to_wifi();
@@ -439,45 +501,17 @@ void setup()
     screens[0][0]->draw(weather, true);
     sci.draw(3,1,1,1);
 
-    collector->collect_all(forecast, TOMMOWROW, 0);
-    collector->collect(forecast, NEXT_12_HOURS);
-    collector->collect(weather, TODAY);
+    collect_data();
 }
 
 
 void loop()
 {
     ts.read();
-
-    if (millis() - lastTimeCheck < SECOND)
-    {
-        return;
-    }
-    wclient.current_weather(weather);
-    wclient.forecast_weather(forecast);
-
-    // adding 1 second to ESP time
-    screens[0][0]->refresh(false);
-    
+    get_esp_info();
     if (screen_idx.y == 0)
     {
         screens[screen_idx.x][0]->draw(weather,false);
         screens[screen_idx.x][0]->draw(forecast,false);
-    }
-    
-    lastTimeCheck = millis();
-
-    if (millis() - lastCollectorCheck > 60000)
-    {
-        collector->collect(weather, TODAY);
-        collector->collect(forecast, NEXT_12_HOURS);
-        collector->collect_all(forecast, TOMMOWROW, 0);
-        lastCollectorCheck = millis();
-    }
-    
-    // Try to regain wifi connection, if lost
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        reconnect_to_wifi();
     }
 }

@@ -18,7 +18,6 @@ using ui16 = uint16_t;
 class WeatherDataCollector
 {
     Vector<WeatherData> *data;
-    int64_t lastWeatherCheck;
 
     i8** min_max;
 
@@ -30,13 +29,12 @@ class WeatherDataCollector
         ui8 ending_idx
     );
     public:
-    WeatherDataCollector(ui8 number_of_data_to_collect):
-    lastWeatherCheck(-MIN_5) {
+    WeatherDataCollector(ui8 number_of_data_to_collect) {
         data = new Vector<WeatherData> [number_of_data_to_collect];
         min_max = new i8* [number_of_data_to_collect];
         for (ui8 i=0; i<number_of_data_to_collect; i++)
         {
-            min_max[i] = new i8 [2]{30,-10};
+            min_max[i] = new i8 [2]{0,0};
         }
     }
 

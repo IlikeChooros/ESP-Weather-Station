@@ -37,5 +37,5 @@ ChartScreenNextDays::draw_name(Vector<WeatherData>& data)
 
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(1);
-    tft->drawCentreString(get_date_string(data.at(0).dt()), 60, 0, 2);
+    tft->drawCentreString(get_full_day_str(data.at(0).dt()), 70, 0, 2);
 }

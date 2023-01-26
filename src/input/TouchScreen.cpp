@@ -13,12 +13,15 @@ TouchScreen::TouchScreen(TFT_eSPI* tft, uint16_t* data)
     _state = false;
     _lastState = false;
     _lastDebounceTime = 0;
+    isAsleep = false;
 
 
     this->on_down(do_nothing);
     this->on_left(do_nothing);
     this->on_right(do_nothing);
     this->on_up(do_nothing);
+    this->on_sleep(do_nothing);
+    this->on_wakeup(do_nothing);
 }
 
 void TouchScreen::read()
@@ -31,6 +34,16 @@ void TouchScreen::read()
         _lastDebounceTime = millis();
     }
 
+    else
+    {
+        if (!isAsleep && millis() - _lastDebounceTime > SLEEP_TIME)
+        {
+            isAsleep = true;
+            _on_sleep();
+            return;
+        }
+    }
+
     if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
     {
         _state=state;
@@ -39,6 +52,14 @@ void TouchScreen::read()
         if (!state)
         {
             _lastState = state;
+            return;
+        }
+
+        if (isAsleep)
+        {
+            isAsleep = false;
+            _lastState = state;
+            _on_wakeup();
             return;
         }
 
@@ -66,44 +87,6 @@ void TouchScreen::read()
     _lastState = state;
 }
 
-bool TouchScreen::isVertical(int16_t d_x, int16_t d_y)
-{
-    if (abs(d_x) < MIN_HORIZONTAL)
-    {
-        return abs(d_y) > VERTICAL_VAL;
-    }
-    return false;
-}
-
-bool TouchScreen::isHorizontal(int16_t d_x, int16_t d_y)
-{
-    if (abs(d_y) < MIN_VERTICAL)
-    {
-        return abs(d_x) > HORIZONTAL_VAL;
-    }
-    return false;
-}
-
-void TouchScreen::on_left(void(*left)(void))
-{
-    this->_on_left = left;
-}
-
-void TouchScreen::on_right(void(*right)(void))
-{
-    this->_on_right = right;
-}
-
-void TouchScreen::on_down(void(*down)(void))
-{
-    this->_on_down = down;
-}
-
-void TouchScreen::on_up(void(*up)(void))
-{
-    this->_on_up = up;
-}
-
 int16_t* TouchScreen::read_touch()
 {
     uint16_t x=0,y=0;
@@ -129,4 +112,34 @@ int16_t* TouchScreen::read_touch()
     }
     _lastState = state;
     return 0;
+}
+
+void TouchScreen::on_left(void(*left)(void))
+{
+    this->_on_left = left;
+}
+
+void TouchScreen::on_right(void(*right)(void))
+{
+    this->_on_right = right;
+}
+
+void TouchScreen::on_down(void(*down)(void))
+{
+    this->_on_down = down;
+}
+
+void TouchScreen::on_up(void(*up)(void))
+{
+    this->_on_up = up;
+}
+
+void TouchScreen::on_sleep(void(*sleep)())
+{
+    this->_on_sleep = sleep;
+}
+
+void TouchScreen::on_wakeup(void(*wake_up)())
+{
+    this->_on_wakeup = wake_up;
 }

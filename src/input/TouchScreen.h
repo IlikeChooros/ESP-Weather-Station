@@ -14,6 +14,8 @@
 
 #define TOUCH_VAL 100 
 
+#define SLEEP_TIME 60000
+
 class TouchScreen
 {
     TFT_eSPI* _tft;
@@ -25,15 +27,17 @@ class TouchScreen
 
     bool _lastState;
     bool _state;
-    uint64_t _lastDebounceTime;
+    bool isAsleep;
 
-    bool isVertical(int16_t d_x, int16_t d_y);
-    bool isHorizontal(int16_t d_x, int16_t d_y);
+    uint64_t _lastDebounceTime;
 
     void (*_on_left)();
     void (*_on_right)();
     void (*_on_up)();
     void (*_on_down)();
+    void (*_on_sleep)();
+    void (*_on_wakeup)();
+
     public:
     TouchScreen(TFT_eSPI *tft ,uint16_t* touchData);
     void read();
@@ -42,6 +46,8 @@ class TouchScreen
     void on_right(void(*)(void));
     void on_up(void(*)(void));
     void on_down(void(*)(void));
+    void on_sleep(void(*)());
+    void on_wakeup(void(*)());
 };
 
 

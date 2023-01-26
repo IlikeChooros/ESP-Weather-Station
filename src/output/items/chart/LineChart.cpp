@@ -110,6 +110,8 @@ draw_line_chart(
     prev_y = get_y_pos_by_idx(idx, scale_pos, scale_neg, 0, data), x, y;
     delete dt;
 
+    draw_number_chart(tft, idx, prev_x, prev_y, color, data, 0);
+
     uint64_t lastCheck = data.at(0).dt();
 
     for(ui16 i=1; i<data.size(); i++)
@@ -160,7 +162,7 @@ draw_dots_chart(
         x += pixel_offset;
         y = get_y_pos_by_idx(idx, scale_pos, scale_neg, i, data);
 
-        tft->fillCircle(x,y,2,color);
+        tft->fillCircle(x,y,1,color);
 
         if (data.at(i).dt() - lastCheck < 10800) // 3 hours
         {
@@ -176,9 +178,7 @@ draw_dots_chart(
 void
 LineCharTemp::draw(bool forceDraw)
 {
-    pixel_offset == 3*HOURS_PIXELS?
-    draw_line_chart(tft, TEMP_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative):
-    draw_dots_chart(tft, TEMP_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
+    draw_line_chart(tft, TEMP_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
 }
 
 void
@@ -193,9 +193,7 @@ LineCharTemp::set_data(Vector<WeatherData>& data)
 void
 LineChartFeelsLike::draw(bool forceDraw)
 {
-    pixel_offset == 3*HOURS_PIXELS?
-    draw_line_chart(tft, FEELS_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative):
-    draw_dots_chart(tft, FEELS_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
+    draw_line_chart(tft, FEELS_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
 }
 
 void
@@ -210,9 +208,7 @@ LineChartFeelsLike::set_data(Vector<WeatherData>& data)
 void
 LineChartPop::draw(bool forceDraw)
 {
-    pixel_offset == 3*HOURS_PIXELS?
-    draw_line_chart(tft, POP_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f):
-    draw_dots_chart(tft, POP_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
+    draw_line_chart(tft, POP_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
 }
 
 void
@@ -226,9 +222,7 @@ LineChartPop::set_data(Vector<WeatherData>& data)
 void
 LineChartHumidity::draw(bool forceDraw)
 {
-    pixel_offset == 3*HOURS_PIXELS?
-    draw_line_chart(tft, HUM_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f):
-    draw_dots_chart(tft, HUM_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
+    draw_line_chart(tft, HUM_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
 }
 
 void

@@ -54,6 +54,6 @@ void TextFeelsLike::setWeather(Weather* weather)
 
 void TextPop::setWeather(Weather* weather)
 {
-    this->redraw = (int16_t)100 * weather->_pop != this->_data;
-    _data = (int16_t) 100 * weather->_pop;
+    this->redraw = (int16_t)(100 * weather->_pop) != this->_data;
+    _data = (int16_t)((float) (100 * weather->_pop));
 }
