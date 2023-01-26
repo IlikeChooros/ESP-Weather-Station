@@ -32,12 +32,23 @@ class PasswordInputScreen: public WiFiScreen
     bool change_;
     bool load_main_;
 
-    void re_draw();
-    void enter_pwd();
-    void caps();
-    void change_keypad(int8_t dir);
+    void 
+    re_draw();
+
+    void 
+    enter_pwd();
+
+    void 
+    caps();
+
+    void 
+    change_keypad(int8_t dir);
+
     public:
-    PasswordInputScreen(TFT_eSPI* tft, uint16_t bg_c): WiFiScreen(tft, bg_c){
+    PasswordInputScreen(
+        TFT_eSPI* tft, 
+        uint16_t bg_c
+    ): WiFiScreen(tft, bg_c){
 
         String main_qwerty [24] = {"q", "w", "e" ,"r", "t","y","u" ,"<<",     "a", "s", "d","f","g","h","j", "^",     "z", "x","c","v", "b","n","m","o"};
         String numbers [24] = {"i", "p", "k", "l", "0", "1", "2", "<<",   "3","4","5","6","7","8","9", "^",    "!", "?", "$", "%", "^", "&","*","@"};
@@ -83,17 +94,32 @@ class PasswordInputScreen: public WiFiScreen
     {
         return;
     }
-    void draw(String wifi_name);
-    void check(int16_t* pos);
-    bool change();
-    String get_str();
-    void clear_buttons();
-    bool load_main();
-    void scan()
+    void 
+    draw(String wifi_name);
+
+    void 
+    check(int16_t* pos);
+
+    bool
+    change();
+
+    String 
+    get_str();
+
+    void 
+    clear_buttons();
+
+    bool 
+    load_main();
+
+    void 
+    scan()
     {
         return;
     }
-    void init()
+    
+    void 
+    init()
     {
         return;
     }

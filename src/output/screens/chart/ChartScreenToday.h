@@ -1,18 +1,9 @@
 #pragma once
 
 #include "ChartScreens.h"
-#include "../../items/chart/LineChart.h"
-#include "../../items/chart/ChartFrame.h"
-#include "../../items/chart/ChartName.h"
 
 class ChartScreenToday: public ChartScreens
 {
-    ChartItem **charts;
-    ChartFrameTime* chart_time;
-    ChartName** chart_names;
-
-    void
-    draw_name(Vector<WeatherData>& data);
     public:
     /**
      * @brief Chart Screen that will display collected weather data up to this moment

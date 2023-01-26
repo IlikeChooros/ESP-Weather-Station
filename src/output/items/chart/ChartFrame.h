@@ -59,7 +59,7 @@ class ChartFrameVFull: public ChartItem
         max_value = max;
         scale_positive = (float)((MAX_POSITIVE)/max_value);
         scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
-        number_of_sections = (max - min)/2;
+        number_of_sections = (max - min)/2 < 8 ? (max-min)/2 : 8;
     }
 };
 

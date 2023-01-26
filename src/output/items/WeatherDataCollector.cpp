@@ -7,6 +7,19 @@ WeatherDataCollector::get_data(ui8 idx)
 }
 
 void
+WeatherDataCollector::check_min_max(int8_t data, uint8_t idx)
+{
+    if (min_max[idx][0] > data)
+    {
+        min_max[idx][0] = data; // min
+    }
+    else if(min_max[idx][1] < data)
+    {
+        min_max[idx][1] = data; // max
+    }
+}
+
+void
 WeatherDataCollector::collect(Weather* weather, ui8 idx)
 {
     WeatherData* wdata(static_cast<WeatherData*>(::operator new(sizeof(WeatherData))));
@@ -18,14 +31,8 @@ WeatherDataCollector::collect(Weather* weather, ui8 idx)
     ->pop(100 * weather->_pop);
     data[idx].push_back(*wdata);
 
-    if (min_max[idx][0] > data[idx].at(data[idx].size()-1).temp())
-    {
-        min_max[idx][0] = data[idx].at(data[idx].size()-1).temp(); // min
-    }
-    else if(min_max[idx][1] < data[idx].at(data[idx].size()-1).temp())
-    {
-        min_max[idx][1] = data[idx].at(data[idx].size()-1).temp(); // max
-    }
+    check_min_max(data[idx].at(data[idx].size()-1).temp(), idx);
+    check_min_max(data[idx].at(data[idx].size()-1).feels_like(), idx);
 
     delete wdata;
 }
@@ -84,31 +91,10 @@ WeatherDataCollector::collect_data(
         ->temp(forecast->forecasted_weather[i]->_temp);
 
         data[idx].push_back(*wdata);
-        if (min_max[idx][0] > data[idx].at(count).temp())
-        {
-            min_max[idx][0] = data[idx].at(count).temp(); // min
-        }
-        else if(min_max[idx][1] < data[idx].at(count).temp())
-        {
-            min_max[idx][1] = data[idx].at(count).temp(); // max
-        }
+        check_min_max(data[idx].at(count).temp(), idx);
+        check_min_max(data[idx].at(count).feels_like(), idx);
         count++;
         delete wdata;
-    }
-
-    Serial.println("*****************************");
-    Serial.println("PUSH_BACK COLLECT: ");
-    for (ui16 i = 0; i<data[idx].size(); i++)
-    {
-        HH_YY_date* dt = new HH_YY_date (data[idx].at(i).dt());
-        Serial.println("----------------------");
-        Serial.println(String(i)+": ");
-        Serial.println(get_date_string(data[idx].at(i).dt()) + String(dt->hour) + " : " + String(dt->min));
-        Serial.println(String(data[idx].at(i).feels_like())+" C FEELS");
-        Serial.println(String(data[idx].at(i).temp())+" C TEMP");
-        Serial.println(String(data[idx].at(i).pop())+" % POP");
-        Serial.println(String(data[idx].at(i).humidity())+" % HUM");
-        delete dt;
     }
 }
 

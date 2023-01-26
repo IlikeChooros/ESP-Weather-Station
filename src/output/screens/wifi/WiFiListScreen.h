@@ -24,10 +24,18 @@ class WiFiListScreen: public WiFiScreen
     String** saved_wifi_info;
     uint8_t number_of_saved_wifis;
 
-    void read_from_eeprom_wifis();
-    void connect_to_wifi();
+    void 
+    read_from_eeprom_wifis();
+
+    void 
+    connect_to_wifi();
+
     public:
-    WiFiListScreen(TFT_eSPI* tft, uint16_t bg_c, void(*refresh_func)(void)): WiFiScreen(tft, bg_c){
+    WiFiListScreen(
+        TFT_eSPI* tft, 
+        uint16_t bg_c, 
+        void(*refresh_func)(void)
+    ): WiFiScreen(tft, bg_c){
         WiFi.mode(WIFI_STA);
         change_ = false;
         load_main_ = false;
@@ -37,21 +45,40 @@ class WiFiListScreen: public WiFiScreen
         refresh_button->set_on_press(refresh_func);
     }
 
-    void scan();
-    void draw();
-    void init();
-    void draw(String wifi_name)
+    void 
+    scan();
+
+    void 
+    draw();
+
+    void 
+    init();
+
+    void 
+    draw(
+        String wifi_name
+    )
     {
         return;
     }
-    String get_str()
+
+    String 
+    get_str()
     {
         return this->picked_wifi;
     }
-    void check(int16_t* pos);
-    void clear_buttons();
-    bool change();
-    bool load_main(){
+
+    void 
+    check(int16_t* pos);
+
+    void 
+    clear_buttons();
+
+    bool
+    change();
+
+    bool 
+    load_main(){
         return this->load_main_;
     }
 };

@@ -23,24 +23,37 @@ class WiFiListItem: public TouchButton
     bool password_saved;
 
     public:
-    WiFiListItem(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String ssid, bool password_saved ,int8_t strenght, uint16_t bg_c): TouchButton(x,y,width,height)
-    {
-        this->tft = tft;
-        this->ssid = ssid;
-        this->bg_c = bg_c;
-        this->strenght = strenght;
-        this->password_saved = password_saved;
-    }
-    void draw();
-    int8_t get_strenght();
-    bool is_saved();
-    String get_ssid();
+    WiFiListItem(
+        TFT_eSPI* tft, 
+        int16_t x, 
+        int16_t y, 
+        int16_t width, 
+        int16_t height, 
+        String ssid, 
+        bool password_saved,
+        int8_t strenght, 
+        uint16_t bg_c
+    ): TouchButton(x,y,width,height),
+    tft(tft), ssid(ssid), password_saved(password_saved),
+    strenght(strenght), bg_c(bg_c)
+    {}
+
+    void 
+    draw();
+
+    int8_t 
+    get_strenght();
+
+    bool 
+    is_saved();
+
+    String 
+    get_ssid();
+
     void on_touch()
     {
         return;
     }
-    
-
 };
 
 #endif

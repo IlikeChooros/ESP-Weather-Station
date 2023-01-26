@@ -93,7 +93,7 @@ ChartFrameVUp::draw(bool forceDraw)
     // drawing scale numbers
     float value = 0;
 
-    float value_itr = max_value/number_of_sections;
+    float value_itr = (float)(max_value/number_of_sections);
 
     tft->setTextFont(1);
     tft->setTextSize(1);

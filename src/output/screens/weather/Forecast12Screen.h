@@ -22,7 +22,10 @@ class Forecast12Screen: public MainScreen
 
     ColumnItem* columnItems;
     public:
-    Forecast12Screen(TFT_eSPI* tft, uint16_t bg_c): MainScreen(tft,bg_c)
+    Forecast12Screen(
+        TFT_eSPI* tft, 
+        uint16_t bg_c
+    ): MainScreen(tft,bg_c)
     {
         column_height = this->_tft->width();
         column_width = this->_tft->height()/HOURS_TO_12_FORECAST;
@@ -41,16 +44,31 @@ class Forecast12Screen: public MainScreen
             };
         }
     }
-    void draw(Forecast* forecast, bool forceDraw);
-    void draw(Weather* weather, bool forceDraw)
+    void 
+    draw(
+        Forecast* forecast,
+        bool forceDraw
+    );
+
+    void 
+    draw(
+        Weather* weather, 
+        bool forceDraw
+    )
     {
         return;
     }
-    void refresh(bool forceUpdate)
+    
+    void 
+    refresh(
+        bool forceUpdate
+    )
     {
         return;
     }
-    void init() {
+
+    void 
+    init() {
         return;
     }
 };

@@ -19,9 +19,21 @@ class DigitSection
     DigitObject** digitsObj;
 
 public:
-    DigitSection(TFT_eSPI *tft, int16_t x, int16_t y, uint8_t size, uint8_t font, int16_t bg_c, bool putColonOnTheEnd);
-    void draw(uint8_t digits, bool forceDraw);
-    void set_x(int16_t x);
+    DigitSection(
+        TFT_eSPI *tft, 
+        int16_t x, 
+        int16_t y, 
+        uint8_t size, 
+        uint8_t font, 
+        int16_t bg_c, 
+        bool putColonOnTheEnd
+    );
+
+    void 
+    draw(uint8_t digits, bool forceDraw);
+
+    void 
+    set_x(int16_t x);
 };
 
 

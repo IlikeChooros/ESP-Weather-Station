@@ -90,7 +90,7 @@ MainScreen** screens = new MainScreen*[X_SCREENS]{
     new Forecast12Screen(&tft, BACKGROUND_COLOR),       // [1][0]
     new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)
 };
-ScreenPointItem sci(&tft, 150, 230, BACKGROUND_COLOR);
+ScreenPointItem sci(&tft, 160, 230, BACKGROUND_COLOR);
 
 void refresh();
 

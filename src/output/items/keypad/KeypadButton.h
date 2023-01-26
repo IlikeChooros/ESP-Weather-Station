@@ -18,16 +18,32 @@ class KeypadButton: public TouchButton
     bool wrap;
 
     public:
-    KeypadButton(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height, String name): TouchButton(x,y,width,height)
-    {
-        this->tft = tft;
-        this->name = name;
-        this->wrap = false;
-    }
-    void draw();
-    void on_touch();
-    void set_wrap();
-    String get_str();
+    KeypadButton(
+        TFT_eSPI* tft, 
+        int16_t x, 
+        int16_t y, 
+        int16_t width, 
+        int16_t height, 
+        String name
+    ): TouchButton(x,y,width,height),
+    name(name), wrap(false), tft(tft)
+    {}
+
+    void 
+    draw();
+
+    void 
+    on_touch();
+    
+    /**
+     * @brief Set wrapping of the text
+     * 
+     */
+    void 
+    set_wrap();
+
+    String 
+    get_str();
 };
 
 

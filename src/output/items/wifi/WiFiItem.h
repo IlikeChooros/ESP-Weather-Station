@@ -20,10 +20,21 @@ class WiFiItem
     uint8_t prev_idx;
     uint8_t idx;
 
-    Icon* matchIcon();
+    Icon* 
+    matchIcon();
+    
     public:
-    WiFiItem(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color);
-    void draw(bool forceDraw);
+    WiFiItem(
+        TFT_eSPI *_tft, 
+        uint16_t x, 
+        uint16_t y, 
+        uint8_t size, 
+        uint16_t background_color
+    );
+
+
+    void 
+    draw(bool forceDraw);
 };
 
 #endif

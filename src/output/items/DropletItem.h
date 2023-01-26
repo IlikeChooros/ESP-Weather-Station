@@ -19,10 +19,14 @@ class DropletItem: public WeatherItem
 
     Icon* matchIcon();
     public:
-    DropletItem(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color): WeatherItem(_tft,x,y,background_color){
-        this->size = size;
-        this->pop = -1;
-    }
+    DropletItem(
+        TFT_eSPI *_tft, 
+        uint16_t x, 
+        uint16_t y, 
+        uint8_t size, 
+        uint16_t background_color
+    ): WeatherItem(_tft,x,y,background_color),
+    size(size), pop(-1){}
     void draw(bool forceDraw);
     void setWeather(Weather* weather);
 };

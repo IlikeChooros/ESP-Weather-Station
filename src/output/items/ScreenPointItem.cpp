@@ -28,6 +28,9 @@ ScreenPointItem::draw(
     int8_t itemsOnRight = numberOfAllInX - currentX;
     int8_t itemsOnLeft = currentX - 1;
     int8_t itrR = 1;
+    uint16_t st_x;
+
+    st_x = x - (float)((numberOfAllInX-1)/2 * SIZE_POINT);
 
     uint8_t counter = 0;
 
@@ -39,14 +42,14 @@ ScreenPointItem::draw(
 
     while(itemsOnLeft >= 0)
     {
-        this->_tft->fillSmoothCircle(x + SIZE_POINT*counter,y,SIZE_POINT*0.3f,colors[itemsOnLeft], bg_c);
+        this->_tft->fillSmoothCircle(st_x + SIZE_POINT*counter,y,SIZE_POINT*0.3f,colors[itemsOnLeft], bg_c);
         itemsOnLeft--;
         counter++;
     }
 
     while(itrR <= itemsOnRight)
     {
-        this->_tft->fillSmoothCircle(x + SIZE_POINT*counter,y,SIZE_POINT*0.3f,colors[itrR], bg_c);
+        this->_tft->fillSmoothCircle(st_x + SIZE_POINT*counter,y,SIZE_POINT*0.3f,colors[itrR], bg_c);
         itrR++;
         counter++;
     }

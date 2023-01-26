@@ -18,11 +18,38 @@ class InputField
     int16_t height;
 
     public:
-    InputField(TFT_eSPI* tft, int16_t x, int16_t y, int16_t width, int16_t height);
-    void draw();
-    void add_input(String input);
-    String get_input();
-    void del();
+    InputField(
+        TFT_eSPI* tft,
+        int16_t x, 
+        int16_t y, 
+        int16_t width, 
+        int16_t height
+    );
+
+    void
+    draw();
+
+    /**
+     * @brief Will concatanate given input
+     * 
+     * @param input 
+     */
+    void 
+    add_input(
+        String input
+    );
+
+    /**
+     * @brief Get the input
+     * 
+     * @return String 
+     */
+    String
+    get_input();
+
+
+    void 
+    del();
 };
 
 #endif

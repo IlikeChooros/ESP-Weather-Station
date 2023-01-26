@@ -27,7 +27,11 @@ class FewDaysForecastScreen: public MainScreen
     ColumnItem* column_items;
     uint8_t column_height,
             column_width;
-    float* getMinMaxTemp_pop(Forecast* forecast, uint8_t start_idx);
+    float* 
+    getMinMaxTemp_pop(
+        Forecast* forecast, 
+        uint8_t start_idx
+    );
     public:
     FewDaysForecastScreen(TFT_eSPI *tft, uint16_t bg_c): MainScreen(tft,bg_c){
         column_items = new ColumnItem[NUMBER_OF_DAYS_TO_FORECAST];
@@ -47,16 +51,31 @@ class FewDaysForecastScreen: public MainScreen
             };
         }
     }
-    void draw(Forecast* forecast, bool forceDraw);
-    void draw(Weather* weather, bool forceDraw)
+    void 
+    draw(
+        Forecast* forecast, 
+        bool forceDraw
+    );
+
+    void 
+    draw(
+        Weather* weather, 
+        bool forceDraw
+    )
     {
         return;
     }
-    void refresh(bool forceUpdate)
+    
+    void 
+    refresh(
+        bool forceUpdate
+    )
     {
         return;
     }
-    void init() {
+
+    void 
+    init() {
         return;
     }
 };

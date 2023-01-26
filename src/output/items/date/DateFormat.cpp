@@ -25,11 +25,6 @@ bool DateFormat::get_update()
     return this->getUpdate;
 }
 
-
-//****************************
-// returns true if date has
-// to be redrawn
-//****************************
 bool DateFormat::add_second()
 {
     timeinfo->tm_sec++;

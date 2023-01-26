@@ -40,14 +40,28 @@ class CurrentWeatherScreen: public MainScreen
         wifi = new WiFiItem(this->_tft, 0,0,15,bg_c);
         date = new DateItem(this->_tft, 160, 10 , 45, bg_c);
     }
-    void draw(Weather* weather, bool forceDraw);
-    void draw(Forecast* forecast, bool forceDraw)
+    void 
+    draw(
+        Weather* weather, 
+        bool forceDraw
+    );
+
+    void 
+    draw(
+        Forecast* forecast,
+        bool forceDraw
+    )
     {
         return;
     }
 
-    void refresh(bool forceUpdate);
-    void init() {
+    void 
+    refresh(
+        bool forceUpdate
+    );
+
+    void 
+    init() {
         date->init();
     }
 };

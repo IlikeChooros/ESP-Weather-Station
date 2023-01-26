@@ -21,8 +21,11 @@ class WeatherDataCollector
 
     i8** min_max;
 
-    void print_all();
-    void collect_data(
+    void
+    check_min_max(int8_t data, uint8_t idx);
+
+    void
+    collect_data(
         Forecast* forecast,
         ui8 idx,
         ui8 starting_idx,

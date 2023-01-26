@@ -5,6 +5,7 @@
 #include <Arduino.h>
 
 #include "../../data_structures/Point.h"
+#include "../../data_structures/Hsv_to_rgb.h"
 #include "../../data_structures/Vector.h"
 #include "../../data_structures/Vector.cpp"
 
@@ -56,11 +57,11 @@ class RandomFigure
         return this;
     }
     RandomFigure* height(uint8_t max_height) {
-        this->height_ = esp_random()%max_height + 5;
+        this->height_ = esp_random()%max_height + 8;
         return this;
     }
     RandomFigure* width(uint8_t max_width) {
-        this->width_ = esp_random()%max_width + 5;
+        this->width_ = esp_random()%max_width + 8;
         return this;
     }
     RandomFigure* x(uint16_t starting_x) {
@@ -72,7 +73,12 @@ class RandomFigure
         return this;
     }
     RandomFigure* color() {
-        color_ = static_cast<uint16_t>(esp_random());
+        HSV* hsv = new HSV;
+        hsv->hue = 50 + esp_random()%50;
+        hsv->satrutaion = 50 + esp_random()%50;
+        hsv->value = 50 + esp_random()%50;
+        color_ = HSV_RGB(*hsv);
+        delete hsv;
         return this;
     }
     RandomFigure* bg_c(uint16_t bg_c) {
@@ -92,6 +98,7 @@ class RandomFigure
         if (idx_ == CIRCLE_IDX)
         {
             width_ /=2;
+            width_ -= 1;
             height_ = width_;
             offset_x_ = width_;
             offset_y_ = width_;

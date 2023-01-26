@@ -11,14 +11,22 @@ class TextItem: public WeatherItem
     const char* format;
 
     public:
-    TextItem(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): WeatherItem(_tft,x,y,background_color){
-        this->font = font;
-        this->text_size = text_size;
-        this->format = format;
-        this->color = color;
-        this->prev_data=0;
-    }
-    void draw(bool forceDraw);
+    TextItem(
+        TFT_eSPI *_tft, 
+        uint16_t x, 
+        uint16_t y, 
+        uint8_t font, 
+        uint8_t text_size, 
+        uint16_t color,
+        const char* format, 
+        uint16_t background_color
+    ): WeatherItem(_tft,x,y,background_color),
+    font(font), text_size(text_size), 
+    format(format), color(color), prev_data(0)
+    {}
+
+    void 
+    draw(bool forceDraw);
 
     protected:
     int16_t _data;
