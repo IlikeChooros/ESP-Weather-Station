@@ -1,5 +1,4 @@
-#ifndef CUSTOM_ICONS_H
-#define CUSTOM_ICONS_H
+#pragma once
 
 #include "Icons.h"
 #include "../items/WeatherItem.h"
@@ -18,14 +17,18 @@ class WindIcon: public WeatherItem
 
     Icon* iconMatcher();
     public:
-    WindIcon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color): WeatherItem(tft,x,y,background_color){
-        this->size = size;
-    }
-    void setWeather(Weather* weather);
-    void draw(bool forceDraw);
+    WindIcon(
+        TFT_eSPI *tft, 
+        uint16_t x, 
+        uint16_t y, 
+        uint8_t size, 
+        uint16_t background_color
+    ): WeatherItem(tft,x,y,background_color)
+    {this->size = size;}
+
+    void 
+    setWeather(Weather* weather);
+
+    void 
+    draw(bool forceDraw);
 };
-
-
-
-
-#endif

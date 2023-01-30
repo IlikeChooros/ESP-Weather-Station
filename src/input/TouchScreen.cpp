@@ -5,7 +5,10 @@ void do_nothing()
     return;
 }
 
-TouchScreen::TouchScreen(TFT_eSPI* tft, uint16_t* data)
+TouchScreen::TouchScreen(
+    TFT_eSPI* tft, 
+    uint16_t* data
+)
 {
     this->_tft = tft;
     _tft->setTouch(data);
@@ -24,7 +27,8 @@ TouchScreen::TouchScreen(TFT_eSPI* tft, uint16_t* data)
     this->on_wakeup(do_nothing);
 }
 
-void TouchScreen::read()
+void 
+TouchScreen::read()
 {
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
@@ -87,7 +91,8 @@ void TouchScreen::read()
     _lastState = state;
 }
 
-int16_t* TouchScreen::read_touch()
+Point* 
+TouchScreen::read_touch()
 {
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
@@ -108,38 +113,62 @@ int16_t* TouchScreen::read_touch()
             return 0;
         }
 
-        return new int16_t [2] {x,y};
+        return new Point(x,y);
     }
     _lastState = state;
     return 0;
 }
 
-void TouchScreen::on_left(void(*left)(void))
+TouchScreen* 
+TouchScreen::on_left(
+    void(*left)(void)
+)
 {
     this->_on_left = left;
+    return this;
 }
 
-void TouchScreen::on_right(void(*right)(void))
+TouchScreen* 
+TouchScreen::on_right(
+    void(*right)(void)
+)
 {
     this->_on_right = right;
+    return this;
 }
 
-void TouchScreen::on_down(void(*down)(void))
+TouchScreen* 
+TouchScreen::on_down(
+    void(*down)(void)
+)
 {
     this->_on_down = down;
+    return this;
 }
 
-void TouchScreen::on_up(void(*up)(void))
+TouchScreen* 
+TouchScreen::on_up(
+    void(*up)(void)
+)
 {
     this->_on_up = up;
+    return this;
 }
 
-void TouchScreen::on_sleep(void(*sleep)())
+TouchScreen* 
+TouchScreen::on_sleep(
+    void(*sleep)()
+)
 {
     this->_on_sleep = sleep;
+    return this;
 }
 
-void TouchScreen::on_wakeup(void(*wake_up)())
+TouchScreen* 
+TouchScreen::on_wakeup(
+    void(*wake_up)()
+)
 {
     this->_on_wakeup = wake_up;
+    return this;
 }

@@ -1,21 +1,29 @@
 #include "WiFiListItem.h"
 
-int8_t WiFiListItem::get_strenght()
+int8_t 
+WiFiListItem::
+get_strenght()
 {
     return this->strenght;
 }
 
-bool WiFiListItem::is_saved()
+bool 
+WiFiListItem::
+is_saved()
 {
     return this->password_saved;
 }
 
-String WiFiListItem::get_ssid()
+String 
+WiFiListItem::
+get_ssid()
 {
     return this->ssid;
 }
 
-void WiFiListItem::draw()
+void 
+WiFiListItem::
+draw()
 {
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(2);
@@ -35,7 +43,7 @@ void WiFiListItem::draw()
     icon->draw();
     delete icon;
     
-    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem(tft,x+0.92f*width, y+0.1f*height, 0.08f*width, color);
+    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem (tft,x+0.91f*width, y+0.2f*height, 0.08f*width, color);
     wifi_str->draw(strenght);
     delete wifi_str;
 

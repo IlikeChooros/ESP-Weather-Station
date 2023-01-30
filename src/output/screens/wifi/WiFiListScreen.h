@@ -69,7 +69,7 @@ class WiFiListScreen: public WiFiScreen
     }
 
     void 
-    check(int16_t* pos);
+    check(Point* pos);
 
     void 
     clear_buttons();

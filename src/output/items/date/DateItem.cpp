@@ -3,7 +3,13 @@
 // --------------------------------
 // (&tft, 160, 10, 45)
 // --------------------------------
-DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t y_hour, int16_t bg_c)
+DateItem::DateItem(
+    TFT_eSPI *tft, 
+    int16_t center_x, 
+    int16_t y_full_date, 
+    int16_t y_hour, 
+    int16_t bg_c
+)
 {
     this->center_x = center_x;
     this->y_full_date = y_full_date;
@@ -20,7 +26,9 @@ DateItem::DateItem(TFT_eSPI *tft, int16_t center_x, int16_t y_full_date, int16_t
     };
 }
 
-void DateItem::init()
+void 
+DateItem::
+init()
 {
     bool update = false;
     configTime(3600, 0, NTP_SERVER);
@@ -41,10 +49,11 @@ void DateItem::init()
     prev_time_info = timeinfo;
 }
 
-//---------------------------------------------
-// Function expects to be called every 1 second
-//---------------------------------------------
-void DateItem::draw(bool forceDraw)
+void 
+DateItem::
+draw(
+    bool forceDraw
+)
 {
     // Clearing previous date 
     dateFormat->set_date(&prev_time_info);
@@ -71,12 +80,11 @@ void DateItem::draw(bool forceDraw)
     }
 }
 
-//********************************
-// Adds 1 second to its time info,
-// To work correctly should be called
-// every second
-//********************************
-void DateItem::add_second(bool getUpdate)
+void 
+DateItem::
+add_second(
+    bool getUpdate
+)
 {
     prev_time_info = timeinfo;
 

@@ -1,11 +1,13 @@
 #include "KeypadButton.h"
 
-void KeypadButton::draw()
+void 
+KeypadButton::
+draw()
 {
-    tft->setTextColor(TFT_WHITE);
+    tft->setTextColor(text_color);
     tft->setTextSize(2);
     tft->fillRect(x,y,width,height,color);
-    tft->drawRect(x,y,width,height,TFT_LIGHTGREY);
+    tft->drawRect(x,y,width,height,text_color);
 
     if (name == " ")
     {
@@ -25,12 +27,14 @@ void KeypadButton::draw()
     tft->drawCentreString(name, x+width/2, y, 2);
 }
 
-void KeypadButton::on_touch()
+void 
+KeypadButton::
+on_touch()
 {
-    tft->setTextColor(TFT_WHITE);
+    tft->setTextColor(text_color);
     tft->setTextSize(2);
-    tft->fillRect(x,y,width,height,TFT_GREEN);
-    tft->drawRect(x,y,width,height,TFT_LIGHTGREY);
+    tft->fillRect(x,y,width,height,touch_color);
+    tft->drawRect(x,y,width,height,text_color);
     if (name == " ")
     {
         tft->drawCentreString("SPACE", x+width/2, y, 2);
@@ -39,12 +43,16 @@ void KeypadButton::on_touch()
     tft->drawCentreString(name, x+width/2, y, 2);
 }
 
-String KeypadButton::get_str()
+String 
+KeypadButton::
+get_str()
 {
     return this->name;
 }
 
-void KeypadButton::set_wrap()
+void 
+KeypadButton::
+set_wrap()
 {
     this->wrap = true;
 }

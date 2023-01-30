@@ -40,9 +40,19 @@ public:
     void 
     init();
 
+    /**
+     * @brief Draws date format: Weekday - Month Year  Hours:Minutes:Seconds  ("%A - %b %Y", "%H:%M:%S")
+     * 
+     * @param forceDraw 
+     */
     void 
     draw(bool forceDraw);
 
+    /**
+     * @brief Adds 1 second to struct tm, to work properly should be called every second
+     * 
+     * @param getUpdate 
+     */
     void 
     add_second(bool getUpdate);
 };

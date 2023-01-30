@@ -1,14 +1,5 @@
 #include "Icons.h"
 
-Icon::Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color)
-{
-    this->size = size;
-    this->x = x;
-    this->y = y;
-    this->tft = tft;
-    this->background_color = background_color;
-}
-
 void Sun::draw()
 {
     tft->fillRect(x,y,size,size,background_color);

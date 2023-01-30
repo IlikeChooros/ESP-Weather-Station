@@ -1,6 +1,8 @@
 #include "WindIcon.h"
 
-Icon* WindIcon::iconMatcher()
+Icon* 
+WindIcon::
+iconMatcher()
 {
     switch(this->_icon)
     {
@@ -13,7 +15,9 @@ Icon* WindIcon::iconMatcher()
     }
 }
 
-void WindIcon::setWeather(Weather* weather) 
+void
+WindIcon::
+setWeather(Weather* weather) 
 {
     uint8_t int_icon;
 
@@ -33,7 +37,9 @@ void WindIcon::setWeather(Weather* weather)
     this->_icon = int_icon;
 }
 
-void WindIcon::draw(bool forceDraw)
+void 
+WindIcon::
+draw(bool forceDraw)
 {
     if (!forceDraw && !this->_redraw)
     {

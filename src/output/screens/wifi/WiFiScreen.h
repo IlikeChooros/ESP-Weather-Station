@@ -7,7 +7,12 @@
 #include "TFT_eSPI.h"
 #include "SPI.h"
 
+#include "../../../data_structures/Point.h"
+
+#ifndef EEPROM_SIZE
 #define EEPROM_SIZE 512
+#endif
+
 #define MAX_PASSWORD_LENGHT 31
 #define MAX_SSID_LENGHT 26 
 
@@ -21,44 +26,35 @@ public:
         int16_t bg_c
     );
 
-    virtual
-    void 
+    virtual void 
     draw() = 0;
 
-    virtual 
-    void 
+    virtual void 
     draw(
         String wifi_name
     ) = 0;
 
-    virtual 
-    String 
+    virtual String 
     get_str() = 0;
 
-    virtual 
-    void 
+    virtual void 
     check(
-        int16_t* pos
+        Point* pos
     ) = 0;
 
-    virtual 
-    void 
+    virtual void 
     scan() = 0;
 
-    virtual 
-    void 
+    virtual void 
     clear_buttons() = 0;
 
-    virtual 
-    bool 
+    virtual bool 
     change() = 0;
 
-    virtual 
-    bool 
+    virtual bool 
     load_main() = 0;
 
-    virtual
-    void 
+    virtual void 
     init() = 0;
 
 protected:

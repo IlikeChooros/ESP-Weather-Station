@@ -30,7 +30,10 @@ public:
     );
 
     void 
-    draw(uint8_t digits, bool forceDraw);
+    draw(
+        uint8_t digits, 
+        bool forceDraw
+    );
 
     void 
     set_x(int16_t x);

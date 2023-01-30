@@ -2,35 +2,43 @@
 
 #include "Arduino.h"
 
-#define CAPACITY 40
+#define CAPACITY 12
 
-template <class T>
+template <typename T>
 class Vector
 {
     short lenght;
     short capacity;
     T* buffer;
 
-    void swap(Vector<T>& vec);
-    void setNewBuffer();
-    void clearMemoryIfNeccessary();
-    void resizeIfNeccessary();
+    void 
+    swap(Vector<T>& vec);
+
+    void 
+    setNewBuffer();
+
+    void 
+    clearMemoryIfNeccessary();
+
+    void 
+    resizeIfNeccessary();
+
     public:
 
-    template <class U, class... U2>
+    template <typename U, typename... U2>
     Vector(U value, U2... rest) : Vector(rest...){
         push_back(value);
     }
-    Vector() : capacity(capacity == 0 ? CAPACITY: 5), lenght(0) {
-        buffer = new T [capacity];
+    Vector() : capacity(CAPACITY), lenght(0) {
+        this->buffer = new T [capacity];
     }
 
     ~Vector(){
         for (short i=0; i < lenght; i++)
         {
-            buffer[i].~T();   
+            (this->buffer+i)->~T();   
         }
-        delete [] buffer;
+        delete [] this->buffer;
     }
 
     /**
@@ -39,7 +47,7 @@ class Vector
      * @param value 
      */
     void
-    push_back(T value);
+    push_back(T& value);
 
     /**
      * @brief Deletes last element
@@ -73,7 +81,7 @@ class Vector
     size() noexcept;
 
     /**
-     * @brief 
+     * @brief Same as [idx] 
      * 
      * @param idx 
      * @return T& 

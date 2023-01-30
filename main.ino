@@ -14,6 +14,8 @@
 // WiFi setup screens
 #include "src/output/screens/wifi/WiFiListScreen.h"
 #include "src/output/screens/wifi/PasswordInputScreen.h"
+#include "src/output/screens/wifi/CityNameInputScreen.h"
+#include "src/output/screens/wifi/CityNameListScreen.h"
 
 //-----------------------------------------
 // Chart screens
@@ -89,6 +91,11 @@ MainScreen** screens = new MainScreen*[X_SCREENS]{
     new Forecast12Screen(&tft, BACKGROUND_COLOR),       // [1][0]
     new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)
 };
+
+
+CityNameInputScreen* city_input = new CityNameInputScreen(&tft, BACKGROUND_COLOR, &wclient, &ts);
+
+CityNameListScreen* city_list = new CityNameListScreen(&tft, BACKGROUND_COLOR, &wclient, &ts);
 ScreenPointItem sci(&tft, 160, 230, BACKGROUND_COLOR);
 
 void refresh();
@@ -339,7 +346,7 @@ void move(uint8_t move)
 
 void wifi_setup()
 {
-    int16_t* pos = ts.read_touch();
+    Point* pos = ts.read_touch();
 
     if(pos)
     {
@@ -354,7 +361,7 @@ void wifi_setup()
             wifi_screens[wifi_screen_idx]->draw();
             
         }
-        delete [] pos;
+        delete pos;
     }
 }
 
@@ -440,40 +447,80 @@ void force_wifi_connection()
     load_saved_wifis();
 }
 
+void
+pick_city()
+{
+    bool city_idx = 0;
+
+    Serial.println("CITY_LIST DRAW");
+    city_list->draw();
+    while(!(city_input->load_main() || city_list->load_main()))
+    {
+        Point* pos = ts.read_touch();
+        if(!pos)
+        {
+            continue;
+        }
+
+        if(city_idx) // 1
+        {
+            city_input->check(pos);
+            city_idx = !city_input->change(); // if true -> idx = 0, else  idx = 1
+
+            if (city_input->change())
+            {
+                tft.fillScreen(BACKGROUND_COLOR);
+                city_list->draw();
+            }
+        }
+        else{ // 0
+            city_list->check(pos);
+            city_idx = city_list->change(); // if true idx = 1, else idx = 0
+
+            if (city_list->change())
+            {
+                tft.fillScreen(BACKGROUND_COLOR);
+                city_input->draw();
+            }
+        }
+        delete pos;
+    }
+
+
+}
+
 void setup()
 {
     Serial.begin(921600);
     tft.init();
     tft.setRotation(3);
-
-    // EEPROM.begin(EEPROM_SIZE);
-    // eeprom_earse(10, 150);
-    // EEPROM.end();
+    
     reset_tft();
     load_saved_wifis();
     int8_t number_of_networks; 
     wifi_screens[0]->init();
 
-    ts.on_left(left);
-    ts.on_right(right);
-    ts.on_down(down);
-    ts.on_up(up);
-    ts.on_sleep(sleep);
-    ts.on_wakeup(wakeup);
+    ts
+    .on_left(left)
+    ->on_right(right)
+    ->on_down(down)
+    ->on_up(up)
+    ->on_sleep(sleep)
+    ->on_wakeup(wakeup);
 
     force_wifi_connection();
 
-    reset_tft();
-    get_http = wclient._init_(CITY_NAME);
-    tft.println("GET_HTTP: "+String(get_http));
+    tft.fillScreen(BACKGROUND_COLOR);
+    Serial.println("INIT");
+    city_list->init();
+    Serial.println("SET CITY INFO");
+    city_list->set_city_info();
 
-    while(!get_http)
-    {
-        tft.println("Retrying wclient init...");
-        get_http = wclient._init_(CITY_NAME);
-        delay(3500);
-    }
+    Serial.println("PICK CITY");
+    pick_city();
 
+    tft.fillScreen(BACKGROUND_COLOR);
+    
     weather = new Weather;
     forecast = new Forecast;
     forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
@@ -495,6 +542,7 @@ void setup()
     }
 
     screens[0]->init();
+    collector->init(weather);
 
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0]->draw(weather, true);

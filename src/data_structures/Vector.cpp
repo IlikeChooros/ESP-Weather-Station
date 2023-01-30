@@ -2,24 +2,20 @@
 
 #include "Vector.h"
 
-template <class T>
+template <typename T>
 void Vector<T>::setNewBuffer()
 {
     T* temp = new T [capacity];
     for (short loop = 0; loop < lenght; loop++)
     {
-        *temp = *buffer;
-        buffer[loop].~T();
-        temp++;
-        buffer++;
+        *(temp+loop)= *(buffer+loop); // faster than temp[i] = buffer[i]
+        (buffer+loop)->~T();
     }
-    temp -= lenght;
-    buffer -= lenght;
     delete [] buffer;
     buffer = temp;
 }
 
-template <class T>
+template <typename T>
 void Vector<T>::resizeIfNeccessary()
 {
     if (lenght != capacity)
@@ -30,7 +26,7 @@ void Vector<T>::resizeIfNeccessary()
     setNewBuffer();
 } 
 
-template <class T>
+template <typename T>
 void Vector<T>::clearMemoryIfNeccessary()
 {
     if (capacity - lenght < CAPACITY+1)
@@ -41,41 +37,41 @@ void Vector<T>::clearMemoryIfNeccessary()
     setNewBuffer();
 }
 
-template <class T>
-void Vector<T>::push_back(T value)
+template <typename T>
+void Vector<T>::push_back(T& value)
 {
     resizeIfNeccessary();
     buffer[lenght] = value;
     lenght++; 
 }   
 
-template <class T>
+template <typename T>
 void Vector<T>::pop_back() noexcept
 {
     clearMemoryIfNeccessary();
     lenght = lenght > 0 ? lenght - 1 : 0;
-    buffer[lenght].~T();
+    (buffer + lenght)->~T();
 } 
 
-template <class T>
+template <typename T>
 void Vector<T>::emplace(short idx, T value)
 {
-    this->buffer[idx] = value;
+    *(buffer + idx) = value;
 } 
 
-template <class T>
+template <typename T>
 bool Vector<T>::is_empty() noexcept
 {
     return lenght == 0;
 }
 
-template <class T>
+template <typename T>
 short Vector<T>::size() noexcept
 {
     return lenght;
 }
 
-template <class T>
+template <typename T>
 void Vector<T>::swap(Vector<T>& vec)
 {
     T* buf = vec.buffer_();
@@ -87,54 +83,50 @@ void Vector<T>::swap(Vector<T>& vec)
     {
         if (loop < vec.size())
         {
-            *temp = *buf;
-            temp++;
-            buf++;
+            *(temp+loop) = *(buf+loop);
         }
         if (loop < lenght)
         {
-            buffer[loop].~T();
+            (buffer + loop)->~T();
         }
         
     }
     lenght = vec.size();
-    temp -= lenght;
-    buf -= lenght;
     delete [] buffer;
     buffer = temp;
 }
 
-template <class T>
+template <typename T>
 T& Vector<T>::at(short idx)
 {
     if (idx >= 0 && idx < lenght)
     {
-        return buffer[idx];
+        return *(buffer+idx);
     }
     T value;
     return value;
 }
 
-template <class T>
+template <typename T>
 T& Vector<T>::operator[] (short idx)
 {
-    return buffer[idx];
+    return *(buffer + idx);
 }
 
-template<class T>
+template<typename T>
 Vector<T>& Vector<T>::operator=(Vector<T>& vec)
 {
     swap(vec);
     return *this;
 }
 
-template <class T>
+template <typename T>
 T* Vector<T>::buffer_() noexcept
 {
     return buffer;
 }
 
-template <class T>
+template <typename T>
 short Vector<T>::capacity_() noexcept
 {
     return capacity;

@@ -1,27 +1,8 @@
 #include "DigitObject.h"
 
-DigitObject::DigitObject(
-    TFT_eSPI *tft, 
-    int16_t x, 
-    int16_t y, 
-    uint8_t size, 
-    uint8_t font, 
-    int16_t bg_c
-)
-{
-    this->tft = tft;
-    this->x = x;
-    this->y = y;
-    this->size = size;
-    this->font = font;
-    this->bg_c = bg_c;
-    currentDigit = 0;
-    prevDigit = 0;
-}
-
-
 void 
-DigitObject::draw(
+DigitObject::
+draw(
     int8_t digit, 
     bool forceDraw
 )
@@ -43,7 +24,8 @@ DigitObject::draw(
     prevDigit = currentDigit;
 }
 void 
-DigitObject::set_digit(
+DigitObject::
+set_digit(
     int8_t digit
 )
 {
@@ -52,7 +34,8 @@ DigitObject::set_digit(
 }
 
 void 
-DigitObject::set_x_y(
+DigitObject::
+set_x_y(
     int16_t x, 
     int16_t y
 )

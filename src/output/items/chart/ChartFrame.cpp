@@ -1,6 +1,14 @@
 #include "ChartFrame.h"
 
-void draw_arrow_up(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 height, ui8 arrow_lenght, ui16 color)
+void 
+draw_arrow_up(
+    TFT_eSPI* tft, 
+    ui16 starting_x, 
+    ui16 starting_y, 
+    ui16 height, 
+    ui8 arrow_lenght, 
+    ui16 color
+)
 {
     tft->drawFastVLine(starting_x, starting_y-height, height, color);
 
@@ -9,7 +17,15 @@ void draw_arrow_up(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 height,
     tft->drawLine(starting_x + SQRT_2_DIV_2*arrow_lenght, y, starting_x, starting_y - height, color);
 }
 
-void draw_arrow_down(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 height, ui8 arrow_lenght, ui16 color)
+void 
+draw_arrow_down(
+    TFT_eSPI* tft, 
+    ui16 starting_x, 
+    ui16 starting_y, 
+    ui16 height, 
+    ui8 arrow_lenght, 
+    ui16 color
+)
 {
     tft->drawFastVLine(starting_x, starting_y, height, color);
 
@@ -18,7 +34,15 @@ void draw_arrow_down(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 heigh
     tft->drawLine(starting_x + SQRT_2_DIV_2*arrow_lenght, y, starting_x, starting_y + height, color);
 }
 
-void draw_arrow_left(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 width, ui8 arrow_lenght, ui16 color)
+void 
+draw_arrow_left(
+    TFT_eSPI* tft, 
+    ui16 starting_x, 
+    ui16 starting_y, 
+    ui16 width, 
+    ui8 arrow_lenght, 
+    ui16 color
+)
 {
     tft->drawFastHLine(starting_x, starting_y, width, color);
 
@@ -29,7 +53,8 @@ void draw_arrow_left(TFT_eSPI* tft, ui16 starting_x, ui16 starting_y, ui16 width
 
 
 void
-ChartFrameVFull::draw(bool forceDraw)
+ChartFrameVFull::
+draw(bool forceDraw)
 {
     if (!forceDraw)
     {
@@ -68,19 +93,22 @@ ChartFrameVFull::draw(bool forceDraw)
 }
 
 ui16
-ChartFrameVFull::get_y(i16 data)
+ChartFrameVFull::
+get_y(i16 data)
 {
     return data > 0 ? (MIDDLE_Y - data*scale_positive) : (MIDDLE_Y - data*scale_negative);
 }
 
 ui16
-ChartFrameVUp::get_y(i16 data)
+ChartFrameVUp::
+get_y(i16 data)
 {
     return MIDDLE_Y - data*scale;
 }
 
 void
-ChartFrameVUp::draw(bool forceDraw)
+ChartFrameVUp::
+draw(bool forceDraw)
 {
     if (!forceDraw)
     {
@@ -112,7 +140,9 @@ ChartFrameVUp::draw(bool forceDraw)
 
 
 
-void ChartFrameTime::draw(bool forceDraw)
+void 
+ChartFrameTime::
+draw(bool forceDraw)
 {
     if(!forceDraw)
     {

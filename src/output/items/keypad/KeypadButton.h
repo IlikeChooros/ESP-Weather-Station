@@ -15,6 +15,12 @@ class KeypadButton: public TouchButton
 
     String name;
 
+    uint16_t 
+    touch_color;
+
+    uint16_t 
+    text_color;
+
     bool wrap;
 
     public:
@@ -26,7 +32,9 @@ class KeypadButton: public TouchButton
         int16_t height, 
         String name
     ): TouchButton(x,y,width,height),
-    name(name), wrap(false), tft(tft)
+    name(name), wrap(false), tft(tft),
+    touch_color(0x2104),
+    text_color(TFT_LIGHTGREY)
     {}
 
     void 
@@ -34,6 +42,16 @@ class KeypadButton: public TouchButton
 
     void 
     on_touch();
+
+    void
+    set_on_touch_color
+    (uint16_t color)
+    {touch_color = color;}
+
+    void
+    set_text_color
+    (uint16_t color)
+    {text_color = color;}
     
     /**
      * @brief Set wrapping of the text

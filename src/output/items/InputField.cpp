@@ -17,7 +17,8 @@ InputField::InputField(
 }
 
 void 
-InputField::draw()
+InputField::
+draw()
 {
     tft->setTextSize(2);
     tft->setTextFont(2);
@@ -41,7 +42,8 @@ InputField::draw()
 
 
 void 
-InputField::add_input(
+InputField::
+add_input(
     String input
 )
 {
@@ -50,13 +52,15 @@ InputField::add_input(
 }
 
 String 
-InputField::get_input()
+InputField::
+get_input()
 {
     return this->input;
 }
 
 void 
-InputField::del()
+InputField::
+del()
 {
     if (input == "" || input.length() == 0)
     {

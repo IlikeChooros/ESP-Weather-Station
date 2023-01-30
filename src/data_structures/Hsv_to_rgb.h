@@ -1,5 +1,4 @@
-#ifndef HSV_TO_RGB_H
-#define HSV_TO_RGB_H
+#pragma once
 
 #define TEMP_RANGE 35
 
@@ -15,7 +14,11 @@ public:
 
 inline
 uint16_t
-to_rgb(uint8_t r, uint8_t g, uint8_t b)
+to_rgb(
+    uint8_t r, 
+    uint8_t g, 
+    uint8_t b
+)
 {
     uint32_t RGB;
     r = (r >> 3);
@@ -31,7 +34,9 @@ to_rgb(uint8_t r, uint8_t g, uint8_t b)
 
 inline
 uint16_t
-HSV_RGB(HSV color)
+HSV_RGB(
+    HSV color
+)
 {
     float s = color.satrutaion / 100;
     float v = color.value / 100;
@@ -75,7 +80,9 @@ HSV_RGB(HSV color)
 
 inline
 uint16_t
-convert_to_idx(int16_t t)
+convert_to_idx(
+    int16_t t
+)
 {
     int16_t temp = t + 10;
     temp = temp > TEMP_RANGE ? TEMP_RANGE : temp;
@@ -108,7 +115,10 @@ set_text_colors()
 
 inline
 uint16_t
-get_text_color(int16_t temp, uint16_t *temp_text_colors)
+get_text_color(
+    int16_t temp, 
+    uint16_t *temp_text_colors
+)
 {
     return temp_text_colors[convert_to_idx(temp)];
 }
@@ -121,7 +131,9 @@ get_text_color(int16_t temp, uint16_t *temp_text_colors)
  */
 inline
 uint16_t*
-get_colors_grey_fade(uint8_t number_of_colors)
+get_colors_grey_fade(
+    uint8_t number_of_colors
+)
 {
     uint16_t *colors = new uint16_t[number_of_colors];
     HSV *hsv = new HSV;
@@ -142,5 +154,3 @@ get_colors_grey_fade(uint8_t number_of_colors)
     delete hsv;
     return colors;
 }
-
-#endif

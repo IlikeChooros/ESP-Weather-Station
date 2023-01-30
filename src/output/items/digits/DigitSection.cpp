@@ -1,6 +1,14 @@
 #include "DigitSection.h"
 
-DigitSection::DigitSection(TFT_eSPI *tft, int16_t x, int16_t y, uint8_t size, uint8_t font, int16_t bg_c, bool putColonOnTheEnd)
+DigitSection::DigitSection(
+    TFT_eSPI *tft, 
+    int16_t x, 
+    int16_t y, 
+    uint8_t size, 
+    uint8_t font, 
+    int16_t bg_c, 
+    bool putColonOnTheEnd
+)
 {
     this->tft = tft;
     this-> x = x;
@@ -15,7 +23,12 @@ DigitSection::DigitSection(TFT_eSPI *tft, int16_t x, int16_t y, uint8_t size, ui
 
 }
 
-void DigitSection::draw(uint8_t digits, bool forceDraw)
+void 
+DigitSection::
+draw(
+    uint8_t digits, 
+    bool forceDraw
+)
 {
     digitsObj[LEFT_DIGIT]->draw(digits / 10, forceDraw);
     digitsObj[RIGHT_DIGIT]->draw(digits % 10, forceDraw);
@@ -26,7 +39,9 @@ void DigitSection::draw(uint8_t digits, bool forceDraw)
     }
 }
 
-void DigitSection::set_x(int16_t x)
+void
+DigitSection::
+set_x(int16_t x)
 {
     this->x = x;
     digitsObj[LEFT_DIGIT]->set_x_y(x, y);

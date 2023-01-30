@@ -1,6 +1,12 @@
 #include "WiFiItem.h"
 
-WiFiItem::WiFiItem(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color)
+WiFiItem::WiFiItem(
+    TFT_eSPI *tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t background_color
+)
 {
     this->tft = tft;
     this->x = x;
@@ -12,7 +18,9 @@ WiFiItem::WiFiItem(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t
     this->prev_idx = STRONG_WIFI;
 }
 
-void WiFiItem::draw(bool forceDraw)
+void 
+WiFiItem::
+draw(bool forceDraw)
 {
     Icon* icon = matchIcon();
     if (!forceDraw && prev_idx == idx)
@@ -25,7 +33,9 @@ void WiFiItem::draw(bool forceDraw)
     delete icon;
 }
 
-Icon* WiFiItem::matchIcon()
+Icon* 
+WiFiItem::
+matchIcon()
 {
     int8_t strenght = WiFi.RSSI();
     prev_idx = idx;

@@ -31,7 +31,7 @@ class ChartItem
     TFT_eSPI *tft;
     Vector<WeatherData> data;
 
-    public:
+public:
 
     explicit ChartItem(
         TFT_eSPI *tft,

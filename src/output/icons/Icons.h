@@ -1,5 +1,4 @@
-#ifndef ICON_DRAWER_H
-#define ICON_DRAWER_H
+#pragma once
 
 #include "drawings.h"
 
@@ -17,11 +16,20 @@
 
 class Icon
 {
-    public:
-    explicit Icon(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color);
-    virtual void draw() = 0;
+public:
+    explicit Icon(
+        TFT_eSPI *tft,
+        uint16_t x, 
+        uint16_t y, 
+        uint8_t size, 
+        uint16_t background_color
+    ): x(x), y(y), size(size), tft(tft), 
+    background_color(background_color) {}
 
-    protected:
+    virtual void 
+    draw() = 0;
+
+protected:
     TFT_eSPI *tft;
     uint16_t x;
     uint16_t y;
@@ -242,5 +250,3 @@ class WiFiStrenghtWeak: public Icon
     WiFiStrenghtWeak(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t background_color):Icon(tft,x,y,size,background_color){}
     void draw();
 };
-
-#endif

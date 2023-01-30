@@ -10,16 +10,54 @@ WeatherClient::WeatherClient(HTTPClient* http, uint32_t cacheTime)
     this->cacheTime = cacheTime;
 }
 
+City_info*
+WeatherClient::
+get_city_info(String city_name)
+{
+    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
+    int16_t http_code = http->GET();
+
+    String payload = http->getString();
+
+    City_info* data;
+
+    if (http_code == 200)
+    {
+        data = new City_info;
+        StaticJsonDocument<200> filter;
+        filter[0]["lat"] = true;
+        filter[0]["lon"] = true;
+        filter[0]["country"] = true;
+        filter[0]["state"] = true;
+
+        StaticJsonDocument<200> doc;
+        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
+
+        _lat = doc[0]["lat"].as<double>();
+        _lon = doc[0]["lon"].as<double>();
+
+        data->name = city_name;
+        data->country = doc[0]["country"].as<String>();
+        data->state = doc[0]["state"].as<String>();
+        data->lat = _lat;
+        data->lon = _lon;
+    }
+
+    http->end();
+
+    return data;
+}
+
 bool WeatherClient::_init_(String city_name)
 {
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
 
     int16_t http_code = http->GET();
     bool isSuccesful = http_code == 200;
+
+    String payload = http->getString();
     if (isSuccesful)
     {
-        String payload = http->getString();
-
         StaticJsonDocument<100> filter;
         filter[0]["lat"] = true;
         filter[0]["lon"] = true;

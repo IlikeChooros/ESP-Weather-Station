@@ -17,8 +17,10 @@ class DropletItem: public WeatherItem
     double pop;
     uint8_t idx_icon;
 
-    Icon* matchIcon();
-    public:
+    Icon* 
+    matchIcon();
+    
+public:
     DropletItem(
         TFT_eSPI *_tft, 
         uint16_t x, 
@@ -27,8 +29,12 @@ class DropletItem: public WeatherItem
         uint16_t background_color
     ): WeatherItem(_tft,x,y,background_color),
     size(size), pop(-1){}
-    void draw(bool forceDraw);
-    void setWeather(Weather* weather);
+
+    void 
+    draw(bool forceDraw);
+
+    void 
+    setWeather(Weather* weather);
 };
 
 

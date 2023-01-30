@@ -1,11 +1,19 @@
-#ifndef DRAWINGS_H
-#define DRAWINGS_H
+#pragma once
 
 #include <Arduino.h>
 #include <TFT_eSPI.h> 
 #include <SPI.h>
 
-void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color,uint16_t fade_color ,uint16_t background_color)
+void inline 
+drawCloud(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t color,
+    uint16_t fade_color,
+    uint16_t background_color
+)
 {
     //Cloud drawing
     // circles on the right and left
@@ -30,7 +38,15 @@ void inline drawCloud(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint1
 }
 
 
-void inline drawSun(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawSun(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.50f, color, background_color);
 
@@ -56,13 +72,31 @@ void inline drawSun(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_
     }
 }
 
-void inline drawMoon(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawMoon(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     tft->fillSmoothCircle(x+0.45f*size, y + 0.5f*size, 0.45f*size, color, background_color);
     tft->fillSmoothCircle(x+0.65f*size, y + 0.42f*size, 0.4f*size, background_color, background_color);
 }
 
-void inline drawSnowflake(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t filler_circle_color , uint16_t color, uint16_t background_color)
+
+void inline 
+drawSnowflake(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t filler_circle_color, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     uint16_t Ax,Ay,Bx,By, xc = 0.5f*size + x, yc = 0.5f*size + y;
 
@@ -128,7 +162,15 @@ void inline drawSnowflake(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, u
     tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.06f*size, filler_circle_color);
 }
 
-void inline drawMist (TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawMist (
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     // lines going from down to up
     uint16_t ax = 0.3f*size + x,
@@ -177,10 +219,19 @@ void inline drawMist (TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint1
     tft->drawWideLine(ax,ay,bx,by, 0.05f*size, color, background_color);
 }
 
-void inline drawSingleWindString(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size ,uint16_t lenght, uint8_t thickness ,uint16_t color, uint16_t background_color, bool reversed)
+void inline 
+drawSingleWindString(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size,
+    uint16_t lenght, 
+    uint8_t thickness,
+    uint16_t color, 
+    uint16_t background_color, 
+    bool reversed
+)
 {
-  
-
     if (!reversed)
     {
         tft->fillCircle(x + (size + lenght)*0.5f, y+0.3f*size, 0.2f*size, color);
@@ -197,13 +248,28 @@ void inline drawSingleWindString(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t 
     tft->drawWideLine(x + (size - lenght)*0.5f, y+0.5f*size,x + (size + lenght)*0.5f, y+0.5f*size, thickness, color, background_color);
 }
 
-void inline drawDroplet(TFT_eSPI *tft,uint16_t x, uint16_t y, uint16_t size, uint16_t color)
+void inline 
+drawDroplet(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t size, 
+    uint16_t color
+)
 {
     tft->fillCircle(x+size/2, y + size*0.7f, size*0.3f, color);
     tft->fillTriangle(x+0.2f*size, y + 0.7f*size, x + 0.8f*size, y + 0.7f*size, x + 0.5f*size, y, color);
 }
 
-void inline drawWifi(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawWifi(
+    TFT_eSPI *tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     // first line
     tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, color);
@@ -219,7 +285,15 @@ void inline drawWifi(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16
     tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, color);
 }
 
-void inline drawLockOpened(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawLockOpened(
+    TFT_eSPI *tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     tft->fillRect(x,y,size,size,background_color);
 
@@ -233,7 +307,15 @@ void inline drawLockOpened(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, 
     tft->fillRect(x+0.4f*size,y+0.3f*size,0.5f*size, 0.6f*size, color);
 }
 
-void inline drawLockLocked(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, uint16_t color, uint16_t background_color)
+void inline 
+drawLockLocked(
+    TFT_eSPI *tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t color, 
+    uint16_t background_color
+)
 {
     tft->fillRect(x,y,size,size,background_color);
 
@@ -244,4 +326,23 @@ void inline drawLockLocked(TFT_eSPI *tft, uint16_t x, uint16_t y, uint8_t size, 
 
     tft->fillRect(x+0.4f*size,y+0.3f*size,0.6f*size, 0.7f*size, color);
 }
-#endif
+
+inline
+void
+drawPickIcon(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t color
+)
+{
+    uint8_t size_2 = size*0.2f;
+    uint16_t st_y = y + 0.7f*size, end_x = x+0.6f*size;
+
+    for (uint8_t i=0; i<size_2; i++)
+    {
+        tft->drawLine(x, st_y+i, end_x, y+size+i, color);
+        tft->drawLine(end_x, y+size+i, x+size, y+i, color);
+    }
+}

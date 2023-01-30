@@ -30,8 +30,8 @@ class ChartFrameVFull: public ChartItem
         uint16_t color,
         uint16_t starting_x,
         String name
-    ): ChartItem(tft, color, starting_x) 
-    {this->name = name;}
+    ): ChartItem(tft, color, starting_x),
+    name(name) {}
 
     /**
      * @brief Draws chart frame.
@@ -81,8 +81,8 @@ class ChartFrameVUp: public ChartItem
         uint16_t color,
         uint16_t starting_x,
         String name
-    ): ChartItem(tft, color, starting_x) 
-    {this->name = name;}
+    ): ChartItem(tft, color, starting_x),
+    name(name) {}
 
     void
     draw(bool forceDraw);

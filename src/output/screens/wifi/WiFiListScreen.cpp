@@ -49,11 +49,14 @@ void WiFiListScreen::scan()
     }
 }
 
-void WiFiListScreen::check(int16_t* pos)
+void 
+WiFiListScreen::check(
+    Point* pos
+)
 {
     for (uint8_t i=0; i<number_of_networks; i++)
     {
-        if (wifis[i]->check(pos[0], pos[1]))
+        if (wifis[i]->check(pos->x, pos->y))
         {
             picked_wifi = wifis[i]->get_ssid();
             if (wifis[i]->is_saved())
@@ -67,7 +70,7 @@ void WiFiListScreen::check(int16_t* pos)
     }
 
     // Already got refresh function
-    refresh_button->check(pos[0], pos[1]);
+    refresh_button->check(pos->x, pos->y);
 }
 
 void WiFiListScreen::connect_to_wifi()

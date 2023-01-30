@@ -1,6 +1,8 @@
 #include "DropletItem.h"
 
-void DropletItem::draw(bool forceDraw)
+void 
+DropletItem::
+draw(bool forceDraw)
 {
     if (!forceDraw && !redraw)
     {
@@ -12,7 +14,9 @@ void DropletItem::draw(bool forceDraw)
     delete icon;
 }
 
-void DropletItem::setWeather(Weather* weather)
+void 
+DropletItem::
+setWeather(Weather* weather)
 {
     redraw = pop != weather->_pop;
     pop = weather->_pop;
@@ -38,7 +42,8 @@ void DropletItem::setWeather(Weather* weather)
     }
 }
 
-Icon* DropletItem::matchIcon()
+Icon* 
+DropletItem::matchIcon()
 {
     switch (idx_icon)
     {

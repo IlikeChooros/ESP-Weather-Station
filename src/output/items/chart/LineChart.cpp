@@ -176,13 +176,15 @@ draw_dots_chart(
 }
 
 void
-LineCharTemp::draw(bool forceDraw)
+LineCharTemp::
+draw(bool forceDraw)
 {
     draw_line_chart(tft, TEMP_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
 }
 
 void
-LineCharTemp::set_data(Vector<WeatherData>& data)
+LineCharTemp::
+set_data(Vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -191,13 +193,15 @@ LineCharTemp::set_data(Vector<WeatherData>& data)
 
 //Feels like
 void
-LineChartFeelsLike::draw(bool forceDraw)
+LineChartFeelsLike::
+draw(bool forceDraw)
 {
     draw_line_chart(tft, FEELS_IDX, data, starting_x_,pixel_offset, color, scale_positive, scale_negative);
 }
 
 void
-LineChartFeelsLike::set_data(Vector<WeatherData>& data)
+LineChartFeelsLike::
+set_data(Vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -206,13 +210,15 @@ LineChartFeelsLike::set_data(Vector<WeatherData>& data)
 
 // Pop
 void
-LineChartPop::draw(bool forceDraw)
+LineChartPop::
+draw(bool forceDraw)
 {
     draw_line_chart(tft, POP_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
 }
 
 void
-LineChartPop::set_data(Vector<WeatherData>& data)
+LineChartPop::
+set_data(Vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -220,13 +226,15 @@ LineChartPop::set_data(Vector<WeatherData>& data)
 
 // Humidity
 void
-LineChartHumidity::draw(bool forceDraw)
+LineChartHumidity::
+draw(bool forceDraw)
 {
     draw_line_chart(tft, HUM_IDX, data, starting_x_,pixel_offset, color, scale, 0.0f);
 }
 
 void
-LineChartHumidity::set_data(Vector<WeatherData>& data)
+LineChartHumidity::
+set_data(Vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);

@@ -1,10 +1,10 @@
-#ifndef TOUCH_SCREEN_H
-#define TOUCH_SCREEN_H
+#pragma once
 
 #include <TFT_eSPI.h>
 #include <SPI.h>
 
 #include "TouchButton.h"
+#include "../data_structures/Point.h"
 
 #define VERTICAL_VAL 15
 #define HORIZONTAL_VAL 20
@@ -39,17 +39,72 @@ class TouchScreen
     void (*_on_wakeup)();
 
     public:
-    TouchScreen(TFT_eSPI *tft ,uint16_t* touchData);
-    void read();
-    int16_t* read_touch();
-    void on_left(void(*)(void));
-    void on_right(void(*)(void));
-    void on_up(void(*)(void));
-    void on_down(void(*)(void));
-    void on_sleep(void(*)());
-    void on_wakeup(void(*)());
+    TouchScreen(
+        TFT_eSPI *tft ,
+        uint16_t* touchData
+    );
+    /**
+     * @brief Will read the TFT screen, if touched, based on the screen fragmentation, the following fuctions will be called:
+     * on_left, on_right, on_up, on_down, if they werent set, nothing will happen
+     */
+    void 
+    read();
+
+    /**
+     * @brief Reads for pixel coordinates of touch
+     * 
+     * @return Point* if touch screen wasnt touched Point* = 0, else it was allocated via operator new, so it must be deleted
+     */
+    Point* 
+    read_touch();
+
+    /**
+     * @brief Set function to be called when screens is touched on the left side
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen* 
+    on_left(void(*)(void));
+
+    /**
+     * @brief Set function to be called when screens is touched on the right side
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen* 
+    on_right(void(*)(void));
+
+    /**
+     * @brief Set function to be called when screens is touched on the upper side
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen* 
+    on_up(void(*)(void));
+
+    /**
+     * @brief Set function to be called when screens is touched on the down side
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen*
+    on_down(void(*)(void));
+
+    /**
+     * @brief When screen isnt touched for at least 1 minute, the parsed function will be activated, only once in the 'sleep mode'
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen*
+    on_sleep(void(*)());
+
+    /**
+     * @brief When in 'sleep mode', after touching the screen parsed function will be activated, note that other on touch function wont be activaed:
+     * on_left, on_right etc.
+     * 
+     * @return TouchScreen* pointer to this object
+     */
+    TouchScreen* 
+    on_wakeup(void(*)());
+
 };
-
-
-
-#endif
