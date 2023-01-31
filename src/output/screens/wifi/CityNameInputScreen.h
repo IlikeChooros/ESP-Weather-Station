@@ -2,7 +2,9 @@
 
 #include "CityNameScreen.h"
 #include "../../items/keypad/Keyboard.h"
+#include "../../items/keypad/CustomButton.h"
 #include "../../items/InputField.h"
+
 
 
 class CityNameInputScreen: public CityNameScreen
@@ -10,7 +12,7 @@ class CityNameInputScreen: public CityNameScreen
     Keyboard* keyboard;
     InputField* inputfield;
 
-    KeypadButton* enter_button;
+    CustomButton* enter_button;
     KeypadButton* return_button;
 
     void
@@ -29,11 +31,13 @@ public:
     {
         keyboard = new Keyboard(tft);
         inputfield = new InputField(tft, 40, 20, 230, 40);
-        enter_button = new KeypadButton(tft, 275, 20, 35, 40, "+");
-        return_button = new KeypadButton(tft, 0,0, 25, 25, "X");
-        enter_button->set_color(0x3CE6);
-        enter_button->set_on_touch_color(0x19E2);
 
+        enter_button = new CustomButton(tft, 275, 20, 35, 40,0x3CE6);
+        enter_button
+        ->set_draw(drawTickButton)
+        ->touch_color(0x19E2);
+
+        return_button = new KeypadButton(tft, 5, 5, 30, 30, "x");
         return_button->set_color(TFT_RED);
     }
 

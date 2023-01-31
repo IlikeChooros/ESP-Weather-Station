@@ -30,12 +30,12 @@ drawRefreshButton(
     tft->drawCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color);
 
     // on left
-    tft->drawWideLine(x+0.1f*size, y+0.4f*size, x+0.2f*size, y+0.5f*size, size*0.05f, TFT_WHITE, TFT_WHITE);
-    tft->drawWideLine(x+0.2f*size, y+0.5f*size, x+0.3f*size, y+0.4f*size, size*0.05f, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.1f*size, y+0.4f*size, x+0.2f*size, y+0.5f*size, size*0.03f, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.2f*size, y+0.5f*size, x+0.3f*size, y+0.4f*size, size*0.03f, TFT_WHITE, TFT_WHITE);
 
     // on right
-    tft->drawWideLine(x+0.7f*size, y+0.6f*size, x+0.8f*size, y+0.5f*size, size*0.05f, TFT_WHITE, TFT_WHITE);
-    tft->drawWideLine(x+0.8f*size, y+0.5f*size, x+0.9f*size, y+0.6f*size, size*0.05f, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.7f*size, y+0.6f*size, x+0.8f*size, y+0.5f*size, size*0.03f, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.8f*size, y+0.5f*size, x+0.9f*size, y+0.6f*size, size*0.03f, TFT_WHITE, TFT_WHITE);
 }
 
 inline
@@ -51,10 +51,10 @@ drawTickButton(
     tft->fillRect(x,y,size,size,color);
     tft->drawRect(x,y,size,size, TFT_LIGHTGREY);
 
-    uint16_t st_y = y + 0.4f*size, end_x = x+0.5f*size;
+    uint16_t st_y = y + 0.5f*size, end_x = x+0.5f*size;
 
-    tft->drawWideLine(x+0.2f*size, st_y, end_x, y+size*0.75f, 0.08f*size, TFT_WHITE, TFT_WHITE);
-    tft->drawWideLine(end_x, y+size*0.75f, x+0.85f*size, y+0.15f*size, 0.08f*size, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.22f*size, st_y, end_x, y+size*0.7f, 0.03f*size, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(end_x, y+size*0.7f, x+0.8f*size, y+0.2f*size, 0.03f*size, TFT_WHITE, TFT_WHITE);
 }
 
 inline

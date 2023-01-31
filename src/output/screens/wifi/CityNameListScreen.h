@@ -41,6 +41,8 @@ public:
         input_city->set_color(0x10A3);
         input_city->set_on_touch_color(0x0861);
         wifi = new WiFiItem(tft, 5,5,20, bg_c);
+
+        
     }
 
     /**
