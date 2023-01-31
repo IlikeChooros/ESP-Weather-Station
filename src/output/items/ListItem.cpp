@@ -30,7 +30,7 @@ draw(uint16_t color)
 
         if (!data.at(j).same_line)
         {
-            y += data.at(j).font*data.at(j).size*5;
+            y += data.at(j).font*data.at(j).size*5+5;
             x = this->x+5;
         }
 

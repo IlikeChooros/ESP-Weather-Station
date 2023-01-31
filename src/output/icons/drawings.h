@@ -337,12 +337,8 @@ drawPickIcon(
     uint16_t color
 )
 {
-    uint8_t size_2 = size*0.2f;
     uint16_t st_y = y + 0.7f*size, end_x = x+0.6f*size;
 
-    for (uint8_t i=0; i<size_2; i++)
-    {
-        tft->drawLine(x, st_y+i, end_x, y+size+i, color);
-        tft->drawLine(end_x, y+size+i, x+size, y+i, color);
-    }
+    tft->drawWideLine(x, st_y, end_x, y+size, 0.3f*size, color);
+    tft->drawWideLine(end_x, y+size, x+size, y, 0.3f*size, color);
 }

@@ -8,7 +8,7 @@ init()
 
     number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX-1);
 
-    number_of_saved_city_names = number_of_saved_city_names < 5 ? number_of_saved_city_names : 4;
+    number_of_saved_city_names = number_of_saved_city_names < MAX_CITIES ? number_of_saved_city_names : MAX_CITIES;
 
     if (number_of_saved_city_names>0)
     {
@@ -77,10 +77,8 @@ void
 CityNameListScreen::
 draw()
 {
-    Serial.println("WIFI DRAW");
     wifi->draw(true);
 
-    Serial.println("FOR DRAW");
     for (uint8_t i=0; i<number_of_saved_city_names; ++i)
     {
         saved_city_names[i]->draw();
@@ -94,6 +92,5 @@ draw()
         tft->setTextSize(2);
         tft->print("No saved locations.");
     }
-    Serial.println("INPUT DRAW");
     input_city->draw();
 }

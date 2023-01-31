@@ -1,8 +1,10 @@
 #ifndef WIFI_LIST_SCREEN_H
 #define WIFI_LIST_SCREEN_H
 
+
 #include "../../items/wifi/WiFiListItem.h"
 #include "../../items/keypad/KeypadButton.h"
+#include "../../items/keypad/CustomButton.h"
 #include "WiFiScreen.h"
 
 #define HEIGHT 30
@@ -12,7 +14,7 @@
 class WiFiListScreen: public WiFiScreen
 {
     WiFiListItem** wifis;
-    TouchButton* refresh_button;
+    CustomButton* refresh_button;
 
     int8_t number_of_networks;
 
@@ -40,9 +42,11 @@ class WiFiListScreen: public WiFiScreen
         change_ = false;
         load_main_ = false;
 
-        refresh_button = new KeypadButton(tft, 285, 10, 30, 30, "O");
-        refresh_button->set_color(TFT_DARKGREEN);
+        refresh_button = new CustomButton(tft, 285, 10, 30, 30, 0x3CE6);
         refresh_button->set_on_press(refresh_func);
+        refresh_button
+        ->set_draw(drawRefreshButton)
+        ->touch_color(0x19E2);
     }
 
     void 

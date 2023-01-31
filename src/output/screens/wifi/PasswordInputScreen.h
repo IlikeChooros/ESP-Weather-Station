@@ -3,6 +3,7 @@
 
 #include "WiFiScreen.h"
 
+#include "../../items/keypad/CustomButton.h"
 #include "../../items/keypad/Keyboard.h"
 #include "../../items/InputField.h"
 
@@ -11,7 +12,7 @@ class PasswordInputScreen: public WiFiScreen
     Keyboard* keyboard;
     InputField* inputfield;
 
-    KeypadButton* enter_button;
+    CustomButton* enter_button;
     KeypadButton* exit_button;
 
     String wifi_name;
@@ -31,9 +32,10 @@ class PasswordInputScreen: public WiFiScreen
     ): WiFiScreen(tft, bg_c), counter(0), change_(false),
     load_main_(false), wifi_name("") 
     {
-        enter_button = new KeypadButton(tft, 275, 20, 35, 40, "+");
-        enter_button->set_color(0x3CE6);
-        enter_button->set_on_touch_color(0x19E2);
+        enter_button = new CustomButton(tft, 275, 20, 35, 40,0x3CE6);
+        enter_button
+        ->set_draw(drawTickButton)
+        ->touch_color(0x19E2);
 
         exit_button = new KeypadButton(tft, 5, 5, 30, 30, "x");
         exit_button->set_color(TFT_RED);

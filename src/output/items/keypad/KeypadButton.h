@@ -23,6 +23,9 @@ class KeypadButton: public TouchButton
 
     bool wrap;
 
+    void
+    draw(uint16_t color);
+
     public:
     KeypadButton(
         TFT_eSPI* tft, 
