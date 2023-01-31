@@ -82,8 +82,8 @@ SleepScreen::reset()
         ->tft(tft)
         ->height(4)
         ->width(4)
-        ->x(esp_random()%(tft->width()+1))
-        ->y(esp_random()%(tft->height()+1))
+        ->x((esp_random()%(tft->width()-40)+20)) // from 20 to 299
+        ->y((esp_random()%(tft->height()-40)+20)) // from 20 to 219
         ->rest();
         rects.push_back(*rect);
         delete rect;
