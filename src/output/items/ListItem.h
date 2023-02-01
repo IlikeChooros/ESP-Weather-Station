@@ -42,7 +42,7 @@ public:
     draw(uint16_t color);
 
     void 
-    draw();
+    draw(const bool forceDraw) const;
 
     void
     on_touch();

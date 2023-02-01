@@ -60,5 +60,5 @@ public:
     check(Point* pos);
 
     void
-    draw();
+    draw(bool forceDraw);
 };

@@ -33,7 +33,7 @@ class Keypad
         String right_slider
     );
     void 
-    draw();
+    draw(bool forceDraw);
 
     void 
     re_draw(uint8_t idx);

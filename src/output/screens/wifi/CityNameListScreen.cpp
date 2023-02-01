@@ -50,6 +50,11 @@ set_city_info()
         Serial.println("LON: "+String(info->lon));
         Serial.println("STATE: "+info->state);
 
+        if (info->state == "null")
+        {
+            info->state = "";
+        }
+
         saved_city_names[i]
         ->set_data(info->name, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
@@ -75,13 +80,13 @@ check(Point* pos)
 
 void
 CityNameListScreen::
-draw()
+draw(bool forceDraw)
 {
-    wifi->draw(true);
+    wifi->draw(forceDraw);
 
     for (uint8_t i=0; i<number_of_saved_city_names; ++i)
     {
-        saved_city_names[i]->draw();
+        saved_city_names[i]->draw(forceDraw);
     }
 
     if (number_of_saved_city_names<1)
@@ -92,5 +97,5 @@ draw()
         tft->setTextSize(2);
         tft->print("No saved locations.");
     }
-    input_city->draw();
+    input_city->draw(forceDraw);
 }

@@ -2,8 +2,12 @@
 
 void 
 KeypadButton::
-draw()
+draw(bool forceDraw) const
 {
+    if(!forceDraw)
+    {
+        return;
+    }
     draw(this->color);
 }
 

@@ -27,11 +27,12 @@ public:
     );
 
     virtual void 
-    draw() = 0;
+    draw(bool forceDraw) = 0;
 
     virtual void 
     draw(
-        String wifi_name
+        String wifi_name,
+        bool forceDraw
     ) = 0;
 
     virtual String 

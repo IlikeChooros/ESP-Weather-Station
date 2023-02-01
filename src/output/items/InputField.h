@@ -27,7 +27,7 @@ class InputField
     );
 
     void
-    draw();
+    draw(bool forceDraw);
 
     /**
      * @brief Will concatanate given input
@@ -46,7 +46,6 @@ class InputField
      */
     String
     get_input();
-
 
     void 
     del();

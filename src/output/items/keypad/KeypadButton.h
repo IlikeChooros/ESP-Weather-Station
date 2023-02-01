@@ -41,7 +41,7 @@ class KeypadButton: public TouchButton
     {}
 
     void 
-    draw();
+    draw(bool forceDraw) const;
 
     void 
     on_touch();

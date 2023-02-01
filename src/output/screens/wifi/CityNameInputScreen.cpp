@@ -13,12 +13,12 @@ draw_rect(TFT_eSPI* tft)
 
 void
 CityNameInputScreen::
-draw()
+draw(bool forceDraw)
 {
-    keyboard->draw();
-    inputfield->draw();
-    enter_button->draw();
-    return_button->draw();
+    keyboard->draw(forceDraw);
+    inputfield->draw(forceDraw);
+    enter_button->draw(forceDraw);
+    return_button->draw(forceDraw);
 }
 
 void 
@@ -107,13 +107,13 @@ override_location()
     {
         temp[i] = new ListItem(tft, 50, 90 + i*(35), max_len*12, 30);
         temp[i]->set_data(EEPROM.readString(i*CITY_NAME_LEN + CITY_NAME_IDX), true, 2, 1, TFT_WHITE);
-        temp[i]->draw();
+        temp[i]->draw(true);
     }
     EEPROM.end();
 
 
-    exit->draw();
-    enter->draw();
+    exit->draw(true);
+    enter->draw(true);
 
     bool selected = false;
     int8_t idx_selected;
@@ -134,7 +134,7 @@ override_location()
                 selected = true;
                 idx_selected = i;
                 enter->set_color(0x3CE6);
-                enter->draw();
+                enter->draw(true);
                 break;
             }
         }

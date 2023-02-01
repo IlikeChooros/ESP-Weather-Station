@@ -73,7 +73,9 @@ WiFiListScreen::check(
     refresh_button->check(pos->x, pos->y);
 }
 
-void WiFiListScreen::connect_to_wifi()
+void 
+WiFiListScreen::
+connect_to_wifi()
 {
     String psw;
 
@@ -106,7 +108,9 @@ void WiFiListScreen::connect_to_wifi()
 // ssids and passwords
 // then saves it as a String** pointer
 //*************************************
-void WiFiListScreen::read_from_eeprom_wifis()
+void 
+WiFiListScreen::
+read_from_eeprom_wifis()
 {
     EEPROM.begin(EEPROM_SIZE);
     uint8_t count = EEPROM.read(10);
@@ -140,7 +144,9 @@ void WiFiListScreen::read_from_eeprom_wifis()
 // returns true if this screen has to be
 // changed to another one
 //---------------------------------
-bool WiFiListScreen::change()
+bool 
+WiFiListScreen::
+change()
 {
     return this->change_;
 }
@@ -150,19 +156,23 @@ bool WiFiListScreen::change()
 // Before using it, make sure
 // envoke scan() method
 //------------------------
-void WiFiListScreen::draw()
+void 
+WiFiListScreen::
+draw(bool forceDraw)
 {
     for (uint8_t i=0; i<number_of_networks; i++)
     {
-        wifis[i]->draw();
+        wifis[i]->draw(forceDraw);
     }
-    refresh_button->draw();
+    refresh_button->draw(forceDraw);
 }
 
 //*****************************
 // Deletes all WiFi List Items
 //*****************************
-void WiFiListScreen::clear_buttons()
+void 
+WiFiListScreen::
+clear_buttons()
 {
     if (number_of_networks<1)
     {

@@ -56,7 +56,7 @@ public:
     }
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     KeyInfo*
     check(Point* pos);

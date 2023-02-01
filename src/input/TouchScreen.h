@@ -3,7 +3,6 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 
-#include "TouchButton.h"
 #include "../data_structures/Point.h"
 
 #define VERTICAL_VAL 15
@@ -21,9 +20,6 @@ class TouchScreen
     TFT_eSPI* _tft;
     
     uint16_t max_interval;
-
-    TouchButton** buttons;
-    uint8_t number_of_buttons;
 
     bool _lastState;
     bool _state;

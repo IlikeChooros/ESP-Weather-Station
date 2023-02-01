@@ -25,8 +25,12 @@ touch_color(uint16_t color)
 
 void
 CustomButton::
-draw()
+draw(bool forceDraw) const
 {
+    if(!forceDraw)
+    {
+        return;
+    }
     draw(color);
 }
 

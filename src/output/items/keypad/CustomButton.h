@@ -64,7 +64,7 @@ public:
     touch_color(uint16_t color);
 
     void 
-    draw();
+    draw(bool forceDraw) const;
 
     /**
      * @brief Drawing fuction, activated when button is touched

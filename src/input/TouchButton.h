@@ -59,7 +59,7 @@ TouchButton
     set_color(uint16_t color);
 
     virtual void 
-    draw() = 0;
+    draw(bool forceDraw) const = 0;
     
     virtual void 
     on_touch() = 0;

@@ -23,8 +23,12 @@ get_ssid()
 
 void 
 WiFiListItem::
-draw()
+draw(bool forceDraw) const
 {
+    if(!forceDraw)
+    {
+        return;
+    }
     tft->setTextColor(TFT_WHITE);
     tft->setTextSize(2);
     tft->setTextFont(2);

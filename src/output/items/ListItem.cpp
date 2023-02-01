@@ -2,8 +2,12 @@
 
 void
 ListItem::
-draw()
+draw(const bool forceDraw) const
 {
+    if(!forceDraw)
+    {
+        return;
+    }
     draw(0x10A3);
 }
 

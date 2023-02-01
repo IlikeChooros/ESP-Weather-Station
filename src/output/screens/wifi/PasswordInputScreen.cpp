@@ -3,7 +3,8 @@
 void 
 PasswordInputScreen::
 draw(
-    String wifi_name
+    String wifi_name,
+    bool forceDraw
 )
 {
     this->wifi_name = wifi_name;
@@ -13,10 +14,10 @@ draw(
 
     tft->fillRect(0,70, 320, 170, bg_c);
 
-    keyboard->draw();
-    enter_button->draw();
-    exit_button->draw();
-    inputfield->draw();
+    keyboard->draw(forceDraw);
+    enter_button->draw(forceDraw);
+    exit_button->draw(forceDraw);
+    inputfield->draw(forceDraw);
 }
 
 void 

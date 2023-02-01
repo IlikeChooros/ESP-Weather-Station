@@ -46,13 +46,16 @@ class PasswordInputScreen: public WiFiScreen
     }
 
     void 
-    draw()
+    draw(bool forceDraw)
     {
         return;
     }
     
     void 
-    draw(String wifi_name);
+    draw(
+        String wifi_name,
+        bool forceDraw
+    );
 
     void 
     check(Point* pos);
