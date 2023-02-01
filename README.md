@@ -85,8 +85,13 @@ After successfully establishing a connection with WiFi, you should see the scree
 3. Weather data update
 > Weather data is updated every 15 minutes, just like the time *(although the time object will try in different time: every time when the hour hits: XX:00, XX:15, XX:30, XX:45)*, but if the device loses the connection to WiFi when trying to update the weather data, it won't cause any exceptions or crash, displayed data will be just stay the same and the program will try to update data again in next 15 minutes.
 
+
+4. Saving locations
+> This feature lets you save up to 2 (by default) locations to get infromation about, provided that location character lenght is shorter than `MAX_CITY_LEN` (22). 
+It also lets you override saved locations.
+
 ## Troubleshooting
-While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses.
+While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses. 
 
 
  * [Esp resets after connecting to wifi](#esp-resets-after-connecting-to-wifi)
