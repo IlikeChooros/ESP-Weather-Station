@@ -50,6 +50,11 @@ set_city_info()
         Serial.println("LON: "+String(info->lon));
         Serial.println("STATE: "+info->state);
 
+        if (info->state == "null")
+        {
+            info->state = "";
+        }
+
         saved_city_names[i]
         ->set_data(info->name, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)

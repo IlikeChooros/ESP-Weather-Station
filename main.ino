@@ -265,7 +265,7 @@ void refresh()
 {
     wifi_screens[0]->clear_buttons();
     wifi_screens[0]->scan();
-    wifi_screens[0]->draw();
+    wifi_screens[0]->draw(true);
 }
 
 void left()
@@ -358,7 +358,7 @@ void wifi_setup()
             tft.fillScreen(BACKGROUND_COLOR);
 
             wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
-            wifi_screens[wifi_screen_idx]->draw();
+            wifi_screens[wifi_screen_idx]->draw(true);
             
         }
         delete pos;
@@ -372,7 +372,7 @@ void force_wifi_connection()
     wifi_screens[0]->scan();
 
     tft.fillScreen(BACKGROUND_COLOR);
-    wifi_screens[0]->draw();
+    wifi_screens[0]->draw(true);
 
     while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
 
@@ -456,6 +456,18 @@ pick_city()
     city_list->draw(true);
     while(!(city_input->load_main() || city_list->load_main()))
     {
+        if(city_idx)
+        {
+            city_input->draw(false);
+        }
+        else{
+            city_list->draw(false);
+        }
+
+        if (WiFi.status() == WL_DISCONNECTED)
+        {
+            reconnect_to_wifi();
+        }
         Point* pos = ts.read_touch();
         if(!city_idx)
         {

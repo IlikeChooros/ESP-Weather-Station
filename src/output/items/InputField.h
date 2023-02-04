@@ -47,7 +47,6 @@ class InputField
     String
     get_input();
 
-
     void 
     del();
 };

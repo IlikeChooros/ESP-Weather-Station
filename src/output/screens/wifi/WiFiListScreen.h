@@ -53,14 +53,15 @@ class WiFiListScreen: public WiFiScreen
     scan();
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     void 
     init();
 
     void 
     draw(
-        String wifi_name
+        String wifi_name,
+        bool forceDraw
     )
     {
         return;

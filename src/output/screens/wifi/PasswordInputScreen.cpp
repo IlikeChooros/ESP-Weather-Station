@@ -3,7 +3,8 @@
 void 
 PasswordInputScreen::
 draw(
-    String wifi_name
+    String wifi_name,
+    bool forceDraw
 )
 {
     this->wifi_name = wifi_name;
