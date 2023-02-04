@@ -27,7 +27,7 @@ class InputField
     );
 
     void
-    draw();
+    draw(bool forceDraw);
 
     /**
      * @brief Will concatanate given input

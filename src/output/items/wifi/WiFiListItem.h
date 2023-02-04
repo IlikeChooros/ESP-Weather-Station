@@ -39,7 +39,7 @@ class WiFiListItem: public TouchButton
     {}
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     int8_t 
     get_strenght();

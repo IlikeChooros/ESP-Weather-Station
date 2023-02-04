@@ -12,7 +12,10 @@ WeatherClient::WeatherClient(HTTPClient* http, uint32_t cacheTime)
 
 City_info*
 WeatherClient::
-get_city_info(String city_name)
+get_city_info(
+    String city_name, 
+    uint8_t idx
+)
 {
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
     int16_t http_code = http->GET();
@@ -25,20 +28,31 @@ get_city_info(String city_name)
     {
         data = new City_info;
         StaticJsonDocument<200> filter;
-        filter[0]["lat"] = true;
-        filter[0]["lon"] = true;
-        filter[0]["country"] = true;
-        filter[0]["state"] = true;
+        filter[idx]["lat"] = true;
+        filter[idx]["lon"] = true;
+        filter[idx]["country"] = true;
+        filter[idx]["state"] = true;
+
 
         StaticJsonDocument<200> doc;
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
-        _lat = doc[0]["lat"].as<double>();
-        _lon = doc[0]["lon"].as<double>();
+        _lat = doc[idx]["lat"].as<double>();
+        _lon = doc[idx]["lon"].as<double>();
+
+        double a;
+        Serial.println("YOLO:");
+        a = doc[1]["lat"].as<double>();
+        Serial.println(a);
+        a= doc[5]["lon"];
+        Serial.println(a);
+        a = doc[3]["lat"];
+        Serial.println(a);
+        Serial.println("WORKED:");
 
         data->name = city_name;
-        data->country = doc[0]["country"].as<String>();
-        data->state = doc[0]["state"].as<String>();
+        data->country = doc[idx]["country"].as<String>();
+        data->state = doc[idx]["state"].as<String>();
         data->lat = _lat;
         data->lon = _lon;
     }

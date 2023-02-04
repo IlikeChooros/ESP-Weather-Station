@@ -25,21 +25,25 @@ touch_color(uint16_t color)
 
 void
 CustomButton::
-draw()
+draw(bool forceDraw)
 {
-    draw(color);
+    if (!forceDraw)
+    {
+        return;
+    }
+    draw_(color);
 }
 
 void
 CustomButton::
 on_touch()
 {
-    draw(touch_color_);
+    draw_(touch_color_);
 }
 
 void
 CustomButton::
-draw(uint16_t color)
+draw_(uint16_t color)
 {
     drawing_funct(
         tft,

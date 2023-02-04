@@ -26,6 +26,9 @@ ListItem: public TouchButton
     bool marked_;
 
     Vector<print_data> data;
+
+    void 
+    draw_(uint16_t color);
     
 public:
     ListItem(
@@ -38,11 +41,9 @@ public:
     tft(tft), marked_(false)
     {}
 
-    void 
-    draw(uint16_t color);
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     void
     on_touch();

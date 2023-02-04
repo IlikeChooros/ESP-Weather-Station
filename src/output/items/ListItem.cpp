@@ -2,14 +2,18 @@
 
 void
 ListItem::
-draw()
+draw(bool forceDraw)
 {
-    draw(0x10A3);
+    if(!forceDraw)
+    {
+        return;
+    }
+    draw_(0x10A3);
 }
 
 void
 ListItem::
-draw(uint16_t color)
+draw_(uint16_t color)
 {
     if(data.is_empty())
     {
@@ -59,7 +63,7 @@ void
 ListItem::
 on_touch()
 {
-    draw(0x0861);
+    draw_(0x0861);
 }
 
 

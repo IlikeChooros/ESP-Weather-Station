@@ -453,10 +453,15 @@ pick_city()
     bool city_idx = 0;
 
     Serial.println("CITY_LIST DRAW");
-    city_list->draw();
+    city_list->draw(true);
     while(!(city_input->load_main() || city_list->load_main()))
     {
         Point* pos = ts.read_touch();
+        if(!city_idx)
+        {
+            city_list->draw(false);
+        }
+
         if(!pos)
         {
             continue;
@@ -470,7 +475,7 @@ pick_city()
             if (city_input->change())
             {
                 tft.fillScreen(BACKGROUND_COLOR);
-                city_list->draw();
+                city_list->draw(true);
             }
         }
         else{ // 0
@@ -480,7 +485,7 @@ pick_city()
             if (city_list->change())
             {
                 tft.fillScreen(BACKGROUND_COLOR);
-                city_input->draw();
+                city_input->draw(true);
             }
         }
         delete pos;

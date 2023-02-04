@@ -82,14 +82,14 @@ set_text_color(
 
 void 
 Keypad::
-draw()
+draw(bool forceDraw)
 {
     for (uint8_t i=0; i<NUMBER_OF_KEYPAD_BUTTONS; i++)
     {
-        buttons[i]->draw();
+        buttons[i]->draw(forceDraw);
     }
-    sliders[0]->draw();
-    sliders[1]->draw();
+    sliders[0]->draw(forceDraw);
+    sliders[1]->draw(forceDraw);
 }
 
 void 
@@ -98,15 +98,15 @@ re_draw(uint8_t idx)
 {
     if (idx == 0)
     {
-        sliders[0]->draw();
+        sliders[0]->draw(true);
         return;
     }
     if (idx == NUMBER_OF_KEYPAD_BUTTONS+1)
     {
-        sliders[1]->draw();
+        sliders[1]->draw(true);
         return;
     }
-    buttons[idx-1]->draw();
+    buttons[idx-1]->draw(true);
 }
 
 int8_t 

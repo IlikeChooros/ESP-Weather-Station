@@ -18,8 +18,12 @@ InputField::InputField(
 
 void 
 InputField::
-draw()
+draw(bool forceDraw)
 {
+    if(!forceDraw)
+    {
+        return;
+    }
     tft->setTextSize(2);
     tft->setTextFont(2);
     tft->setTextColor(TFT_WHITE);
@@ -48,7 +52,7 @@ add_input(
 )
 {
     this->input += input;
-    draw();
+    draw(true);
 }
 
 String 
@@ -67,7 +71,7 @@ del()
         return;
     }
     this->input.remove(input.length()-1);
-    draw();
+    draw(true);
 }
 
 

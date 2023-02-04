@@ -24,7 +24,7 @@ class KeypadButton: public TouchButton
     bool wrap;
 
     void
-    draw(uint16_t color);
+    draw_(uint16_t color);
 
     public:
     KeypadButton(
@@ -41,7 +41,7 @@ class KeypadButton: public TouchButton
     {}
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     void 
     on_touch();

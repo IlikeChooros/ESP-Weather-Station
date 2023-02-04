@@ -2,14 +2,18 @@
 
 void 
 KeypadButton::
-draw()
+draw(bool forceDraw)
 {
-    draw(this->color);
+    if(!forceDraw)
+    {
+        return;
+    }
+    draw_(this->color);
 }
 
 void 
 KeypadButton::
-draw(uint16_t color)
+draw_(uint16_t color)
 {
     tft->setTextColor(text_color);
     tft->setTextSize(2);
@@ -39,7 +43,7 @@ void
 KeypadButton::
 on_touch()
 {
-    draw(touch_color);
+    draw_(touch_color);
 }
 
 String 

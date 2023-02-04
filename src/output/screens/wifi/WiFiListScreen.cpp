@@ -154,9 +154,9 @@ void WiFiListScreen::draw()
 {
     for (uint8_t i=0; i<number_of_networks; i++)
     {
-        wifis[i]->draw();
+        wifis[i]->draw(true);
     }
-    refresh_button->draw();
+    refresh_button->draw(true);
 }
 
 //*****************************

@@ -31,7 +31,7 @@ set_city_info()
 {
     for (uint8_t i=0; i<number_of_saved_city_names; i++)
     {
-        City_info* info = wclient->get_city_info(city_names.at(i));
+        City_info* info = wclient->get_city_info(city_names.at(i), 0);
         if (!info)
         {
             saved_city_names[i]
@@ -75,13 +75,13 @@ check(Point* pos)
 
 void
 CityNameListScreen::
-draw()
+draw(bool forceDraw)
 {
-    wifi->draw(true);
+    wifi->draw(forceDraw);
 
     for (uint8_t i=0; i<number_of_saved_city_names; ++i)
     {
-        saved_city_names[i]->draw();
+        saved_city_names[i]->draw(forceDraw);
     }
 
     if (number_of_saved_city_names<1)
@@ -92,5 +92,5 @@ draw()
         tft->setTextSize(2);
         tft->print("No saved locations.");
     }
-    input_city->draw();
+    input_city->draw(forceDraw);
 }

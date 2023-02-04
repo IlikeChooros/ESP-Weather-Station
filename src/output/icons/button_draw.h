@@ -59,6 +59,24 @@ drawTickButton(
 
 inline
 void
+drawSetLocationButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color 
+)
+{
+    tft->fillRect(x, y, 320, size, color);
+    tft->drawFastHLine(x, y, 320, TFT_DARKGREY);
+
+    tft->setTextColor(TFT_DARKGREY, color, true);
+    tft->setTextSize(2);
+    tft->drawCentreString("Set new location.", 160, y+2, 2);
+}
+
+inline
+void
 drawSettingsButton(
     TFT_eSPI* tft,
     uint16_t x,

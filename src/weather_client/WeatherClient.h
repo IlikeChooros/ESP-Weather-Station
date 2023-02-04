@@ -50,7 +50,10 @@ public:
     forecast_weather(Forecast *forecast);
 
     City_info*
-    get_city_info(String city_name);
+    get_city_info(
+        String city_name,
+        uint8_t idx
+    );
 
     void
     set_lat_lon(double lat, double lon)

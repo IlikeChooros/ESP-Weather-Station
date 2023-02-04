@@ -42,7 +42,7 @@ public:
     }
 
     void
-    draw();
+    draw(bool forceDraw);
 
     void 
     check(Point* pos);

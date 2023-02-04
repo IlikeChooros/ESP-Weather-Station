@@ -8,7 +8,7 @@
 
 #include "../../../data_structures/Point.h"
 
-#include "../../items/keypad/KeypadButton.h"
+#include "../../items/keypad/CustomButton.h"
 #include "../../items/wifi/WiFiItem.h"
 
 
@@ -21,7 +21,7 @@ CityNameListScreen: public CityNameScreen
 {
     ListItem** saved_city_names;
 
-    KeypadButton* input_city;
+    CustomButton* input_city;
     WiFiItem* wifi;
 
     Vector<City_info> city_info;
@@ -37,9 +37,10 @@ public:
         TouchScreen* ts
     ): CityNameScreen(tft, bg_c, wc, ts)
     {
-        input_city = new KeypadButton(tft, 0, 180, 320, 60, "Set new location.");
-        input_city->set_color(0x10A3);
-        input_city->set_on_touch_color(0x0861);
+        input_city = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
+        input_city
+        ->touch_color(0x0861)
+        ->set_draw(drawSetLocationButton);
         wifi = new WiFiItem(tft, 5,5,20, bg_c);
 
         
@@ -60,5 +61,5 @@ public:
     check(Point* pos);
 
     void
-    draw();
+    draw(bool forceDraw);
 };

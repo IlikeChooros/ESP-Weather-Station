@@ -18,7 +18,7 @@ draw_get(String city_name)
         tft->drawCentreString("Failed, try again.", 160, 130, 2);
         delay(1000);
         tft->fillScreen(bg_c);
-        draw();
+        draw(true);
         return false;
     }
     return true;

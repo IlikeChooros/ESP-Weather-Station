@@ -13,12 +13,12 @@ draw_rect(TFT_eSPI* tft)
 
 void
 CityNameInputScreen::
-draw()
+draw(bool forceDraw)
 {
-    keyboard->draw();
-    inputfield->draw();
-    enter_button->draw();
-    return_button->draw();
+    keyboard->draw(forceDraw);
+    inputfield->draw(forceDraw);
+    enter_button->draw(forceDraw);
+    return_button->draw(forceDraw);
 }
 
 void 
@@ -90,11 +90,11 @@ override_location()
     size = size < MAX_CITIES ? size : MAX_CITIES;
 
     ListItem** temp = new ListItem* [size];
-    KeypadButton* exit = new KeypadButton(tft, 35, 175, 50,35, "EXIT");
+    KeypadButton* exit = new KeypadButton(tft, 35, 175, 30,30, "X");
     exit->set_color(TFT_RED);
 
-    KeypadButton* enter = new KeypadButton(tft, 235, 175, 60,35, "PICK");
-    enter->set_color(0x19E2);
+    CustomButton* enter = new CustomButton(tft, 235, 175, 30,30, 0x19E2);
+    enter->set_draw(drawTickButton);
 
     uint8_t max_len=0;
     for (uint8_t i=0; i<size; ++i)
@@ -107,16 +107,16 @@ override_location()
     {
         temp[i] = new ListItem(tft, 50, 90 + i*(35), max_len*12, 30);
         temp[i]->set_data(EEPROM.readString(i*CITY_NAME_LEN + CITY_NAME_IDX), true, 2, 1, TFT_WHITE);
-        temp[i]->draw();
+        temp[i]->draw(true);
     }
     EEPROM.end();
 
 
-    exit->draw();
-    enter->draw();
+    exit->draw(true);
+    enter->draw(true);
 
     bool selected = false;
-    int8_t idx_selected;
+    int8_t idx_selected=-1;
 
     while(1)
     {
@@ -134,7 +134,7 @@ override_location()
                 selected = true;
                 idx_selected = i;
                 enter->set_color(0x3CE6);
-                enter->draw();
+                enter->draw(true);
                 break;
             }
         }

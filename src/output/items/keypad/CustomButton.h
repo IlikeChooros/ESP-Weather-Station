@@ -23,7 +23,7 @@ CustomButton: public TouchButton
     );
 
     void
-    draw(uint16_t color);
+    draw_(uint16_t color);
 
 public:
     CustomButton(
@@ -64,7 +64,7 @@ public:
     touch_color(uint16_t color);
 
     void 
-    draw();
+    draw(bool forceDraw);
 
     /**
      * @brief Drawing fuction, activated when button is touched

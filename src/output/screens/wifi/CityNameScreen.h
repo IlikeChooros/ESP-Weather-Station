@@ -37,7 +37,7 @@ public:
     {}
 
     virtual void
-    draw() = 0;
+    draw(bool forceDraw) = 0;
 
     bool 
     load_main() 

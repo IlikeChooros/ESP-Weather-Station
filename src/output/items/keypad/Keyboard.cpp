@@ -122,7 +122,7 @@ change_keypad(uint8_t dir)
             current_keypad = current_keypad < 2 ? current_keypad + 1 : 0;
             break;
     }
-    keypads[current_keypad]->draw();
+    keypads[current_keypad]->draw(true);
 }
 
 void
@@ -150,12 +150,12 @@ caps()
         default:
             current_keypad = NUMBERS_CAPS;
     }
-    keypads[current_keypad]->draw();
+    keypads[current_keypad]->draw(true);
 }  
 
 void 
 Keyboard::
-draw()
+draw(bool forceDraw)
 {
-    keypads[current_keypad]->draw();
+    keypads[current_keypad]->draw(forceDraw);
 }
