@@ -1,12 +1,28 @@
 #include "CityNameListScreen.h"
 
+
+CityNameListScreen::
+CityNameListScreen(
+    TFT_eSPI* tft,
+    uint16_t bg_c,
+    WeatherClient* wc,
+    TouchScreen* ts
+): CityNameScreen(tft, bg_c, wc, ts)
+{
+    input_city = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
+    input_city
+    ->touch_color(0x0861)
+    ->set_draw(drawSetLocationButton);
+    wifi = new WiFiItem(tft, 5,5,20, bg_c);
+}
+
 void
 CityNameListScreen::
 init()
 {
     EEPROM.begin(EEPROM_SIZE);
 
-    number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX-1);
+    number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX);
 
     number_of_saved_city_names = number_of_saved_city_names < MAX_CITIES ? number_of_saved_city_names : MAX_CITIES;
 
@@ -15,11 +31,13 @@ init()
         saved_city_names = new ListItem* [number_of_saved_city_names];
     }
 
+    uint16_t address = CITY_NAME_IDX+2;
     for (uint8_t i=0; i<number_of_saved_city_names; i++)
     {
-        String name = EEPROM.readString(CITY_NAME_IDX+i*CITY_NAME_LEN);
+        String name = EEPROM.readString(address);
         city_names.push_back(name);
         saved_city_names[i] = new ListItem(tft, 20, 30+i*(LIST_HEIGHT+5), LIST_WIDTH, LIST_HEIGHT);
+        address += 1 + CITY_NAME_LEN;
     }
 
     EEPROM.end();
@@ -29,9 +47,17 @@ void
 CityNameListScreen::
 set_city_info()
 {
+    EEPROM.begin(EEPROM_SIZE);
+
+    uint16_t address = CITY_NAME_IDX + 1;
     for (uint8_t i=0; i<number_of_saved_city_names; i++)
     {
-        City_info* info = wclient->get_city_info(city_names.at(i), 0);
+        City_info* info =
+        wclient->get_city_info(
+            city_names.at(i), 
+            EEPROM.read(address)
+        );
+
         if (!info)
         {
             saved_city_names[i]
@@ -40,7 +66,8 @@ set_city_info()
             ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String("NULL"), false, 2, 1, TFT_LIGHTGREY);
-            continue;
+            EEPROM.end();
+            break;
         }
         city_info.push_back(*info);
         Serial.println("---------------------------");
@@ -60,7 +87,11 @@ set_city_info()
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->state, false, 2, 2, TFT_LIGHTGREY);
         delete info;
+
+        address += CITY_NAME_LEN + 1;
     }
+
+    EEPROM.end();
 }
 
 void

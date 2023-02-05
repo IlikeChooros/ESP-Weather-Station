@@ -22,7 +22,7 @@ draw()
     tft->setTextColor(TFT_LIGHTGREY);
 
     uint16_t x = this->x + 5,
-                y = this->y + 10;
+             y = this->y + 10;
 
 
     tft->setCursor(x,y);

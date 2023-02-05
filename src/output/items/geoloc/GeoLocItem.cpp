@@ -1,6 +1,7 @@
 #include "GeoLocItem.h"
 
-static int8_t pos = 0;
+extern int8_t geo_pos = 0;
+extern uint8_t total_geo_size = 0;
 
 GeoLocItem::
 GeoLocItem(
@@ -8,27 +9,31 @@ GeoLocItem(
     WeatherClient* wclient
 ): tft(tft), wclient(wclient)
 {
-    display = new GeoDisplayItem*[5]{
-        0,
-        0,
-        0,
-        0,
-        0
-    };
+    display = new GeoDisplayItem*[5]{};
 }
 
 void
 GeoLocItem::
 draw(bool forceDraw)
 {
-    if(!forceDraw)
+    if (data.size())
+    {
+        tft->fillRect(45, 40, 230, 160,TFT_BLACK);
+        tft->setTextFont(2);
+        tft->setTextSize(1);
+        tft->setTextColor(TFT_LIGHTGREY);
+        tft->setCursor(45,40);
+        tft->print("No data...");
+    }
+
+    if(!(forceDraw && display[geo_pos]))
     {
         return;
     }
 
-    display[pos]->draw();
-}
 
+    display[geo_pos]->draw();
+}
 
 void
 GeoLocItem::
@@ -41,13 +46,15 @@ set_loctation
 
         if (!info || info->country == "null")
         {
+            delete info;
             break;
         }
-
         data.push_back(*info);
-        display[i] = new GeoDisplayItem(this->tft, *info,45, 40, 230, 180);
+        display[i] = new GeoDisplayItem(this->tft, *info,45, 40, 230, 160);
         delete info;
     }
+
+    total_geo_size = data.size();
 }
 
 void
@@ -64,6 +71,7 @@ clear()
     {
         delete display[i];
     }
+    delete [] display;
 }
 
 
@@ -71,10 +79,17 @@ void
 GeoLocItem::
 change(Move dir)
 {
-    if (dir == RIGHT)
+    if (data.is_empty())
     {
-        pos = pos < data.size()-1 ? pos+1 : 0;
         return;
     }
-    pos = pos > 0 ? pos - 1 : data.size()-1;
+
+    if (dir == Move::RIGHT)
+    {
+        geo_pos = geo_pos < data.size()-1 ? geo_pos+1 : 0;
+        draw(true);
+        return;
+    }
+    geo_pos = geo_pos > 0 ? geo_pos - 1 : data.size()-1;
+    draw(true);
 }

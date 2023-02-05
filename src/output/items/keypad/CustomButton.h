@@ -22,6 +22,15 @@ CustomButton: public TouchButton
         uint16_t
     );
 
+    void (*drawing_funct_wh)(
+        TFT_eSPI*, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t,
+        uint16_t
+    );
+
     void
     draw_(uint16_t color);
 
@@ -36,6 +45,8 @@ public:
     ): TouchButton(x,y,width,height),
     tft(tft), touch_color_(color) {
         this->color = color;
+        drawing_funct = 0;
+        drawing_funct_wh = 0;
     }
 
 
@@ -51,6 +62,17 @@ public:
             uint16_t, 
             uint16_t, 
             uint16_t, 
+            uint16_t
+    ));
+
+    CustomButton*
+    set_draw_wh(
+        void(*drawing)(
+            TFT_eSPI*, 
+            uint16_t, 
+            uint16_t, 
+            uint16_t, 
+            uint16_t,
             uint16_t
     ));
 

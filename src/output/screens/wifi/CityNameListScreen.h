@@ -35,16 +35,7 @@ public:
         uint16_t bg_c,
         WeatherClient* wc,
         TouchScreen* ts
-    ): CityNameScreen(tft, bg_c, wc, ts)
-    {
-        input_city = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
-        input_city
-        ->touch_color(0x0861)
-        ->set_draw(drawSetLocationButton);
-        wifi = new WiFiItem(tft, 5,5,20, bg_c);
-
-        
-    }
+    );
 
     /**
      * @brief Reads form eeprom saved city names,

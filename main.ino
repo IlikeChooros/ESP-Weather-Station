@@ -28,7 +28,6 @@
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
-#define CITY_NAME "Oława"
 #define BACKGROUND_COLOR 0x10C4
 #define X_1_SCREENS 6
 #define X_SCREENS 3
@@ -452,7 +451,6 @@ pick_city()
 {
     bool city_idx = 0;
 
-    Serial.println("CITY_LIST DRAW");
     city_list->draw(true);
     while(!(city_input->load_main() || city_list->load_main()))
     {

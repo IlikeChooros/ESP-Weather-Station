@@ -77,6 +77,53 @@ drawSetLocationButton(
 
 inline
 void
+drawRightArrow(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t color 
+)
+{
+    tft->fillTriangle(x+0.7f*w, y, x+w, y+0.5f*h, x+0.7f*w, y+h, color);
+    tft->fillRect(x, y+0.3f*h, 0.7*w, 0.4f*h, color);
+}
+
+inline
+void
+drawLeftArrow(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t color 
+)
+{
+    tft->fillTriangle(x+0.3f*w, y, x, y+0.5f*h, x+0.3f*w, y+h, color);
+    tft->fillRect(x+0.3f*h, y+0.3f*h, 0.7*w, 0.4f*h, color);
+}
+
+inline
+void
+drawExitButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color
+)
+{
+    tft->fillRect(x,y,size,size,color);
+    tft->drawRect(x,y,size,size,TFT_DARKGREY);
+
+    tft->drawWideLine(x+0.1f*size, y+0.1f*size, x+0.9f*size, y+0.9f*size, 0.05f*size, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.1f*size, y+0.9f*size, x+0.9f*size, y+0.1f*size, 0.05f*size, TFT_WHITE, TFT_WHITE);
+}
+
+inline
+void
 drawSettingsButton(
     TFT_eSPI* tft,
     uint16_t x,

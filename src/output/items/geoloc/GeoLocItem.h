@@ -5,7 +5,8 @@
 
 #include "GeoDisplayItem.h"
 
-enum Move
+enum class
+Move
 {
     LEFT,
     RIGHT
@@ -20,9 +21,6 @@ GeoLocItem
 
     WeatherClient* wclient;
     TFT_eSPI* tft;
-
-    int8_t
-    get_pos();
 
 public:
     GeoLocItem(

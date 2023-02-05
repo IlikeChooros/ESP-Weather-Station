@@ -47,7 +47,7 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
 
                 tft->fillScreen(bg_c);
                 draw(wifi_name);
-                draw();
+                draw(true);
                 return false;
             }
             timer = millis();
