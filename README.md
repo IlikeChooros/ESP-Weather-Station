@@ -31,16 +31,15 @@ To run this project you will need some essential parts and libraries.
 
 ### In order to run this code:
 > 1. Create an account on [openwathermap](https://openweathermap.org/) and generate your API key
-> 1. Download this code anywhere you want
+> 1. Download this code anywhere you want (or git clone)
 > 1. Unzip it
 > 1. Go to folder 'ESP-Weather-Station-master'
-> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino' *(You can rename it howevery you want, but folder's name has to be the same as .ino file)*
+> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino' *(You can rename it however you want, but folder's name has to be the same as .ino file)*
 >    1. If you dont have already installed Arduino IDE,
 [download it](https://www.arduino.cc/en/software).
 >    1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
 >    1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
 > 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
-> 1. Change:  `#define CITY_NAME "YOUR CITY NAME"`
 > 1. Go to file: `src/weather_client/WeatherClient.h`
 > 1. Change: `#define APPID "YOUR API KEY"`
 > 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
@@ -92,6 +91,9 @@ After successfully establishing a connection with WiFi, you should see the scree
 4. Saving locations
 > This feature lets you save up to 2 (by default) locations to get infromation about, provided that location character lenght is shorter than `MAX_CITY_LEN` (22). 
 It also lets you override saved locations.
+
+5. Screensaver
+> It will activate after 1 minute of no activity
 
 ## Troubleshooting
 While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses.
@@ -148,17 +150,13 @@ void setup()
     eeprom_earse(10, 487); 
     EEPROM.end();
     
-    Serial.begin(921600);
     tft.init();
     tft.setRotation(3);
 
-    //******************************
-    // Scanning for newtorks
-    //
     reset_tft();
     load_saved_wifis();
     int8_t number_of_networks; 
-    
+    wifi_screens[0]->init();
     ...
 }
 ```
