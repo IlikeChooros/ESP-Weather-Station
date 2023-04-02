@@ -30,19 +30,21 @@ To run this project you will need some essential parts and libraries.
 
 ### In order to run this code:
 > 1. Create an account on [openwathermap](https://openweathermap.org/) and generate your API key
-> 1. Download this code anywhere you want
+> 1. Download this code anywhere you want (or git clone)
 > 1. Unzip it
 > 1. Go to folder 'ESP-Weather-Station-master'
-> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino' *(You can rename it howevery you want, but folder's name has to be the same as .ino file)*
+> 1. Rename 'main.ino' to 'ESP-Weather-Station-master.ino' *(You can rename it however you want, but folder's name has to be the same as .ino file)*
 >    1. If you dont have already installed Arduino IDE,
 [download it](https://www.arduino.cc/en/software).
 >    1. Follow [this tutorial](https://youtu.be/CD8VJl27n94) to setup Arduino IDE for ESP 32
 >    1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
+>    1. Download ArduinoJson library
 > 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
-> 1. Change:  `#define CITY_NAME "YOUR CITY NAME"`
 > 1. Go to file: `src/weather_client/WeatherClient.h`
 > 1. Change: `#define APPID "YOUR API KEY"`
 > 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
+
+*First upload of the code might result in esp system abort, see [this](#esp-restarts-immediately-after-uploading-the-code) how to fix it.*
 
 ## Step by step explanation
 The first screen on the display you will encounter, if the code was uploaded successfuly, is the WiFi setup sceen. You will see up to 6 nearest networks.
@@ -86,18 +88,46 @@ After successfully establishing a connection with WiFi, you should see the scree
 > Weather data is updated every 15 minutes, just like the time *(although the time object will try in different time: every time when the hour hits: XX:00, XX:15, XX:30, XX:45)*, but if the device loses the connection to WiFi when trying to update the weather data, it won't cause any exceptions or crash, displayed data will be just stay the same and the program will try to update data again in next 15 minutes.
 
 ## Troubleshooting
-While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses. 
+While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses.
 
-
- * [Esp resets after connecting to wifi](#esp-resets-after-connecting-to-wifi)
+ * [Esp restarts immediately after uploading the code](#esp-restarts-after-connecting-to-wifi)
+ * [Esp restarts after connecting to wifi](#esp-restarts-after-connecting-to-wifi)
  * [Reset saved wifis](#reset-saved-wifis)
 
+### Esp restarts immediately after uploading the code
+This situation might happen on first upload. The root of this problem is most likely that some data is written on address 10 *(starting address for writing saved wifi data)*. It is used to control number of data saved in EEPROM, so conflicting data will cause an undefined behaviour and as a result ESP abort.
+To fix it, you have to simply clear this address:
+
+```
+...
+
+void setup()
+{
+  tft.init();
+  tft.setRotation(3);
+  
+  EEPROM.begin(EEPROM_SIZE);
+  EEPROM.write(10, 0);
+  EEPROM.commit();
+
+
+  //******************************
+  // Scanning for newtorks
+  //
+  reset_tft();
+  load_saved_wifis();
+  int8_t number_of_networks; 
+    
+    ...
+}
+```
+
+Make sure to delete it after resolving the issue to use WiFi and city location saving feature.
 
 ### Esp resets after connecting to wifi
 Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
-  * if connected via already saved wifi data, try clearing the wifi data from eeprom
+  * if connected via already saved wifi data, try clearing the wifi data from eeprom ([see this](#reset-saved-wifis))
   * check your wifi connetion on other wireless devices, do they have access to the internet
-  * try resetarting ESP
   * try restarting router
 
 ### Reset saved wifis

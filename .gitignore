@@ -1,2 +1,7 @@
 .vscode
 build
+my_api.txt
+.gitignore
+debug_custom.json
+esp32.svd
+debug.cfg

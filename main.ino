@@ -12,7 +12,7 @@
 #include "src/output/items/ScreenPointItem.h"
 #include "src/input/TouchScreen.h"
 
-#define CITY_NAME "Oława"
+#define CITY_NAME ""
 #define BACKGROUND_COLOR 0x10C4
 #define X_SCREENS 3
 #define Y_SCREENS 1
@@ -290,7 +290,6 @@ void force_wifi_connection()
 
 void setup()
 {
-    Serial.begin(921600);
     tft.init();
     tft.setRotation(3);
 
