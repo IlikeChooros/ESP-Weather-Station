@@ -40,8 +40,9 @@ To run this project you will need some essential parts and libraries.
 >    1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
 >    1. Download ArduinoJson library
 > 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
+> 1. Change: `#define CITY_NAME "Your city name"`
 > 1. Go to file: `src/weather_client/WeatherClient.h`
-> 1. Change: `#define APPID "YOUR API KEY"`
+> 1. Change: `#define APPID "Your API key"`
 > 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
 
 *First upload of the code might result in esp system abort, see [this](#esp-restarts-immediately-after-uploading-the-code) how to fix it.*
