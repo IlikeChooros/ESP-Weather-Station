@@ -29,13 +29,8 @@ get_city_info(
 
     City_info* data;
 
-    Serial.println("GET: "+city_name + "  "+String(idx));
-
-    Serial.println(payload);
-
     if (http_code == 200)
     {
-        Serial.println("200");
         DynamicJsonDocument filter (1200);
         filter[idx]["lat"] = true;
         filter[idx]["lon"] = true;
@@ -44,12 +39,7 @@ get_city_info(
 
 
         DynamicJsonDocument doc(1200);
-        DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
-        if (err.code())
-        {
-            Serial.println(">>>>>>ERROR: "+String(err.c_str()));
-        }
+        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
         data = new City_info{
             doc[idx]["lat"].as<double>(),
@@ -58,8 +48,6 @@ get_city_info(
             doc[idx]["country"].as<String>(), 
             doc[idx]["state"].as<String>()
         };
-
-        Serial.println("LAT: "+String(_lat));
     }
 
     http->end();

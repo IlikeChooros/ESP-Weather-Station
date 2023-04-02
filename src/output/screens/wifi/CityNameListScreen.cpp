@@ -70,13 +70,6 @@ set_city_info()
             break;
         }
         city_info.push_back(*info);
-        Serial.println("---------------------------");
-        Serial.println("NAME: "+info->name);
-        Serial.println("COUNTRY: "+info->country);
-        Serial.println("LAT: "+String(info->lat));
-        Serial.println("LON: "+String(info->lon));
-        Serial.println("STATE: "+info->state);
-
         if (info->state == "null")
         {
             info->state = "";

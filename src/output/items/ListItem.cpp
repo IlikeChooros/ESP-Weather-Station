@@ -85,8 +85,6 @@ set_data(
     uint16_t text_color
 )
 {
-    Serial.println("PRINT_DATA: "+str);
     data.push_back({str, font, text_size, text_color, same_line});
-
     return this;
 }

@@ -92,7 +92,6 @@ draw(bool forceDraw)
     {
         return;
     }
-    Serial.println("DRAW_");
     draw_(color);
 }
 

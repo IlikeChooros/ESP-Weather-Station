@@ -97,14 +97,8 @@ void
 GeoLocScreen::
 draw_window(bool forceDraw)
 {
-    Serial.println
-    ("DRAW WINDOW: "+String(total_geo_size)+
-    " current_pos: "+String(current_pos)+
-    "  geo: "+String(geo_pos));
-
     if(forceDraw)
     {
-        Serial.println("force = true");
         tft->fillRect(40, 5, 240, 230, 0x18E3);
         tft->drawRect(40, 5, 240, 230, 0x2985);
     }
@@ -117,8 +111,6 @@ draw_window(bool forceDraw)
     tft->setTextColor(TFT_WHITE, 0x18E3, true);
     tft->setTextSize(2);
     tft->drawCentreString(String(geo_pos+1)+" / "+String(total_geo_size), 160, 20, 2);
-
-    Serial.println("END DRAW WINDOW");
 }
 
 void
@@ -128,12 +120,9 @@ draw(bool forceDraw)
     draw_window(forceDraw);
     for (uint8_t i=0; i<4; ++i)
     {
-        Serial.println("buttons-> draw "+String(i));
         buttons[i]->draw(forceDraw);
     }
-    Serial.println("AFTER FOR");
     geoitem->draw(forceDraw);
-    Serial.println("END DRAW");
 }
 
 void

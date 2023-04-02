@@ -32,7 +32,6 @@ draw(bool forceDraw)
 
     if(!(forceDraw && display[geo_pos]))
     {
-        Serial.println("NO GEO POS");
         return;
     }
 

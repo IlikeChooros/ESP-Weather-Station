@@ -526,12 +526,8 @@ void setup()
     force_wifi_connection();
 
     tft.fillScreen(BACKGROUND_COLOR);
-    Serial.println("INIT");
     city_list->init();
-    Serial.println("SET CITY INFO");
     city_list->set_city_info();
-
-    Serial.println("PICK CITY");
     pick_city();
 
     tft.fillScreen(BACKGROUND_COLOR);
