@@ -26,7 +26,7 @@ class LineCharTemp: public ChartItem
 
 
     void
-    set_data(Vector<WeatherData>& data);
+    set_data(std::vector<WeatherData>& data);
 
     void set_min_max(
         int16_t min,
@@ -59,7 +59,7 @@ class LineChartFeelsLike: public ChartItem
 
 
     void
-    set_data(Vector<WeatherData>& data);
+    set_data(std::vector<WeatherData>& data);
 
     void set_min_max(
         int16_t min,
@@ -90,7 +90,7 @@ class LineChartHumidity: public ChartItem
 
 
     void
-    set_data(Vector<WeatherData>& data);
+    set_data(std::vector<WeatherData>& data);
 
     void set_min_max(
         int16_t min,
@@ -120,7 +120,7 @@ class LineChartPop: public ChartItem
 
 
     void
-    set_data(Vector<WeatherData>& data);
+    set_data(std::vector<WeatherData>& data);
 
     void set_min_max(
         int16_t min,

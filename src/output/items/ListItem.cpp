@@ -15,7 +15,7 @@ void
 ListItem::
 draw_(uint16_t color)
 {
-    if(data.is_empty())
+    if(data.empty())
     {
         return;
     }
@@ -85,8 +85,8 @@ set_data(
     uint16_t text_color
 )
 {
-    print_data* p = new print_data {str, font, text_size, text_color, same_line};
     Serial.println("PRINT_DATA: "+str);
-    data.push_back(*p);
-    delete p;
+    data.push_back({str, font, text_size, text_color, same_line});
+
+    return this;
 }

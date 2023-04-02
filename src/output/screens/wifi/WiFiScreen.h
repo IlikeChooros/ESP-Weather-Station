@@ -31,8 +31,7 @@ public:
 
     virtual void 
     draw(
-        String wifi_name,
-        bool forceDraw
+        String wifi_name
     ) = 0;
 
     virtual String 

@@ -47,7 +47,7 @@ class ChartFrameVFull: public ChartItem
      * @param data 
      */
     void
-    set_data(Vector<WeatherData>& data) {return;}
+    set_data(std::vector<WeatherData>& data) {return;}
 
 
     void set_min_max(
@@ -88,7 +88,7 @@ class ChartFrameVUp: public ChartItem
     draw(bool forceDraw);
 
     void
-    set_data(Vector<WeatherData>& data) {return;}
+    set_data(std::vector<WeatherData>& data) {return;}
 
     void set_min_max(
         int16_t min,

@@ -9,8 +9,8 @@ CityNameListScreen(
     TouchScreen* ts
 ): CityNameScreen(tft, bg_c, wc, ts)
 {
-    input_city = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
-    input_city
+    set_new_location = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
+    set_new_location
     ->touch_color(0x0861)
     ->set_draw(drawSetLocationButton);
     wifi = new WiFiItem(tft, 5,5,20, bg_c);
@@ -86,7 +86,6 @@ set_city_info()
         ->set_data(info->name, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->state, false, 2, 2, TFT_LIGHTGREY);
-        delete info;
 
         address += CITY_NAME_LEN + 1;
     }
@@ -98,7 +97,7 @@ void
 CityNameListScreen::
 check(Point* pos)
 {
-    change_ = input_city->check(pos->x, pos->y);
+    change_ = set_new_location->check(pos->x, pos->y);
     for (uint8_t i=0; i<number_of_saved_city_names; ++i)
     {
         if(saved_city_names[i]->check(pos->x, pos->y))
@@ -128,5 +127,5 @@ draw(bool forceDraw)
         tft->setTextSize(2);
         tft->print("No saved locations.");
     }
-    input_city->draw(forceDraw);
+    set_new_location->draw(forceDraw);
 }

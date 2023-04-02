@@ -6,7 +6,11 @@ extern uint8_t total_geo_size = 0;
 GeoLocItem::
 GeoLocItem(
     TFT_eSPI* tft, 
-    WeatherClient* wclient
+    WeatherClient* wclient,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h
 ): tft(tft), wclient(wclient)
 {
     display = new GeoDisplayItem*[5]{};
@@ -16,7 +20,7 @@ void
 GeoLocItem::
 draw(bool forceDraw)
 {
-    if (data.size())
+    if (data.empty())
     {
         tft->fillRect(45, 40, 230, 160,TFT_BLACK);
         tft->setTextFont(2);
@@ -28,6 +32,7 @@ draw(bool forceDraw)
 
     if(!(forceDraw && display[geo_pos]))
     {
+        Serial.println("NO GEO POS");
         return;
     }
 
@@ -50,7 +55,7 @@ set_loctation
             break;
         }
         data.push_back(*info);
-        display[i] = new GeoDisplayItem(this->tft, *info,45, 40, 230, 160);
+        display[i] = new GeoDisplayItem(this->tft, *info, x, y, w, h);
         delete info;
     }
 
@@ -61,12 +66,7 @@ void
 GeoLocItem::
 clear()
 {
-    while(!data.is_empty())
-    {
-        data.pop_back();
-    }
-    data.~Vector();
-
+    data.clear();
     for (uint8_t i=0; i<5; ++i)
     {
         delete display[i];
@@ -79,7 +79,7 @@ void
 GeoLocItem::
 change(Move dir)
 {
-    if (data.is_empty())
+    if (data.empty())
     {
         return;
     }

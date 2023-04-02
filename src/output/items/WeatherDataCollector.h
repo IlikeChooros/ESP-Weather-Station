@@ -1,8 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "date/DateFormat.h"
-#include "../../data_structures/Vector.h"
-#include "../../data_structures/Vector.cpp"
+
+
 #include "../../weather_client/Weather.h"
 #include "../../weather_client/Forecast.h"
 #include "../../weather_client/WeatherData.h"
@@ -17,9 +19,8 @@ using ui16 = uint16_t;
 
 class WeatherDataCollector
 {
-    Vector<WeatherData> *data;
-
-    i8** min_max;
+    std::vector<std::vector<WeatherData>> _data;
+    std::vector<std::vector<i8>> _min_max;
     ui8 current_day_;
 
     void
@@ -32,13 +33,15 @@ class WeatherDataCollector
         ui8 starting_idx,
         ui8 ending_idx
     );
+
     public:
     WeatherDataCollector(ui8 number_of_data_to_collect) {
-        data = new Vector<WeatherData> [number_of_data_to_collect];
-        min_max = new i8* [number_of_data_to_collect];
+        _data.resize(number_of_data_to_collect);
+        _min_max.resize(number_of_data_to_collect);
+
         for (ui8 i=0; i<number_of_data_to_collect; i++)
         {
-            min_max[i] = new i8 [2]{0,0};
+            _min_max[i].resize(2);
         }
     }
 
@@ -92,5 +95,5 @@ class WeatherDataCollector
     );
 
     void clear_mem(uint8_t idx);
-    Vector<WeatherData>& get_data(uint8_t idx);
+    std::vector<WeatherData>& get_data(uint8_t idx);
 };  

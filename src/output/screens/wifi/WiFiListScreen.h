@@ -43,10 +43,10 @@ class WiFiListScreen: public WiFiScreen
         load_main_ = false;
 
         refresh_button = new CustomButton(tft, 285, 10, 30, 30, 0x3CE6);
-        refresh_button->set_on_press(refresh_func);
         refresh_button
         ->set_draw(drawRefreshButton)
-        ->touch_color(0x19E2);
+        ->touch_color(0x19E2)
+        ->set_on_press(refresh_func);
     }
 
     void 
@@ -60,8 +60,7 @@ class WiFiListScreen: public WiFiScreen
 
     void 
     draw(
-        String wifi_name,
-        bool forceDraw
+        String wifi_name
     )
     {
         return;

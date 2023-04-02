@@ -1,5 +1,49 @@
 #include "CustomButton.h"
 
+namespace 
+custom_button
+{
+    void 
+    do_nothing(
+        TFT_eSPI*, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t
+    )
+    {
+        return;
+    }
+
+    void 
+    do_nothing_wh(
+        TFT_eSPI*, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t, 
+        uint16_t,
+        uint16_t
+    )
+    {
+        return;
+    }
+}
+
+
+CustomButton::
+CustomButton(
+    TFT_eSPI* tft, 
+    int16_t x, 
+    int16_t y, 
+    int16_t width, 
+    int16_t height,
+    uint16_t color
+): TouchButton(x,y,width,height),
+tft(tft), touch_color_(color) {
+    this->color = color;
+    set_draw(custom_button::do_nothing);
+    set_draw_wh(custom_button::do_nothing_wh);
+}
 
 CustomButton*
 CustomButton::
@@ -37,6 +81,7 @@ CustomButton::
 touch_color(uint16_t color)
 {
     this->touch_color_ = color;
+    return this;
 }
 
 void
@@ -47,6 +92,7 @@ draw(bool forceDraw)
     {
         return;
     }
+    Serial.println("DRAW_");
     draw_(color);
 }
 
@@ -61,16 +107,12 @@ void
 CustomButton::
 draw_(uint16_t color)
 {
-    if (drawing_funct)
-    {
-        drawing_funct(
-            tft,
-            x,y,
-            width,
-            color
-        );
-        return;
-    }
+    drawing_funct(
+        tft,
+        x,y,
+        width,
+        color
+    );
 
     drawing_funct_wh(
         tft,

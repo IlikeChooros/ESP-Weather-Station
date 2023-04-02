@@ -35,7 +35,7 @@ class ChartScreenNext12Hours: public ChartScreens
     }
 
     void draw(
-        Vector<WeatherData>& data,
+        std::vector<WeatherData>& data,
         int8_t* min_max,
         bool forceDraw
     );

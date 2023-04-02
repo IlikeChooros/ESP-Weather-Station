@@ -1,6 +1,7 @@
 #include "CityNameInputScreen.h"
 
 extern bool waitForGeoLoc;
+
 CityNameInputScreen::
 CityNameInputScreen(
     TFT_eSPI* tft,
@@ -109,6 +110,7 @@ override_location()
 {
     GeoLocScreen* geo_sc = new GeoLocScreen(tft, wclient, ts);
     tft->fillScreen(bg_c);
+    geo_sc->set_location(inputfield->get_input());
     geo_sc->draw(true);
     while(waitForGeoLoc)
     {
@@ -120,7 +122,6 @@ override_location()
         save_data();
     }
 
-    geo_sc->~GeoLocScreen();
     tft->fillScreen(bg_c);
 
     delete geo_sc;

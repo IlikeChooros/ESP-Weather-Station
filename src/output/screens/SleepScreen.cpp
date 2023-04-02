@@ -68,10 +68,7 @@ SleepScreen::draw()
 void
 SleepScreen::reset()
 {
-    while(!rects.is_empty())
-    {
-        rects.pop_back();
-    }
+    rects.clear();
 
     for (uint8_t i=0; i<NUMBER_OF_RECTS; i++)
     {
@@ -85,7 +82,7 @@ SleepScreen::reset()
         ->x(esp_random()%280+20) // from 20 to 299
         ->y(esp_random()%200+20) // from 20 to 219
         ->rest();
-        rects.push_back(*rect);
+        rects.push_back(std::forward<RandomFigure>(*rect));
         delete rect;
     }
 }

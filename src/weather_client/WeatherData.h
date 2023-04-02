@@ -13,6 +13,17 @@ class WeatherData
 
     public:
 
+    WeatherData(
+        uint64_t dt,
+        int8_t temp,
+        int8_t feels_like,
+        int8_t humidity,
+        int8_t pop
+    ):dt_(dt), temp_(temp),
+    feels_like_(feels_like),
+    humidity_(humidity),
+    pop_(pop) {}
+
     WeatherData* dt(uint64_t dt){
         this->dt_ = dt;
         return this;

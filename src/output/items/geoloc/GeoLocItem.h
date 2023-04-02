@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../../../data_structures/Vector.h"
-#include "../../../data_structures/Vector.cpp"
+#include <vector>
 
 #include "GeoDisplayItem.h"
 
@@ -15,17 +14,26 @@ Move
 class 
 GeoLocItem
 {
-    Vector<City_info> data;
+    std::vector<City_info> data;
 
     GeoDisplayItem** display;
 
     WeatherClient* wclient;
     TFT_eSPI* tft;
 
+    uint16_t x;
+    uint16_t y;
+    uint16_t w;
+    uint16_t h;
+
 public:
     GeoLocItem(
         TFT_eSPI* tft,
-        WeatherClient* wclient
+        WeatherClient* wclient,
+        uint16_t x,
+        uint16_t y,
+        uint16_t w,
+        uint16_t h
     );
 
     /**
@@ -38,7 +46,7 @@ public:
     (String city_name);
 
     /**
-     * @brief Clear previous data Vector
+     * @brief Clear previous data std::vector
      * 
      */
     void 

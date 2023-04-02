@@ -42,12 +42,7 @@ public:
         int16_t width, 
         int16_t height,
         uint16_t color
-    ): TouchButton(x,y,width,height),
-    tft(tft), touch_color_(color) {
-        this->color = color;
-        drawing_funct = 0;
-        drawing_funct_wh = 0;
-    }
+    );
 
 
     /**

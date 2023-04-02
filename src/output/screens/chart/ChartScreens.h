@@ -55,7 +55,7 @@ class ChartScreens
      *                  screen
      */
     virtual void draw(
-        Vector<WeatherData>& data,
+        std::vector<WeatherData>& data,
         int8_t* min_max,
         bool forceDraw
     ) = 0;
@@ -67,7 +67,7 @@ class ChartScreens
 
     void
     draw_(
-        Vector<WeatherData>& data,
+        std::vector<WeatherData>& data,
         int8_t* min_max,
         bool forceDraw,
         String str

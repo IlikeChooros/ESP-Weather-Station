@@ -12,9 +12,10 @@
 
 ## Introduction
 
-This project displays forcasted and current weather. Data is obtained via [openwathermap](https://openweathermap.org/) API. The forcasted weather is displayed in 12 hour and next 4 days format.
+This project displays forcasted and current weather. Data is obtained via [openwathermap](https://openweathermap.org/) API. The forcasted weather is displayed in 12 hour and next 4 days format. 
 
 ## Setup
+*Warning: this project uses EEPROM, it might delete some of the data stored there.*
 To run this project you will need some essential parts and libraries.
 
   **Needed parts:**
@@ -43,6 +44,9 @@ To run this project you will need some essential parts and libraries.
 > 1. Go to file: `src/weather_client/WeatherClient.h`
 > 1. Change: `#define APPID "YOUR API KEY"`
 > 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
+
+*First upload of the code might result in esp system abort, see [this](#esp-restarts-immediately-after-uploading-the-code) how to fix it.*
+
 
 ## Step by step explanation
 The first screen on the display you will encounter, if the code was uploaded successfuly, is the WiFi setup sceen. You will see up to 6 nearest networks.
@@ -92,20 +96,49 @@ It also lets you override saved locations.
 ## Troubleshooting
 While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses.
 
-
- * [Esp resets after connecting to wifi](#esp-resets-after-connecting-to-wifi)
+ * [Esp restarts immediately after uploading the code](#esp-restarts-after-connecting-to-wifi)
+ * [Esp restarts after connecting to wifi](#esp-restarts-after-connecting-to-wifi)
  * [Reset saved wifis](#reset-saved-wifis)
 
+### Esp restarts immediately after uploading the code
+This situation might happen on first upload. The root of this problem is most likely that some data is written on addresses 10 *(starting address for writing saved wifi data)* and 487 *(`CITY_NAME_IDX`)*. They are used to control number of data saved in EEPROM, so conflicting data will cause an undefined behaviour and as a result ESP abort.
+To fix it, you have to simply clear those addresses:
 
-### Esp resets after connecting to wifi
+```
+...
+
+void setup()
+{
+  tft.init();
+  tft.setRotation(3);
+  
+  EEPROM.begin(EEPROM_SIZE);
+  EEPROM.write(CITY_NAME_IDX, 0);
+  EEPROM.write(10, 0);
+  EEPROM.commit();
+
+
+  reset_tft();
+  load_saved_wifis();
+  int8_t number_of_networks; 
+  wifi_screens[0]->init();
+
+  ...
+}
+```
+
+Make sure to delete it after resolving the issue to use WiFi and city location saving feature.
+
+### Esp restarts after connecting to wifi
 Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
-  * if connected via already saved wifi data, try clearing the wifi data from eeprom
+  * try clearing the wifi data from eeprom ([see this](#esp-restarts-after-connecting-to-wifi))
   * check your wifi connetion on other wireless devices, do they have access to the internet
   * try resetarting ESP
   * try restarting router
 
+
 ### Reset saved wifis
-To reset all saved wifis data, put this code at the beggining of the void setup() in main.ino *(ESP-Weather-Station-master.ino, or howevery you named .ino file)*:
+To reset all saved wifis data, put this code at the beggining of the void setup() in main.ino *(ESP-Weather-Station-master.ino, or however you named .ino file)*:
 ```
 ...
 

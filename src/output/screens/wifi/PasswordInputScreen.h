@@ -53,8 +53,7 @@ class PasswordInputScreen: public WiFiScreen
     
     void 
     draw(
-        String wifi_name,
-        bool forceDraw
+        String wifi_name
     );
 
     void 

@@ -1,7 +1,7 @@
 #include "LineChart.h"
 
 ui16 
-set_data_(Vector<WeatherData> &data)
+set_data_(std::vector<WeatherData> &data)
 {
     if (data.size() <= 1)
     {
@@ -35,7 +35,7 @@ get_y_pos_by_idx(
     float scale_pos, 
     float scale_neg,
     ui8 i,
-    Vector<WeatherData> &data
+    std::vector<WeatherData> &data
 )
 {
     switch (idx)
@@ -58,7 +58,7 @@ draw_number_chart(
     ui16 x,
     ui16 y,
     ui16 color,
-    Vector<WeatherData> &data,
+    std::vector<WeatherData> &data,
     ui8 i
 )
 {
@@ -97,7 +97,7 @@ void
 draw_line_chart(
     TFT_eSPI* tft,
     uint8_t idx, 
-    Vector<WeatherData>& data, 
+    std::vector<WeatherData>& data, 
     ui16 starting_x_, 
     ui16 pixel_offset,
     ui16 color,
@@ -139,7 +139,7 @@ void
 draw_dots_chart(
     TFT_eSPI* tft,
     uint8_t idx, 
-    Vector<WeatherData>& data, 
+    std::vector<WeatherData>& data, 
     ui16 starting_x_, 
     ui16 pixel_offset,
     ui16 color,
@@ -184,7 +184,7 @@ draw(bool forceDraw)
 
 void
 LineCharTemp::
-set_data(Vector<WeatherData>& data)
+set_data(std::vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -201,7 +201,7 @@ draw(bool forceDraw)
 
 void
 LineChartFeelsLike::
-set_data(Vector<WeatherData>& data)
+set_data(std::vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -218,7 +218,7 @@ draw(bool forceDraw)
 
 void
 LineChartPop::
-set_data(Vector<WeatherData>& data)
+set_data(std::vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);
@@ -234,7 +234,7 @@ draw(bool forceDraw)
 
 void
 LineChartHumidity::
-set_data(Vector<WeatherData>& data)
+set_data(std::vector<WeatherData>& data)
 {
     this->data = data;
     this->pixel_offset = set_data_(data);

@@ -1,11 +1,9 @@
 #pragma once
 
 #include "TFT_eSPI.h"
-#include "SPI.h"
+#include <vector>
 
 #include "../../../data_structures/get_day.h"
-#include "../../../data_structures/Vector.h"
-#include "../../../data_structures/Vector.cpp"
 #include "../../../weather_client/WeatherData.h"
 
 #define MIDDLE_Y 120
@@ -29,7 +27,7 @@ class ChartItem
     int16_t max_value;
     uint16_t starting_x_;
     TFT_eSPI *tft;
-    Vector<WeatherData> data;
+    std::vector<WeatherData> data;
 
 public:
 
@@ -41,7 +39,7 @@ public:
     starting_x_(starting_x) {}
 
     virtual void set_data(
-        Vector<WeatherData>& data
+        std::vector<WeatherData>& data
     ) = 0;
 
     virtual void draw(

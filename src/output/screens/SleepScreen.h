@@ -6,8 +6,7 @@
 
 #include "../../data_structures/Point.h"
 #include "../../data_structures/Hsv_to_rgb.h"
-#include "../../data_structures/Vector.h"
-#include "../../data_structures/Vector.cpp"
+#include <vector>
 
 #define VELOCITY_X 6
 #define VELOCITY_Y 3
@@ -115,7 +114,7 @@ class SleepScreen
     TFT_eSPI* tft;
     uint16_t bg_c;
 
-    Vector<RandomFigure> rects;
+    std::vector<RandomFigure> rects;
     public:
     /**
      * @brief Screen that converse tft screen usage

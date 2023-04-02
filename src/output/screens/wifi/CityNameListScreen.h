@@ -3,8 +3,7 @@
 
 #include "CityNameScreen.h"
 
-#include "../../../data_structures/Vector.h"
-#include "../../../data_structures/Vector.cpp"
+#include <vector>
 
 #include "../../../data_structures/Point.h"
 
@@ -21,12 +20,12 @@ CityNameListScreen: public CityNameScreen
 {
     ListItem** saved_city_names;
 
-    CustomButton* input_city;
+    CustomButton* set_new_location;
     WiFiItem* wifi;
 
-    Vector<City_info> city_info;
+    std::vector<City_info> city_info;
 
-    Vector<String> city_names;
+    std::vector<String> city_names;
     uint8_t number_of_saved_city_names;
 
 public:

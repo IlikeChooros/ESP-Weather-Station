@@ -3,8 +3,7 @@
 void 
 PasswordInputScreen::
 draw(
-    String wifi_name,
-    bool forceDraw
+    String wifi_name
 )
 {
     this->wifi_name = wifi_name;
@@ -100,8 +99,6 @@ void
 PasswordInputScreen::
 clear_buttons()
 {
-    keyboard->~Keyboard();
-
     delete keyboard;
     delete enter_button;
     delete exit_button;

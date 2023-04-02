@@ -1,11 +1,9 @@
 #pragma once
 
 #include "TFT_eSPI.h"
-#include "SPI.h"
+#include <vector>
 
 #include "../../../data_structures/get_day.h"
-#include "../../../data_structures/Vector.h"
-#include "../../../data_structures/Vector.cpp"
 #include "../../../weather_client/WeatherData.h"
 
 #define CHART_NAME_WIDTH 15

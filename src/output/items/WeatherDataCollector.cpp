@@ -1,9 +1,9 @@
 #include "WeatherDataCollector.h"
 
-Vector<WeatherData>&
+std::vector<WeatherData>&
 WeatherDataCollector::get_data(ui8 idx)
 {
-    return data[idx];
+    return _data[idx];
 }
 
 void 
@@ -20,13 +20,13 @@ WeatherDataCollector::check_min_max(
     uint8_t idx
 )
 {
-    if (min_max[idx][0] > data)
+    if (_min_max[idx][0] > data)
     {
-        min_max[idx][0] = data; // min
+        _min_max[idx][0] = data; // min
     }
-    else if(min_max[idx][1] < data)
+    else if(_min_max[idx][1] < data)
     {
-        min_max[idx][1] = data; // max
+        _min_max[idx][1] = data; // max
     }
 }
 
@@ -39,23 +39,14 @@ WeatherDataCollector::collect(
     if (current_day_ != get_day(weather->_dt))
     {
         clear_mem(idx);
-        min_max[idx][0] = -1;
-        min_max[idx][1] = 1;
+        _min_max[idx][0] = -1;
+        _min_max[idx][1] = 1;
         current_day_ = get_day(weather->_dt);
     }
-    WeatherData* wdata(static_cast<WeatherData*>(::operator new(sizeof(WeatherData))));
-    wdata
-    ->dt(weather->_dt)
-    ->humidity(weather->_humidity)
-    ->temp(weather->_temp)
-    ->feels_like(weather->_feels_like)
-    ->pop(100 * weather->_pop);
-    data[idx].push_back(*wdata);
+    _data[idx].push_back(WeatherData(weather->_dt, weather->_temp, weather->_feels_like, weather->_humidity, 100 * weather->_pop));
 
-    check_min_max(data[idx].at(data[idx].size()-1).temp(), idx);
-    check_min_max(data[idx].at(data[idx].size()-1).feels_like(), idx);
-
-    delete wdata;
+    check_min_max(_data[idx].at(_data[idx].size()-1).temp(), idx);
+    check_min_max(_data[idx].at(_data[idx].size()-1).feels_like(), idx);
 }
 
 
@@ -103,19 +94,11 @@ WeatherDataCollector::collect_data(
 
     for (ui8 i=starting_idx; i<ending_idx;i++)
     {
-        WeatherData* wdata(static_cast<WeatherData*>(::operator new(sizeof(WeatherData))));
-        wdata
-        ->dt(forecast->forecasted_weather[i]->_dt)
-        ->humidity(forecast->forecasted_weather[i]->_humidity)
-        ->pop(100*forecast->forecasted_weather[i]->_pop)
-        ->feels_like(forecast->forecasted_weather[i]->_feels_like)
-        ->temp(forecast->forecasted_weather[i]->_temp);
-
-        data[idx].push_back(*wdata);
-        check_min_max(data[idx].at(count).temp(), idx);
-        check_min_max(data[idx].at(count).feels_like(), idx);
+        Weather* weather = forecast->forecasted_weather[i];
+        _data[idx].push_back(WeatherData(weather->_dt, weather->_temp, weather->_feels_like, weather->_humidity, 100 * weather->_pop));
+        check_min_max(_data[idx].at(count).temp(), idx);
+        check_min_max(_data[idx].at(count).feels_like(), idx);
         count++;
-        delete wdata;
     }
 }
 
@@ -124,7 +107,7 @@ WeatherDataCollector::get_min_max(
     ui8 idx
 )
 {
-    return this->min_max[idx];
+    return this->_min_max[idx].begin().base();
 }
 
 void
@@ -132,8 +115,5 @@ WeatherDataCollector::clear_mem(
     ui8 idx
 )
 {
-    while (!data[idx].is_empty())
-    {
-        data[idx].pop_back();
-    }
+    _data[idx].clear();
 }

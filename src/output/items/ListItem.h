@@ -1,13 +1,10 @@
 #pragma once
 
 #include "TFT_eSPI.h"
-#include "SPI.h"
+#include <vector>
 
 #include "../../input/TouchButton.h"
 #include "../icons/drawings.h"
-
-#include "../../data_structures/Vector.h"
-#include "../../data_structures/Vector.cpp"
 
 struct print_data
 {
@@ -25,7 +22,7 @@ ListItem: public TouchButton
 
     bool marked_;
 
-    Vector<print_data> data;
+    std::vector<print_data> data;
 
     void 
     draw_(uint16_t color);

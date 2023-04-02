@@ -35,7 +35,7 @@ ChartScreens::draw_name(String str)
 
 void 
 ChartScreens::draw_(
-    Vector<WeatherData>& data,
+    std::vector<WeatherData>& data,
     int8_t* min_max,
     bool forceDraw,
     String str
@@ -48,7 +48,7 @@ ChartScreens::draw_(
     }
     chart_time->draw(forceDraw);
 
-    if (data.size() == 1 || data.is_empty())
+    if (data.size() == 1 || data.empty())
     {
         return;
     }

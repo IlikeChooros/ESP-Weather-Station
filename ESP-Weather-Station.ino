@@ -1,3 +1,4 @@
+
 #include "src/data_structures/Hsv_to_rgb.h"
 #include "src/calibrate/calibrate_data.h"
 #include "src/data_structures/Point.h"
@@ -506,10 +507,9 @@ pick_city()
 
 void setup()
 {
-    Serial.begin(921600);
     tft.init();
     tft.setRotation(3);
-    
+
     reset_tft();
     load_saved_wifis();
     int8_t number_of_networks; 
