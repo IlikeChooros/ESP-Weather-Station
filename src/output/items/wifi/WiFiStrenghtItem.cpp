@@ -16,17 +16,14 @@ WiFiStrenghtItem::
 matchIcon()
 {
     // strenght (-30 to 0)
-    if (strenght > -45)
-    {
+    if (strenght > -45){
         return new WiFiIconStrong(tft,x,y,size,background_color);
     }
     // strenght (-60 to -30)
-    else if (strenght > -75)
-    {
+    else if (strenght > -75){
         return new WiFiIconMedium(tft,x,y,size,background_color);
     }
-    else 
-    {
+    else {
         return new WiFiIconWeak(tft,x,y,size,background_color);
     }
 }

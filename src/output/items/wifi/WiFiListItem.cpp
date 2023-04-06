@@ -2,22 +2,19 @@
 
 int8_t 
 WiFiListItem::
-get_strenght()
-{
+get_strenght(){
     return this->strenght;
 }
 
 bool 
 WiFiListItem::
-is_saved()
-{
+is_saved(){
     return this->password_saved;
 }
 
 String 
 WiFiListItem::
-get_ssid()
-{
+get_ssid(){
     return this->ssid;
 }
 
@@ -25,8 +22,7 @@ void
 WiFiListItem::
 draw(bool forceDraw)
 {
-    if(!forceDraw)
-    {
+    if(!forceDraw){
         return;
     }
     tft->setTextColor(TFT_WHITE);
@@ -36,12 +32,10 @@ draw(bool forceDraw)
     tft->drawRect(x,y,width,height,TFT_LIGHTGREY);
     
     Icon* icon;
-    if (this->password_saved)
-    {
+    if (this->password_saved){
         icon = new LockerOpened(tft, x+0.82f*width, y+0.1f*height, 0.08f*width, color);
     }
-    else
-    {
+    else{
         icon = new LockerLocked(tft, x+0.82f*width, y+0.1f*height, 0.08f*width, color);
     }
     icon->draw();
@@ -56,8 +50,7 @@ draw(bool forceDraw)
     tft->setCursor(x+0.05f*width, y+0.05f*height);
 
     String temp;
-    if (ssid.length()<14)
-    {
+    if (ssid.length()<14){
         temp = ssid;
     }
     else{

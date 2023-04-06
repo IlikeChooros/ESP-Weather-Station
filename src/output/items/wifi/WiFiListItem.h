@@ -50,8 +50,7 @@ class WiFiListItem: public TouchButton
     String 
     get_ssid();
 
-    void on_touch()
-    {
+    void on_touch(){
         return;
     }
 };

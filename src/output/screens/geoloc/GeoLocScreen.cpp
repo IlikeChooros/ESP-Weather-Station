@@ -6,17 +6,15 @@ extern uint8_t geo_pos;
 
 static uint8_t current_pos = 255;
 static bool picked = false;
-static uint8_t prev_pos = 0;
 
 void
-geo_pick(void)
-{
+exit_geo_pick(void){
+    waitForGeoLoc = false;
     picked = false;
 }
 
 void
-finish_geo_setup(void)
-{
+finish_geo_setup(void){
     waitForGeoLoc = false;
     picked = true;
 }
@@ -24,11 +22,9 @@ finish_geo_setup(void)
 GeoLocScreen::
 ~GeoLocScreen()
 {
-    for (uint8_t i=0; i<4; ++i)
-    {
+    for (uint8_t i=0; i<4; ++i){
         delete buttons[i];
     }
-
     delete buttons;
     geoitem->clear();
     delete geoitem;
@@ -54,7 +50,7 @@ GeoLocScreen(
 
     buttons[1]
     ->set_draw(drawExitButton)
-    ->set_on_press(geo_pick);
+    ->set_on_press(exit_geo_pick);
 
     buttons[2]
     ->set_draw_wh(drawLeftArrow);
@@ -73,22 +69,18 @@ check(void)
 {
     Point* pos = ts->read_touch();
 
-    if (!pos)
-    {
+    if (!pos){
         return;
     }
 
-    for (uint8_t i=0; i<4; ++i)
-    {
-        if(!buttons[i]->check(pos->x, pos->y))
-        {
+    for (uint8_t i=0; i<4; ++i){
+        if(!buttons[i]->check(pos->x, pos->y)){
             continue;
         }
-
-        if (i == 2 || i == 3)
-        {
+        if (i == 2 || i == 3){
             geoitem->change(Move(i-2));
         }
+        draw(false);
         return;
     }
 }
@@ -97,29 +89,27 @@ void
 GeoLocScreen::
 draw_window(bool forceDraw)
 {
-    if(forceDraw)
-    {
+    if(forceDraw){
         tft->fillRect(40, 5, 240, 230, 0x18E3);
         tft->drawRect(40, 5, 240, 230, 0x2985);
     }
 
-    if (!total_geo_size || (current_pos == geo_pos))
-    {
+    if (!total_geo_size || (current_pos == geo_pos)){
         return;
     }
 
     tft->setTextColor(TFT_WHITE, 0x18E3, true);
     tft->setTextSize(2);
-    tft->drawCentreString(String(geo_pos+1)+" / "+String(total_geo_size), 160, 20, 2);
+    tft->drawCentreString(String(geo_pos+1) + " / " + String(total_geo_size), 160, 5, 2);
+    current_pos = geo_pos;
 }
 
 void
 GeoLocScreen::
-draw(bool forceDraw)
-{
+draw(bool forceDraw){
     draw_window(forceDraw);
-    for (uint8_t i=0; i<4; ++i)
-    {
+
+    for (uint8_t i=0; i<4; ++i){
         buttons[i]->draw(forceDraw);
     }
     geoitem->draw(forceDraw);
@@ -127,14 +117,17 @@ draw(bool forceDraw)
 
 void
 GeoLocScreen::
-set_location(String location)
-{
+set_location(String location){
+    waitForGeoLoc = true;
+    picked = false;
+    geo_pos = 0;
+    current_pos = 255;
+
     geoitem->set_loctation(location);
 }
 
 bool
 GeoLocScreen::
-is_picked(void)
-{
+is_picked(void){
     return picked;
 }

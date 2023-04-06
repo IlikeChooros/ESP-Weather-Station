@@ -58,10 +58,9 @@ set_city_info()
             EEPROM.read(address)
         );
 
-        if (!info)
-        {
+        if (!info){
             saved_city_names[i]
-            ->set_data(city_names.at(i), true, 2, 2, TFT_LIGHTGREY)
+            ->set_data("No city", true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String("NULL"), true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
@@ -69,14 +68,14 @@ set_city_info()
             EEPROM.end();
             break;
         }
-        city_info.push_back(*info);
-        if (info->state == "null")
-        {
+
+        city_info.push_back(std::forward<City_info>(*info));
+        if (info->state == "null"){
             info->state = "";
         }
 
         saved_city_names[i]
-        ->set_data(info->name, true, 2, 2, TFT_LIGHTGREY)
+        ->set_data(city_names.at(i), true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->state, false, 2, 2, TFT_LIGHTGREY);
 
@@ -91,10 +90,8 @@ CityNameListScreen::
 check(Point* pos)
 {
     change_ = set_new_location->check(pos->x, pos->y);
-    for (uint8_t i=0; i<number_of_saved_city_names; ++i)
-    {
-        if(saved_city_names[i]->check(pos->x, pos->y))
-        {
+    for (uint8_t i=0; i<number_of_saved_city_names; ++i){
+        if(saved_city_names[i]->check(pos->x, pos->y)){
             load_main_ = wclient->_init_(city_names.at(i));
             return;
         }
@@ -103,12 +100,26 @@ check(Point* pos)
 
 void
 CityNameListScreen::
+draw_wifi_name(bool forceDraw){
+    if(!forceDraw){
+        return;
+    }
+
+    tft->setCursor(30,5);
+    tft->setTextColor(TFT_LIGHTGREY);
+    tft->setTextFont(2);
+    tft->setTextSize(1);
+    tft->print(WiFi.SSID());
+}
+
+void
+CityNameListScreen::
 draw(bool forceDraw)
 {
     wifi->draw(forceDraw);
-
-    for (uint8_t i=0; i<number_of_saved_city_names; ++i)
-    {
+    draw_wifi_name(forceDraw);
+    
+    for (uint8_t i=0; i<number_of_saved_city_names; ++i){
         saved_city_names[i]->draw(forceDraw);
     }
 

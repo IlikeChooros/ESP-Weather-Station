@@ -27,7 +27,7 @@ custom_button
     {
         return;
     }
-}
+} // custom_button
 
 
 CustomButton::
@@ -78,8 +78,7 @@ set_draw_wh(
 
 CustomButton*
 CustomButton::
-touch_color(uint16_t color)
-{
+touch_color(uint16_t color){
     this->touch_color_ = color;
     return this;
 }
@@ -88,8 +87,7 @@ void
 CustomButton::
 draw(bool forceDraw)
 {
-    if (!forceDraw)
-    {
+    if (!forceDraw){
         return;
     }
     draw_(color);
@@ -97,8 +95,7 @@ draw(bool forceDraw)
 
 void
 CustomButton::
-on_touch()
-{
+on_touch(){
     draw_(touch_color_);
 }
 

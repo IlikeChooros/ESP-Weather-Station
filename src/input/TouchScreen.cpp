@@ -110,13 +110,13 @@ TouchScreen::read_touch()
         if (!state)
         {
             _lastState = state;
-            return 0;
+            return nullptr;
         }
 
         return new Point(x,y);
     }
     _lastState = state;
-    return 0;
+    return nullptr;
 }
 
 TouchScreen* 

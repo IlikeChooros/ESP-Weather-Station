@@ -15,6 +15,47 @@ WeatherClient(
     this->cacheTime = cacheTime;
 }
 
+std::vector<City_info>
+WeatherClient::
+get_all_cities_info(
+    String city_name
+){
+    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
+    uint16_t http_code = http->GET();
+    String payload = http->getString();
+
+    std::vector<City_info> data;
+
+    if (http_code == 200)
+    {   
+        DynamicJsonDocument filter(8200);
+        for(uint8_t i = 0; i < 5; ++i){
+            filter[i]["lat"] = true;
+            filter[i]["lon"] = true;
+            filter[i]["country"] = true;
+            filter[i]["state"] = true;
+
+            DynamicJsonDocument doc(8200);
+
+            deserializeJson(doc, payload, DeserializationOption::Filter(filter));
+            if (doc[i]["lat"].as<String>() == "null"){
+                break;
+            }
+
+            data.push_back({
+                doc[i]["lat"].as<double>(),
+                doc[i]["lon"].as<double>(),
+                city_name,
+                doc[i]["country"].as<String>(), 
+                doc[i]["state"].as<String>()
+            });
+
+        }
+    }
+    http->end();
+    return data;
+}
+
 City_info*
 WeatherClient::
 get_city_info(
@@ -22,7 +63,7 @@ get_city_info(
     uint8_t idx
 )
 {
-    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
+    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
     int16_t http_code = http->GET();
 
     String payload = http->getString();
@@ -31,14 +72,14 @@ get_city_info(
 
     if (http_code == 200)
     {
-        DynamicJsonDocument filter (1200);
+        DynamicJsonDocument filter (8200);
         filter[idx]["lat"] = true;
         filter[idx]["lon"] = true;
         filter[idx]["country"] = true;
         filter[idx]["state"] = true;
 
 
-        DynamicJsonDocument doc(1200);
+        DynamicJsonDocument doc(8200);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
         data = new City_info{

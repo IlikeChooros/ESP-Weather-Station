@@ -28,6 +28,9 @@ CityNameListScreen: public CityNameScreen
     std::vector<String> city_names;
     uint8_t number_of_saved_city_names;
 
+    void
+    draw_wifi_name(bool forceDraw);
+
 public:
     CityNameListScreen(
         TFT_eSPI* tft,

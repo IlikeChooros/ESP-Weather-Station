@@ -73,7 +73,7 @@ class RandomFigure
     }
     RandomFigure* color() {
         HSV* hsv = new HSV;
-        hsv->hue = esp_random()%360;
+        hsv->hue = esp_random()%180 + 160;
         hsv->satrutaion = 50 + esp_random()%50;
         hsv->value = 50 + esp_random()%50;
         color_ = HSV_RGB(*hsv);

@@ -5,9 +5,22 @@
 
 #include "../../input/TouchButton.h"
 #include "../icons/drawings.h"
+#include "../../data_structures/Point.h"
 
-struct print_data
+class print_data
 {
+
+public:
+    print_data(
+        String string,
+        uint8_t font,
+        uint8_t size,
+        uint16_t color,
+        bool same_line
+    ): string(string), font(font),
+    size(size), color(color),
+    same_line(same_line) {}
+    
     String string;
     uint8_t font;
     uint8_t size;
@@ -56,4 +69,10 @@ public:
         uint8_t text_size,
         uint16_t text_color
     );
+
+    ListItem*
+    set_position(Point& pos);
+
+    std::vector<print_data>&
+    stored();
 };

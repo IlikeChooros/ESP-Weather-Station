@@ -2,7 +2,6 @@
 
 #include <TFT_eSPI.h>
 #include <SPI.h>
-
 #include "../data_structures/Point.h"
 
 #define VERTICAL_VAL 15

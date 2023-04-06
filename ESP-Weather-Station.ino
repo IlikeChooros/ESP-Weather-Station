@@ -112,24 +112,20 @@ uint8_t wifi_screen_idx = 0;
 uint8_t idx = 0;
 uint8_t for_idx = 0;
 
-void draw_weather_screens()
-{
+void draw_weather_screens(){
     // It wont hurt to call both methods on the same screen object
     screens[screen_idx.x]->draw(weather, true);
     screens[screen_idx.x]->draw(forecast, true);
     sci.draw(X_SCREENS, 2, screen_idx.x+1, screen_idx.y+1);
 }
 
-void draw_chart_screens(uint8_t collector_idx)
-{
+void draw_chart_screens(uint8_t collector_idx){
     chart_screens[screen_idx.x]->draw(collector->get_data(collector_idx), collector->get_min_max(collector_idx), true);
     sci.draw(X_1_SCREENS, 2, screen_idx.x+1, screen_idx.y+1);
 }
 
-void get_esp_info()
-{
-    if (millis() - lastTimeCheck < SECOND)
-    {
+void get_esp_info(){
+    if (millis() - lastTimeCheck < SECOND){
         return;
     }
 
@@ -140,14 +136,12 @@ void get_esp_info()
     screens[0]->refresh(false);
 
     // Try to regain wifi connection, if lost
-    if (WiFi.status() != WL_CONNECTED)
-    {
+    if (WiFi.status() != WL_CONNECTED){
         reconnect_to_wifi();
     }
 
     // Collector
-    if (millis() - lastCollectorCheck > MIN_5)
-    {
+    if (millis() - lastCollectorCheck > MIN_5){
         collect_data();
         lastCollectorCheck = millis();
     }
@@ -155,8 +149,7 @@ void get_esp_info()
     lastTimeCheck = millis();
 }
 
-void wakeup()
-{
+void wakeup(){
     tft.fillScreen(BACKGROUND_COLOR);
     screen_idx.x = 0;
     screen_idx.y = 0;
@@ -165,13 +158,11 @@ void wakeup()
     sleep_screen->reset();
 }
 
-void sleep()
-{
+void sleep(){
     tft.fillScreen(TFT_BLACK);
     is_asleep = true;
 
-    while(is_asleep)
-    {
+    while(is_asleep){
         sleep_screen->draw();
         ts.read();
         get_esp_info();
@@ -190,25 +181,22 @@ void collect_data()
     }
 }
 
-void eeprom_earse(uint16_t starting_address, uint16_t ending_address)
-{
-    for (;starting_address<ending_address; starting_address++)
-    {
+void eeprom_earse(uint16_t starting_address, uint16_t ending_address){
+
+    for (;starting_address<ending_address; starting_address++){
         EEPROM.write(starting_address, 0);
     }
     EEPROM.commit();
 }
 
-void reset_tft()
-{
+void reset_tft(){
     tft.fillScreen(BACKGROUND_COLOR);
     tft.setCursor(0,0);
     tft.setTextColor(TFT_GREEN);
     tft.setTextSize(1);
 }
 
-void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
-{
+void char_to_wifi_info(char* ssid, char* pass, uint8_t idx){
     ssid = new char [saved_wifi_info[idx][0].length()+1];
     pass = new char [saved_wifi_info[idx][1].length()+1];
 
@@ -216,18 +204,15 @@ void char_to_wifi_info(char* ssid, char* pass, uint8_t idx)
     saved_wifi_info[idx][1].toCharArray(pass, saved_wifi_info[idx][1].length()+1);
 }
 
-void reconnect_to_wifi()
-{
-    if (millis() - wifiUpdateTimeCheck > SECOND_10)
-    {
+void reconnect_to_wifi(){
+    if (millis() - wifiUpdateTimeCheck > SECOND_10){
         WiFi.disconnect();
         WiFi.reconnect();
         wifiUpdateTimeCheck = millis();
     }
 }
 
-void load_saved_wifis()
-{
+void load_saved_wifis(){
     //******************************
     // Read from EEPROM saved wifis
     // address = 10 -> number of networks
@@ -261,42 +246,34 @@ void load_saved_wifis()
     EEPROM.end();
 }
 
-void refresh()
-{
+void refresh(){
     wifi_screens[0]->clear_buttons();
     wifi_screens[0]->scan();
     wifi_screens[0]->draw(true);
 }
 
-void left()
-{
+void left(){
     move(LEFT);
 }
 
-void right()
-{
+void right(){
     move(RIGHT);
 }
 
-void up()
-{
+void up(){
     move(UP);
 }
 
-void down()
-{
+void down(){
     move(DOWN);
 }
 
-void move(uint8_t move)
-{
+void move(uint8_t move){
     uint8_t collector_idx = 0;
 
     tft.fillScreen(BACKGROUND_COLOR);
-    if (screen_idx.y == 0)
-    {
-        switch(move)
-        {
+    if (screen_idx.y == 0){
+        switch(move){
             case LEFT:
                 screen_idx.x = screen_idx.x > 0 ? screen_idx.x - 1 : X_SCREENS-1;
                 draw_weather_screens();
@@ -318,10 +295,8 @@ void move(uint8_t move)
         }
     }
 
-    else if (screen_idx.y == 1)
-    {
-        switch(move)
-        {
+    else if (screen_idx.y == 1){
+        switch(move){
             case UP:
                 screen_idx.y = 0;
                 screen_idx.x = screen_idx.x < X_SCREENS ? screen_idx.x : 0;
@@ -344,12 +319,10 @@ void move(uint8_t move)
     }
 }
 
-void wifi_setup()
-{
+void wifi_setup(){
     Point* pos = ts.read_touch();
 
-    if(pos)
-    {
+    if(pos){
         wifi_screens[wifi_screen_idx]->check(pos);
         if (wifi_screens[wifi_screen_idx]->change())
         {
@@ -365,8 +338,7 @@ void wifi_setup()
     }
 }
 
-void force_wifi_connection()
-{
+void force_wifi_connection(){
     tft.println("Scanning WiFis...");
 
     wifi_screens[0]->scan();
@@ -380,8 +352,7 @@ void force_wifi_connection()
     //****************************
     // Already connected to WiFi 
     // without entering password
-    if (!wifi_screens[1]->load_main() || (temp_ssid == "" || temp_pwd == "") )
-    {
+    if (!wifi_screens[1]->load_main() || (temp_ssid == "" || temp_pwd == "") ){
         return;
     }
     //******************************************
@@ -409,8 +380,6 @@ void force_wifi_connection()
             return;
         }
     }
-
-
     //*********************************
     // Saving entered network to EEPROM
     //
@@ -455,36 +424,30 @@ pick_city()
     city_list->draw(true);
     while(!(city_input->load_main() || city_list->load_main()))
     {
-        if(city_idx)
-        {
+        if(city_idx){
             city_input->draw(false);
         }
         else{
             city_list->draw(false);
         }
 
-        if (WiFi.status() == WL_DISCONNECTED)
-        {
+        if (WiFi.status() == WL_DISCONNECTED){
             reconnect_to_wifi();
         }
+
         Point* pos = ts.read_touch();
-        if(!city_idx)
-        {
+        if(!city_idx){
             city_list->draw(false);
         }
-
-        if(!pos)
-        {
+        if(!pos){
             continue;
         }
-
-        if(city_idx) // 1
-        {
+        // 1
+        if(city_idx){
             city_input->check(pos);
             city_idx = !city_input->change(); // if true -> idx = 0, else  idx = 1
 
-            if (city_input->change())
-            {
+            if (city_input->change()){
                 tft.fillScreen(BACKGROUND_COLOR);
                 city_list->draw(true);
             }
@@ -493,16 +456,13 @@ pick_city()
             city_list->check(pos);
             city_idx = city_list->change(); // if true idx = 1, else idx = 0
 
-            if (city_list->change())
-            {
+            if (city_list->change()){
                 tft.fillScreen(BACKGROUND_COLOR);
                 city_input->draw(true);
             }
         }
         delete pos;
     }
-
-
 }
 
 void setup()
@@ -536,17 +496,15 @@ void setup()
     forecast = new Forecast;
     forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
     forecast->forecasted_weather = new Weather* [NUMBER_OF_HOURS_TO_FORECAST];
-    for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++)
-    {
+    
+    for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++){
         forecast->forecasted_weather[i] = new Weather;
     }
 
     reset_tft();
-    while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast)))
-    {
+    while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast))){
         tft.println("Failed to obtain data, try restarting ESP");
-        if (WiFi.status() != WL_CONNECTED)
-        {
+        if (WiFi.status() != WL_CONNECTED){
             reconnect_to_wifi();
         }
         delay(3000);
@@ -563,12 +521,10 @@ void setup()
 }
 
 
-void loop()
-{
+void loop(){
     ts.read();
     get_esp_info();
-    if (screen_idx.y == 0)
-    {
+    if (screen_idx.y == 0){
         screens[screen_idx.x]->draw(weather,false);
         screens[screen_idx.x]->draw(forecast,false);
     }

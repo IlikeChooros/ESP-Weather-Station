@@ -4,8 +4,7 @@ void
 ListItem::
 draw(bool forceDraw)
 {
-    if(!forceDraw)
-    {
+    if(!forceDraw){
         return;
     }
     draw_(0x10A3);
@@ -15,8 +14,7 @@ void
 ListItem::
 draw_(uint16_t color)
 {
-    if(data.empty())
-    {
+    if(data.empty()){
         return;
     }
     uint16_t x = this->x, y = this->y;
@@ -26,22 +24,19 @@ draw_(uint16_t color)
 
     x+=5;
 
-    for (uint8_t j=0; j< data.size(); j++)
+    for (auto i : data)
     {
-        tft->setTextColor(data.at(j).color);
-        tft->setTextSize(data.at(j).size);
-        tft->setTextFont(data.at(j).font);
+        tft->setTextColor(i.color);
+        tft->setTextSize(i.size);
+        tft->setTextFont(i.font);
 
-        if (!data.at(j).same_line)
-        {
-            y += data.at(j).font*data.at(j).size*5+5;
+        if (!i.same_line){
+            y += i.font*i.size*5+5;
             x = this->x+5;
         }
 
-        String str = data.at(j).string,
-        temp;
-        if (str.length() < 17)
-        {
+        String str = i.string, temp;
+        if (str.length() < 17){
             temp = str;
         }
         else{
@@ -52,25 +47,32 @@ draw_(uint16_t color)
         x += 10;
     }
 
-    if (marked_)
-    {
+    if (marked_){
         drawPickIcon(tft, x+0.9f*width, y, height*0.8f, TFT_GREENYELLOW);
     }
 }
 
+std::vector<print_data>&
+ListItem::stored(){
+    return data;
+}
 
 void
 ListItem::
-on_touch()
-{
+on_touch(){
     draw_(0x0861);
 }
 
+ListItem*
+ListItem::set_position(Point& pos){
+    x = pos.x;
+    y = pos.y;
+    return this;
+}
 
 ListItem*
 ListItem::
-marked(bool marked)
-{
+marked(bool marked){
     this->marked_ = marked;
     return this;
 }
@@ -85,6 +87,6 @@ set_data(
     uint16_t text_color
 )
 {
-    data.push_back({str, font, text_size, text_color, same_line});
+    data.push_back(print_data(str, font, text_size, text_color, same_line));
     return this;
 }

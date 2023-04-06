@@ -1,7 +1,6 @@
 #include "WiFiListScreen.h"
 
-void WiFiListScreen::init()
-{
+void WiFiListScreen::init(){
     read_from_eeprom_wifis();
 }
 
@@ -20,8 +19,7 @@ void WiFiListScreen::scan()
     number_of_networks = WiFi.scanNetworks();
     wifis = 0;
 
-    if (number_of_networks <= 0)
-    {
+    if (number_of_networks <= 0){
         return;
     }
 
@@ -32,15 +30,12 @@ void WiFiListScreen::scan()
 
     wifis = new WiFiListItem* [number_of_networks];
     
-    for (uint8_t i=0;i<number_of_networks;i++)
-    {
+    for (uint8_t i=0;i<number_of_networks;i++){
         String ssid = WiFi.SSID(i);
         bool is_saved = false;
-        for (uint8_t j=0; j<number_of_saved_wifis; j++)
-        {
+        for (uint8_t j=0; j<number_of_saved_wifis; j++){
             // If saved wifi has the same ssid as the scanned wifi
-            if (saved_wifi_info[j][0] == ssid)
-            {
+            if (saved_wifi_info[j][0] == ssid){
                 is_saved = true;
                 break;
             }
@@ -56,11 +51,10 @@ WiFiListScreen::check(
 {
     for (uint8_t i=0; i<number_of_networks; i++)
     {
-        if (wifis[i]->check(pos->x, pos->y))
-        {
+        if (wifis[i]->check(pos->x, pos->y)){
+
             picked_wifi = wifis[i]->get_ssid();
-            if (wifis[i]->is_saved())
-            {
+            if (wifis[i]->is_saved()){
                 connect_to_wifi();
                 return;
             }
@@ -80,10 +74,8 @@ connect_to_wifi()
     String psw;
 
     // Look for saved wifi
-    for (uint8_t i=0; i<number_of_saved_wifis; i++)
-    {
-        if (saved_wifi_info[i][0] == picked_wifi)
-        {
+    for (uint8_t i=0; i<number_of_saved_wifis; i++){
+        if (saved_wifi_info[i][0] == picked_wifi){
             psw = saved_wifi_info[i][1];
             break;
         }
@@ -116,16 +108,14 @@ read_from_eeprom_wifis()
     uint8_t count = EEPROM.read(10);
     this->number_of_saved_wifis = count;
     uint16_t address = 11;
-    if (count)
-    {
+    if (count){
         saved_wifi_info = new String* [count];
     }
     
 
     String saved_ssid, saved_psw;
 
-    for (uint8_t i=0; i<count; i++)
-    {
+    for (uint8_t i=0; i<count; i++){
         saved_ssid = EEPROM.readString(address);
         address += MAX_SSID_LENGHT;
         saved_psw = EEPROM.readString(address);
@@ -146,8 +136,7 @@ read_from_eeprom_wifis()
 //---------------------------------
 bool 
 WiFiListScreen::
-change()
-{
+change(){
     return this->change_;
 }
 
@@ -158,10 +147,8 @@ change()
 //------------------------
 void 
 WiFiListScreen::
-draw(bool forceDraw)
-{
-    for (uint8_t i=0; i<number_of_networks; i++)
-    {
+draw(bool forceDraw){
+    for (uint8_t i=0; i<number_of_networks; i++){
         wifis[i]->draw(true);
     }
     refresh_button->draw(true);
@@ -174,12 +161,10 @@ void
 WiFiListScreen::
 clear_buttons()
 {
-    if (number_of_networks<1)
-    {
+    if (number_of_networks<1){
         return;
     }
-    for (uint8_t i=0; i<number_of_networks; i++)
-    {
+    for (uint8_t i=0; i<number_of_networks; i++){
         delete wifis[i];
     }
     delete [] wifis;

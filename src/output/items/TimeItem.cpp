@@ -1,10 +1,8 @@
 #include "TimeItem.h"
 
 
-void TimeItem::draw(bool forceDraw)
-{
-    if (!redraw && !forceDraw)
-    {
+void TimeItem::draw(bool forceDraw){
+    if (!redraw && !forceDraw){
         return;
     }
 
@@ -23,21 +21,18 @@ void TimeItem::draw(bool forceDraw)
 
 String TimeItem::get_date_format(bool hourFormat)
 {
-    if (hourFormat)
-    {
+    if (hourFormat){
         return get_hour_format();
     }
     return get_weekday();
 }
 
-void TimeItem::setWeather(Weather* weather)
-{
+void TimeItem::setWeather(Weather* weather){
     redraw = unix != weather->_dt;
     this->unix = weather->_dt;
 }
 
-String TimeItem::get_hour_format()
-{
+String TimeItem::get_hour_format(){
     uint32_t time = unix % (24 * 60 * 60);
     uint8_t hour = time / 3600,
             min = (time % 3600) / 60;
@@ -54,8 +49,7 @@ String TimeItem::get_hour_format()
     return hour_format;
 }
 
-String TimeItem::get_weekday()
-{
+String TimeItem::get_weekday(){
     String weekdays[7] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
     float days = this->unix/24;
     days /= 3600;

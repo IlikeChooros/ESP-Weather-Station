@@ -59,16 +59,12 @@ class WiFiListScreen: public WiFiScreen
     init();
 
     void 
-    draw(
-        String wifi_name
-    )
-    {
+    draw(String wifi_name){
         return;
     }
 
     String 
-    get_str()
-    {
+    get_str(){
         return this->picked_wifi;
     }
 

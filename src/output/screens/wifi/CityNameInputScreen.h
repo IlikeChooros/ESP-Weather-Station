@@ -6,7 +6,7 @@
 #include "../../items/InputField.h"
 
 #include "../geoloc/GeoLocScreen.h"
-
+#include "../settings/PickOptionScreen.h"
 
 class CityNameInputScreen: public CityNameScreen
 {
