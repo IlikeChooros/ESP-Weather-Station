@@ -20,10 +20,10 @@ PickOptionScreen::
 PickOptionScreen(
     TFT_eSPI* tft,
     TouchScreen* ts
-): tft(tft), ts(ts){
+): tft(tft), ts(ts), _title(""){
     _confirm = new CustomButton(tft, 285, 5, 30, 30, 0x3CE6);
     _exit = new CustomButton(tft, 285, 50, 30, 30, TFT_RED);
-    _sc = new SettingsScreen(tft, 20, 20, 240, 200);
+    _sc = new SettingsScreen(tft, 20, 30, 240, 200);
 
     _confirm
     ->set_draw(drawTickButton)
@@ -67,10 +67,22 @@ init(){
 
 void
 PickOptionScreen::
+draw_title(bool forceDraw){
+    if (!forceDraw){
+        return;
+    }
+    tft->setTextColor(TFT_LIGHTGREY);
+    tft->setTextSize(1);
+    tft->drawCentreString(_title, 140, 5, 2);
+}
+
+void
+PickOptionScreen::
 draw(bool forceDraw){
     _exit->draw(forceDraw);
     _confirm->draw(forceDraw);
     _sc->draw(forceDraw);
+    draw_title(forceDraw);
 }
 
 void
@@ -90,6 +102,13 @@ check(){
     _exit->check(pos->x, pos->y);
 
     delete pos;
+}
+
+PickOptionScreen*
+PickOptionScreen::
+set_title(const String& t){
+    _title = t;
+    return this;
 }
 
 bool

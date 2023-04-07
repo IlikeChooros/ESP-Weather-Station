@@ -2,6 +2,7 @@
 
 namespace settings
 {
+constexpr uint8_t vert_scroll_width = 20;
 constexpr uint8_t scroll_height = 25;
 constexpr uint8_t min_height = 35;
 uint8_t max_items = 5;
@@ -31,12 +32,14 @@ _scroll_up(0),
 _scroll(false),
 _load_main(false),
 x(x), y(y), w(w), h(h),
-_pick_idx(0), _list_y(0) {}
+_pick_idx(0), _list_y(0),
+_scroll_item(0) {}
 
 SettingsScreen::
 ~SettingsScreen(){
     delete _scroll_down;
     delete _scroll_up;
+    delete _scroll_item;
 }
 
 
@@ -64,20 +67,25 @@ init(){
     scroll_idx = 0;
     max_items = (h - 2*scroll_height) / min_height > 1 ? (h - 2*scroll_height) / min_height : 1; // maximum number of display items (list options) on the screen
     uint8_t offset =  (h - 2*scroll_height - min_height * max_items) / (1 + max_items); // distance between options
-
+    uint8_t width, offset_x;
     // Make sure its well scaled
     if (max_idx > max_items){
         _itr_y = min_height;
         max_list_idx = max_items;
         _list_y = y + scroll_height + offset;
 
-        _scroll_up = new CustomButton(tft, x, y, w, scroll_height, 0x10A3);
+        // Is vert_scroll_width bigger than 1/5 of the screen width (In case of small screen)
+        width = w / 5 < vert_scroll_width ? vert_scroll_width / 2 : vert_scroll_width;
+        offset_x = 5;
+        _scroll_item = new ScrollItem(tft, x + w - width, y, width, h, max_idx - max_items + 1);
+
+        _scroll_up = new CustomButton(tft, x, y, w - width - offset_x, scroll_height, 0x10A3);
         _scroll_up
         ->touch_color(0x0861)
         ->set_draw_wh(drawScrollUpButton)
         ->set_on_press(scroll_up);
 
-        _scroll_down = new CustomButton(tft, x, y + h - scroll_height, w, scroll_height, 0x10A3);
+        _scroll_down = new CustomButton(tft, x, y + h - scroll_height, w - width - offset_x, scroll_height, 0x10A3);
         _scroll_down
         ->touch_color(0x0861)
         ->set_draw_wh(drawScrollDownButton)
@@ -87,6 +95,8 @@ init(){
     }
     // Else scale to make it bigger
     else{
+        width = 0;
+        offset_x = 0;
         _list_y = y + offset;
         _itr_y = h/max_idx;
         _scroll = false;
@@ -95,7 +105,7 @@ init(){
 
     uint8_t i = 0;
     for (auto data : _print_data){
-        _list.push_back(uptrl(new ListItem(tft, x, _list_y + i * _itr_y, w, _itr_y - offset)));
+        _list.push_back(uptrl(new ListItem(tft, x, _list_y + i * _itr_y, w - width - offset_x, _itr_y - offset)));
         _list.at(i)->set_data(
             data.string, data.same_line,
             data.font, data.size, data.color);
@@ -144,7 +154,7 @@ check(Point* pos){
         if(!_list.at(i)->check(pos->x, pos->y)){
             continue;
         }
-        if (_pick_idx != i){
+        if (!(_pick_idx == i && _scroll)){
             _list.at(_pick_idx)->draw(true);
         }
         _pick_idx = i;
@@ -163,6 +173,7 @@ draw(bool forceDraw){
     if (_scroll){
         _scroll_up->draw(forceDraw);
         _scroll_down->draw(forceDraw);
+        _scroll_item->draw(scroll_idx);
     }
     
     for (uint8_t i = scroll_idx; i < max_list_idx; ++i){

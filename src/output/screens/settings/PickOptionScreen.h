@@ -11,6 +11,12 @@ class PickOptionScreen
     CustomButton* _exit;
     CustomButton* _confirm;
     SettingsScreen* _sc;
+
+    String _title;
+
+    void
+    draw_title(bool);
+
 public:
     PickOptionScreen(
         TFT_eSPI* tft, 
@@ -23,6 +29,9 @@ public:
 
     PickOptionScreen*
     prepare(const std::vector<print_data>&);
+
+    PickOptionScreen*
+    set_title(const String&);
 
     void
     init();

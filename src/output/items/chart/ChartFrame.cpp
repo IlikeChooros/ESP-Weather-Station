@@ -67,11 +67,14 @@ draw(bool forceDraw)
 
 
     // drawing scale numbers
-    float value = 0;
-    float neg_value = 0;
+    float value = 0,
+    mx_val = max_value,
+    min_val = min_value,
+    num_of_sec = number_of_sections,
+    neg_value = 0;
 
-    float neg_value_itr = min_value/number_of_sections;
-    float value_itr = max_value/number_of_sections;
+    float neg_value_itr = min_val/num_of_sec;
+    float value_itr = mx_val/num_of_sec;
 
 
     tft->setTextFont(1);
@@ -119,9 +122,10 @@ draw(bool forceDraw)
     draw_arrow_up(this->tft, starting_x_, MIDDLE_Y, MAX_POSITIVE, 5, color);
 
     // drawing scale numbers
-    float value = 0;
-
-    float value_itr = (float)(max_value/number_of_sections);
+    float value = 0,
+    mx_val = max_value,
+    n_of_sec = number_of_sections;
+    float value_itr = mx_val/n_of_sec;
 
     tft->setTextFont(1);
     tft->setTextSize(1);

@@ -5,6 +5,7 @@
 #include <memory>
 #include "../../items/ListItem.h"
 #include "../../items/keypad/CustomButton.h"
+#include "../../items/scroll/ScrollItem.h"
 
 namespace settings
 {
@@ -32,6 +33,7 @@ class SettingsScreen
     bool _scroll;
     CustomButton* _scroll_down;
     CustomButton* _scroll_up;
+    ScrollItem* _scroll_item;
 
     uint16_t _itr_y;
     uint8_t _pick_idx;
