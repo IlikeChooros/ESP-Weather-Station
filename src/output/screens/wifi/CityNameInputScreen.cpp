@@ -127,11 +127,21 @@ override_location()
         // Read from EEPROM saved cities
         uint8_t repeat = EEPROM.read(CITY_NAME_IDX);
 
-        std::vector<print_data> data;
-        for (uint8_t i=0; i <repeat; ++i, address += CITY_NAME_LEN + 1){
-            data.push_back(print_data(EEPROM.readString(address), 2, 2, TFT_LIGHTGREY, false));
-        }
-        set_sc->prepare(data)->init();
+        // std::vector<print_data> data;
+        // for (uint8_t i=0; i <repeat; ++i, address += CITY_NAME_LEN + 1){
+        //     data.push_back(print_data(EEPROM.readString(address), 2, 2, TFT_LIGHTGREY, false));
+        // }
+        // set_sc->prepare(data)->init();
+        set_sc
+        ->prepare(print_data("No 1", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 2", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 3", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 4", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 5", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 6", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 7", 2, 2, TFT_LIGHTGREY, true))
+        ->prepare(print_data("No 8", 2, 2, TFT_LIGHTGREY, true))
+        ->init();
         set_sc->draw(true);
         // Override screen
         while(!set_sc->load_main()){

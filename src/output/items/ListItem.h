@@ -48,8 +48,7 @@ public:
         int16_t width,
         int16_t height
     ): TouchButton(x, y, width, height),
-    tft(tft), marked_(false)
-    {}
+    tft(tft), marked_(false) {}
 
 
     void 

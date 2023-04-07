@@ -28,7 +28,7 @@ PickOptionScreen(
     _confirm
     ->set_draw(drawTickButton)
     ->touch_color(0x19E2)
-    ->set_on_press(settings::confirm);
+    ->set_on_press(settings::exit);
 
     _exit
     ->set_draw(drawExitButton)

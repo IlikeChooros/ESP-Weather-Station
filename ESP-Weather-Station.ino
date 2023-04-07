@@ -467,6 +467,7 @@ pick_city()
 
 void setup()
 {
+    
     tft.init();
     tft.setRotation(3);
 
@@ -518,6 +519,8 @@ void setup()
     sci.draw(3,1,1,1);
 
     collect_data();
+
+        Serial.println("SRAM: " + String(ESP.getFreeHeap()));
 }
 
 

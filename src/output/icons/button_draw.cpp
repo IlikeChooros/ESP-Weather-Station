@@ -164,8 +164,8 @@ drawScrollUpButton(
     tft->fillRect(x, y, w, h, color);
     tft->drawRect(x, y, w, h, TFT_DARKGREY);
 
-    tft->drawLine(x + 0.1f*w, y + 0.3f*h, x + 0.5f*w, y + 0.7f*h, TFT_DARKGREY);
-    tft->drawLine(x + 0.5f*w, y + 0.7f*h, x + 0.9f*w, y + 0.3f*h, TFT_DARKGREY);
+    tft->drawLine(x + 0.1f*w, y + 0.7f*h, x + 0.5f*w, y + 0.3f*h, TFT_DARKGREY);
+    tft->drawLine(x + 0.5f*w, y + 0.3f*h, x + 0.9f*w, y + 0.7f*h, TFT_DARKGREY);
 }
 
 void
@@ -181,6 +181,6 @@ drawScrollDownButton(
     tft->fillRect(x, y, w, h, color);
     tft->drawRect(x, y, w, h, TFT_DARKGREY);
 
-    tft->drawLine(x + 0.1f*w, y + 0.7f*h, x + 0.5f*w, y + 0.3f*h, TFT_DARKGREY);
-    tft->drawLine(x + 0.5f*w, y + 0.3f*h, x + 0.9f*w, y + 0.7f*h, TFT_DARKGREY);
+    tft->drawLine(x + 0.1f*w, y + 0.3f*h, x + 0.5f*w, y + 0.7f*h, TFT_DARKGREY);
+    tft->drawLine(x + 0.5f*w, y + 0.7f*h, x + 0.9f*w, y + 0.3f*h, TFT_DARKGREY);
 }

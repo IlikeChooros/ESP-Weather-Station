@@ -31,7 +31,7 @@ draw_(uint16_t color)
         tft->setTextFont(i.font);
 
         if (!i.same_line){
-            y += i.font*i.size*5+5;
+            y += tft->fontHeight(i.font) + 5;
             x = this->x+5;
         }
 
@@ -64,9 +64,10 @@ on_touch(){
 }
 
 ListItem*
-ListItem::set_position(Point& pos){
-    x = pos.x;
-    y = pos.y;
+ListItem::
+set_position(Point& pos){
+    this->x = pos.x;
+    this->y = pos.y;
     return this;
 }
 
