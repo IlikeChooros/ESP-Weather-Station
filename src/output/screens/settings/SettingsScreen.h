@@ -38,7 +38,7 @@ class SettingsScreen
     uint16_t _itr_y;
     uint8_t _pick_idx;
 
-    bool _load_main;
+    bool _picked;
 
     uint16_t x;
     uint16_t y; 

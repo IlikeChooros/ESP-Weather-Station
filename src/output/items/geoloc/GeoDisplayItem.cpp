@@ -19,13 +19,17 @@ draw()
     constexpr uint8_t offset = 10;
 
     tft->setTextFont(2);
-    tft->setTextSize(1);
+
     tft->setTextColor(TFT_LIGHTGREY);
 
     uint16_t x = this->x + 5,
              y = this->y + 10;
 
+    tft->setTextSize(2);
+    tft->drawCentreString(info.name, x+w/2, y, 2);
 
+    tft->setTextSize(1);
+    y += tft->fontHeight() + 5;
     tft->setCursor(x,y);
     tft->print("Country:");
     y += tft->fontHeight();

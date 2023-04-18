@@ -6,7 +6,7 @@
 
 // #include "../screens/PasswordInputScreen.h"
 
-#define NUMBER_OF_KEYPAD_BUTTONS 25
+#define NUMBER_OF_KEYPAD_BUTTONS 29
 #define STARTING_Y 60
 #define KEYPAD_BUTTON_WIDTH 30
 #define KEYPAD_BUTTON_HEIGHT 40
@@ -14,7 +14,7 @@
 class Keypad
 {
     KeypadButton** buttons;
-    KeypadButton** sliders;
+    KeypadButton* slider;
 
     public:
 
@@ -29,8 +29,7 @@ class Keypad
     Keypad(
         TFT_eSPI* tft, 
         String* button_data, 
-        String left_slider, 
-        String right_slider
+        String slider
     );
     void 
     draw(bool forceDraw);

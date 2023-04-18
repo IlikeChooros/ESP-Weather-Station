@@ -12,15 +12,17 @@ CityNameInputScreen(
 ): CityNameScreen(tft, bg_c, wc, ts)
 {
     keyboard = new Keyboard(tft);
-    inputfield = new InputField(tft, 40, 20, 230, 40);
+    inputfield = new InputField(tft, 40, 20, 235, 40);
 
-    enter_button = new CustomButton(tft, 275, 20, 35, 40,0x3CE6);
+    enter_button = new CustomButton(tft, 280, 20, 35, 40,0x3CE6);
     enter_button
     ->set_draw(drawTickButton)
     ->touch_color(0x19E2);
 
-    return_button = new KeypadButton(tft, 5, 5, 30, 30, "x");
-    return_button->set_color(TFT_RED);
+    return_button = new CustomButton(tft, 5, 5, 30, 30, 0x8040);
+    return_button
+    ->set_draw(drawExitButton)
+    ->touch_color(0x30C2);
 }
 
 void
@@ -66,12 +68,6 @@ CityNameInputScreen::
 save_data()
 {
     uint8_t num = EEPROM.read(CITY_NAME_IDX);
-
-    if (num > MAX_CITIES){
-        EEPROM.write(CITY_NAME_IDX, 0);
-        return;
-    }
-
     EEPROM.writeString(num*(CITY_NAME_LEN+1) + CITY_NAME_IDX + 2, inputfield->get_input());
     EEPROM.write(CITY_NAME_IDX, num+1);
     EEPROM.commit();
@@ -81,7 +77,7 @@ void
 CityNameInputScreen::
 enter()
 {
-    load_main_ = draw_get(inputfield->get_input());
+    load_main_ = draw_get(inputfield->get_input(), 0);
 
     if (!load_main_){
         return;
@@ -92,8 +88,6 @@ enter()
         load_main_ = false;
         override_location();
         EEPROM.end();
-        tft->fillScreen(bg_c);
-        draw(true);
         return;
     }
 
@@ -123,15 +117,16 @@ override_location()
         settings::PickOptionScreen* set_sc = new settings::PickOptionScreen(tft, ts);
 
         uint16_t address = CITY_NAME_IDX + 2;
-
         // Read from EEPROM saved cities
         uint8_t repeat = EEPROM.read(CITY_NAME_IDX);
-
         std::vector<print_data> data;
         for (uint8_t i=0; i < repeat; ++i, address += CITY_NAME_LEN + 1){
-            data.push_back(print_data(EEPROM.readString(address), 2, 2, TFT_LIGHTGREY, false));
+            data.push_back(print_data(EEPROM.readString(address), 2, 2, TFT_LIGHTGREY, true));
         }
-        set_sc->prepare(data)->init();
+        set_sc
+        ->prepare(data)
+        ->set_title(String(F("Pick city to override")))
+        ->init();
 
         set_sc->draw(true);
         // Override screen
@@ -146,11 +141,12 @@ override_location()
         }
         // User chose city to override
         settings::picked_list pick = set_sc->get_picked();
-        address = CITY_NAME_IDX;
         EEPROM.begin(EEPROM_SIZE);
-        EEPROM.write(CITY_NAME_IDX + 1 + pick.idx*(CITY_NAME_LEN + 1), geo_pos);
-        EEPROM.writeString(CITY_NAME_IDX + 2 + pick.idx*(CITY_NAME_LEN+1), pick.data.string);
+        address = CITY_NAME_IDX + 1 + pick.idx * (CITY_NAME_LEN + 1);
+        EEPROM.write(address, geo_pos);
+        EEPROM.writeString(address + 1, inputfield->get_input());
         EEPROM.commit();
+        wclient->_init_(inputfield->get_input(), geo_pos);
         delete set_sc;
         load_main_ = true;
     }

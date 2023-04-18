@@ -468,12 +468,11 @@ pick_city()
 void setup()
 {
     
-    tft.init();
+    tft.init(); 
     tft.setRotation(3);
 
     reset_tft();
     load_saved_wifis();
-    int8_t number_of_networks; 
     wifi_screens[0]->init();
 
     ts

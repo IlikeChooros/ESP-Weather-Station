@@ -43,7 +43,10 @@ public:
     );
 
     bool 
-    _init_(String city_name);
+    _init_(
+        String city_name,
+        uint8_t idx    
+    );
 
     bool 
     current_weather(Weather *weather);

@@ -41,15 +41,12 @@ ChartScreens::draw_(
     String str
 )
 {
-    if(forceDraw)
-    {
+    if(forceDraw){
         draw_bg();
         draw_name(str);
     }
     chart_time->draw(forceDraw);
-
-    if (data.size() == 1 || data.empty())
-    {
+    if (data.size() == 1 || data.empty()){
         return;
     }
 
@@ -62,8 +59,7 @@ ChartScreens::draw_(
     charts[4]->set_min_max(-max_value, max_value);
     charts[5]->set_min_max(-max_value, max_value);
 
-    for (uint8_t i=0; i<6; i++)
-    {
+    for (uint8_t i=0; i<6; i++){
         charts[i]->set_data(data);
         charts[i]->draw(true);
     }

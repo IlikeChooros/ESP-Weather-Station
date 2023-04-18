@@ -15,7 +15,7 @@ class ChartFrameVFull: public ChartItem
 
     ui16
     get_y(
-        i16 data
+        float data
     );
 
     public:
@@ -72,7 +72,7 @@ class ChartFrameVUp: public ChartItem
 
     ui16
     get_y(
-        i16 data
+        float data
     );
 
     public:

@@ -60,5 +60,5 @@ protected:
     bool change_;
 
     bool
-    draw_get(String city_name);
+    draw_get(String city_name, uint8_t idx);
 };

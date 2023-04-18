@@ -8,8 +8,8 @@
 #include "../../items/wifi/WiFiItem.h"
 #include "../../icons/WeatherIcon.h"
 #include "../../icons/WindIcon.h"
-#include "../../../weather_client/Weather.h"
 #include "../../../data_structures/Hsv_to_rgb.h"
+#include "../../../weather_client/WeatherClient.h"
 
 
 #define DEGREE '`'
@@ -17,12 +17,14 @@
 #define OFFSET 70
 
 
-
 class CurrentWeatherScreen: public MainScreen
 {
     WeatherItem** weather_items;
     WiFiItem* wifi;
     DateItem* date;
+
+    void
+    draw_city_info(bool);
 
     public:
     CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c): MainScreen(tft,bg_c){
@@ -39,7 +41,7 @@ class CurrentWeatherScreen: public MainScreen
 
         wifi = new WiFiItem(this->_tft, 0,0,15,bg_c);
         date = new DateItem(this->_tft, 160, 10 , 45, bg_c);
-    }
+      }
     void 
     draw(
         Weather* weather, 

@@ -20,8 +20,7 @@ void
 InputField::
 draw(bool forceDraw)
 {
-    if(!forceDraw)
-    {
+    if(!forceDraw){
         return;
     }
     tft->setTextSize(2);
@@ -31,11 +30,10 @@ draw(bool forceDraw)
     tft->fillRect(x,y,width,height, INPUT_FIELD_BG);
     tft->drawRect(x,y,width,height, TFT_WHITE);
 
-    tft->setCursor(x,y);
+    tft->setCursor(x + 3,y);
 
     String temp;
-    if (this->input.length()<14)
-    {
+    if (this->input.length()<14){
         temp = input;
     }
     else{
@@ -66,8 +64,7 @@ void
 InputField::
 del()
 {
-    if (input == "" || input.length() == 0)
-    {
+    if (input == "" || input.length() == 0){
         return;
     }
     this->input.remove(input.length()-1);

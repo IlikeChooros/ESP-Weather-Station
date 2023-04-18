@@ -7,15 +7,14 @@
 #define DELETE 1
 #define NORMAL_BUTTON 2
 
-#define LEFT_KEYBUTTON 0
-#define RIGHT_KEYBUTTON 1
-#define MAIN_QWERTY_CAPS 4
-#define NUMBERS_CAPS 3
+#define MAIN_QWERTY 0
+#define NUMBERS 1
+#define MAIN_QWERTY_CAPS 2
 
-#define NUMBER_OF_KEYBOARDS 5
+#define NUMBER_OF_KEYBOARDS 3
 
-#define CAPS_LOCK 16
-#define DELETE_IDX 8
+#define CAPS_LOCK 28
+#define DELETE_IDX 20
 
 struct 
 KeyInfo
@@ -32,7 +31,7 @@ class Keyboard
     uint8_t last_pressed;
 
     void
-    change_keypad(uint8_t idx);
+    change_keypad();
 
     void
     caps();
@@ -63,6 +62,4 @@ public:
 
     String
     get_str();
-
-    
 };

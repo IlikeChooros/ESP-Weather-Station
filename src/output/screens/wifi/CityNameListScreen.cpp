@@ -1,6 +1,5 @@
 #include "CityNameListScreen.h"
 
-
 CityNameListScreen::
 CityNameListScreen(
     TFT_eSPI* tft,
@@ -23,23 +22,19 @@ init()
     EEPROM.begin(EEPROM_SIZE);
 
     number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX);
-
     number_of_saved_city_names = number_of_saved_city_names < MAX_CITIES ? number_of_saved_city_names : MAX_CITIES;
 
-    if (number_of_saved_city_names>0)
-    {
+    if (number_of_saved_city_names>0){
         saved_city_names = new ListItem* [number_of_saved_city_names];
     }
 
     uint16_t address = CITY_NAME_IDX+2;
-    for (uint8_t i=0; i<number_of_saved_city_names; i++)
-    {
+    for (uint8_t i=0; i<number_of_saved_city_names; i++){
         String name = EEPROM.readString(address);
         city_names.push_back(name);
         saved_city_names[i] = new ListItem(tft, 20, 30+i*(LIST_HEIGHT+5), LIST_WIDTH, LIST_HEIGHT);
         address += 1 + CITY_NAME_LEN;
     }
-
     EEPROM.end();
 }
 
@@ -50,8 +45,7 @@ set_city_info()
     EEPROM.begin(EEPROM_SIZE);
 
     uint16_t address = CITY_NAME_IDX + 1;
-    for (uint8_t i=0; i<number_of_saved_city_names; i++)
-    {
+    for (uint8_t i=0; i<number_of_saved_city_names; i++){
         City_info* info =
         wclient->get_city_info(
             city_names.at(i), 
@@ -92,7 +86,7 @@ check(Point* pos)
     change_ = set_new_location->check(pos->x, pos->y);
     for (uint8_t i=0; i<number_of_saved_city_names; ++i){
         if(saved_city_names[i]->check(pos->x, pos->y)){
-            load_main_ = wclient->_init_(city_names.at(i));
+            load_main_ = wclient->_init_(city_names.at(i), i);
             return;
         }
     }

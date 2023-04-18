@@ -14,7 +14,7 @@ class CityNameInputScreen: public CityNameScreen
     InputField* inputfield;
 
     CustomButton* enter_button;
-    KeypadButton* return_button;
+    CustomButton* return_button;
 
     void
     enter();

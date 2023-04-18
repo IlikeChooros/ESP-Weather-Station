@@ -4,6 +4,7 @@ namespace settings
 {
 constexpr uint8_t vert_scroll_width = 20;
 constexpr uint8_t scroll_height = 25;
+constexpr uint8_t max_height = 60;
 constexpr uint8_t min_height = 35;
 uint8_t max_items = 5;
 int8_t scroll_idx = 0;
@@ -30,7 +31,7 @@ SettingsScreen(
 _scroll_down(0),
 _scroll_up(0),
 _scroll(false),
-_load_main(false),
+_picked(false),
 x(x), y(y), w(w), h(h),
 _pick_idx(0), _list_y(0),
 _scroll_item(0) {}
@@ -98,7 +99,7 @@ init(){
         width = 0;
         offset_x = 0;
         _list_y = y + offset;
-        _itr_y = h/max_idx;
+        _itr_y = h/max_idx > max_height ? max_height : h / max_idx;
         _scroll = false;
         max_list_idx = max_idx;
     }
@@ -116,7 +117,7 @@ init(){
 bool
 SettingsScreen::
 picked(){
-    return _load_main;
+    return _picked;
 }
 
 picked_list
@@ -135,7 +136,6 @@ clear(){
 void
 SettingsScreen::
 check(Point* pos){
-    _load_main = false;
     if (_scroll){
         if (_scroll_up->check(pos->x, pos->y) || _scroll_down->check(pos->x, pos->y)){
             max_list_idx = scroll_idx + max_items;
@@ -158,7 +158,7 @@ check(Point* pos){
             _list.at(_pick_idx)->draw(true);
         }
         _pick_idx = i;
-        _load_main = true;
+        _picked = true;
         break;
     }
 }

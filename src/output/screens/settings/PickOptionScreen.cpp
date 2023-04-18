@@ -21,18 +21,18 @@ PickOptionScreen(
     TFT_eSPI* tft,
     TouchScreen* ts
 ): tft(tft), ts(ts), _title(""){
-    _confirm = new CustomButton(tft, 285, 5, 30, 30, 0x3CE6);
-    _exit = new CustomButton(tft, 285, 50, 30, 30, TFT_RED);
+    _confirm = new CustomButton(tft, 285, 5, 30, 30, 0x33E6);
+    _exit = new CustomButton(tft, 285, 50, 30, 30, 0x8040);
     _sc = new SettingsScreen(tft, 20, 30, 240, 200);
 
     _confirm
     ->set_draw(drawTickButton)
-    ->touch_color(0x19E2)
-    ->set_on_press(settings::exit);
+    ->touch_color(0x2204)
+    ->set_on_press(settings::confirm);
 
     _exit
     ->set_draw(drawExitButton)
-    ->touch_color(0x4800)
+    ->touch_color(0x30C2)
     ->set_on_press(settings::exit);
 }
 

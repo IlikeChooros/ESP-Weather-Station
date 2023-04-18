@@ -1,5 +1,7 @@
 #include "WeatherClient.h"
 
+City_info picked_city;
+
 //--------------------------
 // 1. http = new HTPP
 // 2. cacheTime in millis
@@ -10,7 +12,7 @@ WeatherClient(
     uint32_t cacheTime
 )
 {
-    Serial.begin(921600);
+    Serial.begin(115200);
     this->http = http;
     this->cacheTime = cacheTime;
 }
@@ -34,6 +36,7 @@ get_all_cities_info(
             filter[i]["lon"] = true;
             filter[i]["country"] = true;
             filter[i]["state"] = true;
+            filter[i]["name"] = true;
 
             DynamicJsonDocument doc(8200);
 
@@ -45,7 +48,7 @@ get_all_cities_info(
             data.push_back({
                 doc[i]["lat"].as<double>(),
                 doc[i]["lon"].as<double>(),
-                city_name,
+                doc[i]["name"].as<String>(),
                 doc[i]["country"].as<String>(), 
                 doc[i]["state"].as<String>()
             });
@@ -77,7 +80,7 @@ get_city_info(
         filter[idx]["lon"] = true;
         filter[idx]["country"] = true;
         filter[idx]["state"] = true;
-
+        filter[idx]["name"] = true;
 
         DynamicJsonDocument doc(8200);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
@@ -85,7 +88,7 @@ get_city_info(
         data = new City_info{
             doc[idx]["lat"].as<double>(),
             doc[idx]["lon"].as<double>(),
-            city_name,
+            doc[idx]["name"].as<String>(),
             doc[idx]["country"].as<String>(), 
             doc[idx]["state"].as<String>()
         };
@@ -98,10 +101,12 @@ get_city_info(
 
 bool
 WeatherClient::
-_init_
-(String city_name)
+_init_(
+    String city_name,
+    uint8_t idx
+)
 {
-    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=1&appid="+APPID);
+    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
 
     int16_t http_code = http->GET();
     bool isSuccesful = http_code == 200;
@@ -109,15 +114,23 @@ _init_
     String payload = http->getString();
     if (isSuccesful)
     {
-        StaticJsonDocument<100> filter;
-        filter[0]["lat"] = true;
-        filter[0]["lon"] = true;
+        DynamicJsonDocument filter(8200);
+        filter[idx]["lat"] = true;
+        filter[idx]["lon"] = true;
+        filter[idx]["country"] = true;
+        filter[idx]["name"] = true;
 
-        StaticJsonDocument<100> doc;
+        DynamicJsonDocument doc(8200);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
 
-        _lat = doc[0]["lat"].as<double>();
-        _lon = doc[0]["lon"].as<double>();
+        _lat = doc[idx]["lat"].as<double>();
+        _lon = doc[idx]["lon"].as<double>();
+        picked_city.country = doc[idx]["country"].as<String>();
+        picked_city.lat = _lat;
+        picked_city.lon = _lon;
+        picked_city.name = doc[idx]["name"].as<String>();
+        Serial.println("_INIT_ " + String(idx)+ " " + picked_city.country + " " 
+        + picked_city.name + " " + String(picked_city.lat) + " " + String(picked_city.lon));
     }
 
     http->end();
@@ -141,7 +154,7 @@ current_weather
     {
         return false;
     }
-    
+    Serial.println("GET WEATHER " + String(_lat) + " " + String(_lon) + " PICK: " + String(picked_city.lat) + " " + String(picked_city.lon) + " " + picked_city.country);
     http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
     int16_t http_code = http->GET();
@@ -196,8 +209,7 @@ WeatherClient::
 forecast_weather
 (Forecast* forecast)
 {
-    if (millis() - lastForecastCheck < cacheTime)
-    {
+    if (millis() - lastForecastCheck < cacheTime){
         return false;
     }
 

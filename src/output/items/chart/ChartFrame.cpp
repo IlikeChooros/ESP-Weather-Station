@@ -97,14 +97,14 @@ draw(bool forceDraw)
 
 ui16
 ChartFrameVFull::
-get_y(i16 data)
+get_y(float data)
 {
     return data > 0 ? (MIDDLE_Y - data*scale_positive) : (MIDDLE_Y - data*scale_negative);
 }
 
 ui16
 ChartFrameVUp::
-get_y(i16 data)
+get_y(float data)
 {
     return MIDDLE_Y - data*scale;
 }

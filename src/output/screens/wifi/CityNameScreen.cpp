@@ -1,18 +1,19 @@
 #include "CityNameScreen.h"
 
+
 bool 
 CityNameScreen::
-draw_get(String city_name)
+draw_get(String city_name, uint8_t idx)
 {
     tft->fillRect(40, 40, 240, 160, TFT_BLACK);
     tft->drawRect(40, 40, 240, 160, TFT_WHITE);
 
-    tft->setTextColor(TFT_DARKGREY);
+    tft->setTextColor(TFT_LIGHTGREY);
     tft->setTextSize(2);
     tft->drawCentreString("Getting "+city_name, 160, 60, 2);
     tft->drawCentreString("coordinates...", 160, 100, 2);
 
-    if(!wclient->_init_(city_name))
+    if(!wclient->_init_(city_name, idx))
     {
         tft->setTextColor(TFT_RED);
         tft->drawCentreString("Failed, try again.", 160, 130, 2);

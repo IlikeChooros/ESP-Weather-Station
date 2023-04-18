@@ -47,8 +47,8 @@ drawTickButton(
 
     uint16_t st_y = y + 0.5f*size, end_x = x+0.5f*size;
 
-    tft->drawWideLine(x+0.22f*size, st_y, end_x, y+size*0.7f, 0.03f*size, TFT_WHITE, TFT_WHITE);
-    tft->drawWideLine(end_x, y+size*0.7f, x+0.8f*size, y+0.2f*size, 0.03f*size, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.25f*size, st_y, end_x, y+size*0.75f, 0.05f*size, TFT_WHITE, color);
+    tft->drawWideLine(end_x, y+size*0.75f, x+0.75f*size, y+0.25f*size, 0.05f*size, TFT_WHITE, color);
 }
 
 void
@@ -110,8 +110,8 @@ drawExitButton(
     tft->fillRect(x,y,size,size,color);
     tft->drawRect(x,y,size,size,TFT_DARKGREY);
 
-    tft->drawWideLine(x+0.1f*size, y+0.1f*size, x+0.9f*size, y+0.9f*size, 0.05f*size, TFT_WHITE, TFT_WHITE);
-    tft->drawWideLine(x+0.1f*size, y+0.9f*size, x+0.9f*size, y+0.1f*size, 0.05f*size, TFT_WHITE, TFT_WHITE);
+    tft->drawWideLine(x+0.1f*size, y+0.1f*size, x+0.9f*size, y+0.9f*size, 0.05f*size, TFT_WHITE, color);
+    tft->drawWideLine(x+0.1f*size, y+0.9f*size, x+0.9f*size, y+0.1f*size, 0.05f*size, TFT_WHITE, color);
 }
 
 void
