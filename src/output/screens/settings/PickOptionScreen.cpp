@@ -93,14 +93,12 @@ check(){
     if (!pos){
         return;
     }
-
     _sc->check(pos);
     selected = _sc->picked();
     if (selected){
         _confirm->check(pos->x, pos->y);
     }
     _exit->check(pos->x, pos->y);
-
     delete pos;
 }
 

@@ -154,7 +154,7 @@ check(Point* pos){
         if(!_list.at(i)->check(pos->x, pos->y)){
             continue;
         }
-        if (!(_pick_idx == i && _scroll)){
+        if (!(_pick_idx == i || _scroll)){
             _list.at(_pick_idx)->draw(true);
         }
         _pick_idx = i;
