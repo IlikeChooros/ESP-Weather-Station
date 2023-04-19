@@ -35,7 +35,7 @@ Weather* Weather::humidity(uint8_t humidity)
     return this;
 }
 
-Weather* Weather::pressure(uint16_t pressure){
+Weather* Weather::pressure(int16_t pressure){
     this->_pressure = pressure;
     return this;
 }
@@ -62,7 +62,7 @@ Weather* Weather::pop(double pop){
     return this;
 }
 
-Weather* Weather::timezone(uint16_t timezone){
+Weather* Weather::timezone(int16_t timezone){
     this->_timezone = timezone;
     return this;
 }

@@ -142,14 +142,14 @@ current_weather
             ->feels_like(doc["main"]["feels_like"].as<double>())
             ->main(doc["weather"][0]["main"].as<String>())
             ->icon(doc["weather"][0]["icon"].as<String>())
-            ->pressure(doc["main"]["pressure"].as<uint16_t>())
+            ->pressure(doc["main"]["pressure"].as<int16_t>())
             ->humidity(doc["main"]["humidity"].as<uint8_t>())
             ->temp(doc["main"]["temp"].as<double>())
             ->wind_speed(doc["wind"]["speed"].as<double>())
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
             ->sunset(doc["sys"]["sunset"].as<uint32_t>())
             ->dt(doc["dt"].as<uint32_t>())
-            ->timezone(doc["timezone"].as<uint16_t>());
+            ->timezone(doc["timezone"].as<int16_t>());
         doc.clear();
         filter.clear();
     }
