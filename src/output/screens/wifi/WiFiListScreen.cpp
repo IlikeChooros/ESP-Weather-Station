@@ -95,11 +95,6 @@ connect_to_wifi()
 }
 
 
-//*************************************
-// Reads form eeprom saved 
-// ssids and passwords
-// then saves it as a String** pointer
-//*************************************
 void 
 WiFiListScreen::
 read_from_eeprom_wifis()
@@ -130,10 +125,6 @@ read_from_eeprom_wifis()
     EEPROM.end();
 }
 
-//---------------------------------
-// returns true if this screen has to be
-// changed to another one
-//---------------------------------
 bool 
 WiFiListScreen::
 change(){
@@ -141,22 +132,15 @@ change(){
 }
 
 
-//------------------------
-// Before using it, make sure
-// envoke scan() method
-//------------------------
 void 
 WiFiListScreen::
 draw(bool forceDraw){
     for (uint8_t i=0; i<number_of_networks; i++){
-        wifis[i]->draw(true);
+        wifis[i]->draw(forceDraw);
     }
-    refresh_button->draw(true);
+    refresh_button->draw(forceDraw);
 }
 
-//*****************************
-// Deletes all WiFi List Items
-//*****************************
 void 
 WiFiListScreen::
 clear_buttons()

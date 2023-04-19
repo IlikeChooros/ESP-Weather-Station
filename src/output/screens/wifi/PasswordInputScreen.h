@@ -36,25 +36,18 @@ class PasswordInputScreen: public WiFiScreen
         enter_button
         ->set_draw(drawTickButton)
         ->touch_color(0x19E2);
-
         exit_button = new KeypadButton(tft, 5, 5, 30, 30, "x");
         exit_button->set_color(TFT_RED);
 
         inputfield = new InputField(tft, 40, 20, 230, 40);
-
         keyboard = new Keyboard(tft);
     }
 
     void 
-    draw(bool forceDraw)
-    {
-        return;
-    }
+    draw(bool forceDraw);
     
     void 
-    draw(
-        String wifi_name
-    );
+    draw(String wifi_name);
 
     void 
     check(Point* pos);
@@ -72,14 +65,12 @@ class PasswordInputScreen: public WiFiScreen
     load_main();
 
     void 
-    scan()
-    {
+    scan(){
         return;
     }
     
     void 
-    init()
-    {
+    init(){
         return;
     }
     

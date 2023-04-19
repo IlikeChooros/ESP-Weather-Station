@@ -30,17 +30,13 @@ public:
     draw(bool forceDraw) = 0;
 
     virtual void 
-    draw(
-        String wifi_name
-    ) = 0;
+    draw(String wifi_name) = 0;
 
     virtual String 
     get_str() = 0;
 
     virtual void 
-    check(
-        Point* pos
-    ) = 0;
+    check(Point* pos) = 0;
 
     virtual void 
     scan() = 0;

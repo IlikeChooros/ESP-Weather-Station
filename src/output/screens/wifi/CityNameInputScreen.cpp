@@ -27,10 +27,10 @@ CityNameInputScreen(
 
 void
 CityNameInputScreen::
-draw(bool forceDraw)
-{
+draw(bool forceDraw){
     keyboard->draw(forceDraw);
     inputfield->draw(forceDraw);
+    inputfield->blink();
     enter_button->draw(forceDraw);
     return_button->draw(forceDraw);
 }

@@ -38,9 +38,7 @@ class WeatherDataCollector
     WeatherDataCollector(ui8 number_of_data_to_collect) {
         _data.resize(number_of_data_to_collect);
         _min_max.resize(number_of_data_to_collect);
-
-        for (ui8 i=0; i<number_of_data_to_collect; i++)
-        {
+        for (ui8 i=0; i<number_of_data_to_collect; i++){
             _min_max[i].resize(2);
         }
     }
@@ -94,6 +92,9 @@ class WeatherDataCollector
         uint8_t starting_day 
     );
 
-    void clear_mem(uint8_t idx);
-    std::vector<WeatherData>& get_data(uint8_t idx);
+    void 
+    clear_mem(uint8_t idx);
+
+    std::vector<WeatherData>& 
+    get_data(uint8_t idx);
 };  

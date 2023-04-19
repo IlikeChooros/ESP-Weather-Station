@@ -26,6 +26,9 @@ class WiFiListScreen: public WiFiScreen
     String** saved_wifi_info;
     uint8_t number_of_saved_wifis;
 
+    /// @brief  Reads form eeprom saved 
+    /// ssids and passwords
+    /// then saves it as a String** pointer
     void 
     read_from_eeprom_wifis();
 
@@ -52,6 +55,9 @@ class WiFiListScreen: public WiFiScreen
     void 
     scan();
 
+    /// @brief Before using it, make sure
+    /// envoke scan() method
+    /// @param forceDraw true - every element on in this screen will be drawn, false - only the ones that need to be redrawn
     void 
     draw(bool forceDraw);
 
@@ -71,9 +77,13 @@ class WiFiListScreen: public WiFiScreen
     void 
     check(Point* pos);
 
+    /// @brief Deletes all WiFi List Items
     void 
     clear_buttons();
 
+    /// @brief Returns true if this screen has to be
+    /// changed to another one
+    /// @return 
     bool
     change();
 

@@ -17,6 +17,11 @@ class InputField
     int16_t width;
     int16_t height;
 
+    bool _prev_state;
+    int16_t _cursor_x;
+    uint64_t _cache_time;
+    uint64_t _last_check;
+
     public:
     InputField(
         TFT_eSPI* tft,
@@ -49,6 +54,10 @@ class InputField
 
     void 
     del();
+
+    /// @brief Does the blinking effect on cursor
+    void
+    blink();
 };
 
 #endif

@@ -225,15 +225,11 @@ void load_saved_wifis(){
     numberOfSavedWifis = EEPROM.read(10);
     uint16_t address = 11;
 
-    if (numberOfSavedWifis)
-    {
+    if (numberOfSavedWifis){
         saved_wifi_info = new String* [numberOfSavedWifis];
     }
-
     String saved_ssid, saved_psw;
-
-    for (uint8_t i=0; i<numberOfSavedWifis; i++)
-    {
+    for (uint8_t i=0; i<numberOfSavedWifis; i++){
         saved_ssid = EEPROM.readString(address);
         address += MAX_SSID_LENGHT;
         saved_psw = EEPROM.readString(address);
@@ -322,17 +318,15 @@ void move(uint8_t move){
 void wifi_setup(){
     Point* pos = ts.read_touch();
 
+    wifi_screens[wifi_screen_idx]->draw(false);
+
     if(pos){
         wifi_screens[wifi_screen_idx]->check(pos);
-        if (wifi_screens[wifi_screen_idx]->change())
-        {
+        if (wifi_screens[wifi_screen_idx]->change()){
             wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
-
             tft.fillScreen(BACKGROUND_COLOR);
-
             wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
             wifi_screens[wifi_screen_idx]->draw(true);
-            
         }
         delete pos;
     }
@@ -366,14 +360,12 @@ void force_wifi_connection(){
         {
             address += i*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT)+MAX_SSID_LENGHT;
 
-            if (EEPROM.readString(address).length() > temp_pwd.length())
-            {
+            if (EEPROM.readString(address).length() > temp_pwd.length()){
                 eeprom_earse(address + temp_pwd.length(), address + EEPROM.readString(address).length());
             }
             
             EEPROM.writeString(address, temp_pwd);
             EEPROM.commit();
-
             EEPROM.end();
 
             saved_wifi_info[i][1] = temp_pwd;
@@ -384,8 +376,7 @@ void force_wifi_connection(){
     // Saving entered network to EEPROM
     //
     address += numberOfSavedWifis*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT);
-    if (address <= 512-MAX_PASSWORD_LENGHT-MAX_SSID_LENGHT && temp_ssid.length() < MAX_SSID_LENGHT && temp_pwd.length() < MAX_SSID_LENGHT)
-    {
+    if (address <= 512-MAX_PASSWORD_LENGHT-MAX_SSID_LENGHT && temp_ssid.length() < MAX_SSID_LENGHT && temp_pwd.length() < MAX_SSID_LENGHT){
         EEPROM.writeString(address, temp_ssid);
 
         address += MAX_SSID_LENGHT;
@@ -400,14 +391,12 @@ void force_wifi_connection(){
     //**************************
     // Updating saved_wifi_info
     //
-    if (numberOfSavedWifis-1 == 0)
-    {
+    if (numberOfSavedWifis-1 == 0){
         EEPROM.end();
         return;
     }
 
-    for (int8_t i=0; i<numberOfSavedWifis-1;i++)
-    {
+    for (int8_t i = 0; i < numberOfSavedWifis-1; i++){
         delete [] saved_wifi_info[i];
     }
     delete [] saved_wifi_info;
@@ -467,7 +456,6 @@ pick_city()
 
 void setup()
 {
-    
     tft.init(); 
     tft.setRotation(3);
 
@@ -489,7 +477,6 @@ void setup()
     city_list->init();
     city_list->set_city_info();
     pick_city();
-
     tft.fillScreen(BACKGROUND_COLOR);
     
     weather = new Weather;

@@ -1,16 +1,13 @@
 #include "WeatherDataCollector.h"
 
 std::vector<WeatherData>&
-WeatherDataCollector::get_data(ui8 idx)
-{
+WeatherDataCollector::get_data(ui8 idx){
     return _data[idx];
 }
 
 void 
-WeatherDataCollector::init(
-    Weather* weather
-)
-{
+WeatherDataCollector::
+init(Weather* weather){
     this->current_day_ = get_day(weather->_dt);
 }
 
@@ -20,12 +17,10 @@ WeatherDataCollector::check_min_max(
     uint8_t idx
 )
 {
-    if (_min_max[idx][0] > data)
-    {
+    if (_min_max[idx][0] > data){
         _min_max[idx][0] = data; // min
     }
-    else if(_min_max[idx][1] < data)
-    {
+    else if(_min_max[idx][1] < data){
         _min_max[idx][1] = data; // max
     }
 }
@@ -36,8 +31,7 @@ WeatherDataCollector::collect(
     ui8 idx
 )
 {
-    if (current_day_ != get_day(weather->_dt))
-    {
+    if (current_day_ != get_day(weather->_dt)){
         clear_mem(idx);
         _min_max[idx][0] = -1;
         _min_max[idx][1] = 1;
@@ -57,12 +51,9 @@ WeatherDataCollector::collect(
 )
 {
     clear_mem(idx);
-
     ui8 current_day = get_day(forecast->forecasted_weather[0]->_dt);
-
     ui8 ending_idx=1;
     while(current_day == get_day(forecast->forecasted_weather[ending_idx]->_dt)) {ending_idx++;}
-
     collect_data(forecast, idx, 0, ending_idx+1);
 }
 
@@ -74,7 +65,6 @@ WeatherDataCollector::collect_all(
 )
 {
     clear_mem(idx);
-
     ui8 current_day = get_day(forecast->forecasted_weather[0]->_dt);
     ui8 starting_idx=1;
     while(current_day == get_day(forecast->forecasted_weather[starting_idx]->_dt)) {starting_idx++;}
@@ -91,9 +81,7 @@ WeatherDataCollector::collect_data(
 )
 {
     ui8 count = 0;
-
-    for (ui8 i=starting_idx; i<ending_idx;i++)
-    {
+    for (ui8 i = starting_idx; i < ending_idx; i++){
         Weather* weather = forecast->forecasted_weather[i];
         _data[idx].push_back(WeatherData(weather->_dt, weather->_temp, weather->_feels_like, weather->_humidity, 100 * weather->_pop));
         check_min_max(_data[idx].at(count).temp(), idx);
@@ -103,17 +91,13 @@ WeatherDataCollector::collect_data(
 }
 
 i8*
-WeatherDataCollector::get_min_max(
-    ui8 idx
-)
-{
+WeatherDataCollector::
+get_min_max(ui8 idx){
     return this->_min_max[idx].begin().base();
 }
 
 void
-WeatherDataCollector::clear_mem(
-    ui8 idx
-)
-{
+WeatherDataCollector::
+clear_mem(ui8 idx){
     _data[idx].clear();
 }

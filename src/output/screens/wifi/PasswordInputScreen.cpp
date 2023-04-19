@@ -2,9 +2,7 @@
 
 void 
 PasswordInputScreen::
-draw(
-    String wifi_name
-)
+draw(String wifi_name)
 {
     this->wifi_name = wifi_name;
     tft->setTextSize(1);
@@ -17,16 +15,19 @@ draw(
     enter_button->draw(true);
     exit_button->draw(true);
     inputfield->draw(true);
+    inputfield->blink();
+}
+
+void
+PasswordInputScreen::
+draw(bool forceDraw){
+    inputfield->blink();
 }
 
 void 
 PasswordInputScreen::
-check(
-    Point* pos
-)
-{
-    change_=false;
-
+check(Point* pos){
+    change_ = false;
     KeyInfo* info = keyboard->check(pos);
 
     if (info)
@@ -44,12 +45,13 @@ check(
         }
     }
 
-    if(enter_button->check(pos->x, pos->y))
-    {
+    if(enter_button->check(pos->x, pos->y)){
         enter_pwd();
         return;
     }
     change_ = exit_button->check(pos->x, pos->y);
+
+    inputfield->blink();
 }
 
 void 
@@ -72,33 +74,28 @@ enter_pwd()
 
 String 
 PasswordInputScreen::
-get_str()
-{   
+get_str(){   
     counter++;
-    if (counter%2 == 1)
-    {
+    if (counter%2 == 1){
         return wifi_name;
     }
 
     return inputfield->get_input();
 }
 
-bool PasswordInputScreen::load_main()
-{
+bool PasswordInputScreen::load_main(){
     return this->load_main_;
 }
 
 bool 
 PasswordInputScreen::
-change()
-{
+change(){
     return this->change_;
 }
 
 void 
 PasswordInputScreen::
-clear_buttons()
-{
+clear_buttons(){
     delete keyboard;
     delete enter_button;
     delete exit_button;

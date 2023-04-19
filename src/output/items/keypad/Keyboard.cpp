@@ -31,12 +31,12 @@ Keyboard::Keyboard(
 
     for (uint8_t i = 0; i < NUMBER_OF_KEYBOARDS; i++)
     {
-        keypads[i]->set_color(0x9800, DELETE_IDX);
-        keypads[i]->set_on_touch_color(0x4000, DELETE_IDX);
-        keypads[i]->set_text_color(TFT_WHITE, DELETE_IDX);
+        keypads[i]->set_color(0x9800, DELETE_IDX - 1);
+        keypads[i]->set_on_touch_color(0x4000, DELETE_IDX - 1);
+        keypads[i]->set_text_color(TFT_WHITE, DELETE_IDX - 1);
         if (i != 1){
-            keypads[i]->set_color(0x03CF, CAPS_LOCK);
-            keypads[i]->set_on_touch_color(0x0208, CAPS_LOCK);
+            keypads[i]->set_color(0x03CF, CAPS_LOCK - 1);
+            keypads[i]->set_on_touch_color(0x0208, CAPS_LOCK - 1);
         }
     }
 }
