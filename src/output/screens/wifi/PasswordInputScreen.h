@@ -13,7 +13,7 @@ class PasswordInputScreen: public WiFiScreen
     InputField* inputfield;
 
     CustomButton* enter_button;
-    KeypadButton* exit_button;
+    CustomButton* exit_button;
 
     String wifi_name;
 
@@ -36,8 +36,10 @@ class PasswordInputScreen: public WiFiScreen
         enter_button
         ->set_draw(drawTickButton)
         ->touch_color(0x19E2);
-        exit_button = new KeypadButton(tft, 5, 5, 30, 30, "x");
-        exit_button->set_color(TFT_RED);
+        exit_button = new CustomButton(tft, 5, 5, 30, 30, 0x8040);
+        exit_button
+        ->set_draw(drawExitButton)
+        ->touch_color(0x30C2);
 
         inputfield = new InputField(tft, 40, 20, 230, 40);
         keyboard = new Keyboard(tft);

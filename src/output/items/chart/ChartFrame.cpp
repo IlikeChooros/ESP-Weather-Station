@@ -77,7 +77,7 @@ draw(bool forceDraw)
     float value_itr = mx_val/num_of_sec;
 
 
-    tft->setTextFont(1);
+    tft->setTextFont(2);
     tft->setTextSize(1);
     tft->setTextColor(color);
     tft->drawCentreString(String(0), starting_x_-STARTING_X/2, MIDDLE_Y-3, 1);
@@ -85,6 +85,7 @@ draw(bool forceDraw)
     tft->setCursor(starting_x_, MIDDLE_Y - MAX_POSITIVE - 8);
     tft->print(name);
 
+    tft->setTextFont(1);
     for (ui8 i=0; i< number_of_sections; i++)
     {
         neg_value += neg_value_itr;
@@ -97,15 +98,13 @@ draw(bool forceDraw)
 
 ui16
 ChartFrameVFull::
-get_y(float data)
-{
+get_y(float data){
     return data > 0 ? (MIDDLE_Y - data*scale_positive) : (MIDDLE_Y - data*scale_negative);
 }
 
 ui16
 ChartFrameVUp::
-get_y(float data)
-{
+get_y(float data){
     return MIDDLE_Y - data*scale;
 }
 
@@ -113,8 +112,7 @@ void
 ChartFrameVUp::
 draw(bool forceDraw)
 {
-    if (!forceDraw)
-    {
+    if (!forceDraw){
         return;
     }
 
@@ -135,8 +133,7 @@ draw(bool forceDraw)
     tft->setCursor(starting_x_, MIDDLE_Y - MAX_POSITIVE - 8);
     tft->print(name);
 
-    for (ui8 i=0; i< number_of_sections; i++)
-    {
+    for (ui8 i=0; i< number_of_sections; i++){
         value += value_itr;
         tft->drawCentreString(String((i8)value), starting_x_+STARTING_X/2+4, get_y(value), 1);
     }
@@ -146,10 +143,8 @@ draw(bool forceDraw)
 
 void 
 ChartFrameTime::
-draw(bool forceDraw)
-{
-    if(!forceDraw)
-    {
+draw(bool forceDraw){
+    if(!forceDraw){
         return;
     }
 
@@ -163,8 +158,7 @@ draw(bool forceDraw)
     tft->setTextSize(1);
     tft->setTextColor(color);
 
-    for (ui8 i=0; i<7; i++)
-    {
+    for (ui8 i=0; i<7; i++){
         x += 3*HOURS_PIXELS;
         tft->drawCentreString(hours[i], x, y, 1);
     }

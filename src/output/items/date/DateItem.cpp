@@ -9,15 +9,11 @@ DateItem::DateItem(
     int16_t y_full_date, 
     int16_t y_hour, 
     int16_t bg_c
-)
+): tft(tft), y_full_date(y_full_date),
+center_x(center_x), y_hour(y_hour),
+bg_c(bg_c), _timezone(3600)
 {
-    this->center_x = center_x;
-    this->y_full_date = y_full_date;
-    this->y_hour = y_hour;
-    this->tft = tft;
-    this->bg_c = bg_c;
     dateFormat = new DateFormat;
-
     digitsec = new DigitSection *[3]{
         new DigitSection(tft, STARTING_X, y_hour, 1, 6, bg_c, true),
         new DigitSection(tft, STARTING_X+70, y_hour, 1, 6, bg_c, true),
@@ -29,7 +25,7 @@ void
 DateItem::
 init(){
     bool update = false;
-    configTime(3600, 0, NTP_SERVER);
+    configTime(_timezone, 0, NTP_SERVER);
     if (!getLocalTime(&timeinfo)){
         timeinfo.tm_hour = 12;
         timeinfo.tm_mday = 7;
@@ -46,12 +42,16 @@ init(){
     prev_time_info = timeinfo;
 }
 
+DateItem*
+DateItem::
+timezone(uint16_t timezone){
+    _timezone = timezone;
+    return this;
+}
+
 void 
 DateItem::
-draw(
-    bool forceDraw
-)
-{
+draw(bool forceDraw){
     // Clearing previous date 
     dateFormat->set_date(&prev_time_info);
 
@@ -76,16 +76,10 @@ draw(
 
 void 
 DateItem::
-add_second(
-    bool getUpdate
-)
-{
+add_second(bool getUpdate){
     prev_time_info = timeinfo;
-
-    if (getUpdate){
-        dateFormat->set_update(true);
-    }
-
+    dateFormat->set_update(getUpdate);
+    
     if (dateFormat->add_second()){
         timeinfo = dateFormat->get_date();
         draw(true);

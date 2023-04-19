@@ -50,8 +50,6 @@ check(Point* pos){
         return;
     }
     change_ = exit_button->check(pos->x, pos->y);
-
-    inputfield->blink();
 }
 
 void 

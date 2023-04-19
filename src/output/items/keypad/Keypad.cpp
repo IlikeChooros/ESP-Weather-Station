@@ -30,7 +30,7 @@ Keypad::Keypad(
     }
 
     this->slider = new KeypadButton(
-        tft, 320 - KEYPAD_BUTTON_WIDTH - 2, 2*KEYPAD_BUTTON_HEIGHT + STARTING_Y + 24,
+        tft, 320 - KEYPAD_BUTTON_WIDTH, 2*KEYPAD_BUTTON_HEIGHT + STARTING_Y + 24,
         KEYPAD_BUTTON_WIDTH, KEYPAD_BUTTON_HEIGHT, slider);
     
     buttons[NUMBER_OF_KEYPAD_BUTTONS-1] = new KeypadButton(
@@ -89,7 +89,7 @@ void
 Keypad::
 draw(bool forceDraw)
 {
-    for (uint8_t i=0; i<NUMBER_OF_KEYPAD_BUTTONS; i++){
+    for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         buttons[i]->draw(forceDraw);
     }
     slider->draw(forceDraw);
@@ -110,7 +110,7 @@ int8_t
 Keypad::
 check(Point* pos)
 {
-    for (uint8_t i=0; i<NUMBER_OF_KEYPAD_BUTTONS; i++){
+    for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         if (buttons[i]->check(pos->x, pos->y)){
             return i+1;
         }
@@ -126,7 +126,7 @@ void
 Keypad::
 clear()
 {
-    for (uint8_t i=0; i<NUMBER_OF_KEYPAD_BUTTONS; i++){
+    for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         delete buttons[i];
     }
     delete [] buttons;

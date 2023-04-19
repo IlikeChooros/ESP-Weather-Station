@@ -39,7 +39,7 @@ class MainScreen
 
     virtual 
     void 
-    init() = 0;
+    init(Weather*) = 0;
 
     protected:
     TFT_eSPI* _tft;

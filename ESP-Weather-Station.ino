@@ -497,7 +497,7 @@ void setup()
         delay(3000);
     }
 
-    screens[0]->init();
+    screens[0]->init(weather);
     collector->init(weather);
 
     tft.fillScreen(BACKGROUND_COLOR);

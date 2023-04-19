@@ -28,6 +28,7 @@ class DateItem
     int16_t y_full_date;
     int16_t y_hour;
     int16_t bg_c;
+    uint16_t _timezone;
 public:
     DateItem(
         TFT_eSPI *tft, 
@@ -55,6 +56,12 @@ public:
      */
     void 
     add_second(bool getUpdate);
+
+    /// @brief Set custom timezone, by default 3600 (1 hour)
+    /// @param timezone 
+    /// @return this pointer
+    DateItem*
+    timezone(uint16_t timezone);
 };
 
 

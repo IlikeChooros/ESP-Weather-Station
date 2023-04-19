@@ -3,21 +3,16 @@
 
 Weather* Weather::main(String main){
     this->_main = main;
-
     return this;
 }
 
-Weather* Weather::icon(String icon)
-{
+Weather* Weather::icon(String icon){
     this->_icon = icon;
-
     return this;
 }
 
-Weather* Weather::temp(double temp)
-{
+Weather* Weather::temp(double temp){
     this->_temp = temp;
-
     return this;
 }
 
@@ -28,10 +23,8 @@ Weather* Weather::feels_like(double feels_like)
     return this;
 }
 
-Weather* Weather::wind_speed(double wind_speed)
-{
+Weather* Weather::wind_speed(double wind_speed){
     this->_wind_speed = wind_speed;
-
     return this;
 }
 
@@ -42,10 +35,8 @@ Weather* Weather::humidity(uint8_t humidity)
     return this;
 }
 
-Weather* Weather::pressure(uint16_t pressure)
-{
+Weather* Weather::pressure(uint16_t pressure){
     this->_pressure = pressure;
-
     return this;
 }
 
@@ -56,23 +47,22 @@ Weather* Weather::sunrise(uint32_t sunrise)
     return this;
 }
 
-Weather* Weather::sunset(uint32_t sunset)
-{
+Weather* Weather::sunset(uint32_t sunset){
     this->_sunset = sunset;
-
     return this;
 }
 
-Weather* Weather::dt(uint32_t dt)
-{
+Weather* Weather::dt(uint32_t dt){
     this->_dt = dt;
-
     return this;
 }
 
-Weather* Weather::pop(double pop)
-{
+Weather* Weather::pop(double pop){
     this->_pop = pop;
+    return this;
+}
 
+Weather* Weather::timezone(uint16_t timezone){
+    this->_timezone = timezone;
     return this;
 }

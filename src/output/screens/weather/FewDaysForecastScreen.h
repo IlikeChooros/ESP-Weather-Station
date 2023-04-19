@@ -75,7 +75,7 @@ class FewDaysForecastScreen: public MainScreen
     }
 
     void 
-    init() {
+    init(Weather*) {
         return;
     }
 };

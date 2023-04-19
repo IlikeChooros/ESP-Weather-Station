@@ -66,36 +66,15 @@ get_city_info(
     uint8_t idx
 )
 {
-    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
-    int16_t http_code = http->GET();
-
-    String payload = http->getString();
-
-    City_info* data;
-
-    if (http_code == 200)
-    {
-        DynamicJsonDocument filter (8200);
-        filter[idx]["lat"] = true;
-        filter[idx]["lon"] = true;
-        filter[idx]["country"] = true;
-        filter[idx]["state"] = true;
-        filter[idx]["name"] = true;
-
-        DynamicJsonDocument doc(8200);
-        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
-        data = new City_info{
-            doc[idx]["lat"].as<double>(),
-            doc[idx]["lon"].as<double>(),
-            doc[idx]["name"].as<String>(),
-            doc[idx]["country"].as<String>(), 
-            doc[idx]["state"].as<String>()
-        };
+    City_info *data, get_data;
+    auto get = get_all_cities_info(city_name);
+    try{
+        get_data = get.at(idx);
+        data = new City_info(get_data);
     }
-
-    http->end();
-
+    catch(const std::out_of_range& err){
+        data = 0;
+    }
     return data;
 }
 
@@ -106,38 +85,19 @@ _init_(
     uint8_t idx
 )
 {
-    http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
-
-    int16_t http_code = http->GET();
-    bool isSuccesful = http_code == 200;
-
-    String payload = http->getString();
-    if (isSuccesful)
-    {
-        DynamicJsonDocument filter(8200);
-        filter[idx]["lat"] = true;
-        filter[idx]["lon"] = true;
-        filter[idx]["country"] = true;
-        filter[idx]["name"] = true;
-
-        DynamicJsonDocument doc(8200);
-        deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
-        _lat = doc[idx]["lat"].as<double>();
-        _lon = doc[idx]["lon"].as<double>();
-        picked_city.country = doc[idx]["country"].as<String>();
-        picked_city.lat = _lat;
-        picked_city.lon = _lon;
-        picked_city.name = doc[idx]["name"].as<String>();
-        Serial.println("_INIT_ " + String(idx)+ " " + picked_city.country + " " 
-        + picked_city.name + " " + String(picked_city.lat) + " " + String(picked_city.lon));
+    auto get = get_city_info(city_name, idx);
+    bool isSuccessful = false;
+    if (get){
+        isSuccessful = true;
+        picked_city = *get;
+        delete get;
+        _lat = picked_city.lat;
+        _lon = picked_city.lon;
     }
-
-    http->end();
 
     lastWeatherCheck = -2*cacheTime;
     lastForecastCheck = -2*cacheTime;
-    return isSuccesful;
+    return isSuccessful;
 }
 
 //-------------------------------------------------------------
@@ -150,8 +110,7 @@ WeatherClient::
 current_weather
 (Weather* weather)
 {
-    if (millis() - lastWeatherCheck < cacheTime)
-    {
+    if (millis() - lastWeatherCheck < cacheTime){
         return false;
     }
     Serial.println("GET WEATHER " + String(_lat) + " " + String(_lon) + " PICK: " + String(picked_city.lat) + " " + String(picked_city.lon) + " " + picked_city.country);
@@ -164,7 +123,7 @@ current_weather
 
     if (isSuccessfull)
     {
-        DynamicJsonDocument filter(440);
+        DynamicJsonDocument filter(1024);
         filter["weather"][0]["main"] = true;
         filter["weather"][0]["icon"] = true;
         filter["main"]["temp"] = true;
@@ -174,9 +133,10 @@ current_weather
         filter["wind"]["speed"] = true;
         filter["sys"]["sunrise"] = true;
         filter["sys"]["sunset"] = true;
-        filter["dt"]=true;
+        filter["dt"] = true;
+        filter["timezone"] = true;
 
-        DynamicJsonDocument doc(440);
+        DynamicJsonDocument doc(1024);
         deserializeJson(doc, payload, DeserializationOption::Filter(filter));
         weather
             ->feels_like(doc["main"]["feels_like"].as<double>())
@@ -188,7 +148,8 @@ current_weather
             ->wind_speed(doc["wind"]["speed"].as<double>())
             ->sunrise(doc["sys"]["sunrise"].as<uint32_t>())
             ->sunset(doc["sys"]["sunset"].as<uint32_t>())
-            ->dt(doc["dt"].as<uint32_t>());
+            ->dt(doc["dt"].as<uint32_t>())
+            ->timezone(doc["timezone"].as<uint16_t>());
         doc.clear();
         filter.clear();
     }
@@ -237,7 +198,6 @@ forecast_weather
 
             DynamicJsonDocument doc(FORECAST_CAPACITY);
             DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
-
 
             forecast->forecasted_weather[i]
                 ->feels_like(doc["list"][i]["main"]["feels_like"].as<double>())

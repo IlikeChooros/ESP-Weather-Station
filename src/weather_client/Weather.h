@@ -14,7 +14,8 @@ class Weather
             _wind_speed,
             _pop;
     uint8_t _humidity;
-    uint16_t _pressure;
+    uint16_t _pressure,
+             _timezone;
     uint32_t _sunrise,
             _sunset,
             _dt;
@@ -30,6 +31,7 @@ class Weather
     Weather* sunset(uint32_t sunset);
     Weather* dt(uint32_t dt);
     Weather* pop(double pop);
+    Weather* timezone(uint16_t timezone);
 };
 
 

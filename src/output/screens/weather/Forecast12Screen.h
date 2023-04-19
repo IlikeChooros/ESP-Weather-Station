@@ -68,7 +68,7 @@ class Forecast12Screen: public MainScreen
     }
 
     void 
-    init() {
+    init(Weather*) {
         return;
     }
 };
