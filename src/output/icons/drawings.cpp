@@ -262,22 +262,38 @@ drawWifi(
     uint16_t x, 
     uint16_t y, 
     uint8_t size, 
-    uint16_t color, 
+    uint8_t strenght, 
     uint16_t background_color
 )
 {
+    uint16_t 
+    first  = TFT_WHITE,
+    second = 0x52AA,
+    third  = 0x52AA;
+    switch (strenght){
+        case 3:
+            first = 0x52AA;
+            break;
+        case 2:
+            third = TFT_WHITE;
+        case 1:
+            second = TFT_WHITE;
+        default:
+            break;
+    }
+
     // first line
-    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, color);
+    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, third);
     tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.4f * size, background_color);
     tft->fillRect(x, y + 0.3f * size, 1.1f * size, 0.8f * size, background_color);
 
     // second line
-    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, color);
+    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, second);
     tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.2f * size, background_color);
     tft->fillRect(x, y + 0.5f * size, 1.1f * size, 0.5f * size, background_color);
 
     // center circle
-    tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, color);
+    tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, first);
 }
 
 void  

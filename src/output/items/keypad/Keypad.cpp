@@ -33,6 +33,9 @@ Keypad::Keypad(
         tft, 320 - KEYPAD_BUTTON_WIDTH, 2*KEYPAD_BUTTON_HEIGHT + STARTING_Y + 24,
         KEYPAD_BUTTON_WIDTH, KEYPAD_BUTTON_HEIGHT, slider);
     
+    this->slider
+    ->set_color(0x5836);
+
     buttons[NUMBER_OF_KEYPAD_BUTTONS-1] = new KeypadButton(
         tft, 70, 207, 180, 30, " "
     );
@@ -118,7 +121,6 @@ check(Point* pos)
     if (slider->check(pos->x, pos->y)){
         return 0;
     }
-
     return -1;
 }
 

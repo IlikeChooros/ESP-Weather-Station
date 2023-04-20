@@ -242,7 +242,7 @@ void WiFiIconStrong::draw()
     tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
 
-    drawWifi(tft,x,y,size, WIFI_BG, background_color);
+    drawWifi(tft,x,y,size, 2, background_color);
 }
 
 void WiFiIconMedium::draw()
@@ -251,7 +251,7 @@ void WiFiIconMedium::draw()
     tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
 
-    drawWifi(tft,x,y,size, TFT_ORANGE, background_color);
+    drawWifi(tft,x,y,size, 1, background_color);
 }
 
 void WiFiIconWeak::draw()
@@ -260,7 +260,7 @@ void WiFiIconWeak::draw()
     tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
 
-    drawWifi(tft,x,y,size, TFT_RED, background_color);
+    drawWifi(tft,x,y,size, 0, background_color);
 }
 
 void WiFiIconLost::draw()
@@ -269,7 +269,7 @@ void WiFiIconLost::draw()
     tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
 
-    drawWifi(tft,x,y,size, TFT_RED, background_color);
+    drawWifi(tft,x,y,size, 3, background_color);
     tft->drawLine(x+size, y, x+size, y+0.55f*size, TFT_RED);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, TFT_RED);
 }
@@ -304,6 +304,6 @@ void WiFiStrenghtMedium::draw()
 void WiFiStrenghtWeak::draw()
 {
     tft->fillRect(x,y,size*0.2f,size,background_color);
-    
+
     tft->fillRect(x,y, size*0.2f, size, TFT_RED);
 }

@@ -85,7 +85,7 @@ drawWifi(
     uint16_t x, 
     uint16_t y, 
     uint8_t size, 
-    uint16_t color, 
+    uint8_t strenght, 
     uint16_t background_color
 );
 

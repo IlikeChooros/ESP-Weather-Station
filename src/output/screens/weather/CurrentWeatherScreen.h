@@ -33,7 +33,7 @@ class CurrentWeatherScreen: public MainScreen
         set_text_colors();
         
         weather_items = new WeatherItem*[NUMBER_OF_WEATHER_ITEMS] {
-            new WeatherIcon(this->_tft, 195,30+OFFSET, 120, bg_c),
+            new WeatherIcon(this->_tft, 190,30+OFFSET, 125, bg_c),
             new WindIcon(this->_tft, 80, 105+OFFSET, 20, bg_c),
             new TextTemp(this->_tft, 30, 30+OFFSET, 4, 2, TFT_WHITE, "%d `C" , bg_c),
             new TextFeelsLike(this->_tft, 35, 80+OFFSET, 2, 1, TFT_WHITE,"Feels like: %d `C", bg_c),
