@@ -6,6 +6,7 @@
 #include "../../items/keypad/KeypadButton.h"
 #include "../../items/keypad/CustomButton.h"
 #include "WiFiScreen.h"
+#include "../settings/PickOptionScreen.h"
 
 #define HEIGHT 30
 #define WIDTH 270
@@ -16,15 +17,14 @@ class WiFiListScreen: public WiFiScreen
     WiFiListItem** wifis;
     CustomButton* refresh_button;
 
+    ReadMem read_mem;
     int8_t number_of_networks;
-
     String picked_wifi;
 
     bool change_;
     bool load_main_;
 
-    String** saved_wifi_info;
-    uint8_t number_of_saved_wifis;
+    std::list<std::pair<String, String>> wifi_info;
 
     /// @brief  Reads form eeprom saved 
     /// ssids and passwords

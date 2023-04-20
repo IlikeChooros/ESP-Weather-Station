@@ -8,13 +8,7 @@
 #include "SPI.h"
 
 #include "../../../data_structures/Point.h"
-
-#ifndef EEPROM_SIZE
-#define EEPROM_SIZE 512
-#endif
-
-#define MAX_PASSWORD_LENGHT 31
-#define MAX_SSID_LENGHT 26 
+#include "../../items/memory/ReadMem.h"
 
 
 class WiFiScreen
@@ -23,7 +17,7 @@ public:
     explicit 
     WiFiScreen(
         TFT_eSPI* tft, 
-        int16_t bg_c
+        uint16_t bg_c
     );
 
     virtual void 
@@ -62,7 +56,7 @@ protected:
         char* pass
     );
 
-    int16_t bg_c;
+    uint16_t bg_c;
     TFT_eSPI* tft;
 };
 

@@ -9,14 +9,9 @@
 #include "../../../input/TouchScreen.h"
 
 #include "../../items/ListItem.h"
+#include "../../items/memory/ReadMem.h"
 
-#ifndef EEPROM_SIZE
-#define EEPROM_SIZE 512
-#endif
 
-#define MAX_CITIES 2
-#define CITY_NAME_LEN 22
-#define CITY_NAME_IDX EEPROM_SIZE-CITY_NAME_LEN*MAX_CITIES-MAX_CITIES
 // city name is up to 22 characters, 512 - 2*22 -2 = 466, 
 // 466 (default) address is used for number of saved city names
 // 467 - idx               <-|

@@ -71,10 +71,6 @@ public:
     get_all_cities_info(
         String city_name
     );
-
-    void
-    set_lat_lon(double lat, double lon)
-    {this->_lat = lat; this->_lon = lon;}
 };
 
 #endif

@@ -1,15 +1,11 @@
 #pragma once
 
-
-#include "CityNameScreen.h"
-
 #include <vector>
 
+#include "CityNameScreen.h"
 #include "../../../data_structures/Point.h"
-
 #include "../../items/keypad/CustomButton.h"
 #include "../../items/wifi/WiFiItem.h"
-
 
 
 #define LIST_HEIGHT 60
@@ -19,12 +15,10 @@ class
 CityNameListScreen: public CityNameScreen
 {
     ListItem** saved_city_names;
-
     CustomButton* set_new_location;
     WiFiItem* wifi;
 
     std::vector<City_info> city_info;
-
     std::vector<String> city_names;
     uint8_t number_of_saved_city_names;
 

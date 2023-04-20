@@ -23,7 +23,7 @@ draw()
     tft->setTextColor(TFT_LIGHTGREY);
 
     uint16_t x = this->x + 5,
-             y = this->y + 10;
+             y = this->y + 5;
 
     tft->setTextSize(2);
     tft->drawCentreString(info.name, x+w/2, y, 2);

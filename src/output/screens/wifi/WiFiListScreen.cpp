@@ -30,12 +30,12 @@ void WiFiListScreen::scan()
 
     wifis = new WiFiListItem* [number_of_networks];
     
-    for (uint8_t i=0;i<number_of_networks;i++){
+    for (uint8_t i=0; i < number_of_networks; i++){
         String ssid = WiFi.SSID(i);
         bool is_saved = false;
-        for (uint8_t j=0; j<number_of_saved_wifis; j++){
+        for (auto j = wifi_info.begin(); j != wifi_info.end(); j++){
             // If saved wifi has the same ssid as the scanned wifi
-            if (saved_wifi_info[j][0] == ssid){
+            if (j->first == ssid){
                 is_saved = true;
                 break;
             }
@@ -45,10 +45,8 @@ void WiFiListScreen::scan()
 }
 
 void 
-WiFiListScreen::check(
-    Point* pos
-)
-{
+WiFiListScreen::
+check(Point* pos){
     for (uint8_t i=0; i<number_of_networks; i++)
     {
         if (wifis[i]->check(pos->x, pos->y)){
@@ -69,14 +67,12 @@ WiFiListScreen::check(
 
 void 
 WiFiListScreen::
-connect_to_wifi()
-{
+connect_to_wifi(){
     String psw;
-
     // Look for saved wifi
-    for (uint8_t i=0; i<number_of_saved_wifis; i++){
-        if (saved_wifi_info[i][0] == picked_wifi){
-            psw = saved_wifi_info[i][1];
+    for (auto i=wifi_info.begin(); i != wifi_info.end(); i++){
+        if (i->first == picked_wifi){
+            psw = i->second;
             break;
         }
     }
@@ -97,32 +93,8 @@ connect_to_wifi()
 
 void 
 WiFiListScreen::
-read_from_eeprom_wifis()
-{
-    EEPROM.begin(EEPROM_SIZE);
-    uint8_t count = EEPROM.read(10);
-    this->number_of_saved_wifis = count;
-    uint16_t address = 11;
-    if (count){
-        saved_wifi_info = new String* [count];
-    }
-    
-
-    String saved_ssid, saved_psw;
-
-    for (uint8_t i=0; i<count; i++){
-        saved_ssid = EEPROM.readString(address);
-        address += MAX_SSID_LENGHT;
-        saved_psw = EEPROM.readString(address);
-        address += MAX_PASSWORD_LENGHT;
-
-        saved_wifi_info[i] = new String[2]{
-            saved_ssid,
-            saved_psw
-        };
-    }
-
-    EEPROM.end();
+read_from_eeprom_wifis(){
+    wifi_info = read_mem.wifis(true);
 }
 
 bool 
