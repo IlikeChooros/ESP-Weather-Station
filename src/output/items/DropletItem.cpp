@@ -2,10 +2,8 @@
 
 void 
 DropletItem::
-draw(bool forceDraw)
-{
-    if (!forceDraw && !redraw)
-    {
+draw(bool forceDraw){
+    if (!forceDraw && !redraw){
         return;
     }
 
@@ -16,25 +14,20 @@ draw(bool forceDraw)
 
 void 
 DropletItem::
-setWeather(Weather* weather)
-{
+setWeather(Weather* weather){
     redraw = pop != weather->_pop;
     pop = weather->_pop;
 
-    if (pop <= 0.1f)
-    {
+    if (pop <= 0.1f){
         idx_icon = NO_RAIN;
     }
-    else if (pop <= 0.3f)
-    {
+    else if (pop <= 0.3f){
         idx_icon = UNLIKELY_RAIN;
     }
-    else if (pop <= 0.5f)
-    {
+    else if (pop <= 0.5f){
         idx_icon = PROBABLY_RAIN;
     }
-    else if (pop <= 0.7f)
-    {
+    else if (pop <= 0.7f){
         idx_icon = LIKELY_RAIN;
     }
     else{
@@ -43,8 +36,7 @@ setWeather(Weather* weather)
 }
 
 Icon* 
-DropletItem::matchIcon()
-{
+DropletItem::matchIcon(){
     switch (idx_icon)
     {
         case NO_RAIN:

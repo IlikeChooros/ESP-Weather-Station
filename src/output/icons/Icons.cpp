@@ -9,7 +9,6 @@ void Sun::draw()
 void Moon::draw()
 {
     tft->fillRect(x,y,size,size,background_color);
-
     drawMoon(tft,x+0.05f*size,y,size*0.9f, MOON, background_color);
 }
 
@@ -127,9 +126,6 @@ void Rain::draw()
 
 void Rain::draw_droplet(uint16_t ax, uint16_t ay,uint16_t bx, uint16_t by ,uint16_t size)
 {
-    //tft->fillCircle(x + 0.5f*size, y + 0.7f*size, 0.25f*size, WATER);
-    //tft->fillTriangle(x+ 0.5f*size, y + 0.1f*size,    x+ 0.27f*size, y + 0.6*size,    x + 0.75f*size, y+ 0.6f * size, WATER);
-
     tft->drawWideLine(ax,ay,bx,by,size, WATER, background_color);
 }
 
@@ -293,11 +289,8 @@ void WiFiStrenghtStrong::draw()
     tft->fillRect(x,y,size*0.8f,size,background_color);
 
     tft->fillRect(x,y, size*0.2f, size, TFT_GREEN);
-
     tft->fillRect(x+0.3f*size,y, size*0.2f, size, TFT_GREEN);
-
     tft->fillRect(x+0.6f*size,y, size*0.2f, size, TFT_GREEN);
-
 }
 
 void WiFiStrenghtMedium::draw()
@@ -305,13 +298,12 @@ void WiFiStrenghtMedium::draw()
     tft->fillRect(x,y,size*0.5f,size,background_color);
 
     tft->fillRect(x,y, size*0.2f, size, TFT_ORANGE);
-
     tft->fillRect(x+0.3f*size,y, size*0.2f, size, TFT_ORANGE);
 }
 
 void WiFiStrenghtWeak::draw()
 {
     tft->fillRect(x,y,size*0.2f,size,background_color);
-
+    
     tft->fillRect(x,y, size*0.2f, size, TFT_RED);
 }

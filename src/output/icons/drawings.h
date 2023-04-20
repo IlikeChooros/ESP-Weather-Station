@@ -118,3 +118,22 @@ drawPickIcon(
     uint8_t size, 
     uint16_t color
 );
+
+void
+drawSunset(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t bg_c
+);
+
+void
+drawSunrise(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t bg_c
+);
+

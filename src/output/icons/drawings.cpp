@@ -44,7 +44,8 @@ drawSun(
     uint16_t background_color
 )
 {
-    tft->fillSmoothCircle(x+size/2, y+size/2, size/2 * 0.50f, color, background_color);
+    Serial.println(String(x + size/2) + " " + String(y + size/2) + " " + String(size/4) + " " + color);
+    tft->fillSmoothCircle(x+size/2, y+size/2, size/4, color, background_color);
 
     // 
     uint16_t 
@@ -64,7 +65,7 @@ drawSun(
             bx = (Bx - xc) * cosf(angle) - (By - yc) * sinf(angle) + xc,
             by = (Bx - xc) * sinf(angle) + (By - yc) * cosf(angle) + yc;
 
-        tft->drawWideLine(ax, ay,bx , by, 0.05f * size, color, background_color);
+        tft->drawWideLine(ax, ay,bx , by, roundf(0.05f * size), color, background_color);
     }
 }
 
@@ -95,7 +96,6 @@ drawSnowflake(
 )
 {
     uint16_t Ax,Ay,Bx,By, xc = 0.5f*size + x, yc = 0.5f*size + y;
-
 
     // 1st 'right up' part
     Ax = x + 0.8f*size;
@@ -238,7 +238,6 @@ drawSingleWindString(
         tft->fillCircle(x + (size + lenght)*0.5f, y+0.7f*size, 0.2f*size, color);
         tft->fillCircle(x + (size + lenght)*0.5f, y+0.7f*size,0.2f*size - thickness, background_color);
         tft->fillRect(x+(size + lenght)*0.5f - 0.2f*size, y + 0.5f*size, 0.2f*size, 0.2f*size, background_color);
-
     }
     
     tft->drawWideLine(x + (size - lenght)*0.5f, y+0.5f*size,x + (size + lenght)*0.5f, y+0.5f*size, thickness, color, background_color);
@@ -336,4 +335,71 @@ drawPickIcon(
 
     tft->drawWideLine(x, st_y, end_x, y+size, 0.3f*size, color);
     tft->drawWideLine(end_x, y+size, x+size, y, 0.3f*size, color);
+}
+
+void
+drawSunGoingDown(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t bg_c,
+    uint16_t color
+)
+{
+    drawSun(tft, x, y, size, color, bg_c);
+    tft->fillRect(x, y + size*0.6f, size, size*0.4f, bg_c);
+    tft->fillSmoothRoundRect(x, y + size*0.6f, size, size*0.15f, size*0.1f + 1, color, bg_c);
+}
+
+void
+drawSunset(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t bg_c
+)
+{
+    drawSunGoingDown(tft, x, y, size, bg_c, 0xF240);
+    tft->drawWideLine(
+        float(x) + float(size)*0.5f, float(y) + float(size) * 0.75f,
+        float(x) + float(size)*0.5f, float(y) + float(size),
+        0.05f*size, 0xF240, bg_c);
+    
+    tft->drawWideLine(
+        float(x) + float(size)*0.4f, float(y) + float(size) * 0.9f,
+        float(x) + float(size)*0.5f, float(y) + float(size), 
+        0.05f*size, 0xF240, bg_c);
+
+    tft->drawWideLine(
+        float(x) + float(size)*0.5f, float(y) + float(size),
+        float(x) + float(size)*0.6f, float(y) + float(size)*0.9f,
+        0.05f*size, 0xF240, bg_c);
+}
+
+void
+drawSunrise(
+    TFT_eSPI* tft,
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t bg_c
+)
+{
+    drawSunGoingDown(tft, x, y, size, bg_c, 0xF4E3);
+    tft->drawWideLine(
+        float(x) + float(size)*0.5f, float(y) + float(size) * 0.75f,
+        float(x) + float(size)*0.5f, float(y) + float(size),
+        0.05f*size, 0xF4E3, bg_c);
+
+    tft->drawWideLine(
+        float(x) + float(size)*0.4f, float(y) + float(size) * 0.85f,
+        float(x) + float(size)*0.5f, float(y) + float(size) * 0.75f,
+        0.05f*size, 0xF4E3, bg_c);
+
+    tft->drawWideLine(
+        float(x) + float(size)*0.5f, float(y) + float(size) * 0.75f,
+        float(x) + float(size)*0.6f, float(y) + float(size) * 0.85f,
+        0.05f*size, 0xF4E3, bg_c);
 }
