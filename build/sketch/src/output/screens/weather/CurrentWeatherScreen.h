@@ -31,7 +31,6 @@ class CurrentWeatherScreen: public MainScreen
 
     public:
     CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c): MainScreen(tft,bg_c){
-        set_text_colors();
         
         weather_items = new WeatherItem*[NUMBER_OF_WEATHER_ITEMS] {
             new WeatherIcon(this->_tft, 190,30+OFFSET, 125, bg_c),

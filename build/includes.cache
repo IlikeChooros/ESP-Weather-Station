@@ -60,6 +60,11 @@
     "Includepath": null
   },
   {
+    "Sourcefile": "c:\\Users\\pawel\\arduino\\ESP-Weather-Station\\build\\sketch\\src\\data_structures\\hsv_to_rgb.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
     "Sourcefile": "c:\\Users\\pawel\\arduino\\ESP-Weather-Station\\build\\sketch\\src\\input\\TouchButton.cpp",
     "Include": "",
     "Includepath": null

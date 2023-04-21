@@ -2,4 +2,5 @@
 debug_custom.json
 debug.cfg
 esp32.svd
+build
 my_api.txt

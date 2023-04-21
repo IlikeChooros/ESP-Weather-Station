@@ -4,8 +4,7 @@ uint16_t* temp_colors = set_text_colors();
 
 void TextItem::draw(bool forceDraw)
 {
-    if (!forceDraw && !redraw)
-    {
+    if (!forceDraw && !redraw){
         return;
     }
     
