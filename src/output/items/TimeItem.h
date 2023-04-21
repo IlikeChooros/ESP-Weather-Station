@@ -34,15 +34,9 @@ class TimeItem: public WeatherItem
         uint8_t text_size, 
         uint64_t unix, 
         bool hourly
-    ): WeatherItem(_tft,x,y,background_color)
-    {
-        this->font = font;
-        this->text_size = text_size;
-        this->unix = unix;
-        this->color = color;
-        this->hourly = hourly;
-        prev_date = "";
-    }
+    ): WeatherItem(_tft,x,y,background_color),
+    font(font), text_size(text_size), unix(unix),
+    color(color), hourly(hourly), prev_date("") {}
 
     void 
     draw(bool forceDraw);

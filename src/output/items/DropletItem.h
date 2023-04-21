@@ -14,7 +14,7 @@ class DropletItem: public WeatherItem
 {
     bool redraw;
     uint8_t size;
-    double pop;
+    uint8_t pop;
     uint8_t idx_icon;
 
     Icon* 
@@ -28,7 +28,7 @@ public:
         uint8_t size, 
         uint16_t background_color
     ): WeatherItem(_tft,x,y,background_color),
-    size(size), pop(-1){}
+    size(size), pop(0){}
 
     void 
     draw(bool forceDraw);

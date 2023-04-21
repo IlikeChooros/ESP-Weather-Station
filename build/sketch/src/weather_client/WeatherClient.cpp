@@ -196,6 +196,7 @@ forecast_weather
             filter["list"][i]["wind"]["speed"] = true;
             filter["list"][i]["dt"] = true;
             filter["list"][i]["pop"] = true;
+            filter["city"]["timezone"] = true;
 
             DynamicJsonDocument doc(FORECAST_CAPACITY);
             DeserializationError err = deserializeJson(doc, payload, DeserializationOption::Filter(filter));
@@ -209,7 +210,8 @@ forecast_weather
                 ->temp(doc["list"][i]["main"]["temp"].as<double>())
                 ->wind_speed(doc["list"][i]["wind"]["speed"].as<double>())
                 ->pop(doc["list"][i]["pop"].as<double>())
-                ->dt(doc["list"][i]["dt"].as<uint32_t>());
+                ->dt(doc["list"][i]["dt"].as<uint32_t>())
+                ->timezone(doc["city"]["timezone"].as<int16_t>());
         }
         filter.clear();
     }

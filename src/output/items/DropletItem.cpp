@@ -15,19 +15,19 @@ draw(bool forceDraw){
 void 
 DropletItem::
 setWeather(Weather* weather){
-    redraw = pop != weather->_pop;
-    pop = weather->_pop;
+    redraw = pop != uint16_t(100 * weather->_pop);
+    pop = uint16_t(100 * weather->_pop);
 
-    if (pop <= 0.1f){
+    if (pop <= 10){
         idx_icon = NO_RAIN;
     }
-    else if (pop <= 0.3f){
+    else if (pop <= 30){
         idx_icon = UNLIKELY_RAIN;
     }
-    else if (pop <= 0.5f){
+    else if (pop <= 50){
         idx_icon = PROBABLY_RAIN;
     }
-    else if (pop <= 0.7f){
+    else if (pop <= 70){
         idx_icon = LIKELY_RAIN;
     }
     else{

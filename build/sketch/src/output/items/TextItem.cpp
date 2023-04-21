@@ -27,34 +27,29 @@ void TextItem::draw(bool forceDraw)
     this->prev_data = this->_data;
 }
 
-void TextTemp::setWeather(Weather* weather)
-{
+void TextTemp::setWeather(Weather* weather){
     this->redraw = (int16_t)weather->_temp != this->_data;
     _data = (int16_t)weather->_temp;
     this->color = get_text_color((int16_t) weather->_temp, temp_colors);
 }
 
-void TextPressure::setWeather(Weather* weather)
-{
+void TextPressure::setWeather(Weather* weather){
     this->redraw = (int16_t)weather->_pressure != this->_data;
     _data = (int16_t)weather->_pressure;
 }
 
-void TextWind::setWeather(Weather* weather)
-{
+void TextWind::setWeather(Weather* weather){
     this->redraw = (int16_t) (weather->_wind_speed*3.6f) != this->_data;
     _data = (int16_t) ((float) (weather->_wind_speed*3.6f));
 }
 
-void TextFeelsLike::setWeather(Weather* weather)
-{
+void TextFeelsLike::setWeather(Weather* weather){
     this->redraw = (int16_t)weather->_feels_like != this->_data;
     _data = (int16_t)weather->_feels_like;
     this->color = get_text_color((int16_t) weather->_feels_like, temp_colors);
 }
 
-void TextPop::setWeather(Weather* weather)
-{
+void TextPop::setWeather(Weather* weather){
     this->redraw = (int16_t)(100 * weather->_pop) != this->_data;
-    _data = (int16_t)((float) (100 * weather->_pop));
+    _data = (int16_t)(100 * weather->_pop);
 }

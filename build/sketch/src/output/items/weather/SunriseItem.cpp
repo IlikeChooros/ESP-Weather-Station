@@ -32,7 +32,7 @@ draw(bool forceDraw){
 void
 SunriseItem::
 setWeather(Weather* weather){
-    uint64_t sunrise = weather->_sunrise;
+    uint64_t sunrise = weather->_sunrise + weather->_timezone;
     redraw = sunrise != prev_sunrise;
     prev_sunrise = sunrise;
 }

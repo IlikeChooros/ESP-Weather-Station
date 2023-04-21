@@ -28,23 +28,17 @@ String TimeItem::get_date_format(bool hourFormat)
 }
 
 void TimeItem::setWeather(Weather* weather){
-    redraw = unix != weather->_dt;
-    this->unix = weather->_dt;
+    redraw = unix != weather->_dt + weather->_timezone;
+    this->unix = weather->_dt + weather->_timezone;
 }
 
 String TimeItem::get_hour_format(){
     uint32_t time = unix % (24 * 60 * 60);
     uint8_t hour = time / 3600,
             min = (time % 3600) / 60;
-    String hour_format = "";
-
-    hour_format += String(hour);
-    hour_format += ":";
-    if (min<10)
-    {
-        hour_format+= "0";
-    }
-    hour_format += String(min);
+            
+    String hour_format = String(hour) + ":";
+    hour_format += min < 10 ? "0" + String(min) : String(min);
 
     return hour_format;
 }
