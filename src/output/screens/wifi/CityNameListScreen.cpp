@@ -19,23 +19,18 @@ void
 CityNameListScreen::
 init()
 {
-    EEPROM.begin(EEPROM_SIZE);
-
-    number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX);
+    auto cities = read_mem.cities(true);
+    number_of_saved_city_names = cities.size();
     number_of_saved_city_names = number_of_saved_city_names < MAX_CITIES ? number_of_saved_city_names : MAX_CITIES;
-
-    if (number_of_saved_city_names>0){
-        saved_city_names = new ListItem* [number_of_saved_city_names];
+    if (!cities.empty()){
+        city_list = new ListItem* [number_of_saved_city_names];
     }
-
-    uint16_t address = CITY_NAME_IDX+2;
-    for (uint8_t i=0; i<number_of_saved_city_names; i++){
-        String name = EEPROM.readString(address);
-        city_names.push_back(name);
-        saved_city_names[i] = new ListItem(tft, 20, 30+i*(LIST_HEIGHT+5), LIST_WIDTH, LIST_HEIGHT);
-        address += 1 + CITY_NAME_LEN;
+    uint8_t count = 0;
+    for (auto i : cities){
+        city_names.push_back(i.first);
+        city_list[count] = new ListItem(tft, 20, 30+count*(LIST_HEIGHT+5), LIST_WIDTH, LIST_HEIGHT);
+        count++;
     }
-    EEPROM.end();
 }
 
 void
@@ -53,7 +48,7 @@ set_city_info()
         );
 
         if (!info){
-            saved_city_names[i]
+            city_list[i]
             ->set_data("No city", true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String("NULL"), true, 2, 2, TFT_LIGHTGREY)
             ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
@@ -68,7 +63,7 @@ set_city_info()
             info->state = "";
         }
 
-        saved_city_names[i]
+        city_list[i]
         ->set_data(city_names.at(i), true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
         ->set_data(info->state, false, 2, 2, TFT_LIGHTGREY);
@@ -85,7 +80,7 @@ check(Point* pos)
 {
     change_ = set_new_location->check(pos->x, pos->y);
     for (uint8_t i=0; i<number_of_saved_city_names; ++i){
-        if(saved_city_names[i]->check(pos->x, pos->y)){
+        if(city_list[i]->check(pos->x, pos->y)){
             load_main_ = wclient->_init_(city_names.at(i), i);
             return;
         }
@@ -98,7 +93,6 @@ draw_wifi_name(bool forceDraw){
     if(!forceDraw){
         return;
     }
-
     tft->setCursor(30,5);
     tft->setTextColor(TFT_LIGHTGREY);
     tft->setTextFont(2);
@@ -114,11 +108,10 @@ draw(bool forceDraw)
     draw_wifi_name(forceDraw);
     
     for (uint8_t i=0; i<number_of_saved_city_names; ++i){
-        saved_city_names[i]->draw(forceDraw);
+        city_list[i]->draw(forceDraw);
     }
 
-    if (number_of_saved_city_names<1)
-    {
+    if (number_of_saved_city_names<1){
         tft->setCursor(10, 20);
         tft->setTextColor(TFT_DARKGREY);
         tft->setTextFont(2);

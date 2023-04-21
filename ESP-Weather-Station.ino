@@ -213,33 +213,21 @@ void reconnect_to_wifi(){
 }
 
 void load_saved_wifis(){
-    //******************************
-    // Read from EEPROM saved wifis
-    // address = 10 -> number of networks
-    // address <11, 11+MAX_SSID_LEN (37)) -> 1. ssid 
-    // address <37, 38 + MAX_PASSWORD_LEN (58)) -> 1. password
-    // ...
-    // address < (prev_address)+1 = x, x + MAX_SSID_LEN> -> k. ssid
-
-    EEPROM.begin(EEPROM_SIZE);
-    numberOfSavedWifis = EEPROM.read(10);
-    uint16_t address = 11;
+    ReadMem read;
+    auto wifis = read.wifis(true);
+    numberOfSavedWifis = wifis.size();
 
     if (numberOfSavedWifis){
         saved_wifi_info = new String* [numberOfSavedWifis];
     }
-    String saved_ssid, saved_psw;
-    for (uint8_t i=0; i<numberOfSavedWifis; i++){
-        saved_ssid = EEPROM.readString(address);
-        address += MAX_SSID_LENGHT;
-        saved_psw = EEPROM.readString(address);
-        address += MAX_PASSWORD_LENGHT;
-        saved_wifi_info[i] = new String[2]{
-            saved_ssid,
-            saved_psw
+    uint8_t count = 0;
+    for (auto i : wifis){
+        saved_wifi_info[count] = new String[2]{
+            i.first,
+            i.second
         };
+        count++;
     }
-    EEPROM.end();
 }
 
 void refresh(){
@@ -505,8 +493,6 @@ void setup()
     sci.draw(3,1,1,1);
 
     collect_data();
-
-        Serial.println("SRAM: " + String(ESP.getFreeHeap()));
 }
 
 

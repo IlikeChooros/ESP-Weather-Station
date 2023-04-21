@@ -14,10 +14,11 @@
 class
 CityNameListScreen: public CityNameScreen
 {
-    ListItem** saved_city_names;
+    ListItem** city_list;
     CustomButton* set_new_location;
     WiFiItem* wifi;
 
+    ReadMem read_mem;
     std::vector<City_info> city_info;
     std::vector<String> city_names;
     uint8_t number_of_saved_city_names;

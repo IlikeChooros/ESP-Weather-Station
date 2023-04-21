@@ -33,6 +33,7 @@ ReadMem::cities(bool forceRead){
     uint8_t number_of_saved_city_names = EEPROM.read(CITY_NAME_IDX);
     number_of_saved_city_names = number_of_saved_city_names < MAX_CITIES ? number_of_saved_city_names : MAX_CITIES;
 
+    location.clear();
     uint16_t address = CITY_NAME_IDX+1;
     for (uint8_t i=0; i<number_of_saved_city_names; i++, address += CITY_NAME_LEN){
         uint8_t idx = EEPROM.read(address);
