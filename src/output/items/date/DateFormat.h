@@ -9,6 +9,7 @@ class DateFormat
 {
     struct tm* timeinfo;
     bool getUpdate;
+
     public:
 
     void 

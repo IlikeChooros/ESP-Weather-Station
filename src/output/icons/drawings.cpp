@@ -44,7 +44,6 @@ drawSun(
     uint16_t background_color
 )
 {
-    Serial.println(String(x + size/2) + " " + String(y + size/2) + " " + String(size/4) + " " + color);
     tft->fillSmoothCircle(x+size/2, y+size/2, size/4, color, background_color);
 
     // 

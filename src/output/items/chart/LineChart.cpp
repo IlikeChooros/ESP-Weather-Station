@@ -3,19 +3,14 @@
 ui16 
 set_data_(std::vector<WeatherData> &data)
 {
-    if (data.size() <= 1)
-    {
+    if (data.size() <= 1){
         return 0;
     }
     return data.at(1).dt() - data.at(0).dt() > 3600 ? 3*HOURS_PIXELS : MINUTES_5_PIXELS; 
 }
 
 ui16
-get_y_pos(
-    i16 data,
-    float sc
-)
-{
+get_y_pos(i16 data, float sc){
     return MIDDLE_Y - data*sc;
 }
 
@@ -124,8 +119,7 @@ draw_line_chart(
         prev_x = x;
         prev_y = y;
 
-        if (data.at(i).dt() - lastCheck < 10800) // 3 hours
-        {
+        if (data.at(i).dt() - lastCheck < 10800){
             continue;
         }
 

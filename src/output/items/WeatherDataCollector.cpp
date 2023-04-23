@@ -8,7 +8,7 @@ WeatherDataCollector::get_data(ui8 idx){
 void 
 WeatherDataCollector::
 init(Weather* weather){
-    this->current_day_ = get_day(weather->_dt);
+    this->current_day_ = get_day(weather->_dt + weather->_timezone);
 }
 
 void
@@ -68,6 +68,8 @@ WeatherDataCollector::collect_all(
     ui8 current_day = get_day(forecast->forecasted_weather[0]->_dt);
     ui8 starting_idx=1;
     while(current_day == get_day(forecast->forecasted_weather[starting_idx]->_dt)) {starting_idx++;}
+    
+
     starting_idx += 8*day_offset;
     collect_data(forecast, idx, starting_idx, starting_idx+9);
 }

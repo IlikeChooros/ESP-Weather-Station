@@ -24,7 +24,7 @@ bg_c(bg_c), _timezone(3600)
 void 
 DateItem::
 init(){
-    bool update = false;
+    update = false;
     configTime(_timezone, 0, NTP_SERVER);
     if (!getLocalTime(&timeinfo)){
         timeinfo.tm_hour = 12;
@@ -78,10 +78,15 @@ void
 DateItem::
 add_second(bool getUpdate){
     prev_time_info = timeinfo;
+
+    if (!getUpdate){
+        getUpdate = update;    
+    }
     dateFormat->set_update(getUpdate);
     
     if (dateFormat->add_second()){
         timeinfo = dateFormat->get_date();
+        update = dateFormat->get_update();
         draw(true);
         return;
     } 

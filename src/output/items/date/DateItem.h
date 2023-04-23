@@ -29,6 +29,7 @@ class DateItem
     int16_t y_hour;
     int16_t bg_c;
     uint16_t _timezone;
+    bool update;
 public:
     DateItem(
         TFT_eSPI *tft, 

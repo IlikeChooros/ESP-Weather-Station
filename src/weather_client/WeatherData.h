@@ -10,7 +10,6 @@ class WeatherData
     int8_t humidity_;
     int8_t pop_;
 
-
     public:
 
     WeatherData(
