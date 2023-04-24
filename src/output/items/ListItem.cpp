@@ -1,5 +1,15 @@
 #include "ListItem.h"
 
+ListItem::
+ListItem(
+    TFT_eSPI* tft,
+    int16_t x,
+    int16_t y,
+    int16_t width,
+    int16_t height
+): TouchButton(x, y, width, height),
+tft(tft), marked_(false), wrap(true) {}
+
 void
 ListItem::
 draw(bool forceDraw)
@@ -36,19 +46,26 @@ draw_(uint16_t color)
         }
 
         String str = i.string, temp;
-        if (str.length() < 17){
+
+        if (!wrap){
             temp = str;
         }
         else{
-            temp = str.substring(0, 14);
-            temp += "...";
+            if (str.length() < 17){
+                temp = str;
+            }
+            else{
+                temp = str.substring(0, 14);
+                temp += "...";
+            }
         }
+
         x += tft->drawString(temp, x, y);
         x += 10;
     }
 
     if (marked_){
-        drawPickIcon(tft, x+0.9f*width, y, height*0.8f, TFT_GREENYELLOW);
+        drawPickIcon(tft, x+0.9f*width, y, 0.1f*width, TFT_GREENYELLOW);
     }
 }
 
@@ -75,6 +92,13 @@ ListItem*
 ListItem::
 marked(bool marked){
     this->marked_ = marked;
+    return this;
+}
+
+ListItem*
+ListItem::
+wrap_text(bool wrap){
+    this->wrap = wrap;
     return this;
 }
 

@@ -124,11 +124,8 @@ drawSettingsButton(
 )
 {
     tft->fillRect(x,y,size,size,color);
-    tft->drawRect(x,y,size,size, TFT_WHITE);
 
-    uint16_t gear_color = TFT_DARKGREY;
-    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.3f*size, gear_color);
-    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color);
+    uint16_t gear_color = 0x4228;
 
     uint16_t 
     xc = x + size/2,
@@ -149,6 +146,10 @@ drawSettingsButton(
 
         tft->drawWideLine(ax, ay,bx , by, 0.15f * size, gear_color, color);
     }
+
+    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.3f*size, gear_color);
+    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color);
+    tft->drawRect(x,y,size,size, TFT_WHITE);
 }
 
 void

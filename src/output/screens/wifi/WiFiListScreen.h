@@ -6,16 +6,19 @@
 #include "../../items/keypad/KeypadButton.h"
 #include "../../items/keypad/CustomButton.h"
 #include "WiFiScreen.h"
-#include "../settings/PickOptionScreen.h"
+#include "SavedWiFiScreen.h"
 
 #define HEIGHT 30
 #define WIDTH 270
 #define OFFSET 5
+namespace wifi{
 
 class WiFiListScreen: public WiFiScreen
 {
     WiFiListItem** wifis;
     CustomButton* refresh_button;
+    CustomButton* settings_button;
+    TouchScreen* ts;
 
     ReadMem read_mem;
     int8_t number_of_networks;
@@ -26,31 +29,19 @@ class WiFiListScreen: public WiFiScreen
 
     std::list<std::pair<String, String>> wifi_info;
 
-    /// @brief  Reads form eeprom saved 
-    /// ssids and passwords
-    /// then saves it as a String** pointer
-    void 
-    read_from_eeprom_wifis();
-
     void 
     connect_to_wifi();
+
+    void
+    settings();
 
     public:
     WiFiListScreen(
         TFT_eSPI* tft, 
+        TouchScreen* ts,
         uint16_t bg_c, 
         void(*refresh_func)(void)
-    ): WiFiScreen(tft, bg_c){
-        WiFi.mode(WIFI_STA);
-        change_ = false;
-        load_main_ = false;
-
-        refresh_button = new CustomButton(tft, 285, 10, 30, 30, 0x3CE6);
-        refresh_button
-        ->set_draw(drawRefreshButton)
-        ->touch_color(0x19E2)
-        ->set_on_press(refresh_func);
-    }
+    );
 
     void 
     scan();
@@ -92,5 +83,9 @@ class WiFiListScreen: public WiFiScreen
         return this->load_main_;
     }
 };
+
+
+}
+
 
 #endif

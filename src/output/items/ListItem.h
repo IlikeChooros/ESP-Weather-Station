@@ -6,27 +6,7 @@
 #include "../../input/TouchButton.h"
 #include "../icons/drawings.h"
 #include "../../data_structures/Point.h"
-
-class print_data
-{
-
-public:
-    print_data(
-        String string,
-        uint8_t font,
-        uint8_t size,
-        uint16_t color,
-        bool same_line
-    ): string(string), font(font),
-    size(size), color(color),
-    same_line(same_line) {}
-    
-    String string;
-    uint8_t font;
-    uint8_t size;
-    uint16_t color;
-    bool same_line;
-};
+#include "../../data_structures/print_data.h"
 
 class
 ListItem: public TouchButton
@@ -34,6 +14,7 @@ ListItem: public TouchButton
     TFT_eSPI* tft;
 
     bool marked_;
+    bool wrap;
 
     std::vector<print_data> data;
 
@@ -47,8 +28,7 @@ public:
         int16_t y,
         int16_t width,
         int16_t height
-    ): TouchButton(x, y, width, height),
-    tft(tft), marked_(false) {}
+    );
 
 
     void 
@@ -59,6 +39,9 @@ public:
 
     ListItem*
     marked(bool marked);
+
+    ListItem*
+    wrap_text(bool);
 
     ListItem*
     set_data(

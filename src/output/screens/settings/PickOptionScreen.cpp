@@ -88,7 +88,7 @@ draw(bool forceDraw){
 void
 PickOptionScreen::
 check(){
-    Point* pos = ts->read_touch();
+    ::Point* pos = ts->read_touch();
 
     if (!pos){
         return;

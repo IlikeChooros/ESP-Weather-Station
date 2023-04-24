@@ -4,6 +4,7 @@
 #include "../../items/keypad/Keyboard.h"
 #include "../../items/keypad/CustomButton.h"
 #include "../../items/InputField.h"
+#include "../../items/memory/ReadMem.h"
 
 #include "../geoloc/GeoLocScreen.h"
 #include "../settings/PickOptionScreen.h"
@@ -15,12 +16,16 @@ class CityNameInputScreen: public CityNameScreen
 
     CustomButton* enter_button;
     CustomButton* return_button;
+    ReadMem read_mem;
 
     void
     enter();
 
     void
     override_location();
+
+    void
+    set_new_location();
 
     void
     save_data();

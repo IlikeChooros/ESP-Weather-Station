@@ -36,6 +36,9 @@ public:
     virtual void
     draw(bool forceDraw) = 0;
 
+    virtual void
+    check(Point*) = 0;
+
     bool 
     load_main();
     

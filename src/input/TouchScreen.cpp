@@ -1,7 +1,6 @@
 #include "TouchScreen.h"
 
-void do_nothing()
-{
+void do_nothing(){
     return;
 }
 
@@ -33,15 +32,12 @@ TouchScreen::read()
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
 
-    if (_lastState!=state)
-    {
+    if (_lastState!=state){
         _lastDebounceTime = millis();
     }
 
-    else
-    {
-        if (!isAsleep && millis() - _lastDebounceTime > SLEEP_TIME)
-        {
+    else{
+        if (!isAsleep && millis() - _lastDebounceTime > SLEEP_TIME){
             isAsleep = true;
             _on_sleep();
             return;
@@ -97,26 +93,23 @@ TouchScreen::read_touch()
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
     
-    if (_lastState!=state)
-    {
+    if (_lastState!=state){
         _lastDebounceTime = millis();
     }
 
-    if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
-    {
+    if (_state!=state && (millis()-_lastDebounceTime)> max_interval){
         _state=state;
 
         // if this is an realse, then igonre
-        if (!state)
-        {
+        if (!state){
             _lastState = state;
-            return nullptr;
+            return 0;
         }
 
         return new Point(x,y);
     }
     _lastState = state;
-    return nullptr;
+    return 0;
 }
 
 TouchScreen* 

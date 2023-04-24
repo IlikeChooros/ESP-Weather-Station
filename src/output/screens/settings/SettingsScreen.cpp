@@ -41,6 +41,7 @@ SettingsScreen::
     delete _scroll_down;
     delete _scroll_up;
     delete _scroll_item;
+    clear();
 }
 
 
@@ -123,6 +124,7 @@ picked(){
 picked_list
 SettingsScreen::
 picked_data(){
+        Serial.println("PICK " + String(_pick_idx) + " " + _list.at(_pick_idx)->stored().at(0).string);
     return picked_list(_list.at(_pick_idx)->stored().at(0), _pick_idx);
 }
 
@@ -131,6 +133,7 @@ void
 SettingsScreen::
 clear(){
     _print_data.clear();
+    _list.clear();
 }
 
 void
@@ -159,6 +162,7 @@ check(Point* pos){
         }
         _pick_idx = i;
         _picked = true;
+            Serial.println("PICK " + String(_pick_idx));
         break;
     }
 }

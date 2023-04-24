@@ -66,8 +66,6 @@ uint64_t lastCollectorCheck = 0;
 int64_t wifiUpdateTimeCheck = -SECOND_10;
 
 int8_t savedWiFiIdx = 0;
-int8_t numberOfSavedWifis = 0;
-String** saved_wifi_info = 0;
 
 TouchScreen ts(&tft, calData);
 
@@ -101,7 +99,7 @@ ScreenPointItem sci(&tft, 160, 230, BACKGROUND_COLOR);
 void refresh();
 
 WiFiScreen** wifi_screens = new WiFiScreen* [2]{
-    new WiFiListScreen (&tft, BACKGROUND_COLOR, refresh),
+    new wifi::WiFiListScreen (&tft, &ts, BACKGROUND_COLOR, refresh),
     new PasswordInputScreen(&tft, BACKGROUND_COLOR)
 };
 
@@ -182,7 +180,6 @@ void collect_data()
 }
 
 void eeprom_earse(uint16_t starting_address, uint16_t ending_address){
-
     for (;starting_address<ending_address; starting_address++){
         EEPROM.write(starting_address, 0);
     }
@@ -196,37 +193,11 @@ void reset_tft(){
     tft.setTextSize(1);
 }
 
-void char_to_wifi_info(char* ssid, char* pass, uint8_t idx){
-    ssid = new char [saved_wifi_info[idx][0].length()+1];
-    pass = new char [saved_wifi_info[idx][1].length()+1];
-
-    saved_wifi_info[idx][0].toCharArray(ssid, saved_wifi_info[idx][0].length()+1);
-    saved_wifi_info[idx][1].toCharArray(pass, saved_wifi_info[idx][1].length()+1);
-}
-
 void reconnect_to_wifi(){
     if (millis() - wifiUpdateTimeCheck > SECOND_10){
         WiFi.disconnect();
         WiFi.reconnect();
         wifiUpdateTimeCheck = millis();
-    }
-}
-
-void load_saved_wifis(){
-    ReadMem read;
-    auto wifis = read.wifis(true);
-    numberOfSavedWifis = wifis.size();
-
-    if (numberOfSavedWifis){
-        saved_wifi_info = new String* [numberOfSavedWifis];
-    }
-    uint8_t count = 0;
-    for (auto i : wifis){
-        saved_wifi_info[count] = new String[2]{
-            i.first,
-            i.second
-        };
-        count++;
     }
 }
 
@@ -328,118 +299,48 @@ void force_wifi_connection(){
     tft.fillScreen(BACKGROUND_COLOR);
     wifi_screens[0]->draw(true);
 
-    while(!wifi_screens[wifi_screen_idx]->load_main()){wifi_setup();}
+    while(!wifi_screens[wifi_screen_idx]->load_main()){
+        wifi_setup();
+    }
 
     String temp_ssid = wifi_screens[1]->get_str(), temp_pwd = wifi_screens[1]->get_str();
-    //****************************
-    // Already connected to WiFi 
-    // without entering password
+    // Already connected to WiFi without entering password
     if (!wifi_screens[1]->load_main() || (temp_ssid == "" || temp_pwd == "") ){
         return;
     }
-    //******************************************
-    // Checking if entered wifi ssid
-    // is already saved, if so updating password
-    EEPROM.begin(EEPROM_SIZE);
-    uint16_t address = 11;
-    for (uint8_t i=0; i<numberOfSavedWifis; i++)
-    {
-        if (saved_wifi_info[i][0] == temp_ssid && temp_pwd.length() < MAX_PASSWORD_LENGHT)
-        {
-            address += i*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT)+MAX_SSID_LENGHT;
-
-            if (EEPROM.readString(address).length() > temp_pwd.length()){
-                eeprom_earse(address + temp_pwd.length(), address + EEPROM.readString(address).length());
-            }
-            
-            EEPROM.writeString(address, temp_pwd);
-            EEPROM.commit();
-            EEPROM.end();
-
-            saved_wifi_info[i][1] = temp_pwd;
-            return;
-        }
-    }
-    //*********************************
-    // Saving entered network to EEPROM
-    //
-    address += numberOfSavedWifis*(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT);
-    if (address <= 512-MAX_PASSWORD_LENGHT-MAX_SSID_LENGHT && temp_ssid.length() < MAX_SSID_LENGHT && temp_pwd.length() < MAX_SSID_LENGHT){
-        EEPROM.writeString(address, temp_ssid);
-
-        address += MAX_SSID_LENGHT;
-        EEPROM.writeString(address, temp_pwd);
-
-        address += MAX_PASSWORD_LENGHT;
-        numberOfSavedWifis++;
-        EEPROM.write(10, numberOfSavedWifis);
-        EEPROM.commit();
-    }
-
-    //**************************
-    // Updating saved_wifi_info
-    //
-    if (numberOfSavedWifis-1 == 0){
-        EEPROM.end();
-        return;
-    }
-
-    for (int8_t i = 0; i < numberOfSavedWifis-1; i++){
-        delete [] saved_wifi_info[i];
-    }
-    delete [] saved_wifi_info;
-
-    EEPROM.end();
-    load_saved_wifis();
+    ReadMem read_mem;
+    read_mem.writeNewWiFi(temp_ssid, temp_pwd);
 }
 
 void
 pick_city()
 {
-    bool city_idx = 0;
-
-    city_list->draw(true);
-    while(!(city_input->load_main() || city_list->load_main()))
+    CityNameScreen** screens = new CityNameScreen* [2]{
+        city_list,
+        city_input
+    };
+    uint8_t idx = 0;
+    screens[idx]->draw(true);
+    while(!screens[idx]->load_main())
     {
-        if(city_idx){
-            city_input->draw(false);
-        }
-        else{
-            city_list->draw(false);
-        }
-
+        screens[idx]->draw(false);
         if (WiFi.status() == WL_DISCONNECTED){
             reconnect_to_wifi();
         }
 
         Point* pos = ts.read_touch();
-        if(!city_idx){
-            city_list->draw(false);
-        }
         if(!pos){
             continue;
         }
-        // 1
-        if(city_idx){
-            city_input->check(pos);
-            city_idx = !city_input->change(); // if true -> idx = 0, else  idx = 1
-
-            if (city_input->change()){
-                tft.fillScreen(BACKGROUND_COLOR);
-                city_list->draw(true);
-            }
-        }
-        else{ // 0
-            city_list->check(pos);
-            city_idx = city_list->change(); // if true idx = 1, else idx = 0
-
-            if (city_list->change()){
-                tft.fillScreen(BACKGROUND_COLOR);
-                city_input->draw(true);
-            }
+        screens[idx]->check(pos);
+        if (screens[idx]->change()){
+            idx = idx != 0 ? 0 : 1;
+            tft.fillScreen(BACKGROUND_COLOR);
+            screens[idx]->draw(true);
         }
         delete pos;
     }
+    delete [] screens;
 }
 
 void setup()
@@ -448,7 +349,6 @@ void setup()
     tft.setRotation(3);
 
     reset_tft();
-    load_saved_wifis();
     wifi_screens[0]->init();
 
     ts

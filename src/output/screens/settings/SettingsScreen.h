@@ -6,20 +6,10 @@
 #include "../../items/ListItem.h"
 #include "../../items/keypad/CustomButton.h"
 #include "../../items/scroll/ScrollItem.h"
+#include "../../../data_structures/picked_list.h"
 
 namespace settings
 {
-
-class picked_list{
-public:
-    picked_list(
-        print_data& data,
-        uint8_t idx
-    ): data(data), idx(idx) {}
-    
-    print_data data;
-    uint8_t idx;
-};
 
 // Screen showing list of data, scrollable
 class SettingsScreen

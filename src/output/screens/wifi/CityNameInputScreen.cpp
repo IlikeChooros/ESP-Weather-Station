@@ -65,8 +65,7 @@ check(Point* pos)
 
 void
 CityNameInputScreen::
-save_data()
-{
+save_data(){
     uint8_t num = EEPROM.read(CITY_NAME_IDX);
     EEPROM.writeString(num*(CITY_NAME_LEN+1) + CITY_NAME_IDX + 2, inputfield->get_input());
     EEPROM.write(CITY_NAME_IDX, num+1);
@@ -82,17 +81,41 @@ enter()
     if (!load_main_){
         return;
     }
-
     EEPROM.begin(EEPROM_SIZE);
-    if (EEPROM.read(CITY_NAME_IDX) >= MAX_CITIES){   
+    uint8_t number_of_cities = EEPROM.read(CITY_NAME_IDX);
+    EEPROM.end();
+    if (number_of_cities >= MAX_CITIES){   
         load_main_ = false;
-        override_location();
-        EEPROM.end();
+        override_location();        
         return;
     }
+    set_new_location();
+}
 
-    save_data();  
-    EEPROM.end();
+void
+CityNameInputScreen::
+set_new_location(){
+    GeoLocScreen* geo_sc = new GeoLocScreen(tft, wclient, ts);
+    
+    // set_loaction also resets waitForGeoLoc and picked flags
+    geo_sc->set_location(inputfield->get_input());
+    tft->fillScreen(bg_c);
+    geo_sc->draw(true);
+
+    while(waitForGeoLoc){
+        geo_sc->check();
+    }
+    // User chose valid city 
+    if (geo_sc->is_picked()){
+        read_mem.writeNewCity(inputfield->get_input(), geo_pos);
+        wclient->_init_(inputfield->get_input(), geo_pos);
+        load_main_ = true;
+    }
+    else{
+        tft->fillScreen(bg_c);
+        draw(true);
+    }
+    delete geo_sc;  
 }
 
 void
@@ -102,7 +125,6 @@ override_location()
     GeoLocScreen* geo_sc = new GeoLocScreen(tft, wclient, ts);
 
     tft->fillScreen(bg_c);
-
     // set_loaction also resets waitForGeoLoc and picked flags
     geo_sc->set_location(inputfield->get_input());
     geo_sc->draw(true);
@@ -125,7 +147,7 @@ override_location()
         }
         set_sc
         ->prepare(data)
-        ->set_title(String(F("Pick city to override")))
+        ->set_title(String("Pick city to override"))
         ->init();
 
         set_sc->draw(true);
@@ -141,14 +163,14 @@ override_location()
         }
         // User chose city to override
         settings::picked_list pick = set_sc->get_picked();
-        EEPROM.begin(EEPROM_SIZE);
-        address = CITY_NAME_IDX + 1 + pick.idx * (CITY_NAME_LEN + 1);
-        EEPROM.write(address, geo_pos);
-        EEPROM.writeString(address + 1, inputfield->get_input());
-        EEPROM.commit();
+        read_mem.overwriteCity(inputfield->get_input(), geo_pos, pick.idx);
         wclient->_init_(inputfield->get_input(), geo_pos);
         delete set_sc;
         load_main_ = true;
     }
-    delete geo_sc;
+    else{
+        tft->fillScreen(bg_c);
+        draw(true);
+    }
+    delete geo_sc;    
 }

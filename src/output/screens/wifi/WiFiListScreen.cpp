@@ -1,7 +1,32 @@
 #include "WiFiListScreen.h"
 
+namespace wifi{
+
+WiFiListScreen::
+WiFiListScreen(
+    TFT_eSPI* tft, 
+    TouchScreen* ts,
+    uint16_t bg_c, 
+    void(*refresh_func)(void)
+): WiFiScreen(tft, bg_c),
+ts(ts), change_(false),
+load_main_(false){
+    WiFi.mode(WIFI_STA);
+
+    refresh_button = new CustomButton(tft, 285, 10, 30, 30, 0x3CE6);
+    refresh_button
+    ->set_draw(drawRefreshButton)
+    ->touch_color(0x19E2)
+    ->set_on_press(refresh_func);
+
+    settings_button = new CustomButton(tft, 285, 55, 30, 30, TFT_DARKGREY);
+    settings_button
+    ->set_draw(drawSettingsButton)
+    ->touch_color(0x18E3);
+}
+
 void WiFiListScreen::init(){
-    read_from_eeprom_wifis();
+    wifi_info = read_mem.wifis(true);
 }
 
 //-----------------------------------
@@ -40,7 +65,7 @@ void WiFiListScreen::scan()
                 break;
             }
         }
-        wifis[i] = new WiFiListItem(tft, x, y + i *(HEIGHT+OFFSET), WIDTH, HEIGHT, ssid, is_saved,WiFi.RSSI(i), bg_c);
+        wifis[i] = new WiFiListItem(tft, x, y + i *(HEIGHT+OFFSET), WIDTH, HEIGHT, ssid, is_saved, WiFi.RSSI(i), bg_c);
     }
 }
 
@@ -62,7 +87,30 @@ check(Point* pos){
     }
 
     // Already got refresh function
-    refresh_button->check(pos->x, pos->y);
+    if (refresh_button->check(pos->x, pos->y)){
+        return;
+    }
+
+    if (settings_button->check(pos->x, pos->y)){
+        settings();
+    }
+}
+
+void
+WiFiListScreen::
+settings(){
+    tft->fillScreen(bg_c);
+    std::unique_ptr<SavedWiFiScreen> screen(new SavedWiFiScreen(tft, ts, bg_c));
+
+    screen->draw(true);
+    while (!screen->exited()){
+        screen->check();
+    }
+    if (screen->changed()){
+        wifi_info = read_mem.wifis(true);
+    }
+    tft->fillScreen(bg_c);
+    draw(true);
 }
 
 void 
@@ -90,19 +138,11 @@ connect_to_wifi(){
     change_ = !load_main_;
 }
 
-
-void 
-WiFiListScreen::
-read_from_eeprom_wifis(){
-    wifi_info = read_mem.wifis(true);
-}
-
 bool 
 WiFiListScreen::
 change(){
     return this->change_;
 }
-
 
 void 
 WiFiListScreen::
@@ -111,6 +151,7 @@ draw(bool forceDraw){
         wifis[i]->draw(forceDraw);
     }
     refresh_button->draw(forceDraw);
+    settings_button->draw(forceDraw);
 }
 
 void 
@@ -124,4 +165,6 @@ clear_buttons()
         delete wifis[i];
     }
     delete [] wifis;
+}
+
 }
