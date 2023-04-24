@@ -21,8 +21,7 @@ drawRefreshButton(
     tft->fillRect(x,y,size,size,color);
     tft->drawRect(x,y,size,size, TFT_WHITE);
 
-    tft->drawCircle(x+0.5f*size, y+0.5f*size, 0.3f*size, TFT_WHITE);
-    tft->drawCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color);
+    tft->drawSmoothCircle(x+0.5f*size, y+0.5f*size, 0.3f*size, TFT_WHITE, color);
 
     // on left
     tft->drawWideLine(x+0.1f*size, y+0.4f*size, x+0.2f*size, y+0.5f*size, size*0.03f, TFT_WHITE, TFT_WHITE);

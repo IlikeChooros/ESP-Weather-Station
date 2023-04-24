@@ -282,17 +282,17 @@ drawWifi(
     }
 
     // first line
-    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, third);
-    tft->fillCircle(x + 0.5f * size, y + 0.5f * size, 0.4f * size, background_color);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, third, background_color);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.5f * size, 0.4f * size, background_color, third);
     tft->fillRect(x, y + 0.3f * size, 1.1f * size, 0.8f * size, background_color);
 
     // second line
-    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, second);
-    tft->fillCircle(x + 0.5f * size, y + 0.55f * size, 0.2f * size, background_color);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, second, background_color);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.55f * size, 0.2f * size, background_color, second);
     tft->fillRect(x, y + 0.5f * size, 1.1f * size, 0.5f * size, background_color);
 
     // center circle
-    tft->fillCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, first);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, first, background_color);
 }
 
 void  

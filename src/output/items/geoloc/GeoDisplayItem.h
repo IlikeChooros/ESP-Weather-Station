@@ -2,7 +2,6 @@
 
 #include "../../../weather_client/WeatherClient.h"
 #include "TFT_eSPI.h"
-#include "SPI.h"
 
 class GeoDisplayItem
 {
