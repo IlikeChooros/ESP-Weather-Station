@@ -41,20 +41,12 @@ To run this project you will need some essential parts and libraries.
 >    1. If you have any trouble **connecting the display** to ESP or **downloading the library** check [this tutorial](https://youtu.be/rq5yPJbX_uk).
 >    1. Download ArduinoJson library
 > 1. Open the 'ESP-Weather-Station-master.ino' file with Arduino IDE
-<<<<<<< HEAD
-=======
-> 1. Change: `#define CITY_NAME "Your city name"`
->>>>>>> master
 > 1. Go to file: `src/weather_client/WeatherClient.h`
 > 1. Change: `#define APPID "Your API key"`
 > 1. Connect your ESP  to PC, pick COM port in Arduino IDE and upload the code
 
 *First upload of the code might result in esp system abort, see [this](#esp-restarts-immediately-after-uploading-the-code) how to fix it.*
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 ## Step by step explanation
 The first screen on the display you will encounter, if the code was uploaded successfuly, is the WiFi setup sceen. You will see up to 6 nearest networks.
 
@@ -111,39 +103,8 @@ While I did my best making sure everything is working fine, there are possible s
  * [Reset saved wifis](#reset-saved-wifis)
 
 ### Esp restarts immediately after uploading the code
-<<<<<<< HEAD
 This situation might happen on first upload. The root of this problem is most likely that some data is written on addresses 10 *(starting address for writing saved wifi data)* and 487 *(`CITY_NAME_IDX`)*. They are used to control number of data saved in EEPROM, so conflicting data will cause an undefined behaviour and as a result ESP abort.
 To fix it, you have to simply clear those addresses:
-=======
-This situation might happen on first upload. The root of this problem is most likely that some data is written on address 10 *(starting address for writing saved wifi data)*. It is used to control number of data saved in EEPROM, so conflicting data will cause an undefined behaviour and as a result ESP abort.
-To fix it, you have to simply clear this address:
-
-```
-...
-
-void setup()
-{
-  tft.init();
-  tft.setRotation(3);
-  
-  EEPROM.begin(EEPROM_SIZE);
-  EEPROM.write(10, 0);
-  EEPROM.commit();
-
-
-  //******************************
-  // Scanning for newtorks
-  //
-  reset_tft();
-  load_saved_wifis();
-  int8_t number_of_networks; 
-    
-    ...
-}
-```
-
-Make sure to delete it after resolving the issue to use WiFi and city location saving feature.
->>>>>>> master
 
 ```
 ...
@@ -172,11 +133,7 @@ Make sure to delete it after resolving the issue to use WiFi and city location s
 
 ### Esp restarts after connecting to wifi
 Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
-<<<<<<< HEAD
   * try clearing the wifi data from eeprom ([see this](#esp-restarts-after-connecting-to-wifi))
-=======
-  * if connected via already saved wifi data, try clearing the wifi data from eeprom ([see this](#reset-saved-wifis))
->>>>>>> master
   * check your wifi connetion on other wireless devices, do they have access to the internet
   * try restarting router
 
