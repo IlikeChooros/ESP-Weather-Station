@@ -10,7 +10,7 @@ namespace window{
 
 class WindowItem
 {
-private:
+protected:
     TFT_eSPI *tft;
     CustomButton* exit_button;
     ListItem* content;
@@ -25,6 +25,8 @@ private:
 
     void
     draw_window(bool forceDraw);
+
+    bool quit;
 public:
     WindowItem(
         TFT_eSPI* tft,
@@ -35,6 +37,7 @@ public:
         uint16_t fr_c,
         uint16_t frame_c
     );
+    virtual
     ~WindowItem();
 
     WindowItem*
@@ -46,16 +49,16 @@ public:
     void
     init();
 
-    void
+    virtual void
     draw(bool);
 
-    void
+    virtual void
     check(Point*);
 
     void
     clear();
 
-    bool
+    virtual bool
     exited();
 };
 

@@ -148,7 +148,7 @@ drawSettingsButton(
     }
 
     tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.3f*size, gear_color);
-    tft->fillCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color);
+    tft->fillSmoothCircle(x+0.5f*size, y+0.5f*size, 0.2f*size, color, gear_color);
     tft->drawRect(x,y,size,size, TFT_WHITE);
 }
 
@@ -184,4 +184,46 @@ drawScrollDownButton(
 
     tft->drawLine(x + 0.1f*w, y + 0.3f*h, x + 0.5f*w, y + 0.7f*h, TFT_DARKGREY);
     tft->drawLine(x + 0.5f*w, y + 0.7f*h, x + 0.9f*w, y + 0.3f*h, TFT_DARKGREY);
+}
+
+void
+drawEraseButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color 
+)
+{
+    tft->fillRect(x, y, size, size, color);
+    tft->drawRect(x, y, size, size, TFT_WHITE);
+
+    tft->fillRect(x + 0.25f*size, y+0.3f*size, size*0.5f + 1, size*0.6f, color);
+    tft->drawRect(x + 0.25f*size, y+0.3f*size, size*0.5f + 1, size*0.6f, TFT_LIGHTGREY);
+
+    tft->drawWideLine(x + 0.35f*size, y + 0.75f*size, x + 0.35f*size, y + 0.45f*size, 0.075f*size, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.5f*size, y + 0.75f*size, x + 0.5f*size, y + 0.45f*size, 0.075f*size, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.65f*size, y + 0.75f*size, x + 0.65f*size, y + 0.45f*size, 0.075f*size, TFT_DARKGREY, color);
+
+    tft->fillRect(x + 0.2f*size, y+0.15f*size, size*0.6f, size*0.2f, color);
+    tft->drawRect(x + 0.2f*size, y+0.15f*size, size*0.6f, size*0.2f, TFT_LIGHTGREY);
+}
+
+void
+drawDetailsButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color 
+)
+{
+    tft->fillRect(x, y, size, size, color);
+    tft->drawRect(x, y, size, size, TFT_WHITE);
+
+    tft->fillEllipse(x + size*0.5f, y + size*0.5f, size*0.4f, size*0.3f, TFT_LIGHTGREY);
+    tft->fillEllipse(x + size*0.5f, y + size*0.5, size*0.3f, size*0.2f, color);
+
+    tft->fillCircle(x + size*0.5f, y + size*0.5f, size*0.3f, TFT_LIGHTGREY);
+    tft->fillSmoothCircle(x + size*0.5f, y + size*0.5f, size*0.2f, color, TFT_LIGHTGREY);
 }

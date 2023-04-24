@@ -30,6 +30,9 @@ class CityNameInputScreen: public CityNameScreen
     void
     save_data();
 
+    void
+    draw_title(bool);
+
 public:
     CityNameInputScreen(
         TFT_eSPI* tft,

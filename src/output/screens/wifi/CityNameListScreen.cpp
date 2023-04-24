@@ -48,13 +48,6 @@ set_city_info()
         );
 
         if (!info){
-            city_list[i]
-            ->set_data("No city", true, 2, 2, TFT_LIGHTGREY)
-            ->set_data(String("NULL"), true, 2, 2, TFT_LIGHTGREY)
-            ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
-            ->set_data(String(0), true, 2, 2, TFT_LIGHTGREY)
-            ->set_data(String("NULL"), false, 2, 1, TFT_LIGHTGREY);
-            EEPROM.end();
             break;
         }
 
@@ -70,7 +63,6 @@ set_city_info()
 
         address += CITY_NAME_LEN + 1;
     }
-
     EEPROM.end();
 }
 

@@ -64,7 +64,7 @@ void
 SettingsScreen::
 init(){
     using uptrl = std::unique_ptr<ListItem>;
-
+    _pick_idx = 0;
     max_idx = _print_data.size();
     scroll_idx = 0;
     max_items = (h - 2*scroll_height) / min_height > 1 ? (h - 2*scroll_height) / min_height : 1; // maximum number of display items (list options) on the screen

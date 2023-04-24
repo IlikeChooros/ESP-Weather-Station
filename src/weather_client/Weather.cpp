@@ -16,10 +16,8 @@ Weather* Weather::temp(double temp){
     return this;
 }
 
-Weather* Weather::feels_like(double feels_like)
-{
+Weather* Weather::feels_like(double feels_like){
     this->_feels_like = feels_like;
-
     return this;
 }
 
@@ -28,10 +26,8 @@ Weather* Weather::wind_speed(double wind_speed){
     return this;
 }
 
-Weather* Weather::humidity(uint8_t humidity)
-{
+Weather* Weather::humidity(uint8_t humidity){
     this->_humidity = humidity;
-
     return this;
 }
 
@@ -40,10 +36,8 @@ Weather* Weather::pressure(int16_t pressure){
     return this;
 }
 
-Weather* Weather::sunrise(uint32_t sunrise)
-{
+Weather* Weather::sunrise(uint32_t sunrise){
     this->_sunrise = sunrise;
-
     return this;
 }
 

@@ -114,10 +114,9 @@ void setup()
   tft.init();
   tft.setRotation(3);
   
-  EEPROM.begin(EEPROM_SIZE);
-  EEPROM.write(CITY_NAME_IDX, 0);
-  EEPROM.write(10, 0);
-  EEPROM.commit();
+  ReadMem read_mem;
+  read_mem.resetWifis();
+  read_mem.resetCities();
 
 
   reset_tft();
@@ -129,7 +128,7 @@ void setup()
 }
 ```
 
-Make sure to delete it after resolving the issue to use WiFi and city location saving feature.
+Make sure to delete it on next upload to use WiFi and city location saving feature.
 
 ### Esp restarts after connecting to wifi
 Most errors will occur when after successfully connecting to WiFi, the program initializes weather data objects, requesting information from API. When some error happens make sure to:
@@ -146,7 +145,7 @@ To reset all saved wifis data, put this code at the beggining of the void setup(
 void setup()
 {
     EEPROM.begin(EEPROM_SIZE);
-    eeprom_earse(10, 487); 
+    eeprom_earse(10, CITY_NAME_IDX); 
     EEPROM.end();
     
     tft.init();
@@ -159,7 +158,3 @@ void setup()
     ...
 }
 ```
-The number 487 isn't obligatory you can calculate on you own how many cells need to be earased. This formula might help you:
-
-
-` End-address = 11 + number-of-saved-networks * (MAX_SSID_LENGHT + MAX_PASSWORD_LENGHT)`

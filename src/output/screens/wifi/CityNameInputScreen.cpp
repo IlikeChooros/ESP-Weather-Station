@@ -33,6 +33,18 @@ draw(bool forceDraw){
     inputfield->blink();
     enter_button->draw(forceDraw);
     return_button->draw(forceDraw);
+    draw_title(forceDraw);
+}
+
+void
+CityNameInputScreen::
+draw_title(bool forceDraw){
+    if (!forceDraw){
+        return;
+    }
+    tft->setTextSize(1);
+    tft->setTextColor(TFT_WHITE);
+    tft->drawCentreString("Enter desired location", 160, 0, 2);
 }
 
 void 

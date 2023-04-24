@@ -97,3 +97,22 @@ drawScrollDownButton(
     uint16_t h,
     uint16_t color 
 );
+
+
+void
+drawDetailsButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color 
+);
+
+void
+drawEraseButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t color 
+);

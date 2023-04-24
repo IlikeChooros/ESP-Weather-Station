@@ -56,9 +56,12 @@ ReadMem::cities(bool forceRead){
 
 void
 ReadMem::deleteString(uint16_t idx){
+    if(!idx){
+        return;
+    }
     EEPROM.begin(EEPROM_SIZE);
     EEPROM.writeString(idx, String());
-    EEPROM.commit();
+    Serial.println("COMMIT:" + String(EEPROM.commit()));
     EEPROM.end();
 }
 
@@ -182,4 +185,20 @@ ReadMem::writeNewCity(String city, uint8_t city_idx){
     EEPROM.commit();
     EEPROM.end();
     return true;
+}
+
+void
+ReadMem::resetWifis(){
+    EEPROM.begin(EEPROM_SIZE);
+    EEPROM.write(10, 0);
+    EEPROM.commit();
+    EEPROM.end();
+}
+
+void
+ReadMem::resetCities(){
+    EEPROM.begin(EEPROM_SIZE);
+    EEPROM.write(CITY_NAME_IDX, 0);
+    EEPROM.commit();
+    EEPROM.end();
 }

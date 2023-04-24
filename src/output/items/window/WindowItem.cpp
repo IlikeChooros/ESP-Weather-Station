@@ -2,12 +2,6 @@
 
 namespace window{
 
-bool quit = false;
-
-void exit(){
-    quit = true;
-}
-
 WindowItem::
 WindowItem(
     TFT_eSPI* tft,
@@ -19,12 +13,12 @@ WindowItem(
     uint16_t frame_color
 ): tft(tft), frame_color(frame_color),
 foreground_color(foreground_color),
-x(x), y(y), w(w), h(h), content(0) {
+x(x), y(y), w(w), h(h), content(0),
+quit(false) {
     exit_button = new CustomButton(tft, x + w - 35, y + 3, 30, 30, 0x8040);
     exit_button
     ->set_draw(drawExitButton)
-    ->touch_color(0x30C2)
-    ->set_on_press(window::exit);
+    ->touch_color(0x30C2);
 }
 
 WindowItem::
@@ -81,7 +75,7 @@ draw_window(bool force){
 void
 WindowItem::
 check(Point* pos){
-    exit_button->check(pos->x, pos->y);
+    quit = exit_button->check(pos->x, pos->y);
     content->check(pos->x, pos->y);
 }
 

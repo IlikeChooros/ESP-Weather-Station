@@ -17,23 +17,17 @@ SavedWiFiScreen(
 bg_c(bg_c), change(false)
 {
     exit_button   = new CustomButton(tft, 285, 10, 30, 30, 0x8040);
-    detail_button = new CustomButton(tft, 285, 55, 30, 30, TFT_BLACK);
-    erase_button  = new CustomButton(tft, 285, 100, 30, 30, TFT_DARKGREY);
-    
+    detail_button = new CustomButton(tft, 285, 55, 30, 30, 0x5AEB);
     screen = new settings::SettingsScreen(tft, 20, 30, 250, 210);
-    window = new window::WindowItem(tft, 40, 40, 240, 160, TFT_DARKGREY, TFT_LIGHTGREY);
+    window = new window::WindowDelete(tft, 40, 40, 240, 160, TFT_DARKGREY, TFT_LIGHTGREY);
 
     exit_button
     ->set_draw(drawExitButton)
     ->touch_color(0x30C2)
     ->set_on_press(wifi::exit);
 
-    erase_button
-    ->set_draw(drawTickButton)
-    ->touch_color(0x30C2);
-
     detail_button
-    ->set_draw(drawTickButton)
+    ->set_draw(drawDetailsButton)
     ->touch_color(TFT_BLUE);
 
     exit_screen = false;
@@ -43,7 +37,6 @@ bg_c(bg_c), change(false)
 SavedWiFiScreen::
 ~SavedWiFiScreen(){
     delete exit_button;
-    delete erase_button;
     delete screen;
 }
 
@@ -86,6 +79,7 @@ set_window(String ssid){
             i.second, 2, 1, TFT_WHITE, true
         };
         window->prepare(data)->init();
+        break;
     }
     window->draw(true);
     while(!window->exited()){
@@ -94,6 +88,11 @@ set_window(String ssid){
             continue;
         }
         window->check(pos);
+        if(window->deleted()){
+            Serial.println("DELETE");
+            erase(ssid);
+        }
+        delete pos;
     }
     tft->fillScreen(bg_c);
     draw(true);
@@ -110,29 +109,24 @@ check(){
 
     screen->check(pos);
     if (screen->picked()){
-        if(erase_button->check(pos->x, pos->y)){
-            erase(screen->picked_data());
-            draw(true);
-            delete pos;
-            return;
-        }
         if (detail_button->check(pos->x, pos->y)){
             Serial.println("IDX " + String(screen->picked_data().idx));
             set_window(screen->picked_data().data.string);
             delete pos;
             return;
         }
-    }
-    
+    }    
     exit_screen = exit_button->check(pos->x, pos->y);
     delete pos;
 }
 
 void
 SavedWiFiScreen::
-erase(settings::picked_list data){
-    tft->fillScreen(bg_c);
-    read_mem.deleteString(read_mem.getAddress(data.data.string));
+erase(String& data){
+    Serial.println("ERASE: " + data);
+    uint16_t address = read_mem.getAddress(data);
+    Serial.println("ADD: " + String(address));
+    read_mem.deleteString(address);
     screen->clear();
     prepare();
     change = true;
@@ -142,7 +136,6 @@ void
 SavedWiFiScreen::
 draw(bool forceDraw){
     screen->draw(forceDraw);
-    erase_button->draw(forceDraw);
     exit_button->draw(forceDraw);
     detail_button->draw(forceDraw);
     draw_title(forceDraw);

@@ -45,4 +45,10 @@ public:
 
     bool
     writeNewCity(String city, uint8_t city_idx);
+
+    void
+    resetWifis();
+
+    void
+    resetCities();
 };
