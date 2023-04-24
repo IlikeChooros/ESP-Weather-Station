@@ -48,7 +48,7 @@ void WiFiListScreen::scan()
         return;
     }
 
-    uint16_t x = 10, y = 20;
+    uint16_t x = 10, y = 10;
     uint8_t size_count = 1;
 
     number_of_networks = number_of_networks < 6 ? number_of_networks : 6;

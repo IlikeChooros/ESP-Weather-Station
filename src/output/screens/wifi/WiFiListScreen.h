@@ -8,7 +8,7 @@
 #include "WiFiScreen.h"
 #include "SavedWiFiScreen.h"
 
-#define HEIGHT 30
+#define HEIGHT 33
 #define WIDTH 270
 #define OFFSET 5
 namespace wifi{

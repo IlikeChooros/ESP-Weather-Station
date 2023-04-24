@@ -23,12 +23,10 @@ WiFiItem::
 draw(bool forceDraw)
 {
     Icon* icon = matchIcon();
-    if (!forceDraw && prev_idx == idx)
-    {
+    if (!forceDraw && prev_idx == idx){
         delete icon;
         return;
     }
-
     icon->draw();
     delete icon;
 }
@@ -38,31 +36,26 @@ WiFiItem::
 matchIcon()
 {
     int8_t strenght = WiFi.RSSI();
-    prev_idx = idx;
-    
+    prev_idx = idx;    
 
-    if (WiFi.status() != WL_CONNECTED)
-    {
+    if (WiFi.status() != WL_CONNECTED){
         idx = LOST_WIFI;
         return new WiFiIconLost(tft, x, y, size, background_color);
     }
 
     // strenght (-45 to 0)
-    if (strenght > -45)
-    {
+    if (strenght > -45){
         idx = STRONG_WIFI;
         return new WiFiIconStrong(tft, x, y, size, background_color);
     }
     // strenght (-75 to -45)
-    else if (strenght > -75)
-    {
+    else if (strenght > -75){
         idx = MEDIUM_WIFI;
         return new WiFiIconMedium(tft, x, y, size, background_color);
     }
 
     // strenght (-75 to -128)
-    else
-    {
+    else{
         idx = WEAK_WIFI;
         return new WiFiIconWeak(tft, x, y, size, background_color);
     }

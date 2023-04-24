@@ -32,7 +32,6 @@ class WiFiItem
         uint16_t background_color
     );
 
-
     void 
     draw(bool forceDraw);
 };

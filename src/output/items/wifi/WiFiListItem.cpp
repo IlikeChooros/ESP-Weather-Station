@@ -33,21 +33,21 @@ draw(bool forceDraw)
     
     Icon* icon;
     if (this->password_saved){
-        icon = new LockerOpened(tft, x+0.82f*width, y+0.1f*height, 0.08f*width, color);
+        icon = new LockerOpened(tft, x+0.82f*width, y+0.15f*height, 0.08f*width, color);
     }
     else{
-        icon = new LockerLocked(tft, x+0.82f*width, y+0.1f*height, 0.08f*width, color);
+        icon = new LockerLocked(tft, x+0.82f*width, y+0.15f*height, 0.08f*width, color);
     }
     icon->draw();
     delete icon;
     
-    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem (tft,x+0.91f*width, y+0.2f*height, 0.08f*width, color);
+    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem (tft,x+0.91f*width, y+roundf(0.2f*height), 0.08f*width, color);
     wifi_str->draw(strenght);
     delete wifi_str;
 
     //-------------------
     // drawing wifi ssid
-    tft->setCursor(x+0.05f*width, y+0.05f*height);
+    tft->setCursor(x+0.05f*width, y);
 
     String temp;
     if (ssid.length()<14){
@@ -57,6 +57,5 @@ draw(bool forceDraw)
         temp = ssid.substring(0,11);
         temp += "...";
     }
-
     tft->print(temp);
 }
