@@ -124,9 +124,7 @@ void
 SavedWiFiScreen::
 erase(String& data){
     Serial.println("ERASE: " + data);
-    uint16_t address = read_mem.getAddress(data);
-    Serial.println("ADD: " + String(address));
-    read_mem.deleteString(address);
+    read_mem.deleteWifi(data);
     screen->clear();
     prepare();
     change = true;

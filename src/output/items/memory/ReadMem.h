@@ -17,6 +17,7 @@
 
 #define MAX_SAVED_NETWORKS uint8_t((CITY_NAME_IDX - 10)/(MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT))
 
+/// @brief Class to read EEPROM memory, saves as much as possible write transactions, allows memory fragmentation.
 class ReadMem
 {
 private:
@@ -39,6 +40,9 @@ public:
 
     bool
     writeNewWiFi(String ssid, String psw);
+
+    void
+    deleteWifi(String ssid);
 
     bool
     overwriteCity(String city, uint8_t city_idx, int8_t idx);

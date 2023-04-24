@@ -11,15 +11,16 @@ ReadMem::wifis(bool forceRead){
     String saved_ssid, saved_psw;
 
     wifi.clear();
-    for (uint8_t i=0; i<count; i++){
+    for (uint8_t i=0; i<count;){
         saved_ssid = EEPROM.readString(address);
         address += MAX_SSID_LENGHT;
         saved_psw = EEPROM.readString(address);
         address += MAX_PASSWORD_LENGHT;
-
+        // Find first 'count' non-empty networks
         if (saved_ssid.isEmpty() || saved_psw.isEmpty()){
             continue;
         }
+        i++;
         wifi.push_back({saved_ssid, saved_psw});
     }
     EEPROM.end();
@@ -40,7 +41,7 @@ ReadMem::cities(bool forceRead){
     location.clear();
     uint16_t address = CITY_NAME_IDX+1;
     String city;
-    for (uint8_t i=0; i<number_of_saved_city_names; i++, address += CITY_NAME_LEN){
+    for (uint8_t i=0; i<number_of_saved_city_names; address += CITY_NAME_LEN){
         uint8_t idx = EEPROM.read(address);
         address += 1;
         city = EEPROM.readString(address);
@@ -48,6 +49,7 @@ ReadMem::cities(bool forceRead){
             continue;
         }
         location.push_back({city, idx});
+        i++;
     }
     EEPROM.end();
 
@@ -61,7 +63,6 @@ ReadMem::deleteString(uint16_t idx){
     }
     EEPROM.begin(EEPROM_SIZE);
     EEPROM.writeString(idx, String());
-    Serial.println("COMMIT:" + String(EEPROM.commit()));
     EEPROM.end();
 }
 
@@ -74,23 +75,26 @@ ReadMem::getAddress(String& find){
             number_of_wifis  = EEPROM.read(10);
     
     String psw, ssid;
-    for (uint8_t i = 0; i < number_of_wifis; ++i){
+    for (uint8_t i = 0; i < number_of_wifis;){
         ssid = EEPROM.readString(address);
+        // Not classified network
+        if (ssid.isEmpty()){
+            address += MAX_SSID_LENGHT + MAX_PASSWORD_LENGHT;
+            continue;
+        }
         address += MAX_SSID_LENGHT;
-
         if (ssid == find){
             EEPROM.end();
             return address;
         }
         psw  = EEPROM.readString(address);
         address += MAX_PASSWORD_LENGHT;
-
         if (psw == find){
             EEPROM.end();
             return address;
         }
+        i++;
     }
-
     String city;
     address = CITY_NAME_IDX + 1;
     for (uint8_t i = 0; i < number_of_cities; ++i, address += CITY_NAME_IDX + 1){
@@ -115,7 +119,7 @@ ReadMem::writeNewWiFi(String ssid, String psw){
     uint8_t number_of_wifis = EEPROM.read(10);
     uint16_t address = 11;
     String temp;
-    // Look for deleted networks and maybe update network's pass
+    // Look for deleted networks and maybe update this network's pass
     for (uint8_t i = 0; i < number_of_wifis; ++i){
         temp = EEPROM.readString(address);
         // Update already saved network
@@ -129,10 +133,12 @@ ReadMem::writeNewWiFi(String ssid, String psw){
         // Look for deleted networks
         if (!temp.isEmpty()){
             address += MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT;
+            continue;
         }
         EEPROM.writeString(address, ssid);
         address += MAX_SSID_LENGHT;
         EEPROM.writeString(address, psw);
+        EEPROM.write(10, number_of_wifis + 1);
         EEPROM.commit();
         EEPROM.end();
         return true;
@@ -150,6 +156,19 @@ ReadMem::writeNewWiFi(String ssid, String psw){
     EEPROM.commit();
     EEPROM.end();
     return true;
+}
+
+void
+ReadMem::deleteWifi(String ssid){
+    uint16_t address = getAddress(ssid);
+    if (!address){
+        return;
+    }
+    deleteString(address);
+    EEPROM.begin(EEPROM_SIZE);
+    EEPROM.write(10, EEPROM.read(10) - 1);
+    EEPROM.commit();
+    EEPROM.end();
 }
 
 bool
