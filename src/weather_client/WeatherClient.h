@@ -10,6 +10,7 @@
 #include "Weather.h"
 #include "Forecast.h"
 
+<<<<<<< HEAD
 
 #define APPID "6a0b31b6c9c1f95d47860092dadc1f6c"
 #define FORECAST_CAPACITY 24576
@@ -24,6 +25,10 @@ City_info
     String country;
     String state;
 };
+=======
+#define APPID ""
+#define FORECAST_CAPACITY JSON_ARRAY_SIZE(NUMBER_OF_HOURS_TO_FORECAST) + 3*JSON_OBJECT_SIZE(1) + NUMBER_OF_HOURS_TO_FORECAST*((5)*JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(9) + JSON_ARRAY_SIZE(4)+JSON_OBJECT_SIZE(3))
+>>>>>>> master
 
 class WeatherClient
 {

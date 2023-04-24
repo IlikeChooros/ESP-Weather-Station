@@ -1,6 +1,15 @@
 .vscode
+<<<<<<< HEAD
 debug_custom.json
 debug.cfg
 esp32.svd
 my_api.txt
 build
+=======
+build
+my_api.txt
+.gitignore
+debug_custom.json
+esp32.svd
+debug.cfg
+>>>>>>> master
