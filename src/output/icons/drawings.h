@@ -12,7 +12,10 @@ drawCloud(
     uint16_t size, 
     uint16_t color,
     uint16_t fade_color,
-    uint16_t background_color
+    uint16_t background_color,
+    uint16_t left_shade,
+    uint16_t right_shade,
+    uint16_t far_right_shade
 );
 
 void 

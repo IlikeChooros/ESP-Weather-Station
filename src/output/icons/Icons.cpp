@@ -17,7 +17,7 @@ void FewCloudsDay::draw()
     tft->fillRect(x,y,size,size,background_color);
 
     drawSun(tft, x + 0.05f*size, y, size*0.9f, SUNNY, background_color);
-    drawCloud(tft, x+0.2f*size, y + 0.63f*size, 0.6f*size, MIST, CLOUDY, background_color);
+    drawCloud(tft, x+0.2f*size, y + 0.63f*size, 0.6f*size, MIST, CLOUDY, background_color, SUNNY, SUNNY, background_color);
 }
 
 void FewCloudsNight::draw()
@@ -25,7 +25,7 @@ void FewCloudsNight::draw()
     tft->fillRect(x,y,size,size,background_color);
 
     drawMoon(tft, x + 0.1f*size, y, size*0.8f, MOON, background_color, 3);
-    drawCloud(tft, x+0.15f*size, y + 0.63f*size, 0.6f*size, MIST, CLOUDY, background_color);
+    drawCloud(tft, x+0.15f*size, y + 0.65f*size, 0.6f*size, MIST, CLOUDY, background_color, MOON, MOON, background_color);
 }
 
 void CloudsDay::draw()
@@ -33,8 +33,8 @@ void CloudsDay::draw()
     tft->fillRect(x,y,size,size,background_color);
 
     drawSun(tft, x + 0.38f*size, y, size*0.6f, SUNNY, background_color);
-    drawCloud(tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
-    drawCloud(tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color);
+    drawCloud(tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color, background_color, background_color, background_color);
+    drawCloud(tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color, background_color, SUNNY, background_color);
 }
 
 void CloudsNight::draw()
@@ -42,8 +42,8 @@ void CloudsNight::draw()
     tft->fillRect(x,y,size,size,background_color);
 
     drawMoon(tft, x + 0.5f*size, y, size*0.4f, MOON, background_color, 2);
-    drawCloud(tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
-    drawCloud(tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color);
+    drawCloud(tft,x,y+0.1f*size, 0.4f*size, CLOUDY, LIGHT_DARK_CLOUDS, background_color, background_color, background_color, background_color);
+    drawCloud(tft, x, y + 0.28f*size, 0.9f*size, MIST, CLOUDY, background_color, background_color, MOON, background_color);
 }
 
 void ManyClouds::draw()
@@ -51,20 +51,20 @@ void ManyClouds::draw()
     tft->fillRect(x,y,size,size,background_color);
 
     //on right
-    drawCloud(tft,x+0.3f*size,y+0.1f*size, 0.7f*size, LIGHT_DARK_CLOUDS, MIDDLE_DARK_CLOUDS,background_color);
+    drawCloud(tft,x+0.3f*size,y+0.1f*size, 0.7f*size, LIGHT_DARK_CLOUDS, MIDDLE_DARK_CLOUDS, background_color, background_color, background_color, background_color);
 
     //on left
-    drawCloud(tft, x,y+0.2f*size, 0.6f*size, CLOUDY, LIGHT_DARK_CLOUDS,background_color);
+    drawCloud(tft, x,y+0.12f*size, 0.6f*size, CLOUDY, LIGHT_DARK_CLOUDS,background_color, background_color, background_color, LIGHT_DARK_CLOUDS);
 
     //bottom
-    drawCloud(tft, x, y+0.25f*size, 0.9f*size, MIST, CLOUDY,background_color);
+    drawCloud(tft, x, y+0.25f*size, 0.9f*size, MIST, CLOUDY,background_color, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
 }
 
 void Storm::draw()
 {
     tft->fillRect(x,y,size,size,background_color);
     //Cloud drawing
-    drawCloud(tft, x, y, size, ALMOST_DARK_CLOUDS, DARK_CLOUDS,background_color);
+    drawCloud(tft, x, y, size, ALMOST_DARK_CLOUDS, DARK_CLOUDS,background_color, background_color, background_color, background_color);
 
     // lightning drawing
 
@@ -97,7 +97,7 @@ void Rain::draw()
     tft->fillRect(x,y,size,size,background_color);
     //Cloud drawing
 
-    drawCloud(tft, x, y, size, CLOUDY,LIGHT_DARK_CLOUDS ,background_color);
+    drawCloud(tft, x, y, size, CLOUDY,LIGHT_DARK_CLOUDS ,background_color, background_color, background_color, background_color);
 
     uint16_t ax = x + 0.3f*size,
             ay = y+0.45f*size,
@@ -134,7 +134,7 @@ void BigRain::draw()
     tft->fillRect(x,y,size,size,background_color);
     //Cloud drawing
 
-    drawCloud(tft, x, y, size, LIGHT_DARK_CLOUDS,MIDDLE_DARK_CLOUDS ,background_color);
+    drawCloud(tft, x, y, size, LIGHT_DARK_CLOUDS,MIDDLE_DARK_CLOUDS ,background_color, background_color, background_color, background_color);
 
     uint16_t ax = x + 0.3f*size,
             ay = y+0.45f*size,
@@ -153,7 +153,7 @@ void Snow::draw()
 {
     tft->fillRect(x,y,size,size,background_color);
 
-    drawCloud(tft, x,y, size, CLOUDY, LIGHT_DARK_CLOUDS, background_color);
+    drawCloud(tft, x,y, size, CLOUDY, LIGHT_DARK_CLOUDS, background_color, background_color, background_color, background_color);
 
     drawSnowflake(tft, x + 0.3f*size, y+0.4f*size, size*0.4f, background_color, SNOW_FLAKE, WATER);
     //drawSnowflake(tft, x+0.1f*size, y, size*0.8f, CLOUDY, SNOW_FLAKE, WATER);

@@ -8,22 +8,27 @@ drawCloud(
     uint16_t size, 
     uint16_t color,
     uint16_t fade_color,
-    uint16_t background_color
+    uint16_t background_color,
+    uint16_t left_shade,
+    uint16_t right_shade,
+    uint16_t far_right_shade
 )
 {
     //Cloud drawing
     // circles on the right and left
     tft->fillSmoothCircle(x+0.2f*size, y + size*0.24f, 0.14f*size, color, background_color);
-    tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, color, background_color);
+    tft->fillSmoothCircle(x+0.8f*size, y + size*0.24f, 0.14f*size, color, far_right_shade);
 
     // circle on the middle left
-    tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, color, background_color);
+    tft->fillSmoothCircle(x+0.4f*size, y+0.2f*size, 0.18f*size, color, left_shade);
 
     // circle on the middle right
-    tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, color, color);
+    tft->fillSmoothCircle(x+0.65f*size, y+0.15f*size, 0.15f*size, color, right_shade);
+    
+    tft->fillCircle(x+0.4f*size, y+0.2f*size+3, 0.18f*size+2, color);
 
     // rect, the filler
-    tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, color);
+    tft->fillRect(x+0.2f*size+1, y+size*0.1f+1, 0.6f * size + 1, 0.3f * size-1, color);
 
     // Shading
     tft->fillSmoothCircle(x+0.4f*size, y+0.4f*size, 0.2f*size, fade_color, color);

@@ -4,8 +4,7 @@ extern City_info picked_city;
 
 void 
 CurrentWeatherScreen::
-draw(Weather* weather, bool forceDraw)
-{
+draw(Weather* weather, bool forceDraw){
     for (uint8_t i = 0; i<NUMBER_OF_WEATHER_ITEMS;i++){
         weather_items[i]
         ->setWeather(weather);
