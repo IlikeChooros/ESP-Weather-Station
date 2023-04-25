@@ -1,9 +1,29 @@
 #include "WiFiListItem.h"
+WiFiListItem::
+WiFiListItem(
+    TFT_eSPI* tft, 
+    int16_t x, 
+    int16_t y, 
+    int16_t width, 
+    int16_t height, 
+    String ssid, 
+    bool password_saved,
+    int8_t strenght, 
+    uint16_t bg_c
+): TouchButton(x,y,width,height),
+tft(tft), ssid(ssid), password_saved(password_saved),
+strenght(strenght), bg_c(bg_c) {}
 
 int8_t 
 WiFiListItem::
 get_strenght(){
     return this->strenght;
+}
+
+void
+WiFiListItem::
+set_save(bool saved){
+    password_saved = saved;
 }
 
 bool 

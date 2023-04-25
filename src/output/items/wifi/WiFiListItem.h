@@ -33,13 +33,13 @@ class WiFiListItem: public TouchButton
         bool password_saved,
         int8_t strenght, 
         uint16_t bg_c
-    ): TouchButton(x,y,width,height),
-    tft(tft), ssid(ssid), password_saved(password_saved),
-    strenght(strenght), bg_c(bg_c)
-    {}
+    );
 
     void 
     draw(bool forceDraw);
+
+    void
+    set_save(bool);
 
     int8_t 
     get_strenght();

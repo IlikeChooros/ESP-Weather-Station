@@ -1,5 +1,6 @@
 #include "ReadMem.h"
 
+
 std::list<std::pair<String, String>>&
 ReadMem::wifis(bool forceRead){
     if (!(wifi.empty() || forceRead)){
@@ -120,7 +121,7 @@ ReadMem::writeNewWiFi(String ssid, String psw){
     uint16_t address = 11;
     String temp;
     // Look for deleted networks and maybe update this network's pass
-    for (uint8_t i = 0; i < number_of_wifis; ++i){
+    for (uint8_t i = 0; i < number_of_wifis;){
         temp = EEPROM.readString(address);
         // Update already saved network
         if (temp == ssid){
@@ -133,6 +134,7 @@ ReadMem::writeNewWiFi(String ssid, String psw){
         // Look for deleted networks
         if (!temp.isEmpty()){
             address += MAX_PASSWORD_LENGHT + MAX_SSID_LENGHT;
+            i++;
             continue;
         }
         EEPROM.writeString(address, ssid);
@@ -178,7 +180,7 @@ ReadMem::overwriteCity(String city, uint8_t city_idx, int8_t idx){
     }
     EEPROM.begin(EEPROM_SIZE);
     uint16_t address = CITY_NAME_IDX + 1 + idx * (CITY_NAME_LEN + 1);
-    EEPROM.write(address, idx);
+    EEPROM.write(address, city_idx);
     EEPROM.writeString(address + 1, city);
     EEPROM.commit();
     EEPROM.end();

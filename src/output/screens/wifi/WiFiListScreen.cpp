@@ -50,17 +50,15 @@ void WiFiListScreen::scan()
 
     uint16_t x = 10, y = 10;
     uint8_t size_count = 1;
-
     number_of_networks = number_of_networks < 6 ? number_of_networks : 6;
-
     wifis = new WiFiListItem* [number_of_networks];
     
     for (uint8_t i=0; i < number_of_networks; i++){
         String ssid = WiFi.SSID(i);
         bool is_saved = false;
-        for (auto j = wifi_info.begin(); j != wifi_info.end(); j++){
+        for (auto j : wifi_info){
             // If saved wifi has the same ssid as the scanned wifi
-            if (j->first == ssid){
+            if (j.first == ssid){
                 is_saved = true;
                 break;
             }
@@ -72,6 +70,7 @@ void WiFiListScreen::scan()
 void 
 WiFiListScreen::
 check(Point* pos){
+    change_ = false;
     for (uint8_t i=0; i<number_of_networks; i++)
     {
         if (wifis[i]->check(pos->x, pos->y)){
@@ -108,6 +107,13 @@ settings(){
     }
     if (screen->changed()){
         wifi_info = read_mem.wifis(true);
+        // Look for deleted network, and update icon
+        for (uint8_t i=0; i < number_of_networks; ++i){
+            if (wifis[i]->get_ssid() != screen->erased()){
+                continue;
+            }
+            wifis[i]->set_save(false);
+        }
     }
     tft->fillScreen(bg_c);
     draw(true);
@@ -156,12 +162,11 @@ draw(bool forceDraw){
 
 void 
 WiFiListScreen::
-clear_buttons()
-{
-    if (number_of_networks<1){
+clear_buttons(){
+    if (!number_of_networks){
         return;
     }
-    for (uint8_t i=0; i<number_of_networks; i++){
+    for (uint8_t i=0; i < number_of_networks; i++){
         delete wifis[i];
     }
     delete [] wifis;

@@ -26,18 +26,31 @@ private:
 public:
     ReadMem() = default;
 
+    /// @brief Reads from EEPROM saved networks 
+    /// @param forceRead should it read forcefully
+    /// @return first - ssid, second - pass
     std::list<std::pair<String, String>>&
     wifis(bool forceRead);
 
+    /// @brief Read from EEPROM saved cities
+    /// @param forceRead should it read forcefully
+    /// @return first - city, second - city index
     std::list<std::pair<String, uint8_t>>&
     cities(bool forceRead);
 
     void
     deleteString(uint16_t idx);
 
+    /// @brief Finds given string in EEPROM via linear search.
+    /// @param  String - to find
+    /// @return A integer number, if it is 0 - then no such string matched
     int16_t 
     getAddress(String&);
 
+    /// @brief Adds to EEPROM given network's data
+    /// @param ssid  network's SSID
+    /// @param psw  valid password
+    /// @return true - added new network, false - couldn't add new network
     bool
     writeNewWiFi(String ssid, String psw);
 

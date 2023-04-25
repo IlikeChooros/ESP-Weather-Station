@@ -18,7 +18,7 @@ class SavedWiFiScreen
 
     uint16_t bg_c;
     ReadMem read_mem;
-
+    String to_erase;
     bool change;
 
     void
@@ -53,6 +53,9 @@ public:
 
     bool
     changed();
+
+    String 
+    erased();
 };
 
 }

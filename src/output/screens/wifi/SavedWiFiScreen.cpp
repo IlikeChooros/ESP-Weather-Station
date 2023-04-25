@@ -123,7 +123,7 @@ check(){
 void
 SavedWiFiScreen::
 erase(String& data){
-    Serial.println("ERASE: " + data);
+    to_erase = data;
     read_mem.deleteWifi(data);
     screen->clear();
     prepare();
@@ -160,6 +160,12 @@ bool
 SavedWiFiScreen::
 changed(){
     return change;
+}
+
+String
+SavedWiFiScreen::
+erased(){
+    return to_erase;
 }
 
 }

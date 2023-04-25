@@ -25,12 +25,12 @@ drawCloud(
     // rect, the filler
     tft->fillRoundRect(x+0.2f*size, y+size*0.1f, 0.6f * size, 0.3f * size, 0.05f*size, color);
 
-    // 
+    // Shading
+    tft->fillSmoothCircle(x+0.4f*size, y+0.4f*size, 0.2f*size, fade_color, color);
+    tft->fillSmoothCircle(x+0.65f*size, y+0.5f*size, 0.23f*size, fade_color, color);
     tft->fillCircle(x+0.4f*size, y+0.4f*size, 0.2f*size, fade_color);
-    tft->fillCircle(x+0.65f*size, y+0.5f*size, 0.23f*size, fade_color);
 
     tft->fillRect(x, y + 0.38f*size, size, 0.4f * size, background_color);
-
 }
 
 
@@ -75,11 +75,14 @@ drawMoon(
     uint16_t y, 
     uint16_t size, 
     uint16_t color, 
-    uint16_t background_color
+    uint16_t background_color,
+    uint8_t offset
 )
 {
     tft->fillSmoothCircle(x+0.45f*size, y + 0.5f*size, 0.45f*size, color, background_color);
-    tft->fillSmoothCircle(x+0.65f*size, y + 0.42f*size, 0.4f*size, background_color, background_color);
+    tft->fillSmoothCircle(x+0.65f*size, y + 0.42f*size, 0.4f*size, background_color, color);
+    tft->fillRect(x + 0.5f*size - offset, y, 0.5f*size + 2*offset, 0.2f*size, background_color);
+    tft->fillRect(x + 0.8f*size - 1, y + 0.2f*size, 0.3f*size, 0.6f*size+1, background_color);
 }
 
 
@@ -227,8 +230,7 @@ drawSingleWindString(
     bool reversed
 )
 {
-    if (!reversed)
-    {
+    if (!reversed){
         tft->fillCircle(x + (size + lenght)*0.5f, y+0.3f*size, 0.2f*size, color);
         tft->fillCircle(x + (size + lenght)*0.5f, y+0.3f*size,0.2f*size - thickness, background_color);
         tft->fillRect(x+(size + lenght)*0.5f - 0.2f*size, y + 0.3f*size, 0.2f*size, 0.2f*size, background_color);

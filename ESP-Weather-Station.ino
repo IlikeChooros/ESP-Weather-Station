@@ -83,13 +83,11 @@ ChartScreens** chart_screens = new ChartScreens* [X_1_SCREENS]{
     new ChartScreenNextDays(&tft, BACKGROUND_COLOR)
 };
 
-
 MainScreen** screens = new MainScreen*[X_SCREENS]{
     new CurrentWeatherScreen(&tft, BACKGROUND_COLOR),  // [0][0]
     new Forecast12Screen(&tft, BACKGROUND_COLOR),       // [1][0]
     new FewDaysForecastScreen(&tft, BACKGROUND_COLOR)
 };
-
 
 CityNameInputScreen* city_input = new CityNameInputScreen(&tft, BACKGROUND_COLOR, &wclient, &ts);
 
@@ -102,7 +100,6 @@ WiFiScreen** wifi_screens = new WiFiScreen* [2]{
     new wifi::WiFiListScreen (&tft, &ts, BACKGROUND_COLOR, refresh),
     new PasswordInputScreen(&tft, BACKGROUND_COLOR)
 };
-
 
 Point screen_idx(0,0);
 uint8_t wifi_screen_idx = 0;
@@ -278,24 +275,22 @@ void wifi_setup(){
     Point* pos = ts.read_touch();
 
     wifi_screens[wifi_screen_idx]->draw(false);
-
-    if(pos){
-        wifi_screens[wifi_screen_idx]->check(pos);
-        if (wifi_screens[wifi_screen_idx]->change()){
-            wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
-            tft.fillScreen(BACKGROUND_COLOR);
-            wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
-            wifi_screens[wifi_screen_idx]->draw(true);
-        }
-        delete pos;
+    if(!pos){
+        return;
     }
+    wifi_screens[wifi_screen_idx]->check(pos);
+    if (wifi_screens[wifi_screen_idx]->change()){
+        wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
+        tft.fillScreen(BACKGROUND_COLOR);
+        wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
+        wifi_screens[wifi_screen_idx]->draw(true);
+    }
+    delete pos;
 }
 
 void force_wifi_connection(){
     tft.println("Scanning WiFis...");
-
     wifi_screens[0]->scan();
-
     tft.fillScreen(BACKGROUND_COLOR);
     wifi_screens[0]->draw(true);
 
@@ -394,7 +389,6 @@ void setup()
 
     collect_data();
 }
-
 
 void loop(){
     ts.read();

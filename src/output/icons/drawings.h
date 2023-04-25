@@ -32,7 +32,8 @@ drawMoon(
     uint16_t y, 
     uint16_t size, 
     uint16_t color, 
-    uint16_t background_color
+    uint16_t background_color,
+    uint8_t offset
 );
 
 

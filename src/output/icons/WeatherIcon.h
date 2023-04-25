@@ -20,16 +20,11 @@ class WeatherIcon: public WeatherItem
         uint16_t y, 
         uint8_t size, 
         uint16_t background_color
-    ): WeatherItem(tft,x,y,background_color)
-    {this->size = size;}
-
-    void 
-    setWeather(
-        Weather* weather
     );
 
     void 
-    draw(
-        bool forceDraw
-    );
+    setWeather(Weather* weather);
+
+    void 
+    draw(bool forceDraw);
 };
