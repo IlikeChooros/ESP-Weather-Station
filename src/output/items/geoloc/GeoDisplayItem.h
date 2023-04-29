@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../../weather_client/WeatherClient.h"
+#include "../../../custom_font/fonts.h"
 #include "TFT_eSPI.h"
 
 class GeoDisplayItem

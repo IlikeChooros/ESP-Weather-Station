@@ -9,8 +9,7 @@ class TimeItem: public WeatherItem
     bool hourly;
 
     String prev_date;
-    uint8_t font;
-    uint8_t text_size;
+    String font;
     uint64_t unix;
     uint16_t color;
 
@@ -30,13 +29,12 @@ class TimeItem: public WeatherItem
         uint16_t y, 
         uint16_t background_color, 
         uint16_t color, 
-        uint8_t font,
-        uint8_t text_size, 
+        String font,
         uint64_t unix, 
         bool hourly
     ): WeatherItem(_tft,x,y,background_color),
-    font(font), text_size(text_size), unix(unix),
-    color(color), hourly(hourly), prev_date("") {}
+    font(font), unix(unix), color(color), 
+    hourly(hourly), prev_date("") {}
 
     void 
     draw(bool forceDraw);

@@ -47,8 +47,7 @@ public:
     set_data(
         String str,
         bool same_line,
-        uint8_t font,
-        uint8_t text_size,
+        String font,
         uint16_t text_color
     );
 

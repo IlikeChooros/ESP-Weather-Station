@@ -15,6 +15,7 @@ class Keypad
 {
     KeypadButton** buttons;
     KeypadButton* slider;
+    TFT_eSPI* tft;
 
     public:
 

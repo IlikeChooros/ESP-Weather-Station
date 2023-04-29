@@ -4,7 +4,7 @@ Keypad::Keypad(
     TFT_eSPI* tft, 
     String* button_data, 
     String slider 
-)
+): tft(tft)
 {
     buttons = new KeypadButton*[NUMBER_OF_KEYPAD_BUTTONS];
     for (uint8_t y=0; y < 2; ++y){
@@ -92,10 +92,12 @@ void
 Keypad::
 draw(bool forceDraw)
 {
+    tft->loadFont(LATIN);
     for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         buttons[i]->draw(forceDraw);
     }
     slider->draw(forceDraw);
+    tft->unloadFont();
 }
 
 void 

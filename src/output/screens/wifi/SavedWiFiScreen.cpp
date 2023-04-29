@@ -49,7 +49,7 @@ prepare(){
     uint8_t count = 0;
     for (auto i : wifis){
         to_print.at(count) = print_data(
-            i.first, 2, 2, TFT_LIGHTGREY, true
+            i.first, LATIN, TFT_LIGHTGREY, true
         );
         count++;
     }
@@ -67,16 +67,16 @@ set_window(String ssid){
         std::vector<print_data> data;
         data.resize(4);
         data.at(0) = {
-            "SSID:", 2, 1, TFT_WHITE, true
+            "SSID:", WEATHER_FONT, TFT_WHITE, true
         };
         data.at(1) = {
-            i.first, 2, 1, TFT_WHITE, true
+            i.first, WEATHER_FONT, TFT_WHITE, true
         };
         data.at(2) = {
-            "PASS:", 2, 1, TFT_WHITE, false
+            "PASS:", WEATHER_FONT, TFT_WHITE, false
         };
         data.at(3) = {
-            i.second, 2, 1, TFT_WHITE, true
+            i.second, WEATHER_FONT, TFT_WHITE, true
         };
         window->prepare(data)->init();
         break;
@@ -89,7 +89,6 @@ set_window(String ssid){
         }
         window->check(pos);
         if(window->deleted()){
-            Serial.println("DELETE");
             erase(ssid);
         }
         delete pos;
@@ -110,7 +109,6 @@ check(){
     screen->check(pos);
     if (screen->picked()){
         if (detail_button->check(pos->x, pos->y)){
-            Serial.println("IDX " + String(screen->picked_data().idx));
             set_window(screen->picked_data().data.string);
             delete pos;
             return;
@@ -145,8 +143,8 @@ draw_title(bool forceDraw){
     if (!forceDraw){
         return;
     }
-    tft->setTextColor(TFT_WHITE);
-    tft->setTextSize(1);
+    tft->setTextColor(TFT_WHITE, bg_c);
+    tft->loadFont(NOTE_FONT);
     tft->drawCentreString("Manage networks", 145, 5, 2);
 }
 

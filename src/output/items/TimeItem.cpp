@@ -2,21 +2,21 @@
 
 
 void TimeItem::draw(bool forceDraw){
-    if (!redraw && !forceDraw){
+    if (!(redraw || forceDraw)){
         return;
     }
 
     String date = get_date_format(hourly);
     this->_tft->setCursor(this->x, this->y);
     this->_tft->setTextColor(this->bg_c);
-    this->_tft->setTextFont(this->font);
-    this->_tft->setTextSize(this->text_size);
+    this->_tft->loadFont(this->font);
     this->_tft->print(prev_date);
 
     this->_tft->setTextColor(color);
     this->_tft->setCursor(x,y);
     this->_tft->print(date);
     prev_date = date;
+    this->_tft->unloadFont();
 }
 
 String TimeItem::get_date_format(bool hourFormat)

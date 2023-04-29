@@ -22,11 +22,11 @@ draw(bool forceDraw)
     // Probably should scale this
     if (data.empty()){
         tft->fillRect(45, 40, 230, 160,TFT_BLACK);
-        tft->setTextFont(2);
-        tft->setTextSize(1);
-        tft->setTextColor(TFT_LIGHTGREY);
+        tft->loadFont(WEATHER_FONT);
+        tft->setTextColor(TFT_LIGHTGREY, TFT_BLACK);
         tft->setCursor(45,40);
         tft->print("No data...");
+        tft->unloadFont();
     }
 
     if(!(forceDraw && display[geo_pos])){

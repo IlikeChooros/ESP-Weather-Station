@@ -36,12 +36,11 @@ draw_(uint16_t color)
 
     for (auto i : data)
     {
-        tft->setTextColor(i.color);
-        tft->setTextSize(i.size);
-        tft->setTextFont(i.font);
+        tft->setTextColor(i.color, color);
+        tft->loadFont(i.font);
 
         if (!i.same_line){
-            y += tft->fontHeight(i.font) + 5;
+            y += tft->fontHeight() + 5;
             x = this->x+5;
         }
 
@@ -59,9 +58,9 @@ draw_(uint16_t color)
                 temp += "...";
             }
         }
-
         x += tft->drawString(temp, x, y);
         x += 10;
+        tft->unloadFont();
     }
 
     if (marked_){
@@ -107,11 +106,10 @@ ListItem::
 set_data(
     String str,
     bool same_line,
-    uint8_t font,
-    uint8_t text_size,
+    String font,
     uint16_t text_color
 )
 {
-    data.push_back(print_data(str, font, text_size, text_color, same_line));
+    data.push_back(print_data(str, font, text_color, same_line));
     return this;
 }

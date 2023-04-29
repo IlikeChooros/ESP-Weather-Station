@@ -57,9 +57,9 @@ set_city_info()
         }
 
         city_list[i]
-        ->set_data(city_names.at(i), true, 2, 2, TFT_LIGHTGREY)
-        ->set_data(info->country, true, 2, 2, TFT_LIGHTGREY)
-        ->set_data(info->state, false, 2, 2, TFT_LIGHTGREY);
+        ->set_data(city_names.at(i), true, LATIN, TFT_LIGHTGREY)
+        ->set_data(info->country, true, LATIN, TFT_LIGHTGREY)
+        ->set_data(info->state, false, LATIN, TFT_LIGHTGREY);
 
         address += CITY_NAME_LEN + 1;
     }
@@ -86,10 +86,10 @@ draw_wifi_name(bool forceDraw){
         return;
     }
     tft->setCursor(30,5);
-    tft->setTextColor(TFT_LIGHTGREY);
-    tft->setTextFont(2);
-    tft->setTextSize(1);
+    tft->setTextColor(TFT_LIGHTGREY, bg_c);
+    tft->loadFont(WEATHER_FONT);
     tft->print(WiFi.SSID());
+    tft->unloadFont();
 }
 
 void
@@ -105,10 +105,10 @@ draw(bool forceDraw)
 
     if (number_of_saved_city_names<1){
         tft->setCursor(10, 20);
-        tft->setTextColor(TFT_DARKGREY);
-        tft->setTextFont(2);
-        tft->setTextSize(2);
+        tft->setTextColor(TFT_DARKGREY, bg_c);
+        tft->loadFont(LATIN);
         tft->print("No saved locations.");
+        tft->unloadFont();
     }
     set_new_location->draw(forceDraw);
 }

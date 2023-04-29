@@ -48,7 +48,7 @@ init(){
     quit = false;
     for (auto i : to_print){
         content->set_data(
-            i.string, i.same_line, i.font, i.size, i.color
+            i.string, i.same_line, i.font, i.color
         );
     }
     content->wrap_text(false);

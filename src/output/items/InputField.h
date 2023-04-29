@@ -5,6 +5,8 @@
 #include "TFT_eSPI.h"
 #include "SPI.h"
 
+#include "../../custom_font/fonts.h"
+
 #define INPUT_FIELD_BG 0x1904
 
 class InputField

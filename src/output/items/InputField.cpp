@@ -19,9 +19,8 @@ draw(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    tft->setTextSize(2);
-    tft->setTextFont(2);
-    tft->setTextColor(TFT_WHITE);
+    tft->loadFont(LATIN);
+    tft->setTextColor(TFT_WHITE, INPUT_FIELD_BG);
 
     tft->fillRect(x,y,width,height, INPUT_FIELD_BG);
     tft->drawRect(x,y,width,height, TFT_WHITE);
@@ -37,6 +36,7 @@ draw(bool forceDraw){
     }
     tft->print(temp);
     _cursor_x = tft->getCursorX();
+    tft->unloadFont();
 }
 
 
@@ -72,10 +72,10 @@ blink(){
 
     uint16_t color = _prev_state ? INPUT_FIELD_BG : TFT_WHITE;
     _prev_state = !_prev_state;
-    tft->setTextSize(2);
-    tft->setTextColor(color);
-    tft->drawString("|", _cursor_x, y, 2);
-
+    tft->loadFont(LATIN);
+    tft->setTextColor(color, INPUT_FIELD_BG);
+    tft->drawString("|", _cursor_x, y + (height - LATIN_HEIGHT)/2, 2);
     _last_check = millis();
+    tft->unloadFont();
 }
 

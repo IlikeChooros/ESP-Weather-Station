@@ -18,21 +18,7 @@ setWeather(Weather* weather){
     redraw = pop != uint16_t(100 * weather->_pop);
     pop = uint16_t(100 * weather->_pop);
 
-    if (pop <= 10){
-        idx_icon = NO_RAIN;
-    }
-    else if (pop <= 30){
-        idx_icon = UNLIKELY_RAIN;
-    }
-    else if (pop <= 50){
-        idx_icon = PROBABLY_RAIN;
-    }
-    else if (pop <= 70){
-        idx_icon = LIKELY_RAIN;
-    }
-    else{
-        idx_icon = RAIN;
-    }
+    idx_icon = (uint8_t)(floorf(pop / 25));
 }
 
 Icon* 

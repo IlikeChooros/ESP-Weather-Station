@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include "../custom_font/fonts.h"
 
 #define X 0
 #define Y 1

@@ -146,7 +146,7 @@ override_location()
         // Read from EEPROM saved cities
         std::vector<print_data> data;
         for (auto i : cities){
-            data.push_back(print_data(i.first, 2, 2, TFT_LIGHTGREY, true));
+            data.push_back(print_data(i.first, LATIN, TFT_LIGHTGREY, true));
         }
         set_sc
         ->prepare(data)

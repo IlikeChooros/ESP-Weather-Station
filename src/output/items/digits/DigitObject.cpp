@@ -1,5 +1,14 @@
 #include "DigitObject.h"
 
+DigitObject::
+DigitObject(
+    TFT_eSPI* tft, 
+    int16_t x, 
+    int16_t y, 
+    int16_t bg_c
+): currentDigit(0), prevDigit(0),
+tft(tft), x(x), y(y), bg_c(bg_c) {}
+
 void 
 DigitObject::
 draw(
@@ -7,21 +16,17 @@ draw(
     bool forceDraw
 )
 {
-    if (!forceDraw && digit == prevDigit)
-    {
+    if (!forceDraw && digit == prevDigit){
         return;
     }
     currentDigit = digit;
-
-    this->tft->setTextSize(size);
     // Clearing previous number
-    this->tft->setTextColor(bg_c);
-    this->tft->drawNumber(prevDigit, x,y,font);
+    this->tft->setTextColor(bg_c, bg_c);
+    this->tft->drawNumber(prevDigit, x,y);
     // Drawing new one
-    this->tft->setTextColor(TFT_WHITE);
-    this->tft->drawNumber(currentDigit, x, y, font);
-
-    prevDigit = currentDigit;
+    this->tft->setTextColor(TFT_WHITE, bg_c);
+    this->tft->drawNumber(currentDigit, x, y);
+    prevDigit = currentDigit;    
 }
 void 
 DigitObject::

@@ -1,11 +1,9 @@
 #ifndef WEATHER_ITEM_H
 #define WEATHER_ITEM_H
 
-#include <Arduino.h>
 #include <TFT_eSPI.h> 
-#include <SPI.h>
 #include "../../weather_client/Weather.h"
-
+#include "../../custom_font/fonts.h"
 
 class WeatherItem
 {

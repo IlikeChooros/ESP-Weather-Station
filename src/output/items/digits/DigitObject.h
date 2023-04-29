@@ -1,9 +1,7 @@
-#ifndef DIGIT_OBJ_H
-#define DIGIT_OBJ_H
+#pragma once
 
 #include "TFT_eSPI.h"
-#include "SPI.h"
-#include "Arduino.h"
+#include "../../../custom_font/fonts.h"
 
 class DigitObject
 {
@@ -13,8 +11,6 @@ class DigitObject
     TFT_eSPI* tft;
     int16_t x;
     int16_t y;
-    uint8_t size;
-    uint8_t font;
     int16_t bg_c;
 
     public:
@@ -22,12 +18,8 @@ class DigitObject
         TFT_eSPI* tft, 
         int16_t x, 
         int16_t y, 
-        uint8_t size, 
-        uint8_t font, 
         int16_t bg_c
-    ): currentDigit(0), prevDigit(0),
-    tft(tft), x(x), y(y), size(size),
-    font(font), bg_c(bg_c) {}
+    );
 
     void 
     draw(
@@ -44,5 +36,3 @@ class DigitObject
         int16_t y
     );
 };
-
-#endif

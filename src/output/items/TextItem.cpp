@@ -11,17 +11,16 @@ void TextItem::draw(bool forceDraw)
     char buffer[40];
     sprintf(buffer, format, prev_data);
 
-    _tft->setTextColor(this->bg_c);
-    _tft->setTextFont(this->font);
-    _tft->setTextSize(this->text_size);
+    _tft->setTextColor(bg_c, bg_c);
+    _tft->loadFont(font);
     _tft->setCursor(this->x, this->y);
     _tft->print(buffer);
 
     sprintf(buffer, format, this->_data);
-    _tft->setTextColor(this->color);
+    _tft->setTextColor(color, bg_c);
     _tft->setCursor(this->x, this->y);
     _tft->print(buffer);
-
+    _tft->unloadFont();
     this->prev_data = this->_data;
 }
 

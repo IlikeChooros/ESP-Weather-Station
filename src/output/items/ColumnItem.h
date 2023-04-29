@@ -1,5 +1,4 @@
-#ifndef COLUMN_ITEM_H
-#define COLUMN_ITEM_H
+#pragma once
 
 #include "WeatherItem.h"
 
@@ -9,6 +8,3 @@ class ColumnItem
     WeatherItem** weather_items;
     uint8_t number_of_items;
 };
-
-
-#endif

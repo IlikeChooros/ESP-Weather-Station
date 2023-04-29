@@ -6,7 +6,7 @@
 
 class TextItem: public WeatherItem
 {   
-    uint8_t font;
+    String font;
     uint8_t text_size;
     const char* format;
 
@@ -15,8 +15,7 @@ class TextItem: public WeatherItem
         TFT_eSPI *_tft, 
         uint16_t x, 
         uint16_t y, 
-        uint8_t font, 
-        uint8_t text_size, 
+        String font,
         uint16_t color,
         const char* format, 
         uint16_t background_color
@@ -38,21 +37,21 @@ class TextItem: public WeatherItem
 class TextTemp: public TextItem
 {
     public:
-    TextTemp(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    TextTemp(TFT_eSPI *_tft, uint16_t x, uint16_t y, String font, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,color,format,background_color){}
     void setWeather(Weather* weather);
 };
 
 class TextWind: public TextItem
 {
     public:
-    TextWind(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    TextWind(TFT_eSPI *_tft, uint16_t x, uint16_t y, String font, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,color,format,background_color){}
     void setWeather(Weather* weather);
 };
 
 class TextPressure: public TextItem
 {
     public:
-    TextPressure(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    TextPressure(TFT_eSPI *_tft, uint16_t x, uint16_t y, String font, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,color,format,background_color){}
     void setWeather(Weather* weather);
 };
 
@@ -60,14 +59,14 @@ class TextPressure: public TextItem
 class TextFeelsLike: public TextItem
 {
     public:
-    TextFeelsLike(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    TextFeelsLike(TFT_eSPI *_tft, uint16_t x, uint16_t y, String font, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,color,format,background_color){}
     void setWeather(Weather* weather);
 };
 
 class TextPop: public TextItem
 {
     public:
-    TextPop(TFT_eSPI *_tft, uint16_t x, uint16_t y, uint8_t font, uint8_t text_size, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,text_size,color,format,background_color){}
+    TextPop(TFT_eSPI *_tft, uint16_t x, uint16_t y, String font, uint16_t color ,const char* format, uint16_t background_color): TextItem(_tft,x,y,font,color,format,background_color){}
     void setWeather(Weather* weather);
 };
 

@@ -18,17 +18,16 @@ draw()
     tft->fillRect(x,y,w,h,TFT_BLACK);
     constexpr uint8_t offset = 10;
 
-    tft->setTextFont(2);
-
-    tft->setTextColor(TFT_LIGHTGREY);
+    tft->setTextColor(TFT_LIGHTGREY, TFT_BLACK);
 
     uint16_t x = this->x + 5,
              y = this->y + 5;
 
-    tft->setTextSize(2);
+    tft->loadFont(LATIN);
     tft->drawCentreString(info.name, x+w/2, y, 2);
+    tft->unloadFont();
 
-    tft->setTextSize(1);
+    tft->loadFont(WEATHER_FONT);
     y += tft->fontHeight() + 5;
     tft->setCursor(x,y);
     tft->print("Country:");
@@ -37,8 +36,7 @@ draw()
     tft->print(info.country);
     y += tft->fontHeight();
 
-    if (info.state != "null")
-    {
+    if (info.state != "null"){
         tft->setCursor(x,y);
         y += tft->fontHeight();
         tft->print("State:");
@@ -47,6 +45,7 @@ draw()
         y += tft->fontHeight();
         tft->print(info.state);
     }
+
     tft->setCursor(x,y);
     y += tft->fontHeight();
     tft->print("Latitude:");
@@ -62,4 +61,5 @@ draw()
     tft->setCursor(x+offset,y);
     y += tft->fontHeight();
     tft->print(info.lon, 4);
+    tft->unloadFont();
 }

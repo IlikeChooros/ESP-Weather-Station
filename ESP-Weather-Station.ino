@@ -340,6 +340,9 @@ pick_city()
 
 void setup()
 {
+    if (!SPIFFS.begin()){
+        while(true) yield();
+    }
     tft.init(); 
     tft.setRotation(3);
 
