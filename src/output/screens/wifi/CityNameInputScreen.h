@@ -28,9 +28,6 @@ class CityNameInputScreen: public CityNameScreen
     set_new_location();
 
     void
-    save_data();
-
-    void
     draw_title(bool);
 
 public:

@@ -27,14 +27,12 @@ class SettingsScreen
 
     uint16_t _itr_y;
     uint8_t _pick_idx;
-
     bool _picked;
 
     uint16_t x;
     uint16_t y; 
     uint16_t w; 
     uint16_t h;
-
     uint16_t _list_y;
 public:
     SettingsScreen(

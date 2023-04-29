@@ -11,8 +11,12 @@ WiFiScreen::WiFiScreen(TFT_eSPI* tft, uint16_t bg_c)
 // connects to WiFi
 //*****************************
 bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass)
-{    tft->fillRect(55, 70, 210, 100, TFT_DARKGREY);
+{
+    tft->fillRect(55, 70, 210, 100, TFT_DARKGREY);
     tft->drawRect(55, 70, 210, 100, TFT_WHITE);
+
+    std::unique_ptr<char[]> ptr_ssid(ssid);
+    std::unique_ptr<char[]> ptr_pass(pass);
 
     tft->setTextSize(1);
     tft->setTextFont(2);
@@ -42,8 +46,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
                 tft->setTextColor(TFT_RED);
                 tft->drawCentreString("Failed.", 160, 115, 2);
                 delay(1000);
-                delete [] ssid;
-                delete [] pass;
 
                 tft->fillScreen(bg_c);
                 draw(wifi_name);
@@ -54,9 +56,5 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
         }
         
     }
-
-    delete [] ssid;
-    delete [] pass;
-
     return true;
 }

@@ -6,6 +6,7 @@
 #include "SPI.h"
 
 #include "../../../input/TouchButton.h"
+#include "../../../../data/fonts.h"
 
 #include "WiFiStrenghtItem.h"
 

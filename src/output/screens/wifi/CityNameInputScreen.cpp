@@ -77,15 +77,6 @@ check(Point* pos)
 
 void
 CityNameInputScreen::
-save_data(){
-    uint8_t num = EEPROM.read(CITY_NAME_IDX);
-    EEPROM.writeString(num*(CITY_NAME_LEN+1) + CITY_NAME_IDX + 2, inputfield->get_input());
-    EEPROM.write(CITY_NAME_IDX, num+1);
-    EEPROM.commit();
-}
-
-void
-CityNameInputScreen::
 enter()
 {
     load_main_ = draw_get(inputfield->get_input(), 0);
@@ -134,7 +125,7 @@ void
 CityNameInputScreen::
 override_location()
 {
-    GeoLocScreen* geo_sc = new GeoLocScreen(tft, wclient, ts);
+    std::unique_ptr<GeoLocScreen> geo_sc(new GeoLocScreen(tft, wclient, ts));
 
     tft->fillScreen(bg_c);
     // set_loaction also resets waitForGeoLoc and picked flags
@@ -148,14 +139,14 @@ override_location()
     // User chose valid city 
     if (geo_sc->is_picked()){
         tft->fillScreen(bg_c);
-        settings::PickOptionScreen* set_sc = new settings::PickOptionScreen(tft, ts);
+        using setscreen = settings::PickOptionScreen;
+        std::unique_ptr<setscreen> set_sc(new setscreen(tft, ts));
 
-        uint16_t address = CITY_NAME_IDX + 2;
+        auto cities = read_mem.cities(false);
         // Read from EEPROM saved cities
-        uint8_t repeat = EEPROM.read(CITY_NAME_IDX);
         std::vector<print_data> data;
-        for (uint8_t i=0; i < repeat; ++i, address += CITY_NAME_LEN + 1){
-            data.push_back(print_data(EEPROM.readString(address), 2, 2, TFT_LIGHTGREY, true));
+        for (auto i : cities){
+            data.push_back(print_data(i.first, 2, 2, TFT_LIGHTGREY, true));
         }
         set_sc
         ->prepare(data)
@@ -169,20 +160,16 @@ override_location()
         }
         // User exited override
         if(!set_sc->picked()){
-            delete set_sc;
-            delete geo_sc;
             return;
         }
         // User chose city to override
         settings::picked_list pick = set_sc->get_picked();
         read_mem.overwriteCity(inputfield->get_input(), geo_pos, pick.idx);
         wclient->_init_(inputfield->get_input(), geo_pos);
-        delete set_sc;
         load_main_ = true;
     }
     else{
         tft->fillScreen(bg_c);
         draw(true);
-    }
-    delete geo_sc;    
+    }  
 }

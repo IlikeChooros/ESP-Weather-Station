@@ -9,7 +9,7 @@
 
 #include "../../../data_structures/Point.h"
 #include "../../items/memory/ReadMem.h"
-
+#include "../../../../data/fonts.h"
 
 class WiFiScreen
 {

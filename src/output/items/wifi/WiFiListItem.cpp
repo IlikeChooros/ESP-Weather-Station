@@ -45,9 +45,9 @@ draw(bool forceDraw)
     if(!forceDraw){
         return;
     }
-    tft->setTextColor(TFT_WHITE);
-    tft->setTextSize(2);
-    tft->setTextFont(2);
+
+    tft->setTextColor(TFT_WHITE, color);
+    tft->loadFont(Arial28);
     tft->fillRect(x,y,width,height,color);
     tft->drawRect(x,y,width,height,TFT_LIGHTGREY);
     
@@ -67,7 +67,7 @@ draw(bool forceDraw)
 
     //-------------------
     // drawing wifi ssid
-    tft->setCursor(x+0.05f*width, y);
+    tft->setCursor(x+0.05f*width, (height - LATIN_HEIGHT)/2);
 
     String temp;
     if (ssid.length()<14){
@@ -78,4 +78,5 @@ draw(bool forceDraw)
         temp += "...";
     }
     tft->print(temp);
+    tft->unloadFont();
 }

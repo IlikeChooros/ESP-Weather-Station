@@ -124,9 +124,9 @@ WiFiListScreen::
 connect_to_wifi(){
     String psw;
     // Look for saved wifi
-    for (auto i=wifi_info.begin(); i != wifi_info.end(); i++){
-        if (i->first == picked_wifi){
-            psw = i->second;
+    for (auto i : wifi_info){
+        if (i.first == picked_wifi){
+            psw = i.second;
             break;
         }
     }

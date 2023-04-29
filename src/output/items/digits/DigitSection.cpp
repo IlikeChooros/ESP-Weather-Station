@@ -33,8 +33,7 @@ draw(
     digitsObj[LEFT_DIGIT]->draw(digits / 10, forceDraw);
     digitsObj[RIGHT_DIGIT]->draw(digits % 10, forceDraw);
 
-    if(colon && forceDraw)
-    {
+    if(colon && forceDraw){
         tft->drawChar(':',x+2*DIGIT_WIDTH,y,font);
     }
 }
