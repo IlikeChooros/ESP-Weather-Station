@@ -236,40 +236,34 @@ void Droplet_100::draw()
     drawDroplet(tft,x,y,size,SNOW_FLAKE);
 }
 
+void WiFiIconSuperStrong::draw()
+{
+    tft->fillRect(x,y,1.05f*size,size, background_color);
+    drawWifi(tft,x,y,size, 3, background_color);
+}
+
 void WiFiIconStrong::draw()
 {
     tft->fillRect(x,y,1.05f*size,size, background_color);
-    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
-    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
-
     drawWifi(tft,x,y,size, 2, background_color);
 }
 
 void WiFiIconMedium::draw()
 {
     tft->fillRect(x,y,1.05f*size,size, background_color);
-    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
-    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
-
     drawWifi(tft,x,y,size, 1, background_color);
 }
 
 void WiFiIconWeak::draw()
 {
     tft->fillRect(x,y,1.05f*size,size, background_color);
-    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
-    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
-
     drawWifi(tft,x,y,size, 0, background_color);
 }
 
 void WiFiIconLost::draw()
 {
     tft->fillRect(x,y,1.05f*size,size, background_color);
-    tft->drawLine(x+size, y, x+size, y+0.55f*size, background_color);
-    tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, background_color);
-
-    drawWifi(tft,x,y,size, 3, background_color);
+    drawWifi(tft,x,y,size, 4, background_color);
     tft->drawLine(x+size, y, x+size, y+0.55f*size, TFT_RED);
     tft->fillCircle(x+size, y+size*0.7f, 0.1f*size, TFT_RED);
 }

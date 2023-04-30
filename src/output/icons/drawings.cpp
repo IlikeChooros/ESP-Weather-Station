@@ -275,11 +275,14 @@ drawWifi(
     uint16_t 
     first  = TFT_WHITE,
     second = 0x52AA,
-    third  = 0x52AA;
+    third  = 0x52AA,
+    fourth = 0x52AA;
     switch (strenght){
-        case 3:
+        case 4:
             first = 0x52AA;
             break;
+        case 3:
+            fourth = TFT_WHITE;
         case 2:
             third = TFT_WHITE;
         case 1:
@@ -289,17 +292,16 @@ drawWifi(
     }
 
     // first line
-    tft->fillSmoothCircle(x + 0.5f * size, y + 0.5f * size, 0.5f * size, third, background_color);
-    tft->fillSmoothCircle(x + 0.5f * size, y + 0.5f * size, 0.4f * size, background_color, third);
-    tft->fillRect(x, y + 0.3f * size, 1.1f * size, 0.8f * size, background_color);
+    tft->drawSmoothArc(x + 0.5f * size, y + 0.85 * size, roundf(0.75f*size), roundf(0.65f*size), 135, 235, fourth, background_color, true);
 
     // second line
-    tft->fillSmoothCircle(x + 0.5f * size, y + 0.55f * size, 0.3f * size, second, background_color);
-    tft->fillSmoothCircle(x + 0.5f * size, y + 0.55f * size, 0.2f * size, background_color, second);
-    tft->fillRect(x, y + 0.5f * size, 1.1f * size, 0.5f * size, background_color);
+    tft->drawSmoothArc(x + 0.5f * size, y + 0.85 * size, roundf(0.5f*size), roundf(0.4f*size) + 1, 135, 235, third, background_color, true);
+
+    // third line
+    tft->drawSmoothArc(x + 0.5f * size, y + 0.85 * size, roundf(0.25f*size) + 1, roundf(0.15f*size) + 2, 135, 235, second, background_color, true);
 
     // center circle
-    tft->fillSmoothCircle(x + 0.5f * size, y + 0.65 * size, 0.1f * size, first, background_color);
+    tft->fillSmoothCircle(x + 0.5f * size, y + 0.85 * size - 1, 0.1f * size, first, background_color);
 }
 
 void  

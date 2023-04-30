@@ -12,7 +12,7 @@ CityNameListScreen(
     set_new_location
     ->touch_color(0x0861)
     ->set_draw(drawSetLocationButton);
-    wifi = new WiFiItem(tft, 5,5,20, bg_c);
+    wifi = new WiFiItem(tft, 5,5,15, bg_c);
 }
 
 CityNameListScreen::
@@ -101,7 +101,7 @@ draw_wifi_name(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    tft->setCursor(30,8);
+    tft->setCursor(28,5);
     tft->setTextColor(TFT_LIGHTGREY, bg_c);
     tft->loadFont(NOTE_FONT16);
     tft->print(WiFi.SSID());
@@ -110,8 +110,7 @@ draw_wifi_name(bool forceDraw){
 
 void
 CityNameListScreen::
-draw(bool forceDraw)
-{
+draw(bool forceDraw){
     wifi->draw(forceDraw);
     draw_wifi_name(forceDraw);
     set_new_location->draw(forceDraw);

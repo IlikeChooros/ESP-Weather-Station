@@ -52,7 +52,7 @@ draw_city_info(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    location.pushSprite(35, 5);
+    location.pushSprite(30, 5);
 }
 
 void
@@ -62,13 +62,11 @@ init(Weather* weather){
     ->timezone(weather->_timezone)
     ->init();
 
-    _tft->setTextColor(TFT_LIGHTGREY, bg_c);
-    _tft->loadFont(EXTENDED_LATIN_SMALL);
-
+    location.setTextColor(TFT_LIGHTGREY, bg_c);
+    location.loadFont(EXTENDED_LATIN_SMALL);
     uint16_t width = _tft->textWidth(picked_city.name + " " + picked_city.country);
-    location.createSprite(width, _tft->fontHeight());
+    location.createSprite(width, location.fontHeight());
     location.fillSprite(bg_c);
     location.drawString(picked_city.name + " " + picked_city.country, 0, 0);
-
-    _tft->unloadFont();
+    location.unloadFont();
 }

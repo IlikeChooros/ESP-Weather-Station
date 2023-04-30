@@ -19,10 +19,9 @@ class DateItem
     struct tm prev_time_info;
 
     DateFormat* dateFormat;
-
     DigitSection** digitsec;
-
     TFT_eSPI* tft;
+    TFT_eSprite full_date;
 
     int16_t text_width;
     int16_t center_x;

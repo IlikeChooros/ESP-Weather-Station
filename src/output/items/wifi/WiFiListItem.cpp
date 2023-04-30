@@ -59,7 +59,7 @@ draw(bool forceDraw)
     icon->draw();
     delete icon;
     
-    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem (tft,x+0.91f*width, y+roundf(0.2f*height), 0.08f*width, color);
+    WiFiStrenghtItem* wifi_str = new WiFiStrenghtItem (tft,x+0.91f*width, y+roundf(0.25f*height), 15, color);
     wifi_str->draw(strenght);
     delete wifi_str;
 

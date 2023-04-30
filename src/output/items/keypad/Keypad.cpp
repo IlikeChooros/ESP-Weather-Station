@@ -93,6 +93,10 @@ void
 Keypad::
 draw(bool forceDraw)
 {
+    if (!forceDraw){
+        return;
+    }
+
     tft->loadFont(LATIN);
     for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         buttons[i]->draw(forceDraw);

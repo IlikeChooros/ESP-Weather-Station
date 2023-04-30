@@ -11,14 +11,15 @@ DateItem::DateItem(
     int16_t bg_c
 ): tft(tft), y_full_date(y_full_date),
 center_x(center_x), y_hour(y_hour),
-bg_c(bg_c), _timezone(3600), text_width(0)
-{
+bg_c(bg_c), _timezone(3600), text_width(0),
+full_date(tft){
     dateFormat = new DateFormat;
     digitsec = new DigitSection *[3]{
         new DigitSection(tft, STARTING_X, y_hour, bg_c, true),
         new DigitSection(tft, STARTING_X+70, y_hour, bg_c, true),
         new DigitSection(tft, STARTING_X+140, y_hour, bg_c, false)
     };
+    full_date.createSprite(320, 28);
 }
 
 void 
@@ -40,6 +41,13 @@ init(){
     dateFormat->set_update(update);
     dateFormat->set_date(&timeinfo);
     prev_time_info = timeinfo;
+
+    full_date.loadFont(DATE_FONT);
+    full_date.setTextColor(TFT_WHITE, bg_c);
+    full_date.fillSprite(bg_c);
+    full_date.drawCentreString(dateFormat->formatDateInfo(), 160, 0, 2);
+    text_width = tft->textWidth(dateFormat->formatDateInfo());
+    full_date.unloadFont();
 }
 
 DateItem*
@@ -65,16 +73,9 @@ draw(bool forceDraw){
     if (!forceDraw){
         return;
     }
-    // Clearing previous date 
-    tft->loadFont(DATE_FONT);
-    tft->fillRect(center_x - text_width/2 - 2, y_full_date, text_width + 4, tft->fontHeight(), bg_c);
-    
-    // Drawing new one
-    dateFormat->set_date(&timeinfo);
 
-    tft->setTextColor(TFT_WHITE, bg_c);
-    text_width = tft->drawCentreString(dateFormat->formatDateInfo(), center_x, y_full_date, 2);
-    tft->unloadFont();
+    tft->fillRect(center_x - text_width/2 - 2, y_full_date, text_width + 4, tft->fontHeight(), bg_c);
+    full_date.pushSprite(0, y_full_date);
 }
 
 void 
@@ -90,6 +91,14 @@ add_second(bool getUpdate){
     if (dateFormat->add_second()){
         timeinfo = dateFormat->get_date();
         update = dateFormat->get_update();
+
+        full_date.loadFont(DATE_FONT);
+        full_date.setTextColor(TFT_WHITE, bg_c);
+        full_date.fillSprite(bg_c);
+        full_date.drawCentreString(dateFormat->formatDateInfo(), 160, 0, 2);
+        text_width = tft->textWidth(dateFormat->formatDateInfo());
+        full_date.unloadFont();
+
         draw(true);
         return;
     } 
