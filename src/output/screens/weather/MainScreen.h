@@ -2,8 +2,6 @@
 #define SCREEN_H
 
 #include <TFT_eSPI.h> 
-#include <SPI.h>
-#include <Arduino.h>
 
 #include "../../../weather_client/Forecast.h"
 #include "../../../weather_client/Weather.h"
