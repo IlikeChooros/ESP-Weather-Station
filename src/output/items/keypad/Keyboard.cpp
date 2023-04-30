@@ -24,9 +24,9 @@ Keyboard::Keyboard(
     };
 
     keypads = new Keypad* [NUMBER_OF_KEYBOARDS]{
-        new Keypad(tft, main_qwerty, "1#"),
-        new Keypad(tft, numbers, "Aa"),
-        new Keypad(tft, main_qwerty_C, "1#")
+        new Keypad(tft, main_qwerty, "123"),
+        new Keypad(tft, numbers, "Abc"),
+        new Keypad(tft, main_qwerty_C, "123")
     };
 
     for (uint8_t i = 0; i < NUMBER_OF_KEYBOARDS; i++)
@@ -39,6 +39,14 @@ Keyboard::Keyboard(
             keypads[i]->set_on_touch_color(0x0208, CAPS_LOCK - 1);
         }
     }
+}
+Keyboard::
+~Keyboard(){
+    for(uint8_t i=0; i<NUMBER_OF_KEYBOARDS; i++){
+        keypads[i]->clear();
+        delete keypads[i];
+    }
+    delete [] keypads;
 }
 
 KeyInfo*
@@ -82,14 +90,8 @@ check(Point* pos)
 
 void 
 Keyboard::
-change_keypad()
-{
-    if (current_keypad != NUMBERS){
-        current_keypad = NUMBERS;
-    }
-    else{
-        current_keypad = MAIN_QWERTY;
-    }
+change_keypad(){
+    current_keypad = current_keypad != NUMBERS ? NUMBERS : MAIN_QWERTY;
     keypads[current_keypad]->draw(true);
 }
 

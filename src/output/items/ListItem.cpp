@@ -33,14 +33,14 @@ draw_(uint16_t color)
     tft->drawRect(x, y, width, height, data.at(0).color);
 
     x+=5;
-
+    y+=7;
+    tft->loadFont(data.at(0).font);
     for (auto i : data)
     {
         tft->setTextColor(i.color, color);
-        tft->loadFont(i.font);
-
+        
         if (!i.same_line){
-            y += tft->fontHeight() + 5;
+            y += LATIN_HEIGHT + 5;
             x = this->x+5;
         }
 
@@ -60,8 +60,8 @@ draw_(uint16_t color)
         }
         x += tft->drawString(temp, x, y);
         x += 10;
-        tft->unloadFont();
     }
+    tft->unloadFont();
 
     if (marked_){
         drawPickIcon(tft, x+0.9f*width, y, 0.1f*width, TFT_GREENYELLOW);

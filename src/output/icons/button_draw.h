@@ -1,8 +1,7 @@
 #pragma once
 
-#include <Arduino.h>
 #include <TFT_eSPI.h> 
-#include <SPI.h>
+#include "../../custom_font/fonts.h"
 
 /**
  * @brief Fuction drawing refresh button

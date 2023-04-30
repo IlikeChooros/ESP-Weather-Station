@@ -18,7 +18,7 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
     std::unique_ptr<char[]> ptr_ssid(ssid);
     std::unique_ptr<char[]> ptr_pass(pass);
 
-    tft->loadFont(WEATHER_FONT);
+    tft->loadFont(NOTE_FONT16);
     tft->setTextColor(TFT_GREEN, TFT_DARKGREY);
     tft->setCursor(90, 75);
     tft->print("Connecting to:");

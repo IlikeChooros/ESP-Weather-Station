@@ -13,16 +13,22 @@ class InputField
 {
     TFT_eSPI* tft;
     String input;
+    String cursor;
 
     int16_t x;
     int16_t y;
     int16_t width;
     int16_t height;
+    uint16_t last_lenght;
+    uint16_t last_print;
 
     bool _prev_state;
     int16_t _cursor_x;
     uint64_t _cache_time;
     uint64_t _last_check;
+    
+    void
+    blink(bool);
 
     public:
     InputField(

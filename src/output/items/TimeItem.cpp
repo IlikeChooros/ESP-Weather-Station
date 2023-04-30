@@ -7,16 +7,15 @@ void TimeItem::draw(bool forceDraw){
     }
 
     String date = get_date_format(hourly);
-    this->_tft->setCursor(this->x, this->y);
-    this->_tft->setTextColor(this->bg_c);
-    this->_tft->loadFont(this->font);
-    this->_tft->print(prev_date);
+    // clear previous data
+    _tft->fillRect(x, y, width, height, bg_c);
 
-    this->_tft->setTextColor(color);
-    this->_tft->setCursor(x,y);
-    this->_tft->print(date);
+    // print new data
+    _tft->loadFont(font);
+    _tft->setTextColor(color, bg_c);
+    width = _tft->drawCentreString(date, x, y, 2);
     prev_date = date;
-    this->_tft->unloadFont();
+    _tft->unloadFont();
 }
 
 String TimeItem::get_date_format(bool hourFormat)

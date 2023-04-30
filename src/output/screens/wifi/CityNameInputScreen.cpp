@@ -42,10 +42,12 @@ draw_title(bool forceDraw){
     if (!forceDraw){
         return;
     }
-    tft->setTextSize(1);
-    tft->setTextColor(TFT_WHITE);
-    tft->drawCentreString("Enter desired location", 160, 0, 2);
+    tft->loadFont(NOTE_FONT12);
+    tft->setTextColor(TFT_WHITE, bg_c);
+    tft->drawCentreString("Enter desired location", 160, 5, 2);
+    tft->unloadFont();
 }
+
 
 void 
 CityNameInputScreen::

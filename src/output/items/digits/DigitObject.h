@@ -13,6 +13,9 @@ class DigitObject
     int16_t y;
     int16_t bg_c;
 
+    int16_t height;
+    int16_t width;
+
     public:
     DigitObject(
         TFT_eSPI* tft, 

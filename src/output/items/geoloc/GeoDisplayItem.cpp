@@ -23,11 +23,11 @@ draw()
     uint16_t x = this->x + 5,
              y = this->y + 5;
 
-    tft->loadFont(LATIN);
+    tft->loadFont(EXTENDED_LATIN);
     tft->drawCentreString(info.name, x+w/2, y, 2);
     tft->unloadFont();
 
-    tft->loadFont(WEATHER_FONT);
+    tft->loadFont(LATIN);
     y += tft->fontHeight() + 5;
     tft->setCursor(x,y);
     tft->print("Country:");

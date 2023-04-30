@@ -24,6 +24,7 @@ class DateItem
 
     TFT_eSPI* tft;
 
+    int16_t text_width;
     int16_t center_x;
     int16_t y_full_date;
     int16_t y_hour;

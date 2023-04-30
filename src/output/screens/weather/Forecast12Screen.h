@@ -35,10 +35,10 @@ class Forecast12Screen: public MainScreen
         {
             columnItems[i].number_of_items = NUMBER_OF_COLUMN_ITEMS;
             columnItems[i].weather_items = new WeatherItem*[NUMBER_OF_COLUMN_ITEMS]{
-                new TimeItem(_tft, i*column_width+5, 10, bg_c, MIST, WEATHER_FONT, 0, true),
+                new TimeItem(_tft, i*column_width+column_width/2, 10, bg_c, MIST, WEATHER_FONT, 0, true),
                 new WeatherIcon(_tft,i*column_width,40,column_width, this->bg_c),
-                new TextTemp(_tft, i*column_width+8, 55 + column_width, LATIN, TFT_WHITE, "%d `C",bg_c),
-                new TextFeelsLike(_tft, i*column_width+10, 80 + column_width, WEATHER_FONT, TFT_WHITE, "(%d `C)", bg_c),
+                new TextTemp(_tft, i*column_width+column_width/3, 55 + column_width, WEATHER_FONT, TFT_WHITE, "%d °C",bg_c),
+                new TextFeelsLike(_tft, i*column_width+column_width/3, 80 + column_width, WEATHER_FONT, TFT_WHITE, "%d °C", bg_c),
                 new TextPop(_tft, i*column_width+25, 100 + column_width + 5, WEATHER_FONT,WATER, "%d %%", bg_c),
                 new DropletItem(_tft,i*column_width+5, 100 + column_width, 20, bg_c)
             };

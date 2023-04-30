@@ -19,7 +19,7 @@ draw_(uint16_t color)
     tft->drawRect(x,y,width,height,text_color);
 
     if (name == " "){
-        tft->drawCentreString("SPACE", x+width/2, y + (height - LATIN_HEIGHT)/2, 2);
+        tft->drawCentreString("SPACE", x+width/2, y + (height - LATIN_HEIGHT)/2 + 3, 2);
         return;
     }
 
@@ -34,12 +34,23 @@ draw_(uint16_t color)
     }
 }
 
+
+KeypadButton*
+KeypadButton::
+custom_font(String font){
+    this->font = font;
+    return this;
+}
+
 void 
 KeypadButton::
 on_touch(){
-    //tft->loadFont(Arial28);
+    if (font.isEmpty())
+        tft->loadFont(LATIN);
+    else
+        tft->loadFont(font);
     draw_(touch_color);
-    //tft->unloadFont();
+    tft->unloadFont();
 }
 
 String 

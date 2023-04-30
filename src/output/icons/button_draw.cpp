@@ -59,12 +59,13 @@ drawSetLocationButton(
     uint16_t color 
 )
 {
+    tft->loadFont(LATIN);
     tft->fillRect(x, y, 320, size, color);
     tft->drawFastHLine(x, y, 320, TFT_DARKGREY);
 
-    tft->setTextColor(TFT_DARKGREY, color, true);
-    tft->setTextSize(2);
-    tft->drawCentreString("Set new location.", 160, y+2, 2);
+    tft->setTextColor(TFT_DARKGREY, color);
+    tft->drawCentreString("Set new location.", 160, y+10, 2);
+    tft->unloadFont();
 }
 
 void

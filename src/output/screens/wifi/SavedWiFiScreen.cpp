@@ -67,16 +67,16 @@ set_window(String ssid){
         std::vector<print_data> data;
         data.resize(4);
         data.at(0) = {
-            "SSID:", WEATHER_FONT, TFT_WHITE, true
+            "SSID:", NOTE_FONT16, TFT_WHITE, true
         };
         data.at(1) = {
-            i.first, WEATHER_FONT, TFT_WHITE, true
+            i.first, NOTE_FONT16, TFT_WHITE, true
         };
         data.at(2) = {
-            "PASS:", WEATHER_FONT, TFT_WHITE, false
+            "PASS:", NOTE_FONT16, TFT_WHITE, false
         };
         data.at(3) = {
-            i.second, WEATHER_FONT, TFT_WHITE, true
+            i.second, NOTE_FONT16, TFT_WHITE, true
         };
         window->prepare(data)->init();
         break;
@@ -144,8 +144,9 @@ draw_title(bool forceDraw){
         return;
     }
     tft->setTextColor(TFT_WHITE, bg_c);
-    tft->loadFont(NOTE_FONT);
+    tft->loadFont(NOTE_FONT16);
     tft->drawCentreString("Manage networks", 145, 5, 2);
+    tft->unloadFont();
 }
 
 bool

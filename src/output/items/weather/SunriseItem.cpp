@@ -25,7 +25,7 @@ draw(bool forceDraw){
     to_print += hours.min < 10 ? "0" + String(hours.min) : String(hours.min);
     _tft->setTextColor(TFT_WHITE, bg_c);
     _tft->loadFont(WEATHER_FONT);
-    _tft->drawString(to_print, x + size + 2, y + 0.2f*size, 2);
+    _tft->drawString(to_print, x + size + 5, y + 0.2f*size);
     _tft->unloadFont();
 }
 

@@ -48,6 +48,7 @@ set_city_info()
         );
 
         if (!info){
+            number_of_saved_city_names = i;
             break;
         }
 
@@ -85,9 +86,9 @@ draw_wifi_name(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    tft->setCursor(30,5);
+    tft->setCursor(30,8);
     tft->setTextColor(TFT_LIGHTGREY, bg_c);
-    tft->loadFont(WEATHER_FONT);
+    tft->loadFont(NOTE_FONT16);
     tft->print(WiFi.SSID());
     tft->unloadFont();
 }
@@ -98,17 +99,18 @@ draw(bool forceDraw)
 {
     wifi->draw(forceDraw);
     draw_wifi_name(forceDraw);
+    set_new_location->draw(forceDraw);
     
-    for (uint8_t i=0; i<number_of_saved_city_names; ++i){
-        city_list[i]->draw(forceDraw);
-    }
-
-    if (number_of_saved_city_names<1){
-        tft->setCursor(10, 20);
+    if (number_of_saved_city_names < 1){
+        tft->setCursor(10, 40);
         tft->setTextColor(TFT_DARKGREY, bg_c);
         tft->loadFont(LATIN);
         tft->print("No saved locations.");
         tft->unloadFont();
+        return;
     }
-    set_new_location->draw(forceDraw);
+    
+    for (uint8_t i=0; i<number_of_saved_city_names; ++i){
+        city_list[i]->draw(forceDraw);
+    }   
 }

@@ -30,7 +30,7 @@ draw(
     digitsObj[RIGHT_DIGIT]->draw(digits % 10, forceDraw);
 
     if(colon && forceDraw){
-        tft->drawChar(':', x+2*DIGIT_WIDTH, y);
+        tft->drawString(String(':'), x+2*DIGIT_WIDTH, y);
     }
 }
 

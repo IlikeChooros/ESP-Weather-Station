@@ -44,15 +44,7 @@ public:
         TFT_eSPI *tft
     );
 
-    ~Keyboard()
-    {
-        for(uint8_t i=0; i<NUMBER_OF_KEYBOARDS; i++)
-        {
-           keypads[i]->clear();
-           delete keypads[i];
-        }
-        delete [] keypads;
-    }
+    ~Keyboard();
 
     void 
     draw(bool forceDraw);

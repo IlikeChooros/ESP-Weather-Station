@@ -11,7 +11,7 @@ DateItem::DateItem(
     int16_t bg_c
 ): tft(tft), y_full_date(y_full_date),
 center_x(center_x), y_hour(y_hour),
-bg_c(bg_c), _timezone(3600)
+bg_c(bg_c), _timezone(3600), text_width(0)
 {
     dateFormat = new DateFormat;
     digitsec = new DigitSection *[3]{
@@ -56,7 +56,7 @@ draw(bool forceDraw){
     // Refresh if needed
     dateFormat->set_date(&prev_time_info);
 
-    tft->loadFont(CLOCK);
+    tft->loadFont(CLOCK_FONT);
     digitsec[HOURS]->draw(timeinfo.tm_hour, forceDraw);
     digitsec[MINUTES]->draw(timeinfo.tm_min, forceDraw);
     digitsec[SECONDS]->draw(timeinfo.tm_sec, forceDraw);
@@ -66,16 +66,14 @@ draw(bool forceDraw){
         return;
     }
     // Clearing previous date 
-    tft->loadFont(LATIN);
-    tft->setTextDatum(TC_DATUM);
-    tft->setTextColor(bg_c, bg_c);
-    tft->drawString(dateFormat->formatDateInfo(), center_x, y_full_date);
+    tft->loadFont(DATE_FONT);
+    tft->fillRect(center_x - text_width/2 - 2, y_full_date, text_width + 4, tft->fontHeight(), bg_c);
     
     // Drawing new one
     dateFormat->set_date(&timeinfo);
 
     tft->setTextColor(TFT_WHITE, bg_c);
-    tft->drawString(dateFormat->formatDateInfo(), center_x, y_full_date);
+    text_width = tft->drawCentreString(dateFormat->formatDateInfo(), center_x, y_full_date, 2);
     tft->unloadFont();
 }
 

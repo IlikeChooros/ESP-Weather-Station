@@ -4,7 +4,6 @@
 #include "KeypadButton.h"
 #include "../../../data_structures/Point.h"
 
-// #include "../screens/PasswordInputScreen.h"
 
 #define NUMBER_OF_KEYPAD_BUTTONS 29
 #define STARTING_Y 60
@@ -70,7 +69,6 @@ class Keypad
         uint16_t color, 
         uint8_t idx
     );
-
     
 };
 

@@ -34,6 +34,7 @@ Keypad::Keypad(
         KEYPAD_BUTTON_WIDTH, KEYPAD_BUTTON_HEIGHT, slider);
     
     this->slider
+    ->custom_font(WEATHER_FONT)
     ->set_color(0x5836);
 
     buttons[NUMBER_OF_KEYPAD_BUTTONS-1] = new KeypadButton(
@@ -96,6 +97,8 @@ draw(bool forceDraw)
     for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
         buttons[i]->draw(forceDraw);
     }
+    tft->unloadFont();
+    tft->loadFont(WEATHER_FONT);
     slider->draw(forceDraw);
     tft->unloadFont();
 }
@@ -105,10 +108,11 @@ Keypad::
 re_draw(uint8_t idx)
 {
     if (idx == 0){
-        slider->draw(true);
         return;
     }
+    tft->loadFont(LATIN);
     buttons[idx-1]->draw(true);
+    tft->unloadFont();
 }
 
 int8_t 
@@ -134,4 +138,5 @@ clear()
         delete buttons[i];
     }
     delete [] buttons;
+    delete slider;
 }

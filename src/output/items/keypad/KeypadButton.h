@@ -14,6 +14,7 @@ class KeypadButton: public TouchButton
     TFT_eSPI* tft;
 
     String name;
+    String font;
 
     uint16_t 
     touch_color;
@@ -45,6 +46,9 @@ class KeypadButton: public TouchButton
 
     void 
     on_touch();
+
+    KeypadButton*
+    custom_font(String font);
 
     void
     set_on_touch_color

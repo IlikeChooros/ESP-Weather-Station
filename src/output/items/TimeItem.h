@@ -13,6 +13,9 @@ class TimeItem: public WeatherItem
     uint64_t unix;
     uint16_t color;
 
+    int16_t width;
+    int16_t height;
+
     String 
     get_weekday();
 
@@ -34,7 +37,7 @@ class TimeItem: public WeatherItem
         bool hourly
     ): WeatherItem(_tft,x,y,background_color),
     font(font), unix(unix), color(color), 
-    hourly(hourly), prev_date("") {}
+    hourly(hourly), prev_date(""), width(1), height(WEATHER_HEIGHT+3) {}
 
     void 
     draw(bool forceDraw);

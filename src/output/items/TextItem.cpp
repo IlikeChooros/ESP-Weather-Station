@@ -2,26 +2,64 @@
 
 uint16_t* temp_colors = set_text_colors();
 
-void TextItem::draw(bool forceDraw)
-{
-    if (!forceDraw && !redraw){
+TextItem::
+TextItem(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font,
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): WeatherItem(_tft,x,y,background_color),
+font(font), format(format), color(color), text_width(0) {}
+
+void TextItem::draw(bool forceDraw){
+    if (!(forceDraw || redraw)){
         return;
     }
     
     char buffer[40];
-    sprintf(buffer, format, prev_data);
-
     _tft->setTextColor(bg_c, bg_c);
     _tft->loadFont(font);
-    _tft->setCursor(this->x, this->y);
-    _tft->print(buffer);
+    _tft->fillRect(x, y, text_width, _tft->fontHeight(), bg_c);
 
     sprintf(buffer, format, this->_data);
     _tft->setTextColor(color, bg_c);
-    _tft->setCursor(this->x, this->y);
-    _tft->print(buffer);
+    text_width = _tft->drawString(buffer, x, y);
     _tft->unloadFont();
-    this->prev_data = this->_data;
+}
+
+void TextTemp::draw(bool force){
+    if (!(force || redraw)){
+        return;
+    }
+    
+    char buffer[40];
+    _tft->setTextColor(bg_c, bg_c);
+    _tft->loadFont(font);
+    _tft->fillRect(x - text_width/2 - 2, y, text_width + 4, _tft->fontHeight(), bg_c);
+
+    sprintf(buffer, format, _data);
+    _tft->setTextColor(color, bg_c);
+    text_width = _tft->drawCentreString(buffer, x, y, 2);
+    _tft->unloadFont();
+}
+
+void TextFeelsLike::draw(bool force){
+    if (!(force || redraw)){
+        return;
+    }
+    
+    char buffer[40];
+    _tft->setTextColor(bg_c, bg_c);
+    _tft->loadFont(font);
+    _tft->fillRect(x - text_width/2 - 2, y, text_width + 4, _tft->fontHeight(), bg_c);
+
+    sprintf(buffer, format, _data);
+    _tft->setTextColor(color, bg_c);
+    text_width = _tft->drawCentreString(buffer, x, y, 2);
+    _tft->unloadFont();
 }
 
 void TextTemp::setWeather(Weather* weather){

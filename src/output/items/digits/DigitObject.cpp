@@ -7,7 +7,8 @@ DigitObject(
     int16_t y, 
     int16_t bg_c
 ): currentDigit(0), prevDigit(0),
-tft(tft), x(x), y(y), bg_c(bg_c) {}
+tft(tft), x(x), y(y), bg_c(bg_c),
+height(48), width(25) {}
 
 void 
 DigitObject::
@@ -21,11 +22,10 @@ draw(
     }
     currentDigit = digit;
     // Clearing previous number
-    this->tft->setTextColor(bg_c, bg_c);
-    this->tft->drawNumber(prevDigit, x,y);
+    tft->fillRect(x, y, width, height, bg_c);
     // Drawing new one
     this->tft->setTextColor(TFT_WHITE, bg_c);
-    this->tft->drawNumber(currentDigit, x, y);
+    width = this->tft->drawNumber(currentDigit, x, y);
     prevDigit = currentDigit;    
 }
 void 
