@@ -42,6 +42,9 @@ class WiFiListScreen: public WiFiScreen
         uint16_t bg_c, 
         void(*refresh_func)(void)
     );
+    
+    ~WiFiListScreen();
+
 
     void 
     scan();

@@ -1,5 +1,4 @@
-#ifndef CURRENT_WEATHER_SCREEN_H
-#define CURRENT_WEATHER_SCREEN_H
+#pragma once
 
 #include "MainScreen.h"
 #include "../../items/WeatherItem.h"
@@ -23,6 +22,8 @@ class CurrentWeatherScreen: public MainScreen
     WeatherItem** weather_items;
     WiFiItem* wifi;
     DateItem* date;
+
+    TFT_eSprite location;
 
     void
     draw_city_info(bool);
@@ -53,6 +54,3 @@ class CurrentWeatherScreen: public MainScreen
     void 
     init(Weather* weather);
 };
-
-
-#endif

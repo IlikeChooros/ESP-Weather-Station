@@ -113,7 +113,6 @@ current_weather
     if (millis() - lastWeatherCheck < cacheTime){
         return false;
     }
-    Serial.println("GET WEATHER " + String(_lat) + " " + String(_lon) + " PICK: " + String(picked_city.lat) + " " + String(picked_city.lon) + " " + picked_city.country);
     http->begin("http://api.openweathermap.org/data/2.5/weather?lat="+String(_lat)+"&lon="+String(_lon)+"&units=metric&lang=pl&appid="+APPID);
     
     int16_t http_code = http->GET();

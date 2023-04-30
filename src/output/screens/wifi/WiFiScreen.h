@@ -19,6 +19,7 @@ public:
         TFT_eSPI* tft, 
         uint16_t bg_c
     );
+    virtual ~WiFiScreen() = default;
 
     virtual void 
     draw(bool forceDraw) = 0;

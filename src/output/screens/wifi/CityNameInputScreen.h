@@ -38,6 +38,8 @@ public:
         TouchScreen* ts
     );
 
+    ~CityNameInputScreen();
+
     void
     draw(bool forceDraw);
 

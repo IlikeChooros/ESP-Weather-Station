@@ -160,7 +160,6 @@ check(Point* pos){
         }
         _pick_idx = i;
         _picked = true;
-            Serial.println("PICK " + String(_pick_idx));
         break;
     }
 }

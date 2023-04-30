@@ -28,7 +28,6 @@ Follow strictly instructions in: TFT_eSPI/Tools/Create_Smooth_Font/Create_font
     #define NOTE_HEIGHT 10
 #endif
 
-
 #ifndef WEATHER_FONT
     #define WEATHER_FONT "Weather16"
     #define WEATHER_HEIGHT 14

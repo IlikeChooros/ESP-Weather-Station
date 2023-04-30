@@ -40,7 +40,7 @@ draw_(uint16_t color)
         tft->setTextColor(i.color, color);
         
         if (!i.same_line){
-            y += LATIN_HEIGHT + 5;
+            y += tft->fontHeight();
             x = this->x+5;
         }
 

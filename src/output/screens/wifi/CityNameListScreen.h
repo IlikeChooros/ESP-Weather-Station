@@ -7,7 +7,6 @@
 #include "../../items/keypad/CustomButton.h"
 #include "../../items/wifi/WiFiItem.h"
 
-
 #define LIST_HEIGHT 60
 #define LIST_WIDTH 280
 
@@ -19,8 +18,7 @@ CityNameListScreen: public CityNameScreen
     WiFiItem* wifi;
 
     ReadMem read_mem;
-    std::vector<City_info> city_info;
-    std::vector<String> city_names;
+    std::list<std::pair<String, uint8_t>> city_info;
     uint8_t number_of_saved_city_names;
 
     void
@@ -33,6 +31,8 @@ public:
         WeatherClient* wc,
         TouchScreen* ts
     );
+
+    ~CityNameListScreen();
 
     /**
      * @brief Reads form eeprom saved city names,

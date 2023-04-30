@@ -25,6 +25,19 @@ load_main_(false){
     ->touch_color(0x18E3);
 }
 
+WiFiListScreen::
+~WiFiListScreen(){
+    delete refresh_button;
+    delete settings_button;
+
+    if (number_of_networks > 0){
+        for (uint8_t i = 0; i < number_of_networks; ++i){
+            delete wifis[i];
+        }
+        delete [] wifis;
+    }
+}
+
 void WiFiListScreen::init(){
     wifi_info = read_mem.wifis(true);
 }

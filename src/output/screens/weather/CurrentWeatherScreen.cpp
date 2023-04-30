@@ -3,12 +3,12 @@
 extern City_info picked_city;
 
 CurrentWeatherScreen::
-CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c): MainScreen(tft,bg_c){
+CurrentWeatherScreen(TFT_eSPI * tft, uint16_t bg_c): MainScreen(tft,bg_c), location(tft){
     
     weather_items = new WeatherItem*[NUMBER_OF_WEATHER_ITEMS] {
         new WeatherIcon(this->_tft, 190,30+OFFSET, 125, bg_c),
-        new WindIcon(this->_tft, 85, 105+OFFSET, 20, bg_c),
-        new TextTemp(this->_tft, 90, 30+OFFSET, TEMP_FONT, TFT_WHITE, "%d °C" , bg_c),
+        new WindIcon(this->_tft, 85, 100+OFFSET, 20, bg_c),
+        new TextTemp(this->_tft, 95, 35+OFFSET, TEMP_FONT, TFT_WHITE, "%d °C" , bg_c),
         new TextFeelsLike(this->_tft, 80, 80+OFFSET, WEATHER_FONT, TFT_WHITE,"Feels like: %d °C", bg_c),
         new TextWind(this->_tft, 110, 105+OFFSET, WEATHER_FONT, 0x77F2, "%d km/h", bg_c),
         new TextPressure(this->_tft, 110, 135+OFFSET, WEATHER_FONT, 0xB41F, "%d hPa", bg_c),
@@ -52,11 +52,7 @@ draw_city_info(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    _tft->setTextColor(TFT_LIGHTGREY, bg_c);
-    _tft->loadFont(EXTENDED_LATIN_SMALL);
-    _tft->setCursor(30, 5);
-    _tft->print(picked_city.name + " " + picked_city.country);
-    _tft->unloadFont();
+    location.pushSprite(35, 5);
 }
 
 void
@@ -65,4 +61,14 @@ init(Weather* weather){
     date
     ->timezone(weather->_timezone)
     ->init();
+
+    _tft->setTextColor(TFT_LIGHTGREY, bg_c);
+    _tft->loadFont(EXTENDED_LATIN_SMALL);
+
+    uint16_t width = _tft->textWidth(picked_city.name + " " + picked_city.country);
+    location.createSprite(width, _tft->fontHeight());
+    location.fillSprite(bg_c);
+    location.drawString(picked_city.name + " " + picked_city.country, 0, 0);
+
+    _tft->unloadFont();
 }

@@ -24,6 +24,13 @@ CityNameInputScreen(
     ->set_draw(drawExitButton)
     ->touch_color(0x30C2);
 }
+CityNameInputScreen::
+~CityNameInputScreen(){
+    delete enter_button;
+    delete return_button;
+    delete keyboard;
+    delete inputfield;
+}
 
 void
 CityNameInputScreen::

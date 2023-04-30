@@ -37,7 +37,9 @@ bg_c(bg_c), change(false)
 SavedWiFiScreen::
 ~SavedWiFiScreen(){
     delete exit_button;
+    delete detail_button;
     delete screen;
+    delete window;
 }
 
 void
