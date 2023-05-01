@@ -116,7 +116,6 @@ void get_esp_info(){
     if (millis() - lastTimeCheck < SECOND){
         return;
     }
-    Serial.println("FREE (ESP INFO): " + String(ESP.getFreeHeap()));
     wclient.current_weather(weather);
     wclient.forecast_weather(forecast);
 
