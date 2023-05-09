@@ -63,24 +63,21 @@ check(Point* pos)
     change_ = return_button->check(pos->x, pos->y);
     KeyInfo* info = keyboard->check(pos);
 
-    if (info)
+    switch(info->info)
     {
-        switch(info->info)
-        {
-            case IGNORE:
-                return;
-            case DELETE:
-                inputfield->del();
-                return;
-            case NORMAL_BUTTON:
-                inputfield->add_input(info->str);
-                return;
-        }
+        case IGNORE:
+            break;
+        case DELETE:
+            inputfield->del();
+            break;
+        case NORMAL_BUTTON:
+            inputfield->add_input(info->str);
+            break;
     }
+    delete info;
 
     if(enter_button->check(pos->x, pos->y)){
         enter();
-        return;
     }
 }
 

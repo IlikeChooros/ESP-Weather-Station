@@ -7,40 +7,43 @@ Keypad::Keypad(
 ): tft(tft)
 {
     buttons = new KeypadButton*[NUMBER_OF_KEYPAD_BUTTONS];
-    for (uint8_t y=0; y < 2; ++y){
-        for (uint8_t i=0; i < 10; ++i){
-            buttons[i + y*10] = new KeypadButton(
-                tft, i*(KEYPAD_BUTTON_WIDTH+2) + 2,
-                y*(KEYPAD_BUTTON_HEIGHT + 2) + STARTING_Y+20,
-                KEYPAD_BUTTON_WIDTH,
-                KEYPAD_BUTTON_HEIGHT,
-                button_data[i + y*10]
-            );
-        }
+
+    for (uint8_t i=0; i < 10; ++i){
+        buttons[i] = new KeypadButton(
+            tft, i*(KEYPAD_BUTTON_WIDTH+2) + 2,
+            STARTING_Y+20,
+            KEYPAD_BUTTON_WIDTH,
+            KEYPAD_BUTTON_HEIGHT,
+            button_data[i]
+        );
     }
 
-    for (uint8_t i=0; i < 8; ++i){
-        buttons[20 + i] = new KeypadButton(
+    for (uint8_t i=0; i < 9; ++i){
+        buttons[i + 10] = new KeypadButton(
+            tft, i*(KEYPAD_BUTTON_WIDTH+2) + 2 + KEYPAD_BUTTON_WIDTH/2 - 1,
+            STARTING_Y+20 + KEYPAD_BUTTON_HEIGHT + 2,
+            KEYPAD_BUTTON_WIDTH,
+            KEYPAD_BUTTON_HEIGHT,
+            button_data[i+ 10]
+        );
+    }
+
+    for (uint8_t i=0; i < 7; ++i){
+        buttons[19 + i] = new KeypadButton(
             tft, (i + 1) * (KEYPAD_BUTTON_WIDTH + 2) + 2,
             2*(KEYPAD_BUTTON_HEIGHT + 2) + STARTING_Y + 20,
             KEYPAD_BUTTON_WIDTH,
             KEYPAD_BUTTON_HEIGHT,
-            button_data[20 + i]
+            button_data[19 + i]
         );
     }
 
     this->slider = new KeypadButton(
-        tft, 320 - KEYPAD_BUTTON_WIDTH, 2*KEYPAD_BUTTON_HEIGHT + STARTING_Y + 24,
-        KEYPAD_BUTTON_WIDTH, KEYPAD_BUTTON_HEIGHT, slider);
+        tft, 320 - 2*KEYPAD_BUTTON_WIDTH - 7, 207,
+        2*KEYPAD_BUTTON_WIDTH + 5, 30, slider);
     
     this->slider
-    ->custom_font(WEATHER_FONT)
-    ->set_color(0x5836);
-
-    buttons[NUMBER_OF_KEYPAD_BUTTONS-1] = new KeypadButton(
-        tft, 70, 207, 180, 30, " "
-    );
-    
+    ->set_color(0x5836);   
 }
 
 String 
@@ -91,19 +94,12 @@ set_text_color(
 
 void 
 Keypad::
-draw(bool forceDraw)
-{
-    if (!forceDraw){
-        return;
-    }
-
+draw(){
     tft->loadFont(LATIN);
     for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
-        buttons[i]->draw(forceDraw);
+        buttons[i]->draw();
     }
-    tft->unloadFont();
-    tft->loadFont(WEATHER_FONT);
-    slider->draw(forceDraw);
+    slider->draw();
     tft->unloadFont();
 }
 
@@ -111,11 +107,12 @@ void
 Keypad::
 re_draw(uint8_t idx)
 {
+    // slider
     if (idx == 0){
         return;
     }
     tft->loadFont(LATIN);
-    buttons[idx-1]->draw(true);
+    buttons[idx-1]->draw();
     tft->unloadFont();
 }
 

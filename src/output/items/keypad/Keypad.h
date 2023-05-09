@@ -5,7 +5,7 @@
 #include "../../../data_structures/Point.h"
 
 
-#define NUMBER_OF_KEYPAD_BUTTONS 29
+#define NUMBER_OF_KEYPAD_BUTTONS 26
 #define STARTING_Y 60
 #define KEYPAD_BUTTON_WIDTH 30
 #define KEYPAD_BUTTON_HEIGHT 40
@@ -32,7 +32,7 @@ class Keypad
         String slider
     );
     void 
-    draw(bool forceDraw);
+    draw();
 
     void 
     re_draw(uint8_t idx);

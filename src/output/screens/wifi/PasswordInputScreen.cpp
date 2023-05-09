@@ -23,10 +23,7 @@ load_main_(false), wifi_name("")
 
 PasswordInputScreen::
 ~PasswordInputScreen(){
-    delete enter_button;
-    delete exit_button;
-    delete inputfield;
-    delete keyboard;
+    clear_buttons();
 }
 
 void 
@@ -56,23 +53,20 @@ draw(bool forceDraw){
 void 
 PasswordInputScreen::
 check(Point* pos){
-    change_ = false;
     KeyInfo* info = keyboard->check(pos);
 
-    if (info)
+    switch(info->info)
     {
-        switch(info->info)
-        {
-            case IGNORE:
-                return;
-            case DELETE:
-                inputfield->del();
-                return;
-            case NORMAL_BUTTON:
-                inputfield->add_input(info->str);
-                return;
-        }
+        case IGNORE:
+            break;
+        case DELETE:
+            inputfield->del();
+            break;
+        case NORMAL_BUTTON:
+            inputfield->add_input(info->str);
+            break;
     }
+    delete info;
 
     if(enter_button->check(pos->x, pos->y)){
         enter_pwd();
@@ -83,8 +77,7 @@ check(Point* pos){
 
 void 
 PasswordInputScreen::
-enter_pwd()
-{
+enter_pwd(){
     String password = inputfield->get_input();
 
     char* ssid = new char [wifi_name.length()+1];
@@ -126,4 +119,5 @@ clear_buttons(){
     delete keyboard;
     delete enter_button;
     delete exit_button;
+    delete inputfield;
 }

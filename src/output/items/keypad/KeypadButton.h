@@ -22,8 +22,6 @@ class KeypadButton: public TouchButton
     uint16_t 
     text_color;
 
-    bool wrap;
-
     void
     draw_(uint16_t color);
 
@@ -36,13 +34,15 @@ class KeypadButton: public TouchButton
         int16_t height, 
         String name
     ): TouchButton(x,y,width,height),
-    name(name), wrap(false), tft(tft),
+    name(name), tft(tft),
     touch_color(0x2104),
-    text_color(TFT_LIGHTGREY)
-    {}
+    text_color(TFT_LIGHTGREY) {}
 
     void 
-    draw(bool forceDraw);
+    draw();
+
+    void
+    draw(bool) {}
 
     void 
     on_touch();
@@ -58,14 +58,7 @@ class KeypadButton: public TouchButton
     void
     set_text_color
     (uint16_t color)
-    {text_color = color;}
-    
-    /**
-     * @brief Set wrapping of the text
-     * 
-     */
-    void 
-    set_wrap();
+    {text_color = color;}    
 
     String 
     get_str();

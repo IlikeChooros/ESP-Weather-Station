@@ -3,6 +3,27 @@
 #include <TFT_eSPI.h> 
 #include "../../custom_font/fonts.h"
 
+#define BACKGROUND_COLOR 0x10C4
+
+void
+drawClear(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t bg_c 
+);
+
+void
+drawClearWH(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t bg_c 
+);
+
 /**
  * @brief Fuction drawing refresh button
  * 
@@ -113,5 +134,25 @@ drawEraseButton(
     uint16_t x,
     uint16_t y,
     uint16_t size,
+    uint16_t color 
+);
+
+void
+drawDeleteButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t color 
+);
+
+void
+drawCapsLockButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
     uint16_t color 
 );

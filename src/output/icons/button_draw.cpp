@@ -1,14 +1,33 @@
 #include "button_draw.h"
 
-/**
- * @brief Fuction drawing refresh button
- * 
- * @param tft 
- * @param x 
- * @param y 
- * @param size
- * @param color 
- */
+
+
+void
+drawClear(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t size,
+    uint16_t bg_c 
+)
+{
+    tft->fillRect(x, y, size, size, BACKGROUND_COLOR);
+}
+
+void
+drawClearWH(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t bg_c 
+)
+{
+    tft->fillRect(x, y, w, h, BACKGROUND_COLOR);
+}
+
+
 void
 drawRefreshButton(
     TFT_eSPI* tft,
@@ -227,3 +246,54 @@ drawDetailsButton(
     tft->fillCircle(x + size*0.5f, y + size*0.5f, size*0.3f, TFT_LIGHTGREY);
     tft->fillSmoothCircle(x + size*0.5f, y + size*0.5f, size*0.2f, color, TFT_LIGHTGREY);
 }
+
+void
+drawDeleteButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t color 
+)
+{
+    tft->fillRect(x, y, w, h, color);
+    tft->drawRect(x, y, w, h, TFT_WHITE);
+
+    tft->drawWideLine(x + 0.4f*w, y + 0.8f*h, x + 0.8f*w, y + 0.8f*h, 2, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.8f*w, y + 0.8f*h, x + 0.8f*w, y + 0.2f*h, 2, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.8f*w, y + 0.2f*h, x + 0.4f*w, y + 0.2f*h, 2, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.4f*w, y + 0.2f*h, x + 0.2f*w, y + 0.5f*h, 2, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.2f*w, y + 0.5f*h, x + 0.4f*w, y + 0.8f*h, 2, TFT_DARKGREY, color);
+
+
+    tft->drawWideLine(x + 0.5f*w, y + 0.3f*h, x + 0.7f*w, y + 0.7f*h, 2, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.7f*w, y + 0.3f*h, x + 0.5f*w, y + 0.7f*h, 2, TFT_DARKGREY, color);
+
+}
+
+void
+drawCapsLockButton(
+    TFT_eSPI* tft,
+    uint16_t x,
+    uint16_t y,
+    uint16_t w,
+    uint16_t h,
+    uint16_t color 
+)
+{
+    tft->fillRect(x, y, w, h, color);
+    tft->drawRect(x, y, w, h, TFT_WHITE);
+
+    tft->drawWideLine(x + 0.5f*w, y + 0.2f*h, x + 0.8f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.5f*w, y + 0.2f*h, x + 0.2f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+
+    tft->drawWideLine(x + 0.2f*w, y + 0.5f*h, x + 0.3f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.8f*w, y + 0.5f*h, x + 0.7f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+
+    tft->drawWideLine(x + 0.7f*w, y + 0.5f*h, x + 0.7f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.3f*w, y + 0.5f*h, x + 0.3f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
+
+    tft->drawWideLine(x + 0.3f*w, y + 0.8f*h, x + 0.7f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
+}
+

@@ -2,11 +2,8 @@
 
 void 
 KeypadButton::
-draw(bool forceDraw)
+draw()
 {
-    if(!forceDraw){
-        return;
-    }
     draw_(this->color);
 }
 
@@ -23,15 +20,8 @@ draw_(uint16_t color)
         return;
     }
 
-    if (wrap){
-        for (uint8_t i=0; i<name.length(); i++){
-            tft->setCursor(x+0.3f*width, y + i*25+height*0.1f);
-            tft->print(name[i]);
-        }
-    }
-    else{
-        tft->drawCentreString(name, x+width/2, y + (height - LATIN_HEIGHT)/2, 2);
-    }
+    tft->drawCentreString(name, x+width/2, y + (height - LATIN_HEIGHT)/2, 2);
+    
 }
 
 
@@ -57,10 +47,4 @@ String
 KeypadButton::
 get_str(){
     return this->name;
-}
-
-void 
-KeypadButton::
-set_wrap(){
-    this->wrap = true;
 }

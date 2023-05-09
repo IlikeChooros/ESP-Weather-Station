@@ -23,7 +23,6 @@
 
 #include "src/output/items/ScreenPointItem.h"
 
-#define BACKGROUND_COLOR 0x10C4
 #define X_1_SCREENS 6
 #define X_SCREENS 3
 #define Y_SCREENS 1

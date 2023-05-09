@@ -2,19 +2,21 @@
 
 #include "Keypad.h"
 #include "../InputField.h"
+#include "CustomButton.h"
 
 #define IGNORE 0
 #define DELETE 1
 #define NORMAL_BUTTON 2
 
 #define MAIN_QWERTY 0
-#define NUMBERS 1
-#define MAIN_QWERTY_CAPS 2
+#define MAIN_QWERTY_CAPS 1
+#define NUMBERS 2
+
 
 #define NUMBER_OF_KEYBOARDS 3
 
-#define CAPS_LOCK 28
-#define DELETE_IDX 20
+#define CAPS_LOCK 30
+#define DELETE_IDX 29
 
 struct 
 KeyInfo
@@ -25,7 +27,11 @@ KeyInfo
 
 class Keyboard
 {
+    TFT_eSPI* tft;
     Keypad** keypads;
+    CustomButton* delete_button;
+    CustomButton* caps_button;
+    KeypadButton* space_button;
 
     uint8_t current_keypad;
     uint8_t last_pressed;

@@ -2,44 +2,48 @@
 
 Keyboard::Keyboard(
     TFT_eSPI *tft
-): last_pressed(0), current_keypad(0)
+): last_pressed(0), current_keypad(0), tft(tft)
 {
 
-    String main_qwerty [28] = {
+    String main_qwerty [26] = {
         "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-        "a", "s", "d", "f", "g", "h", "j", "k", "l", "<<",
-        "z", "x", "c", "v", "b", "n", "m", "^"
+        "a", "s", "d", "f", "g", "h", "j", "k", "l", 
+            "z", "x", "c", "v", "b", "n", "m", 
     };
 
-    String numbers [28] = {
+    String numbers [26] = {
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-        "!", "@", "#", "$", "%", "^", "&", "*", "(", "<<",
-        ")", "[", "]", ";", ":", "+", "-", "."
+        "-", "@", "#", "%", "^", "$", "&", "*", "_", 
+            "!", ".", ",", "?", ";", "'", "/",
     };
 
-    String main_qwerty_C [28] = {
+    String main_qwerty_C [26] = {
         "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",     
-        "A", "S", "D", "F", "G", "H", "J", "K", "L", "<<",     
-        "Z", "X", "C", "V", "B", "N", "M", "^"
+        "A", "S", "D", "F", "G", "H", "J", "K", "L",      
+            "Z", "X", "C", "V", "B", "N", "M",
     };
 
     keypads = new Keypad* [NUMBER_OF_KEYBOARDS]{
         new Keypad(tft, main_qwerty, "123"),
-        new Keypad(tft, numbers, "Abc"),
-        new Keypad(tft, main_qwerty_C, "123")
+        new Keypad(tft, main_qwerty_C, "123"),
+        new Keypad(tft, numbers, "ABC")
     };
 
-    for (uint8_t i = 0; i < NUMBER_OF_KEYBOARDS; i++)
-    {
-        keypads[i]->set_color(0x9800, DELETE_IDX - 1);
-        keypads[i]->set_on_touch_color(0x4000, DELETE_IDX - 1);
-        keypads[i]->set_text_color(TFT_WHITE, DELETE_IDX - 1);
-        if (i != 1){
-            keypads[i]->set_color(0x03CF, CAPS_LOCK - 1);
-            keypads[i]->set_on_touch_color(0x0208, CAPS_LOCK - 1);
-        }
-    }
+    caps_button = new CustomButton(tft, 2, 207,
+    2*KEYPAD_BUTTON_WIDTH + 5, 30, 0x31C6);
+    caps_button
+    ->set_draw_wh(drawCapsLockButton)
+    ->touch_color(0x2104);
+
+    delete_button = new CustomButton(tft, 320 - 2*KEYPAD_BUTTON_WIDTH-2,
+    2*KEYPAD_BUTTON_HEIGHT + STARTING_Y + 24, 2*KEYPAD_BUTTON_WIDTH, KEYPAD_BUTTON_HEIGHT, 0x31C6);
+    delete_button
+    ->set_draw_wh(drawDeleteButton)
+    ->touch_color(0x2104);
+
+    space_button = new KeypadButton(tft, 70, 207, 180, 30, " ");
 }
+
 Keyboard::
 ~Keyboard(){
     for(uint8_t i=0; i<NUMBER_OF_KEYBOARDS; i++){
@@ -47,69 +51,100 @@ Keyboard::
         delete keypads[i];
     }
     delete [] keypads;
+    delete delete_button;
+    delete caps_button;
+    delete space_button;
 }
 
 KeyInfo*
 Keyboard::
 check(Point* pos)
 {
-    KeyInfo *ret;
+    KeyInfo *ret = new KeyInfo {IGNORE, ""}; ;
     int8_t idx = keypads[current_keypad]->check(pos);
-    
-    if (idx == -1){
-        return 0;
-    }
 
-    ret = new KeyInfo {0,""}; // *res = 0, *(res+1) = 0 == IGNORE
+    if (space_button->check(pos->x, pos->y)){
+        idx = NUMBER_OF_KEYPAD_BUTTONS + 1;
+    }
 
     switch(idx)
     {
+        case -1:
+            break;
         case 0: // slider
             change_keypad();
             return ret; 
-        case DELETE_IDX:
-            ret->info = DELETE;
-            break;
-        case CAPS_LOCK: 
-            if (current_keypad != NUMBERS){
-                caps();
-                return ret;
-            }
         default:
             ret->info = NORMAL_BUTTON;
-            ret->str = keypads[current_keypad]->get_button_str(idx-1);  
+            ret->str = idx != NUMBER_OF_KEYPAD_BUTTONS + 1 ? keypads[current_keypad]->get_button_str(idx-1) : space_button->get_str();  
+            if (idx != last_pressed){
+                re_draw();
+                last_pressed = idx;
+            }
+            return ret;
     }
 
-    if (idx != last_pressed){
+    if (delete_button->check(pos->x, pos->y)){
+        ret->info = DELETE;
         re_draw();
-        last_pressed = idx;
     }
-    return ret;
+    else if(current_keypad != NUMBERS && caps_button->check(pos->x, pos->y)){
+        caps();
+    }
+    return ret;    
 }
 
 
 void 
 Keyboard::
 change_keypad(){
-    current_keypad = current_keypad != NUMBERS ? NUMBERS : MAIN_QWERTY;
-    keypads[current_keypad]->draw(true);
+    if (current_keypad != NUMBERS){
+        current_keypad = NUMBERS;
+        caps_button->set_draw_wh(drawClearWH);
+        caps_button->draw(true);
+    }
+    else{
+        current_keypad = MAIN_QWERTY;
+        caps_button->set_draw_wh(drawCapsLockButton);
+        caps_button->draw(true);
+    }    
+    keypads[current_keypad]->draw();
 }
 
 void
 Keyboard::
 re_draw(){
+    if (last_pressed == NUMBER_OF_KEYPAD_BUTTONS + 1){
+        tft->loadFont(LATIN);
+        space_button->draw();
+        tft->unloadFont();
+        return;
+    }
+    caps_button->draw(true);      
     keypads[current_keypad]->re_draw(last_pressed);
+    delete_button->draw(true);    
 }
 
 void 
 Keyboard::
 caps(){
+    if (current_keypad){
+        
+    }
     current_keypad = current_keypad == MAIN_QWERTY ? MAIN_QWERTY_CAPS : MAIN_QWERTY; 
-    keypads[current_keypad]->draw(true);
+    keypads[current_keypad]->draw();
 }  
 
 void 
 Keyboard::
 draw(bool forceDraw){
-    keypads[current_keypad]->draw(forceDraw);
+    if (!forceDraw){
+        return;
+    }
+    caps_button->draw(true);
+    keypads[current_keypad]->draw();
+    delete_button->draw(forceDraw);
+    tft->loadFont(LATIN);
+    space_button->draw();
+    tft->unloadFont();
 }
