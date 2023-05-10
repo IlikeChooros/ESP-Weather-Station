@@ -101,7 +101,7 @@ draw_wifi_name(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    tft->setCursor(28,5);
+    tft->setCursor(28,7);
     tft->setTextColor(TFT_LIGHTGREY, bg_c);
     tft->loadFont(NOTE_FONT16);
     tft->print(WiFi.SSID());

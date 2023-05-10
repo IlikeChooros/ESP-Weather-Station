@@ -8,7 +8,8 @@ TouchScreen::TouchScreen(
     TFT_eSPI* tft, 
     uint16_t* data
 ): _tft(tft), isAsleep(false),
-lastTouch(0), _state(false){
+lastTouch(0), _state(false), 
+holdTime(HOLD_TIME){
     _tft->setTouch(data);
     this->on_down(do_nothing);
     this->on_left(do_nothing);
@@ -74,27 +75,29 @@ read_touch(){
     bool read_state = _tft->getTouch(&x,&y);
     
     // Screen is held 
-    if (read_state && millis() - lastTouch < HOLD_TIME){
+    if (_state && millis() - lastTouch > holdTime){
         lastTouch = millis();
-        isHeld = true;
+        holdTime = 100;
         return new Point(x,y);
     }
-
-    if (_state!=read_state){
-        lastTouch = millis();
-        _state = read_state;
-        // if this is an realse, then igonre
-        if (!read_state){
-            return 0;
-        }
-        return new Point(x,y);
+    
+    if (_state == read_state){
+        return 0;
     }
-    return 0;
+    // State change, either screen is being touched or relased
+    _state = read_state;    
+    if (!_state){
+        return 0;
+    }
+    // Screen is touched after a release
+    lastTouch = millis();
+    holdTime = HOLD_TIME;   
+    return new Point(x,y);
 }
 
 bool TouchScreen::
 hold(){
-    return this->isHeld;
+    return this->_state;
 }
 
 TouchScreen* TouchScreen::

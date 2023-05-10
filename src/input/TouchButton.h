@@ -3,12 +3,6 @@
 #include "Arduino.h"
 #include "../custom_font/fonts.h"
 
-#define X 0
-#define Y 1
-#define WID 2
-#define HEI 3
-#define IDX 4
-
 class
 TouchButton
 {

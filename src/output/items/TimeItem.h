@@ -37,7 +37,7 @@ class TimeItem: public WeatherItem
         bool hourly
     ): WeatherItem(_tft,x,y,background_color),
     font(font), unix(unix), color(color), 
-    hourly(hourly), prev_date(""), width(1), height(WEATHER_HEIGHT+3) {}
+    hourly(hourly), prev_date(""), width(1), height(WEATHER_HEIGHT+1) {}
 
     void 
     draw(bool forceDraw);

@@ -9,7 +9,7 @@ InputField::InputField(
 ): _prev_state(false), _cache_time(500),
 _last_check(millis()), tft(tft), _start_cursor(0), 
 width(width), height(height), x(x), y(y),
-input(""), to_print(""), _end_cursor(0) {}
+input(""), to_print(""), _end_cursor(0), _cursor_x(x + 3) {}
 
 void 
 InputField::
@@ -18,7 +18,9 @@ draw(bool forceDraw){
         return;
     }
 
-    //tft->loadFont(LATIN);
+    if (!tft->fontLoaded){
+        tft->loadFont(LATIN);
+    }
     tft->setTextColor(TFT_WHITE, INPUT_FIELD_BG);
 
     tft->fillRect(x,y,width,height, INPUT_FIELD_BG);
@@ -56,7 +58,7 @@ del(){
     this->input.remove(_end_cursor-1);
     tft->loadFont(LATIN);
     _end_cursor = input.length();
-    while (_start_cursor > 0 && tft->textWidth(input.substring(_start_cursor, _end_cursor)) <= width - 30){
+    while (_start_cursor > 0 && tft->textWidth(input.substring(_start_cursor, _end_cursor)) < width - 30){
         _start_cursor--;
     }
     to_print = input.substring(_start_cursor, _end_cursor);

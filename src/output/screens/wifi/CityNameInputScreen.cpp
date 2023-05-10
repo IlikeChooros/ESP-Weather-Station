@@ -60,8 +60,10 @@ void
 CityNameInputScreen::
 check(Point* pos)
 {
-    change_ = return_button->check(pos->x, pos->y);
-
+    if (return_button->check(pos->x, pos->y)){
+        change_ = true;
+        return;
+    }
     if(enter_button->check(pos->x, pos->y)){
         enter();
         return;
@@ -166,6 +168,8 @@ override_location(){
         }
         // User exited override
         if(!set_sc->picked()){
+            tft->fillScreen(bg_c);
+            draw(true);
             return;
         }
         // User chose city to override

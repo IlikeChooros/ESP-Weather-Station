@@ -9,7 +9,7 @@
 #define MIN_VERTICAL 25
 
 #define SLEEP_TIME 60000
-#define HOLD_TIME 350
+#define HOLD_TIME 500
 
 class TouchScreen
 {
@@ -17,9 +17,9 @@ class TouchScreen
 
     bool _state;
     bool isAsleep;
-    bool isHeld;
 
     uint64_t lastTouch;
+    uint16_t holdTime;
 
     void (*_on_left)();
     void (*_on_right)();

@@ -1,10 +1,10 @@
 #pragma once
 /*
 Include your custom fonts here.
-All of the fonts are in Arial font.
+All of the fonts used by me are in Arial font.
 
-If you want to create your own font then:
-Follow strictly instructions in: TFT_eSPI/Tools/Create_Smooth_Font/Create_font
+If you want to create your own font then
+follow strictly instructions in: TFT_eSPI/Tools/Create_Smooth_Font/Create_font
 
 Here are unicode block I used:
     0x002C, 0x002F, // Basic Latin letterns only
@@ -41,7 +41,6 @@ It's letters only: Basic Latin and Latin-1 Supplement
 */
 #ifndef EXTENDED_LATIN
     #define EXTENDED_LATIN "ExtendedLatin28"
-    #define EXTENDED_HEIGHT 26
 #endif
 
 /*
@@ -61,7 +60,6 @@ It's letters only Basic Latin
     #define NOTE_FONT
     #define NOTE_FONT12 "Arial12"
     #define NOTE_FONT16 "Arial16"
-    #define NOTE_HEIGHT 10
 #endif
 
 /*
@@ -76,7 +74,7 @@ Can display for example:
 */
 #ifndef WEATHER_FONT
     #define WEATHER_FONT "Weather16"
-    #define WEATHER_HEIGHT 14
+    #define WEATHER_HEIGHT 16
 #endif    
 
 /*
