@@ -13,17 +13,19 @@ class InputField
 {
     TFT_eSPI* tft;
     String input;
-    String cursor;
+    String to_print;
 
     int16_t x;
     int16_t y;
     int16_t width;
     int16_t height;
-    uint16_t last_lenght;
-    uint16_t last_print;
+
+    int16_t _start_cursor;
+    int16_t _end_cursor;
+
 
     bool _prev_state;
-    int16_t _cursor_x;
+    int16_t _cursor_x;    
     uint64_t _cache_time;
     uint64_t _last_check;
     
@@ -52,6 +54,10 @@ class InputField
         String input
     );
 
+    /// @brief Deletes 1 character from input
+    void 
+    del();
+
     /**
      * @brief Get the input
      * 
@@ -60,8 +66,7 @@ class InputField
     String
     get_input();
 
-    void 
-    del();
+    
 
     /// @brief Does the blinking effect on cursor
     void

@@ -1,39 +1,32 @@
 #include "DateFormat.h"
 
-void 
-DateFormat::
+void DateFormat::
 init(){
     this->getUpdate = false;
 }
 
-void 
-DateFormat::
+void DateFormat::
 set_date(struct tm* timeinfo){
     this->timeinfo = timeinfo;
 }
 
-struct tm 
-DateFormat::
+struct tm DateFormat::
 get_date(){
     return *this->timeinfo;
 }
 
-void 
-DateFormat::
+void DateFormat::
 set_update(bool update){
     getUpdate = update;
 }
 
-bool 
-DateFormat::
+bool DateFormat::
 get_update(){
     return this->getUpdate;
 }
 
-bool 
-DateFormat::
-add_second()
-{
+bool DateFormat::
+add_second(){
     timeinfo->tm_sec++;
     if (this->getUpdate){
         getUpdate = !getLocalTime(timeinfo);
@@ -89,10 +82,8 @@ add_second()
     return true;
 }
 
-String 
-DateFormat::
-formatDateInfo()
-{
+String DateFormat::
+formatDateInfo(){
     String weekdays[7] = {"Sunday ", "Monday ", "Tuesday ", "Wednesday ", "Thursday ", "Friday ", "Saturday "};
     String months[12] = {"Jan ", "Feb ", "Mar ", "Apr ",
                          "May ", "Jun ", "Jul ", "Aug ",
@@ -108,10 +99,8 @@ formatDateInfo()
     return date;
 }
 
-String 
-DateFormat::
-formatTimeInfo()
-{
+String DateFormat::
+formatTimeInfo(){
     String time = "";
     time += String(timeinfo->tm_hour);
     time += ":";

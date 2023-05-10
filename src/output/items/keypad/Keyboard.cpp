@@ -2,8 +2,7 @@
 
 Keyboard::Keyboard(
     TFT_eSPI *tft
-): last_pressed(0), current_keypad(0), tft(tft)
-{
+): last_pressed(0), current_keypad(0), tft(tft){
 
     String main_qwerty [26] = {
         "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
@@ -42,6 +41,10 @@ Keyboard::Keyboard(
     ->touch_color(0x2104);
 
     space_button = new KeypadButton(tft, 70, 207, 180, 30, " ");
+
+    buttons = new TouchButton* [3]{
+        caps_button, delete_button, space_button
+    };
 }
 
 Keyboard::
@@ -51,6 +54,7 @@ Keyboard::
         delete keypads[i];
     }
     delete [] keypads;
+    delete [] buttons;
     delete delete_button;
     delete caps_button;
     delete space_button;
@@ -60,11 +64,11 @@ KeyInfo*
 Keyboard::
 check(Point* pos)
 {
-    KeyInfo *ret = new KeyInfo {IGNORE, ""}; ;
+    KeyInfo *ret = new KeyInfo {IGNORE, ""};
     int8_t idx = keypads[current_keypad]->check(pos);
 
     if (space_button->check(pos->x, pos->y)){
-        idx = NUMBER_OF_KEYPAD_BUTTONS + 1;
+        idx = SPACE;
     }
 
     switch(idx)
@@ -73,10 +77,13 @@ check(Point* pos)
             break;
         case 0: // slider
             change_keypad();
+            if (last_pressed > NUMBER_OF_KEYPAD_BUTTONS){
+                buttons[last_pressed - NUMBER_OF_KEYPAD_BUTTONS - 1]->draw(true);
+            }
             return ret; 
         default:
             ret->info = NORMAL_BUTTON;
-            ret->str = idx != NUMBER_OF_KEYPAD_BUTTONS + 1 ? keypads[current_keypad]->get_button_str(idx-1) : space_button->get_str();  
+            ret->str = idx != SPACE ? keypads[current_keypad]->get_button_str(idx-1) : space_button->get_str();  
             if (idx != last_pressed){
                 re_draw();
                 last_pressed = idx;
@@ -86,10 +93,17 @@ check(Point* pos)
 
     if (delete_button->check(pos->x, pos->y)){
         ret->info = DELETE;
-        re_draw();
+        if (last_pressed != DELETE_IDX){
+            re_draw();
+        }        
+        last_pressed = DELETE_IDX;
     }
     else if(current_keypad != NUMBERS && caps_button->check(pos->x, pos->y)){
         caps();
+        if (last_pressed == DELETE_IDX || last_pressed == 0){
+            re_draw();
+        }
+        last_pressed = CAPS_LOCK;
     }
     return ret;    
 }
@@ -98,39 +112,44 @@ check(Point* pos)
 void 
 Keyboard::
 change_keypad(){
-    if (current_keypad != NUMBERS){
-        current_keypad = NUMBERS;
-        caps_button->set_draw_wh(drawClearWH);
-        caps_button->draw(true);
+    auto draw = drawCapsLockButton;
+    switch(current_keypad){
+        case NUMBERS:
+            current_keypad = MAIN_QWERTY;
+            break;
+        default:
+            draw = drawClearWH;
+            current_keypad = NUMBERS;
     }
-    else{
-        current_keypad = MAIN_QWERTY;
-        caps_button->set_draw_wh(drawCapsLockButton);
-        caps_button->draw(true);
-    }    
+    caps_button->set_draw_wh(draw);
+    caps_button->draw(true); 
     keypads[current_keypad]->draw();
 }
 
 void
 Keyboard::
 re_draw(){
-    if (last_pressed == NUMBER_OF_KEYPAD_BUTTONS + 1){
-        tft->loadFont(LATIN);
-        space_button->draw();
-        tft->unloadFont();
-        return;
+    switch(last_pressed){
+        case SPACE:
+            tft->loadFont(LATIN);
+            space_button->draw(true);
+            tft->unloadFont();
+            return;
+        case DELETE_IDX:
+            delete_button->draw(true);
+            return;
+        case CAPS_LOCK:
+            caps_button->draw(true);
+            return;
+        default:
+            keypads[current_keypad]->re_draw(last_pressed);
+            return;
     }
-    caps_button->draw(true);      
-    keypads[current_keypad]->re_draw(last_pressed);
-    delete_button->draw(true);    
 }
 
 void 
 Keyboard::
 caps(){
-    if (current_keypad){
-        
-    }
     current_keypad = current_keypad == MAIN_QWERTY ? MAIN_QWERTY_CAPS : MAIN_QWERTY; 
     keypads[current_keypad]->draw();
 }  
@@ -143,8 +162,8 @@ draw(bool forceDraw){
     }
     caps_button->draw(true);
     keypads[current_keypad]->draw();
-    delete_button->draw(forceDraw);
+    delete_button->draw(true);
     tft->loadFont(LATIN);
-    space_button->draw();
+    space_button->draw(true);
     tft->unloadFont();
 }

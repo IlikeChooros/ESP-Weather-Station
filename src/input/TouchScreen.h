@@ -1,30 +1,25 @@
 #pragma once
 
 #include <TFT_eSPI.h>
-#include <SPI.h>
 #include "../data_structures/Point.h"
 
 #define VERTICAL_VAL 15
 #define HORIZONTAL_VAL 20
-
 #define MIN_HORIZONTAL 30
 #define MIN_VERTICAL 25
 
-#define TOUCH_VAL 100 
-
 #define SLEEP_TIME 60000
+#define HOLD_TIME 350
 
 class TouchScreen
 {
     TFT_eSPI* _tft;
-    
-    uint16_t max_interval;
 
-    bool _lastState;
     bool _state;
     bool isAsleep;
+    bool isHeld;
 
-    uint64_t _lastDebounceTime;
+    uint64_t lastTouch;
 
     void (*_on_left)();
     void (*_on_right)();
@@ -52,6 +47,12 @@ class TouchScreen
      */
     Point* 
     read_touch();
+
+    /*
+        @return True - screen is touched and held
+    */ 
+    bool
+    hold();
 
     /**
      * @brief Set function to be called when screens is touched on the left side

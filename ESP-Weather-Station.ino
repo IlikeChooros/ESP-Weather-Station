@@ -25,8 +25,6 @@
 
 #define X_1_SCREENS 6
 #define X_SCREENS 3
-#define Y_SCREENS 1
-#define SCREEN_LIST 2
 #define MINUTES_15 900000
 #define SECOND_10 10000
 #define SECOND 1000

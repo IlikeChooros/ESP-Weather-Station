@@ -39,10 +39,8 @@ class KeypadButton: public TouchButton
     text_color(TFT_LIGHTGREY) {}
 
     void 
-    draw();
+    draw(bool);
 
-    void
-    draw(bool) {}
 
     void 
     on_touch();

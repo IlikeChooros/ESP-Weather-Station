@@ -6,11 +6,10 @@ InputField::InputField(
     int16_t y, 
     int16_t width, 
     int16_t height
-): _prev_state(false), 
-_cache_time(500), cursor(""),
-_last_check(millis()), tft(tft), x(x), 
-y(y), width(width), height(height),
-input(""), last_lenght(0), last_print(0) {}
+): _prev_state(false), _cache_time(500),
+_last_check(millis()), tft(tft), _start_cursor(0), 
+width(width), height(height), x(x), y(y),
+input(""), to_print(""), _end_cursor(0) {}
 
 void 
 InputField::
@@ -19,7 +18,7 @@ draw(bool forceDraw){
         return;
     }
 
-    tft->loadFont(LATIN);
+    //tft->loadFont(LATIN);
     tft->setTextColor(TFT_WHITE, INPUT_FIELD_BG);
 
     tft->fillRect(x,y,width,height, INPUT_FIELD_BG);
@@ -28,14 +27,7 @@ draw(bool forceDraw){
     uint16_t x = this->x + 3,
              y = this->y + (height - LATIN_HEIGHT)/2;
 
-    String temp;
-    if (input.length() < 13){
-        temp = input;
-    }
-    else{
-        temp = input.substring(input.length()-12,input.length());
-    }
-    last_lenght = tft->drawString(temp, x, y);
+    tft->drawString(to_print, x, y);
     _cursor_x = tft->getCursorX();
     tft->unloadFont();
     blink(false);
@@ -43,16 +35,16 @@ draw(bool forceDraw){
 
 void 
 InputField::
-add_input(String input){
-    this->input += input;
-    cursor = input;
+add_input(String inp){
+    this->input += inp;
+    _end_cursor = input.length();
+    tft->loadFont(LATIN);
+    while (tft->textWidth(input.substring(_start_cursor, _end_cursor)) >= width - 30){
+        _start_cursor++;
+    }    
+    to_print = input.substring(_start_cursor, _end_cursor);
     draw(true);
-}
-
-String 
-InputField::
-get_input(){
-    return this->input;
+    tft->unloadFont();
 }
 
 void 
@@ -61,9 +53,21 @@ del(){
     if (input == "" || input.length() == 0){
         return;
     }
-    cursor = String(input.charAt(input.length()-1));
-    this->input.remove(input.length()-1);
+    this->input.remove(_end_cursor-1);
+    tft->loadFont(LATIN);
+    _end_cursor = input.length();
+    while (_start_cursor > 0 && tft->textWidth(input.substring(_start_cursor, _end_cursor)) <= width - 30){
+        _start_cursor--;
+    }
+    to_print = input.substring(_start_cursor, _end_cursor);
     draw(true);
+    tft->unloadFont();
+}
+
+String 
+InputField::
+get_input(){
+    return this->input;
 }
 
 void

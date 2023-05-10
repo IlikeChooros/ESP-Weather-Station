@@ -7,17 +7,9 @@ void do_nothing(){
 TouchScreen::TouchScreen(
     TFT_eSPI* tft, 
     uint16_t* data
-)
-{
-    this->_tft = tft;
+): _tft(tft), isAsleep(false),
+lastTouch(0), _state(false){
     _tft->setTouch(data);
-    max_interval = 20;
-    _state = false;
-    _lastState = false;
-    _lastDebounceTime = 0;
-    isAsleep = false;
-
-
     this->on_down(do_nothing);
     this->on_left(do_nothing);
     this->on_right(do_nothing);
@@ -26,39 +18,31 @@ TouchScreen::TouchScreen(
     this->on_wakeup(do_nothing);
 }
 
-void 
-TouchScreen::read()
-{
+void TouchScreen::
+read(){
     uint16_t x=0,y=0;
     bool state = _tft->getTouch(&x,&y);
 
-    if (_lastState!=state){
-        _lastDebounceTime = millis();
+    if (state){
+        lastTouch = millis();
     }
-
     else{
-        if (!isAsleep && millis() - _lastDebounceTime > SLEEP_TIME){
+        if (!isAsleep && millis() - lastTouch > SLEEP_TIME){
             isAsleep = true;
             _on_sleep();
             return;
         }
     }
 
-    if (_state!=state && (millis()-_lastDebounceTime)> max_interval)
-    {
-        _state=state;
+    if (_state!=state){
+        _state = state;
 
         // if this is an realse, then igonre
-        if (!state)
-        {
-            _lastState = state;
+        if (!state){
             return;
         }
-
-        if (isAsleep)
-        {
+        if (isAsleep){
             isAsleep = false;
-            _lastState = state;
             _on_wakeup();
             return;
         }
@@ -66,8 +50,7 @@ TouchScreen::read()
         // dividing screen to 4 triangles
         if (y > 0.75f*x)
         {
-            if ( y < -0.75f*x + 240)
-            {
+            if ( y < -0.75f*x + 240){
                 this->_on_left();
             }
             else{
@@ -75,8 +58,7 @@ TouchScreen::read()
             }
         }
         else{
-            if ( y < -0.75f*x + 240)
-            {
+            if ( y < -0.75f*x + 240){
                 this->_on_up();
             }
             else{
@@ -84,84 +66,69 @@ TouchScreen::read()
             }
         }
     }
-    _lastState = state;
 }
 
-Point* 
-TouchScreen::read_touch()
-{
+Point* TouchScreen::
+read_touch(){
     uint16_t x=0,y=0;
-    bool state = _tft->getTouch(&x,&y);
+    bool read_state = _tft->getTouch(&x,&y);
     
-    if (_lastState!=state){
-        _lastDebounceTime = millis();
-    }
-
-    if (_state!=state && (millis()-_lastDebounceTime)> max_interval){
-        _state=state;
-
-        // if this is an realse, then igonre
-        if (!state){
-            _lastState = state;
-            return 0;
-        }
-
+    // Screen is held 
+    if (read_state && millis() - lastTouch < HOLD_TIME){
+        lastTouch = millis();
+        isHeld = true;
         return new Point(x,y);
     }
-    _lastState = state;
+
+    if (_state!=read_state){
+        lastTouch = millis();
+        _state = read_state;
+        // if this is an realse, then igonre
+        if (!read_state){
+            return 0;
+        }
+        return new Point(x,y);
+    }
     return 0;
 }
 
-TouchScreen* 
-TouchScreen::on_left(
-    void(*left)(void)
-)
-{
+bool TouchScreen::
+hold(){
+    return this->isHeld;
+}
+
+TouchScreen* TouchScreen::
+on_left(void(*left)(void)){
     this->_on_left = left;
     return this;
 }
 
-TouchScreen* 
-TouchScreen::on_right(
-    void(*right)(void)
-)
-{
+TouchScreen* TouchScreen::
+on_right(void(*right)(void)){
     this->_on_right = right;
     return this;
 }
 
-TouchScreen* 
-TouchScreen::on_down(
-    void(*down)(void)
-)
-{
+TouchScreen* TouchScreen::
+on_down(void(*down)(void)){
     this->_on_down = down;
     return this;
 }
 
-TouchScreen* 
-TouchScreen::on_up(
-    void(*up)(void)
-)
-{
+TouchScreen* TouchScreen::
+on_up(void(*up)(void)){
     this->_on_up = up;
     return this;
 }
 
-TouchScreen* 
-TouchScreen::on_sleep(
-    void(*sleep)()
-)
-{
+TouchScreen* TouchScreen::
+on_sleep(void(*sleep)()){
     this->_on_sleep = sleep;
     return this;
 }
 
-TouchScreen* 
-TouchScreen::on_wakeup(
-    void(*wake_up)()
-)
-{
+TouchScreen* TouchScreen::
+on_wakeup(void(*wake_up)()){
     this->_on_wakeup = wake_up;
     return this;
 }

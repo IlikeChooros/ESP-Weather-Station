@@ -61,6 +61,12 @@ CityNameInputScreen::
 check(Point* pos)
 {
     change_ = return_button->check(pos->x, pos->y);
+
+    if(enter_button->check(pos->x, pos->y)){
+        enter();
+        return;
+    }
+
     KeyInfo* info = keyboard->check(pos);
 
     switch(info->info)
@@ -74,11 +80,7 @@ check(Point* pos)
             inputfield->add_input(info->str);
             break;
     }
-    delete info;
-
-    if(enter_button->check(pos->x, pos->y)){
-        enter();
-    }
+    delete info;    
 }
 
 void
@@ -104,7 +106,7 @@ enter()
 void
 CityNameInputScreen::
 set_new_location(){
-    GeoLocScreen* geo_sc = new GeoLocScreen(tft, wclient, ts);
+    std::unique_ptr<GeoLocScreen> geo_sc(new GeoLocScreen(tft, wclient, ts));
     
     // set_loaction also resets waitForGeoLoc and picked flags
     geo_sc->set_location(inputfield->get_input());
@@ -124,13 +126,11 @@ set_new_location(){
         tft->fillScreen(bg_c);
         draw(true);
     }
-    delete geo_sc;  
 }
 
 void
 CityNameInputScreen::
-override_location()
-{
+override_location(){
     std::unique_ptr<GeoLocScreen> geo_sc(new GeoLocScreen(tft, wclient, ts));
 
     tft->fillScreen(bg_c);
@@ -148,8 +148,8 @@ override_location()
         using setscreen = settings::PickOptionScreen;
         std::unique_ptr<setscreen> set_sc(new setscreen(tft, ts));
 
-        auto cities = read_mem.cities(false);
         // Read from EEPROM saved cities
+        auto cities = read_mem.cities(false);
         std::vector<print_data> data;
         for (auto i : cities){
             data.push_back(print_data(i.first, LATIN, TFT_LIGHTGREY, true));

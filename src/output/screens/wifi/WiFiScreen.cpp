@@ -26,8 +26,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
     tft->drawCentreString(ssid, 160, 95, 2);
 
     tft->setCursor(100, 120);
-    tft->setTextSize(3);
-    tft->setTextColor(TFT_DARKGREEN);
     
     uint8_t number_of_tries = 0;
 
@@ -41,8 +39,6 @@ bool WiFiScreen::draw_connecting_to_wifi(String wifi_name, char* ssid, char* pas
             number_of_tries++;
 
             if (number_of_tries == 10){
-                tft->setTextSize(1);
-                tft->setTextColor(TFT_RED);
                 tft->drawCentreString("Failed.", 160, 115, 2);
                 delay(1000);
 

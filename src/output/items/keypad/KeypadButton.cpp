@@ -1,16 +1,12 @@
 #include "KeypadButton.h"
 
-void 
-KeypadButton::
-draw()
-{
+void KeypadButton::
+draw(bool){
     draw_(this->color);
 }
 
-void 
-KeypadButton::
-draw_(uint16_t color)
-{
+void KeypadButton::
+draw_(uint16_t color){
     tft->setTextColor(text_color, color);
     tft->fillRect(x,y,width,height,color);
     tft->drawRect(x,y,width,height,text_color);
@@ -25,15 +21,13 @@ draw_(uint16_t color)
 }
 
 
-KeypadButton*
-KeypadButton::
+KeypadButton* KeypadButton::
 custom_font(String font){
     this->font = font;
     return this;
 }
 
-void 
-KeypadButton::
+void KeypadButton::
 on_touch(){
     if (font.isEmpty())
         tft->loadFont(LATIN);
@@ -43,8 +37,7 @@ on_touch(){
     tft->unloadFont();
 }
 
-String 
-KeypadButton::
+String KeypadButton::
 get_str(){
     return this->name;
 }

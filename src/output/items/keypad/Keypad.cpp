@@ -97,9 +97,9 @@ Keypad::
 draw(){
     tft->loadFont(LATIN);
     for (uint8_t i=0; i < NUMBER_OF_KEYPAD_BUTTONS; i++){
-        buttons[i]->draw();
+        buttons[i]->draw(true);
     }
-    slider->draw();
+    slider->draw(true);
     tft->unloadFont();
 }
 
@@ -112,7 +112,7 @@ re_draw(uint8_t idx)
         return;
     }
     tft->loadFont(LATIN);
-    buttons[idx-1]->draw();
+    buttons[idx-1]->draw(true);
     tft->unloadFont();
 }
 

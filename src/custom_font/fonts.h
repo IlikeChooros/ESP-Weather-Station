@@ -103,5 +103,5 @@ With those letters you can formulate words:
     Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 */ 
 #ifndef DATE_FONT
-    #define DATE_FONT "Date28"
+    #define DATE_FONT "Date26"
 #endif
