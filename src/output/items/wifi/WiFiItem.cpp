@@ -28,18 +28,18 @@ matchIcon(){
         idx = LOST_WIFI;
         return new WiFiIconLost(tft, x, y, size, background_color);
     }
-    // strenght (-35 to 0)
-    if (strenght > -35){
+    // strenght (-25 to 0)
+    if (strenght > -25){
         idx = SUPER_WIFI;
         return new WiFiIconSuperStrong(tft,x,y,size,background_color);
     }
-    // strenght (-55 to -35)
-    else if(strenght > - 55){
+    // strenght (-50 to -25)
+    else if(strenght > - 50){
         idx = STRONG_WIFI;
         return new WiFiIconStrong(tft,x,y,size,background_color);
     }
-    // strenght (-75 to -55)
-    else if (strenght > -85){
+    // strenght (-75 to -50)
+    else if (strenght > -75){
         idx = MEDIUM_WIFI;
         return new WiFiIconMedium(tft,x,y,size,background_color);
     }

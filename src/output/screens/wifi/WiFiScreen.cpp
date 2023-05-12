@@ -4,10 +4,14 @@ WiFiScreen::WiFiScreen
 (TFT_eSPI* tft, uint16_t bg_c):
 tft(tft), bg_c(bg_c) {}
 
-void 
-animate(TFT_eSPI* tft, uint8_t idx){
-    drawWifi(tft, 160, 120, 30, 3, TFT_DARKGREY);
-    
+bool refresh(int8_t strenght, int8_t& prev_idx){
+    strenght = strenght < -100 ? -100 : strenght;
+    int8_t idx = strenght/(-25);
+    if (prev_idx != idx){
+        prev_idx = idx;
+        return true;
+    }
+    return false;
 }
 
 //*****************************
@@ -16,6 +20,11 @@ animate(TFT_eSPI* tft, uint8_t idx){
 //*****************************
 bool WiFiScreen::
 draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
+    uint8_t i = 0;
+    while(wifi_name != WiFi.SSID(i)){
+        ++i;
+    }
+    // Mmmm i like spaghetti
     tft->fillRect(55, 70, 210, 100, 0x10A3);
     tft->drawRect(55, 70, 210, 100, TFT_WHITE);
 
@@ -23,37 +32,40 @@ draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
     std::unique_ptr<char[]> ptr_pass(pass);
 
     tft->loadFont(NOTE_FONT16);
-    tft->setTextColor(TFT_GREEN, TFT_DARKGREY);
+    tft->setTextColor(TFT_LIGHTGREY, 0x10A3);
     tft->setCursor(90, 75);
     tft->print("Connecting to:");
     tft->drawCentreString(ssid, 160, 95, 2);
     tft->unloadFont();
 
-    drawWifi(tft, 215, 110, 30, 3, 0x10A3);
+    std::unique_ptr<WiFiStrenghtItem> wifi(new WiFiStrenghtItem(tft, 200, 115, 35, 0x10A3));
+    wifi->draw(WiFi.RSSI(i));
 
-    ScreenPointItem sci(tft, 70, 130, 0x10A3, 30);
-    
-    sci.draw(3, 1, 1, 1);
+    std::unique_ptr<ScreenPointItem> sci(new ScreenPointItem(tft, 115, 135, 0x10A3, 20));
+    sci->draw(4, 1, 1, 1);
 
     uint8_t number_of_tries = 0;
     uint32_t timer = millis();
+    int8_t prev_idx = 0;
+    refresh(WiFi.RSSI(i), prev_idx);
 
     while(WiFi.status() != WL_CONNECTED){
-        if (millis() - timer < 1000){
+        if (millis() - timer < 500){
+            if (refresh(WiFi.RSSI(i), prev_idx)){
+                wifi->draw(WiFi.RSSI(i));
+            }            
             continue;
         }
         number_of_tries++;
-        sci.draw(3, (number_of_tries+1)%3 + 1, 1, 1);
+        sci->draw(4, 1, (number_of_tries)%4 + 1, 1);
         if (number_of_tries == 10){
-            delay(1000);
-
-            tft->fillScreen(bg_c);
-            draw(wifi_name);
-            draw(true);
-            
+            tft->drawRect(55, 70, 210, 100, TFT_RED);
+            delay(1000);            
             return false;
         }
         timer = millis();
     }
+    tft->drawRect(55, 70, 210, 100, TFT_DARKGREEN);
+    delay(1000);
     return true;
 }

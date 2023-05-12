@@ -8,7 +8,7 @@
 #include "../../../data_structures/Point.h"
 #include "../../items/memory/ReadMem.h"
 #include "../../../custom_font/fonts.h"
-#include "../../icons/Icons.h"
+#include "../../items/wifi/WiFiStrenghtItem.h"
 #include "../../items/ScreenPointItem.h"
 
 class WiFiScreen

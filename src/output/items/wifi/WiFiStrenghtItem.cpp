@@ -13,19 +13,19 @@ draw(int8_t strenght){
 Icon* 
 WiFiStrenghtItem::
 matchIcon(){
-    // strenght (-35 to 0)
-    if (strenght > -35){
+    // strenght (-25 to 0)
+    if (strenght > -25){
         return new WiFiIconSuperStrong(tft,x,y,size,background_color);
     }
-    // strenght (-55 to -35)
-    else if(strenght > - 55){
+    // strenght (-50 to -25)
+    else if(strenght > - 50){
         return new WiFiIconStrong(tft,x,y,size,background_color);
     }
-    // strenght (-75 to -55)
-    else if (strenght > -85){
+    // strenght (-75 to -50)
+    else if (strenght > -75){
         return new WiFiIconMedium(tft,x,y,size,background_color);
     }
-    // strenght (-128 to -55)
+    // strenght (-128 to -75)
     else {
         return new WiFiIconWeak(tft,x,y,size,background_color);
     }

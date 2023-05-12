@@ -6,7 +6,7 @@ ScreenPointItem::ScreenPointItem(
     uint16_t y, 
     uint16_t bg_c,
     uint8_t size
-): _tft(tft), x(x), y(y), bg_c(bg_c), prev_lenght(0),
+): _tft(tft), x(x), y(y), bg_c(bg_c), prev_lenght(3),
 colors(get_colors_grey_fade(3)), size(size) {}
 
 ScreenPointItem::
