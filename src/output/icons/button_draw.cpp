@@ -97,9 +97,13 @@ drawRightArrow(
     uint16_t color 
 )
 {
-    tft->drawRoundRect(x, y, w, h, 0.1f*h, TFT_DARKGREY);
-    tft->fillTriangle(x+0.7f*w, y, x+w, y+0.5f*h, x+0.7f*w, y+h, color);
-    tft->fillRect(x, y+0.3f*h, 0.7*w, 0.4f*h, color);
+    // 1st arrow
+    tft->drawWideLine(x + 0.1f*w, y + 0.2f*h, x + 0.4f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.4f*w, y + 0.5f*h, x + 0.1f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
+
+    // 2nd arrow
+    tft->drawWideLine(x + 0.6f*w, y + 0.2f*h, x + 0.9f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.9f*w, y + 0.5f*h, x + 0.6f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
 }
 
 void
@@ -112,9 +116,13 @@ drawLeftArrow(
     uint16_t color 
 )
 {
-    tft->drawRoundRect(x, y, w, h, 0.1f*h, TFT_DARKGREY);
-    tft->fillTriangle(x+0.3f*w, y, x, y+0.5f*h, x+0.3f*w, y+h, color);
-    tft->fillRect(x+0.3f*h, y+0.3f*h, 0.7*w, 0.4f*h, color);
+    // 1st arrow
+    tft->drawWideLine(x + 0.4f*w, y + 0.2f*h, x + 0.1f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.1f*w, y + 0.5f*h, x + 0.4f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
+
+    // 2nd arrow
+    tft->drawWideLine(x + 0.9f*w, y + 0.2f*h, x + 0.6f*w, y + 0.5f*h, 3, TFT_DARKGREY, color);
+    tft->drawWideLine(x + 0.6f*w, y + 0.5f*h, x + 0.9f*w, y + 0.8f*h, 3, TFT_DARKGREY, color);
 }
 
 void

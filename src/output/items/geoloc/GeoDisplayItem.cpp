@@ -6,60 +6,47 @@ GeoDisplayItem(
     City_info& city_info,
     uint16_t x,
     uint16_t y,
-    uint16_t w,
-    uint16_t h
+    uint16_t bg_c
 ): tft(tft), info(city_info),
-x(x), y(y), h(h), w(w) {}
-
-void
-GeoDisplayItem::
-draw()
-{
-    tft->fillRect(x,y,w,h,TFT_BLACK);
-    constexpr uint8_t offset = 10;
-
-    tft->setTextColor(TFT_LIGHTGREY, TFT_BLACK);
-
-    uint16_t x = this->x + 5,
-             y = this->y + 5;
+x(x), y(y), bg_c(bg_c),
+state(city_info.state != "null"),
+to_print(info.name + " " + info.country) {
 
     tft->loadFont(EXTENDED_LATIN);
-    tft->drawCentreString(info.name, x+w/2, y, 2);
+    uint16_t len;
+
+    len = tft->textWidth(to_print);
+    y += tft->fontHeight() + 7;
     tft->unloadFont();
-
-    tft->loadFont(LATIN);
-    y += tft->fontHeight() + 5;
-    tft->setCursor(x,y);
-    tft->print("Country:");
-    y += tft->fontHeight();
-    tft->setCursor(x+offset,y);
-    tft->print(info.country);
-    y += tft->fontHeight();
-
-    if (info.state != "null"){
-        tft->setCursor(x,y);
-        y += tft->fontHeight();
-        tft->print("State:");
-
-        tft->setCursor(x+offset,y);
-        y += tft->fontHeight();
-        tft->print(info.state);
+    
+    if (state){
+        tft->loadFont(EXTENDED_LATIN_SMALL);
+        len = tft->textWidth(info.state) > len ? tft->textWidth(info.state) : len;
+        y += tft->fontHeight() + 5;
+        tft->unloadFont();
     }
+    this->w = len + 4;
+    this->h = y - this->y;        
+}
 
-    tft->setCursor(x,y);
+void GeoDisplayItem::
+draw(){
+    tft->setTextColor(TFT_LIGHTGREY, bg_c);
+    tft->loadFont(EXTENDED_LATIN);
+    uint16_t y(this->y + 5), w(this->w - 4);
+    tft->drawCentreString(to_print, x, y, 2);
     y += tft->fontHeight();
-    tft->print("Latitude:");
-
-    tft->setCursor(x+offset,y);
-    y += tft->fontHeight();
-    tft->print(info.lat, 4);
-
-    tft->setCursor(x,y);
-    y += tft->fontHeight();
-    tft->print("Longitude:");
-
-    tft->setCursor(x+offset,y);
-    y += tft->fontHeight();
-    tft->print(info.lon, 4);
     tft->unloadFont();
+
+    if (state){
+        tft->loadFont(EXTENDED_LATIN_SMALL);  
+        tft->drawCentreString(info.state, x, y + 5, 2);
+        tft->unloadFont();
+    }
+    tft->drawFastHLine(x - w/2, y, w, TFT_DARKGREY);    
+}
+
+void GeoDisplayItem::
+clear(){
+    tft->fillRect(x - w/2, y, w, h, bg_c);
 }

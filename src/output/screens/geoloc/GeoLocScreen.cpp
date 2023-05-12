@@ -20,13 +20,9 @@ finish_geo_setup(void){
 }
 
 GeoLocScreen::
-~GeoLocScreen()
-{
-    for (uint8_t i=0; i<4; ++i){
-        delete buttons[i];
-    }
-    delete buttons;
-    geoitem->clear();
+~GeoLocScreen(){
+    delete exit_button;
+    delete enter_button;
     delete geoitem;
 }
 
@@ -35,88 +31,73 @@ GeoLocScreen(
     TFT_eSPI *tft,
     WeatherClient* wclient,
     TouchScreen* ts
-): tft(tft), ts(ts)
-{
-    buttons = new CustomButton* [4]{
-        new CustomButton(tft, 45, 10, 30, 30, 0x3CE6), // enter button
-        new CustomButton(tft, 245, 10, 30, 30, TFT_RED),  // exit button
-        new CustomButton(tft, 45, 210, 40, 25, TFT_WHITE),
-        new CustomButton(tft, 235, 210, 40, 25, TFT_WHITE)
-    };
-
-    buttons[0]
+): tft(tft), ts(ts), img(tft){
+    enter_button = new CustomButton(tft, 5, 5, 30, 30, 0x3CE6);
+    enter_button
     ->set_draw(drawTickButton)
     ->set_on_press(finish_geo_setup);
 
-    buttons[1]
+    exit_button = new CustomButton(tft, 285, 5, 30, 30, TFT_RED);
+    exit_button
     ->set_draw(drawExitButton)
     ->set_on_press(exit_geo_pick);
 
-    buttons[2]
-    ->set_draw_wh(drawLeftArrow);
-
-    buttons[3]
-    ->set_draw_wh(drawRightArrow);
+    img.loadFont(NOTE_FONT16);
+    uint16_t len = img.textWidth("Choose location");
+    img.createSprite(len, img.fontHeight());
+    img.drawString("Choose location", 0, 0);
+    img.unloadFont();
+    img_x = 160 - len/2;
 
     geoitem = new GeoLocItem(
-        tft, wclient,
-        45, 40, 230, 160);
+        tft, wclient, 160, 80, BACKGROUND_COLOR
+    );
 }
 
-void
-GeoLocScreen::
+void GeoLocScreen::
 check(void)
 {
-    Point* pos = ts->read_touch();
+    std::unique_ptr<Point> pos(ts->read_touch());
 
     if (!pos){
         return;
     }
-
-    for (uint8_t i=0; i<4; ++i){
-        if(!buttons[i]->check(pos->x, pos->y)){
-            continue;
-        }
-        if (i == 2 || i == 3){
-            geoitem->change(Move(i-2));
-        }
-        draw(false);
+    if(exit_button->check(pos->x, pos->y)){
         return;
     }
-}
-
-void
-GeoLocScreen::
-draw_window(bool forceDraw)
-{
-    if(forceDraw){
-        tft->fillRect(40, 5, 240, 230, 0x18E3);
-        tft->drawRect(40, 5, 240, 230, 0x2985);
-    }
-
-    if (!total_geo_size || (current_pos == geo_pos)){
+    if(enter_button->check(pos->x, pos->y)){
         return;
     }
 
-    tft->setTextColor(TFT_WHITE, 0x18E3, true);
-    tft->setTextSize(2);
-    tft->drawCentreString(String(geo_pos+1) + " / " + String(total_geo_size), 160, 5, 2);
-    current_pos = geo_pos;
+    // GeoItem screen check
+    uint16_t x = pos->x, y = pos->y;
+    if (y < 80){
+        return;
+    }
+    Move move;
+    if (x < 160){
+        move = Move::LEFT;
+    }
+    else{
+        move = Move::RIGHT;
+    }
+    geoitem->change(move);
 }
 
-void
-GeoLocScreen::
+void GeoLocScreen::
 draw(bool forceDraw){
-    draw_window(forceDraw);
-
-    for (uint8_t i=0; i<4; ++i){
-        buttons[i]->draw(forceDraw);
+    if (!forceDraw){
+        return;
     }
-    geoitem->draw(forceDraw);
+    exit_button->draw(true);
+    enter_button->draw(true);
+    drawLeftArrow(tft, 40, 160, 80, 60, BACKGROUND_COLOR);
+    drawRightArrow(tft, 220, 160, 80, 60, BACKGROUND_COLOR);
+    img.pushSprite(img_x, 10);
+    geoitem->draw(true);
 }
 
-void
-GeoLocScreen::
+void GeoLocScreen::
 set_location(String location){
     waitForGeoLoc = true;
     picked = false;
@@ -126,8 +107,7 @@ set_location(String location){
     geoitem->set_loctation(location);
 }
 
-bool
-GeoLocScreen::
+bool GeoLocScreen::
 is_picked(void){
     return picked;
 }

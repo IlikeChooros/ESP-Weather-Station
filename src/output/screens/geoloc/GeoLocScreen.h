@@ -4,19 +4,16 @@
 #include "../../items/keypad/CustomButton.h"
 #include "../../../input/TouchScreen.h"
 
-class GeoLocScreen
-{
+class GeoLocScreen{
+private:
     TFT_eSPI *tft;
+    TFT_eSprite img;
     TouchScreen* ts;
-
-    CustomButton** buttons;
-
+    CustomButton* exit_button;
+    CustomButton* enter_button;
     GeoLocItem* geoitem;
 
-    void
-    draw_window
-    (bool forceDraw);
-
+    uint16_t img_x;
 public:
     GeoLocScreen(
         TFT_eSPI* tft,
@@ -30,8 +27,7 @@ public:
     draw(bool forceDraw);
 
     void
-    set_location
-    (String location);
+    set_location(String location);
 
     void
     check(void);

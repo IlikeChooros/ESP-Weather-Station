@@ -38,7 +38,9 @@ WiFiListScreen::
     }
 }
 
-void WiFiListScreen::init(){
+void 
+WiFiListScreen::
+init(){
     wifi_info = read_mem.wifis(true);
 }
 
@@ -48,7 +50,9 @@ void WiFiListScreen::init(){
 // make sure to call clear_buttons()
 // before using it
 //----------------------------------
-void WiFiListScreen::scan()
+void 
+WiFiListScreen::
+scan()
 {
     change_ = false;
 

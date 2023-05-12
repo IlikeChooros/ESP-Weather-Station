@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "GeoDisplayItem.h"
+#include "../ScreenPointItem.h"
 
 enum class
 Move
@@ -12,8 +13,8 @@ Move
 };
 
 class 
-GeoLocItem
-{
+GeoLocItem{
+private:
     std::vector<City_info> data;
 
     GeoDisplayItem** display;
@@ -23,8 +24,7 @@ GeoLocItem
 
     uint16_t x;
     uint16_t y;
-    uint16_t w;
-    uint16_t h;
+    uint16_t bg_c;
 
 public:
     GeoLocItem(
@@ -32,9 +32,10 @@ public:
         WeatherClient* wclient,
         uint16_t x,
         uint16_t y,
-        uint16_t w,
-        uint16_t h
+        uint16_t bg_c
     );
+
+    ~GeoLocItem();
 
     /**
      * @brief Gets location struct via weather client
@@ -42,8 +43,7 @@ public:
      * @param city_name 
      */
     void 
-    set_loctation
-    (String city_name);
+    set_loctation(String city_name);
 
     /**
      * @brief Clear previous data std::vector
