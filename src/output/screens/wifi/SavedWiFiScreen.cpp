@@ -102,22 +102,20 @@ set_window(String ssid){
 void
 SavedWiFiScreen::
 check(){
-    Point* pos = ts->read_touch();
+    std::unique_ptr<Point> pos (ts->read_touch());
 
     if (!pos){
         return;
     }
 
-    screen->check(pos);
+    screen->check(pos.get());
     if (screen->picked()){
         if (detail_button->check(pos->x, pos->y)){
             set_window(screen->picked_data().data.string);
-            delete pos;
             return;
         }
     }    
     exit_screen = exit_button->check(pos->x, pos->y);
-    delete pos;
 }
 
 void

@@ -16,7 +16,7 @@ String TextWrapper::
 wrapEnd(String&& text){
     end_cursor = text.length();
     start_cursor = 0;
-    while (tft->textWidth(text.substring(start_cursor, end_cursor)) >= max_width - margin){
+    while (tft->textWidth(text.substring(start_cursor, end_cursor)) >= max_width - margin && start_cursor < end_cursor){
         start_cursor++;
     }    
     return text.substring(start_cursor, end_cursor);
@@ -26,7 +26,7 @@ String TextWrapper::
 wrapBegin(String&& text){
     end_cursor = text.length();
     start_cursor = 0;
-    while (tft->textWidth(text.substring(start_cursor, end_cursor)) >= max_width - margin){
+    while (tft->textWidth(text.substring(start_cursor, end_cursor)) >= max_width - margin && end_cursor > 0){
         end_cursor--;
     }    
     return text.substring(start_cursor, end_cursor);

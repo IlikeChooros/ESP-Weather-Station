@@ -66,7 +66,7 @@ set_city_info()
         city_list[count]
         ->set_data(info->name, true, EXTENDED_LATIN, TFT_LIGHTGREY)
         ->set_data(info->country, true, LATIN, TFT_LIGHTGREY)
-        ->set_data(info->state, false, LATIN, TFT_LIGHTGREY);
+        ->set_data(info->state, false, EXTENDED_LATIN_SMALL, TFT_LIGHTGREY);
 
         count++;
     }

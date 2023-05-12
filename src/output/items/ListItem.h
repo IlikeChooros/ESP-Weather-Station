@@ -14,10 +14,11 @@ ListItem: public TouchButton
 {
     TFT_eSPI* tft;
 
-    bool marked_;
     bool wrap;
 
     std::vector<print_data> data;
+    std::vector<print_data> to_print;
+    uint16_t prev_cursor;
 
     void 
     draw_(uint16_t color);
