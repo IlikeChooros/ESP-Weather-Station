@@ -18,6 +18,7 @@ class ScreenPointItem
     uint16_t x;
     uint16_t y;
     uint16_t bg_c;
+    uint8_t size;
     uint8_t prev_lenght;
     uint16_t* colors;
     public:
@@ -26,8 +27,11 @@ class ScreenPointItem
         TFT_eSPI *tft,
         uint16_t x,
         uint16_t y,
-        uint16_t bg_c
+        uint16_t bg_c,
+        uint8_t size
     );
+
+    ~ScreenPointItem();
 
     /**
      * @brief draws dots on screen

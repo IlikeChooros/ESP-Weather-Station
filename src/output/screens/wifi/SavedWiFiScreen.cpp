@@ -95,8 +95,8 @@ set_window(String ssid){
         }
         delete pos;
     }
-    tft->fillScreen(bg_c);
-    draw(true);
+    tft->fillRect(40, 40, 240, 160, bg_c);
+    screen->draw(true);
 }
 
 void

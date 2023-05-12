@@ -82,7 +82,7 @@ MainScreen** screens = new MainScreen*[X_SCREENS]{
 
 CityNameInputScreen* city_input = new CityNameInputScreen(&tft, BACKGROUND_COLOR, &wclient, &ts);
 CityNameListScreen*  city_list  = new CityNameListScreen(&tft, BACKGROUND_COLOR, &wclient, &ts);
-ScreenPointItem sci(&tft, 160, 230, BACKGROUND_COLOR);
+ScreenPointItem sci(&tft, 160, 230, BACKGROUND_COLOR, SIZE_POINT);
 
 void refresh();
 
@@ -304,17 +304,16 @@ pick_city()
             reconnect_to_wifi();
         }
 
-        Point* pos = ts.read_touch();
+        std::unique_ptr<Point> pos (ts.read_touch());
         if(!pos){
             continue;
         }
-        screens[idx]->check(pos);
+        screens[idx]->check(pos.get());
         if (screens[idx]->change()){
             idx = idx != 0 ? 0 : 1;
             tft.fillScreen(BACKGROUND_COLOR);
             screens[idx]->draw(true);
         }
-        delete pos;
     }
     delete [] screens;
 }

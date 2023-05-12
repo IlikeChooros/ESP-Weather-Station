@@ -2,8 +2,7 @@
 
 void 
 WiFiStrenghtItem::
-draw(int8_t strenght)
-{
+draw(int8_t strenght){
     this->strenght = strenght;
 
     Icon* icon = matchIcon();
@@ -13,20 +12,20 @@ draw(int8_t strenght)
 
 Icon* 
 WiFiStrenghtItem::
-matchIcon()
-{
-    // strenght (-25 to 0)
-    if (strenght > -25){
+matchIcon(){
+    // strenght (-35 to 0)
+    if (strenght > -35){
         return new WiFiIconSuperStrong(tft,x,y,size,background_color);
     }
-    // strenght (-45 to -25)
-    else if(strenght > - 45){
+    // strenght (-55 to -35)
+    else if(strenght > - 55){
         return new WiFiIconStrong(tft,x,y,size,background_color);
     }
-    // strenght (-75 to -45)
-    else if (strenght > -75){
+    // strenght (-75 to -55)
+    else if (strenght > -85){
         return new WiFiIconMedium(tft,x,y,size,background_color);
     }
+    // strenght (-128 to -55)
     else {
         return new WiFiIconWeak(tft,x,y,size,background_color);
     }

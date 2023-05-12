@@ -1,12 +1,10 @@
 #ifndef WIFI_LIST_ITEM_H
 #define WIFI_LIST_ITEM_H
 
-#include "Arduino.h"
 #include "TFT_eSPI.h"
-#include "SPI.h"
 
 #include "../../../input/TouchButton.h"
-
+#include "../text/TextWrapper.h"
 #include "WiFiStrenghtItem.h"
 
 #define BUTTON_BG 0x52AA
@@ -15,6 +13,7 @@ class WiFiListItem: public TouchButton
 {
     TFT_eSPI* tft;
 
+    String to_print;
     String ssid;
     int8_t strenght;
 

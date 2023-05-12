@@ -3,13 +3,13 @@
 
 #include <EEPROM.h>
 #include <WiFi.h>
-#include "Arduino.h"
 #include "TFT_eSPI.h"
-#include "SPI.h"
 
 #include "../../../data_structures/Point.h"
 #include "../../items/memory/ReadMem.h"
 #include "../../../custom_font/fonts.h"
+#include "../../icons/Icons.h"
+#include "../../items/ScreenPointItem.h"
 
 class WiFiScreen
 {

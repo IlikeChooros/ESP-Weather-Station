@@ -10,13 +10,13 @@ set_data_(std::vector<WeatherData> &data)
 }
 
 ui16
-get_y_pos(i16 data, float sc){
+get_y_pos(float data, float sc){
     return MIDDLE_Y - data*sc;
 }
 
 ui16
 get_y_n_p(
-    i16 data,
+    float data,
     float sc_p,
     float sc_n
 )
@@ -29,7 +29,7 @@ get_y_pos_by_idx(
     uint8_t idx, 
     float scale_pos, 
     float scale_neg,
-    ui8 i,
+    ui16 i,
     std::vector<WeatherData> &data
 )
 {
@@ -49,12 +49,12 @@ get_y_pos_by_idx(
 void
 draw_number_chart(
     TFT_eSPI* tft,
-    ui8 idx,
+    ui16 idx,
     ui16 x,
     ui16 y,
     ui16 color,
     std::vector<WeatherData> &data,
-    ui8 i
+    ui16 i
 )
 {
     switch(idx)

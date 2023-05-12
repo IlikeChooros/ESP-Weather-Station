@@ -11,8 +11,12 @@ WiFiListItem(
     int8_t strenght, 
     uint16_t bg_c
 ): TouchButton(x,y,width,height),
-tft(tft), ssid(ssid), password_saved(password_saved),
-strenght(strenght), bg_c(bg_c) {}
+tft(tft), password_saved(password_saved),
+strenght(strenght), bg_c(bg_c), ssid(ssid) {    
+    std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));      
+    this->to_print = tw->prepare(width*0.7f, 5)->wrapBegin(std::forward<String>(ssid));
+    to_print += to_print != ssid ? "..." : "";    
+}
 
 int8_t 
 WiFiListItem::
@@ -68,15 +72,6 @@ draw(bool forceDraw)
     tft->setCursor(x+0.05f*width, y + (height - LATIN_HEIGHT)/2 + 2);
     tft->setTextColor(TFT_WHITE, color);
     tft->loadFont(LATIN);
-
-    String temp;
-    if (ssid.length()<13){
-        temp = ssid;
-    }
-    else{
-        temp = ssid.substring(0,10);
-        temp += "...";
-    }
-    tft->print(temp);
+    tft->print(to_print);
     tft->unloadFont();
 }

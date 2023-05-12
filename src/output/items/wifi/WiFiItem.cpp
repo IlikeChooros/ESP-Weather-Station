@@ -6,35 +6,21 @@ WiFiItem::WiFiItem(
     uint16_t y, 
     uint8_t size, 
     uint16_t background_color
-)
-{
-    this->tft = tft;
-    this->x = x;
-    this->y = y;
-    this->size = size;
-    this->background_color = background_color;
+): tft(tft), x(x), y(y), size(size), 
+background_color(background_color),
+idx(STRONG_WIFI), prev_idx(STRONG_WIFI) {}
 
-    this->idx = STRONG_WIFI;
-    this->prev_idx = STRONG_WIFI;
-}
-
-void 
-WiFiItem::
-draw(bool forceDraw)
-{
-    Icon* icon = matchIcon();
+void WiFiItem::
+draw(bool forceDraw){
+    std::unique_ptr<Icon> icon(matchIcon());
     if (!forceDraw && prev_idx == idx){
-        delete icon;
         return;
     }
     icon->draw();
-    delete icon;
 }
 
-Icon* 
-WiFiItem::
-matchIcon()
-{
+Icon* WiFiItem::
+matchIcon(){
     int8_t strenght = WiFi.RSSI();
     prev_idx = idx;    
 
@@ -42,21 +28,24 @@ matchIcon()
         idx = LOST_WIFI;
         return new WiFiIconLost(tft, x, y, size, background_color);
     }
-
-    // strenght (-45 to 0)
-    if (strenght > -45){
+    // strenght (-35 to 0)
+    if (strenght > -35){
+        idx = SUPER_WIFI;
+        return new WiFiIconSuperStrong(tft,x,y,size,background_color);
+    }
+    // strenght (-55 to -35)
+    else if(strenght > - 55){
         idx = STRONG_WIFI;
-        return new WiFiIconStrong(tft, x, y, size, background_color);
+        return new WiFiIconStrong(tft,x,y,size,background_color);
     }
-    // strenght (-75 to -45)
-    else if (strenght > -75){
+    // strenght (-75 to -55)
+    else if (strenght > -85){
         idx = MEDIUM_WIFI;
-        return new WiFiIconMedium(tft, x, y, size, background_color);
+        return new WiFiIconMedium(tft,x,y,size,background_color);
     }
-
-    // strenght (-75 to -128)
-    else{
+    // strenght (-128 to -55)
+    else {
         idx = WEAK_WIFI;
-        return new WiFiIconWeak(tft, x, y, size, background_color);
+        return new WiFiIconWeak(tft,x,y,size,background_color);
     }
 }

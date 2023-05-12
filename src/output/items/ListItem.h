@@ -7,6 +7,7 @@
 #include "../icons/drawings.h"
 #include "../../data_structures/Point.h"
 #include "../../data_structures/print_data.h"
+#include "text/TextWrapper.h"
 
 class
 ListItem: public TouchButton

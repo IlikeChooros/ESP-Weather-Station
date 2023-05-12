@@ -66,6 +66,7 @@ void WiFiListScreen::scan()
     number_of_networks = number_of_networks < 6 ? number_of_networks : 6;
     wifis = new WiFiListItem* [number_of_networks];
     
+    tft->loadFont(LATIN);
     for (uint8_t i=0; i < number_of_networks; i++){
         String ssid = WiFi.SSID(i);
         bool is_saved = false;
@@ -78,6 +79,7 @@ void WiFiListScreen::scan()
         }
         wifis[i] = new WiFiListItem(tft, x, y + i *(HEIGHT+OFFSET), WIDTH, HEIGHT, ssid, is_saved, WiFi.RSSI(i), bg_c);
     }
+    tft->unloadFont();
 }
 
 void 

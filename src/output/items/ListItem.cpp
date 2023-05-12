@@ -110,6 +110,9 @@ set_data(
     uint16_t text_color
 )
 {
-    data.push_back(print_data(str, font, text_color, same_line));
+    tft->loadFont(font);
+    std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));  
+    data.push_back(print_data(tw->prepare(width, 20)->wrapBegin(std::forward<String>(str)), font, text_color, same_line));
+    tft->unloadFont();
     return this;
 }

@@ -5,8 +5,8 @@
 class WeatherData
 {
     uint64_t dt_;
-    int8_t temp_;
-    int8_t feels_like_;
+    float temp_;
+    float feels_like_;
     int8_t humidity_;
     int8_t pop_;
 
@@ -14,8 +14,8 @@ class WeatherData
 
     WeatherData(
         uint64_t dt,
-        int8_t temp,
-        int8_t feels_like,
+        float temp,
+        float feels_like,
         int8_t humidity,
         int8_t pop
     ):dt_(dt), temp_(temp),

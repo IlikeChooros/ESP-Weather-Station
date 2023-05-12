@@ -4,10 +4,11 @@
 #include "../../icons/Icons.h"
 #include <WiFi.h>
 
-#define STRONG_WIFI 0
-#define MEDIUM_WIFI 1
-#define WEAK_WIFI 2
-#define LOST_WIFI 3
+#define SUPER_WIFI 0
+#define STRONG_WIFI 1
+#define MEDIUM_WIFI 2
+#define WEAK_WIFI 3
+#define LOST_WIFI 4
 
 class WiFiItem
 {
