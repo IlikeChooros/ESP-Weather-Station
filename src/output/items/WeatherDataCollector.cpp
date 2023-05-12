@@ -1,5 +1,14 @@
 #include "WeatherDataCollector.h"
 
+WeatherDataCollector::
+WeatherDataCollector(ui8 number_of_data_to_collect) {
+    _data.resize(number_of_data_to_collect);
+    _min_max.resize(number_of_data_to_collect);
+    for (ui8 i=0; i<number_of_data_to_collect; i++){
+        _min_max[i].resize(2);
+    }
+}
+
 std::vector<WeatherData>&
 WeatherDataCollector::get_data(ui8 idx){
     return _data[idx];

@@ -14,6 +14,61 @@ TextItem(
 ): WeatherItem(_tft,x,y,background_color),
 font(font), format(format), color(color), text_width(0) {}
 
+TextTemp::
+TextTemp(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font, 
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): TextItem(_tft,x,y,font,color,format,background_color){}
+
+TextFeelsLike::
+TextFeelsLike(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font, 
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): TextItem(_tft,x,y,font,color,format,background_color){}
+
+TextWind::
+TextWind(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font, 
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): TextItem(_tft,x,y,font,color,format,background_color){}
+
+TextPressure::
+TextPressure(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font, 
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): TextItem(_tft,x,y,font,color,format,background_color){}
+
+TextPop::
+TextPop(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    String font, 
+    uint16_t color,
+    const char* format, 
+    uint16_t background_color
+): TextItem(_tft,x,y,font,color,format,background_color){}
+
 void TextItem::draw(bool forceDraw){
     if (!(forceDraw || redraw)){
         return;

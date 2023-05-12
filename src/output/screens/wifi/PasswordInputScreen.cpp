@@ -90,6 +90,12 @@ enter_pwd(){
     WiFi.begin(ssid, pass);
 
     load_main_ = draw_connecting_to_wifi(wifi_name, ssid, pass);
+    change_ = false;
+    // On failed connection
+    if (!load_main_){
+        tft->fillRect(55, 70, 210, 100, bg_c);
+        keyboard->draw(true);
+    }
 }
 
 String 
@@ -99,7 +105,6 @@ get_str(){
     if (counter%2 == 1){
         return wifi_name;
     }
-
     return inputfield->get_input();
 }
 

@@ -35,13 +35,7 @@ class WeatherDataCollector
     );
 
     public:
-    WeatherDataCollector(ui8 number_of_data_to_collect) {
-        _data.resize(number_of_data_to_collect);
-        _min_max.resize(number_of_data_to_collect);
-        for (ui8 i=0; i<number_of_data_to_collect; i++){
-            _min_max[i].resize(2);
-        }
-    }
+    WeatherDataCollector(ui8 number_of_data_to_collect);
 
     /**
      * @brief Initializes the object, setting starting day

@@ -1,5 +1,75 @@
 #include "LineChart.h"
 
+LineCharTemp::
+LineCharTemp(
+    TFT_eSPI *tft,
+    uint16_t color,
+    uint16_t starting_x
+): ChartItem(tft, color, starting_x) {}
+
+void LineCharTemp::
+set_min_max(int16_t min,int16_t max){
+    min_value = min;
+    max_value = max;
+    scale_positive = (float)((MAX_POSITIVE)/max_value);
+    scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
+}
+
+LineChartFeelsLike::
+LineChartFeelsLike(
+    TFT_eSPI *tft,
+    uint16_t color,
+    uint16_t starting_x
+): ChartItem(tft, color, starting_x) {}
+
+void LineChartFeelsLike::
+set_min_max(
+    int16_t min,
+    int16_t max
+)
+{
+    min_value = min;
+    max_value = max;
+    scale_positive = (float)((MAX_POSITIVE)/max_value);
+    scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
+}
+
+LineChartHumidity::
+LineChartHumidity(
+    TFT_eSPI *tft,
+    uint16_t color,
+    uint16_t starting_x
+): ChartItem(tft, color, starting_x) {}
+
+void LineChartHumidity::
+set_min_max(
+    int16_t min,
+    int16_t max
+)
+{
+    min_value = min;
+    max_value = max;
+    scale = (float)((MAX_POSITIVE)/max_value);
+}
+
+LineChartPop::
+LineChartPop(
+    TFT_eSPI *tft,
+    uint16_t color,
+    uint16_t starting_x
+): ChartItem(tft, color, starting_x) {}
+
+void LineChartPop::
+set_min_max(
+    int16_t min,
+    int16_t max
+)
+{
+    min_value = min;
+    max_value = max;
+    scale = (float)((MAX_POSITIVE)/max_value);
+}
+
 ui16 
 set_data_(std::vector<WeatherData> &data)
 {

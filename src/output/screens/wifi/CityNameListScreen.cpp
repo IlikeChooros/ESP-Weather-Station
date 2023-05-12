@@ -6,8 +6,8 @@ CityNameListScreen(
     uint16_t bg_c,
     WeatherClient* wc,
     TouchScreen* ts
-): CityNameScreen(tft, bg_c, wc, ts)
-{
+): CityNameScreen(tft, bg_c, wc, ts),
+choose_location(tft), wifi_name(tft){
     set_new_location = new CustomButton(tft, 0, 180, 320, 60, 0x10A3);
     set_new_location
     ->touch_color(0x0861)
@@ -19,6 +19,8 @@ CityNameListScreen::
 ~CityNameListScreen(){
     delete set_new_location;
     delete wifi;
+    choose_location.deleteSprite();
+    wifi_name.deleteSprite();
 
     if (!number_of_saved_city_names){
         return;
@@ -101,11 +103,29 @@ draw_wifi_name(bool forceDraw){
     if(!forceDraw){
         return;
     }
-    tft->setCursor(28,7);
-    tft->setTextColor(TFT_LIGHTGREY, bg_c);
-    tft->loadFont(NOTE_FONT16);
-    tft->print(WiFi.SSID());
-    tft->unloadFont();
+
+    if(!wifi_name.created()){
+        wifi_name.loadFont(NOTE_FONT12);
+        std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
+        String wrap = tw->prepare(85, 0)->wrapBegin(WiFi.SSID());
+        wrap += wrap != WiFi.SSID() ? "..." : "";
+        wifi_name.createSprite(wifi_name.textWidth(wrap), wifi_name.fontHeight());
+        wifi_name.setTextColor(TFT_LIGHTGREY, bg_c);     
+        wifi_name.fillSprite(bg_c);   
+        wifi_name.drawString(wrap, 0, 0);
+        wifi_name.unloadFont();
+
+        choose_location.loadFont(NOTE_FONT16);
+        uint16_t len = choose_location.textWidth("Choose location");
+        choose_location.createSprite(len, choose_location.fontHeight());
+        choose_location.setTextColor(TFT_LIGHTGREY, bg_c);
+        choose_location.fillSprite(bg_c);
+        choose_location.drawString("Choose location", 0, 0);
+        choose_location.unloadFont();
+        choose_location_x = 160 - len/2 - 2;
+    }
+    choose_location.pushSprite(choose_location_x, 7);
+    wifi_name.pushSprite(27, 9);
 }
 
 void

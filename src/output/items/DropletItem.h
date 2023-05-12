@@ -27,8 +27,7 @@ public:
         uint16_t y, 
         uint8_t size, 
         uint16_t background_color
-    ): WeatherItem(_tft,x,y,background_color),
-    size(size), pop(0){}
+    );
 
     void 
     draw(bool forceDraw);

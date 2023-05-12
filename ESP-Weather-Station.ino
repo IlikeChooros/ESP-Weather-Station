@@ -320,9 +320,6 @@ pick_city()
 
 void setup()
 {
-    if (!SPIFFS.begin()){
-        while(true) yield();
-    }
         Serial.println("FREE: " + String(ESP.getFreeHeap()));
     tft.init(); 
     tft.setRotation(3);

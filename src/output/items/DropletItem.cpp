@@ -1,5 +1,15 @@
 #include "DropletItem.h"
 
+DropletItem::
+DropletItem(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t background_color
+): WeatherItem(_tft,x,y,background_color),
+size(size), pop(0){}
+
 void 
 DropletItem::
 draw(bool forceDraw){

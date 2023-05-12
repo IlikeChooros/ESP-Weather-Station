@@ -16,6 +16,9 @@ CityNameListScreen: public CityNameScreen
     ListItem** city_list;
     CustomButton* set_new_location;
     WiFiItem* wifi;
+    TFT_eSprite choose_location;
+    TFT_eSprite wifi_name;
+    uint16_t choose_location_x;
 
     ReadMem read_mem;
     std::list<std::pair<String, uint8_t>> city_info;

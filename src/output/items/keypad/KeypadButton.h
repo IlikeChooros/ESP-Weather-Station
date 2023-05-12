@@ -33,10 +33,7 @@ class KeypadButton: public TouchButton
         int16_t width, 
         int16_t height, 
         String name
-    ): TouchButton(x,y,width,height),
-    name(name), tft(tft),
-    touch_color(0x2104),
-    text_color(TFT_LIGHTGREY) {}
+    );
 
     void 
     draw(bool);

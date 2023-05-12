@@ -8,9 +8,7 @@
 #define FEELS_IDX 2
 #define HUM_IDX 3
 
-class LineCharTemp: public ChartItem
-{
-
+class LineCharTemp: public ChartItem{
     float scale_positive;
     float scale_negative;
 
@@ -19,25 +17,19 @@ class LineCharTemp: public ChartItem
         TFT_eSPI *tft,
         uint16_t color,
         uint16_t starting_x
-    ): ChartItem(tft, color, starting_x) {}
+    );
 
     void
     draw(bool forceDraw);
 
-
     void
     set_data(std::vector<WeatherData>& data);
 
-    void set_min_max(
+    void 
+    set_min_max(
         int16_t min,
         int16_t max
-    )
-    {
-        min_value = min;
-        max_value = max;
-        scale_positive = (float)((MAX_POSITIVE)/max_value);
-        scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
-    }
+    );
 };
 
 
@@ -52,7 +44,7 @@ class LineChartFeelsLike: public ChartItem
         TFT_eSPI *tft,
         uint16_t color,
         uint16_t starting_x
-    ): ChartItem(tft, color, starting_x) {}
+    );
 
     void
     draw(bool forceDraw);
@@ -64,13 +56,7 @@ class LineChartFeelsLike: public ChartItem
     void set_min_max(
         int16_t min,
         int16_t max
-    )
-    {
-        min_value = min;
-        max_value = max;
-        scale_positive = (float)((MAX_POSITIVE)/max_value);
-        scale_negative = min_value < 0 ? -(float)((MAX_NEGATIVE)/min_value) :(float)((MAX_NEGATIVE)/min_value);
-    }
+    );
 };
 
 
@@ -83,11 +69,10 @@ class LineChartHumidity: public ChartItem
         TFT_eSPI *tft,
         uint16_t color,
         uint16_t starting_x
-    ): ChartItem(tft, color, starting_x) {}
+    );
 
     void
     draw(bool forceDraw);
-
 
     void
     set_data(std::vector<WeatherData>& data);
@@ -95,12 +80,7 @@ class LineChartHumidity: public ChartItem
     void set_min_max(
         int16_t min,
         int16_t max
-    )
-    {
-        min_value = min;
-        max_value = max;
-        scale = (float)((MAX_POSITIVE)/max_value);
-    }
+    );
 };
 
 
@@ -113,11 +93,10 @@ class LineChartPop: public ChartItem
         TFT_eSPI *tft,
         uint16_t color,
         uint16_t starting_x
-    ): ChartItem(tft, color, starting_x) {}
+    );
 
     void
     draw(bool forceDraw);
-
 
     void
     set_data(std::vector<WeatherData>& data);
@@ -125,10 +104,5 @@ class LineChartPop: public ChartItem
     void set_min_max(
         int16_t min,
         int16_t max
-    )
-    {
-        min_value = min;
-        max_value = max;
-        scale = (float)((MAX_POSITIVE)/max_value);
-    }
+    );
 };

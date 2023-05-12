@@ -1,5 +1,15 @@
 #include "WiFiStrenghtItem.h"
 
+WiFiStrenghtItem::
+WiFiStrenghtItem(
+    TFT_eSPI *tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint8_t size, 
+    uint16_t background_color
+): tft(tft), x(x), y(y), size(size), 
+background_color(background_color) {}
+
 void 
 WiFiStrenghtItem::
 draw(int8_t strenght){

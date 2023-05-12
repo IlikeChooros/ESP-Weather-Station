@@ -17,6 +17,9 @@ holdTime(HOLD_TIME){
     this->on_up(do_nothing);
     this->on_sleep(do_nothing);
     this->on_wakeup(do_nothing);
+    if (!SPIFFS.begin()){
+        while(true) yield();
+    }
 }
 
 void TouchScreen::

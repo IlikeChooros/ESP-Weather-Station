@@ -15,8 +15,7 @@ class ChartScreenNextDays: public ChartScreens
     ChartScreenNextDays(
         TFT_eSPI *tft,
         uint16_t bg_c
-    ): ChartScreens(tft, bg_c)
-    {}
+    );
 
     void draw(
         std::vector<WeatherData>& data,

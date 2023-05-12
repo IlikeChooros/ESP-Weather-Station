@@ -1,5 +1,18 @@
 #include "TimeItem.h"
 
+TimeItem::
+TimeItem(
+    TFT_eSPI *_tft, 
+    uint16_t x, 
+    uint16_t y, 
+    uint16_t background_color, 
+    uint16_t color, 
+    String font,
+    uint64_t unix, 
+    bool hourly
+): WeatherItem(_tft,x,y,background_color),
+font(font), unix(unix), color(color), 
+hourly(hourly), prev_date(""), width(1), height(WEATHER_HEIGHT+1) {}
 
 void TimeItem::draw(bool forceDraw){
     if (!(redraw || forceDraw)){

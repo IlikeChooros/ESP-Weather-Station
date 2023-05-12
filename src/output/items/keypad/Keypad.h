@@ -17,7 +17,6 @@ class Keypad
     TFT_eSPI* tft;
 
     public:
-
     /**
      * @brief Construct a new Keypad object, with 24 small buttons, 1 space, 2 sliders on right and left edges of the screen
      * 
@@ -31,6 +30,7 @@ class Keypad
         String* button_data, 
         String slider
     );
+
     void 
     draw();
 

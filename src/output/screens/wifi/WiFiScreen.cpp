@@ -40,7 +40,7 @@ draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
 
     std::unique_ptr<WiFiStrenghtItem> wifi(new WiFiStrenghtItem(tft, 200, 115, 35, 0x10A3));
     wifi->draw(WiFi.RSSI(i));
-
+    
     std::unique_ptr<ScreenPointItem> sci(new ScreenPointItem(tft, 115, 135, 0x10A3, 20));
     sci->draw(4, 1, 1, 1);
 
@@ -58,7 +58,7 @@ draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
         }
         number_of_tries++;
         sci->draw(4, 1, (number_of_tries)%4 + 1, 1);
-        if (number_of_tries == 10){
+        if (number_of_tries == 14){
             tft->drawRect(55, 70, 210, 100, TFT_RED);
             delay(1000);            
             return false;

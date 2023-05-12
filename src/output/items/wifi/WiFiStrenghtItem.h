@@ -24,8 +24,7 @@ class WiFiStrenghtItem
         uint16_t y, 
         uint8_t size, 
         uint16_t background_color
-    ): tft(tft), x(x), y(y), size(size), 
-    background_color(background_color) {}
+    );
     /**
      * @brief Based on the strenght of connected WiFi, the colour will change
      * 
