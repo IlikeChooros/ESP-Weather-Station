@@ -85,15 +85,16 @@ set_window(String ssid){
     }
     window->draw(true);
     while(!window->exited()){
-        Point* pos = ts->read_touch();
+        std::unique_ptr<Point> pos(ts->read_touch());
         if (!pos){
             continue;
         }
-        window->check(pos);
+            Serial.println("Memory check: " + String(ESP.getFreeHeap()));
+        window->check(pos.get());
         if(window->deleted()){
             erase(ssid);
         }
-        delete pos;
+            Serial.println("Memory check: " + String(ESP.getFreeHeap()));
     }
     tft->fillRect(40, 40, 240, 160, bg_c);
     screen->draw(true);
@@ -111,7 +112,9 @@ check(){
     screen->check(pos.get());
     if (screen->picked()){
         if (detail_button->check(pos->x, pos->y)){
+                Serial.println("Memory set_window: " + String(ESP.getFreeHeap()));
             set_window(screen->picked_data().data.string);
+                Serial.println("Memory set_window: " + String(ESP.getFreeHeap()));
             return;
         }
     }    

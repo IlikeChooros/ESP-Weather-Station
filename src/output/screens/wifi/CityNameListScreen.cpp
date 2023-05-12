@@ -57,6 +57,7 @@ set_city_info()
         City_info* info = wclient->get_city_info(
             i.first, i.second
         );
+            Serial.println("Memory: " + String(ESP.getFreeHeap()));
 
         if (!info){
             city_list[count]
@@ -68,8 +69,9 @@ set_city_info()
         city_list[count]
         ->set_data(info->name, true, EXTENDED_LATIN, TFT_LIGHTGREY)
         ->set_data(info->country, true, LATIN, TFT_LIGHTGREY)
-        ->set_data(info->state, false, EXTENDED_LATIN_SMALL, TFT_LIGHTGREY);
-
+        ->set_data(info->state, false, EXTENDED_LATIN_SMALL, TFT_LIGHTGREY)
+        ->createSprite();
+            Serial.println("Memory Sprite: " + String(ESP.getFreeHeap()));
         count++;
     }
 }
@@ -81,6 +83,9 @@ check(Point* pos)
     change_ = set_new_location->check(pos->x, pos->y);
     for (uint8_t i=0; i<number_of_saved_city_names; ++i){
         if(city_list[i]->check(pos->x, pos->y)){
+            if (city_list[i]->stored().at(0).string == "No data"){
+                return;
+            }
             std::pair<String, uint8_t> found;
             uint8_t j = 0;
             for (auto a : city_info){
@@ -107,7 +112,7 @@ draw_wifi_name(bool forceDraw){
     if(!wifi_name.created()){
         wifi_name.loadFont(NOTE_FONT12);
         std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
-        String wrap = tw->prepare(85, 0)->wrapBegin(WiFi.SSID());
+        String wrap = tw->prepare(75, 0)->wrapBegin(WiFi.SSID());
         wrap += wrap != WiFi.SSID() ? "..." : "";
         wifi_name.createSprite(wifi_name.textWidth(wrap), wifi_name.fontHeight());
         wifi_name.setTextColor(TFT_LIGHTGREY, bg_c);     

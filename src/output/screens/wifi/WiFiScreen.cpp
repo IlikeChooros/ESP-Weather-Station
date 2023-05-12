@@ -4,16 +4,6 @@ WiFiScreen::WiFiScreen
 (TFT_eSPI* tft, uint16_t bg_c):
 tft(tft), bg_c(bg_c) {}
 
-bool refresh(int8_t strenght, int8_t& prev_idx){
-    strenght = strenght < -100 ? -100 : strenght;
-    int8_t idx = strenght/(-25);
-    if (prev_idx != idx){
-        prev_idx = idx;
-        return true;
-    }
-    return false;
-}
-
 //*****************************
 // Returns true if successfully
 // connects to WiFi
@@ -46,14 +36,9 @@ draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
 
     uint8_t number_of_tries = 0;
     uint32_t timer = millis();
-    int8_t prev_idx = 0;
-    refresh(WiFi.RSSI(i), prev_idx);
 
     while(WiFi.status() != WL_CONNECTED){
-        if (millis() - timer < 500){
-            if (refresh(WiFi.RSSI(i), prev_idx)){
-                wifi->draw(WiFi.RSSI(i));
-            }            
+        if (millis() - timer < 500){       
             continue;
         }
         number_of_tries++;

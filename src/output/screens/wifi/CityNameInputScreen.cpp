@@ -58,8 +58,9 @@ draw_title(bool forceDraw){
 
 void 
 CityNameInputScreen::
-check(Point* pos)
-{
+check(Point* pos){
+    change_ = false;
+    
     if (return_button->check(pos->x, pos->y)){
         change_ = true;
         return;
@@ -68,8 +69,7 @@ check(Point* pos)
         enter();
         return;
     }
-
-    KeyInfo* info = keyboard->check(pos);
+    std::unique_ptr<KeyInfo> info(keyboard->check(pos));
 
     switch(info->info)
     {
@@ -81,8 +81,7 @@ check(Point* pos)
         case NORMAL_BUTTON:
             inputfield->add_input(info->str);
             break;
-    }
-    delete info;    
+    }  
 }
 
 void

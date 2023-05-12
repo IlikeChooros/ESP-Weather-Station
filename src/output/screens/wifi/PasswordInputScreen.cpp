@@ -53,7 +53,7 @@ draw(bool forceDraw){
 void 
 PasswordInputScreen::
 check(Point* pos){
-    KeyInfo* info = keyboard->check(pos);
+    std::unique_ptr<KeyInfo> info(keyboard->check(pos));
 
     switch(info->info)
     {
@@ -66,7 +66,6 @@ check(Point* pos){
             inputfield->add_input(info->str);
             break;
     }
-    delete info;
 
     if(enter_button->check(pos->x, pos->y)){
         enter_pwd();

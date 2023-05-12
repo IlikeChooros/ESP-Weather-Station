@@ -37,6 +37,7 @@ prepare(print_data data){
 WindowItem*
 WindowItem::
 prepare(std::vector<print_data>& data){
+    to_print.clear();
     to_print.assign(data.begin(), data.end());
     return this;
 }
@@ -44,6 +45,9 @@ prepare(std::vector<print_data>& data){
 void
 WindowItem::
 init(){
+    if (content){
+        delete content;
+    }
     content = new ListItem(tft, x+1, y + 35, w-2, h - 36);
     quit = false;
     for (auto i : to_print){

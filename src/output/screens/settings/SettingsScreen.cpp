@@ -27,14 +27,11 @@ SettingsScreen(
     uint16_t y, 
     uint16_t w, 
     uint16_t h
-): tft(tft),
-_scroll_down(0),
-_scroll_up(0),
-_scroll(false),
-_picked(false),
-x(x), y(y), w(w), h(h),
-_pick_idx(0), _list_y(0),
-_scroll_item(0) {}
+): tft(tft), _scroll_down(0),
+_scroll_up(0), _scroll(false),
+_picked(false), x(x), y(y),
+w(w), h(h), _pick_idx(0),
+_list_y(0), _scroll_item(0) {}
 
 SettingsScreen::
 ~SettingsScreen(){
@@ -43,26 +40,23 @@ SettingsScreen::
     delete _scroll_item;
 }
 
-
-SettingsScreen*
-SettingsScreen::
+SettingsScreen* SettingsScreen::
 prepare(const print_data& data){
     _print_data.push_back(data);
     return this;
 }
 
-SettingsScreen*
-SettingsScreen::
+SettingsScreen* SettingsScreen::
 prepare(const std::vector<print_data>& d){
     _print_data.clear();
     _print_data.assign(d.begin(), d.end());
     return this;
 }
 
-void
-SettingsScreen::
+void SettingsScreen::
 init(){
     using uptrl = std::unique_ptr<ListItem>;
+    _list.clear();
     _pick_idx = 0;
     max_idx = _print_data.size();
     scroll_idx = 0;
@@ -114,28 +108,24 @@ init(){
     }
 }
 
-bool
-SettingsScreen::
+bool SettingsScreen::
 picked(){
     return _picked;
 }
 
-picked_list
-SettingsScreen::
+picked_list SettingsScreen::
 picked_data(){
     return picked_list(_list.at(_pick_idx)->stored().at(0), _pick_idx);
 }
 
 
-void
-SettingsScreen::
+void SettingsScreen::
 clear(){
     _print_data.clear();
     _list.clear();
 }
 
-void
-SettingsScreen::
+void SettingsScreen::
 check(Point* pos){
     if (_scroll){
         if (_scroll_up->check(pos->x, pos->y) || _scroll_down->check(pos->x, pos->y)){
@@ -164,8 +154,7 @@ check(Point* pos){
     }
 }
 
-void
-SettingsScreen::
+void SettingsScreen::
 draw(bool forceDraw){
     if (!(forceDraw && _print_data.size() > 0)){
         return;

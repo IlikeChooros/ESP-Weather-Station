@@ -33,6 +33,10 @@
 #define TODAY 0
 #define NEXT_12_HOURS 1
 
+void showmem(const String& msg){
+    Serial.println("Memory " + msg + ": " + String(ESP.getFreeHeap()));
+}
+
 TFT_eSPI tft = TFT_eSPI();
 
 uint8_t number_of_tries = 0;
@@ -155,6 +159,7 @@ void sleep(){
 
 void collect_data()
 {
+        showmem("collector");
     collector->collect(weather, TODAY);
     collector->collect(forecast, NEXT_12_HOURS);
     uint8_t day_idx = 2, day_offset = 0;
@@ -163,6 +168,7 @@ void collect_data()
         day_idx++; 
         day_offset++;
     }
+    showmem("collector after");
 }
 
 void reset_tft(){
@@ -254,20 +260,21 @@ void move(uint8_t move){
 }
 
 void wifi_setup(){
-    Point* pos = ts.read_touch();
+    std::unique_ptr<Point> pos(ts.read_touch());
 
     wifi_screens[wifi_screen_idx]->draw(false);
     if(!pos){
         return;
     }
-    wifi_screens[wifi_screen_idx]->check(pos);
+    
+    wifi_screens[wifi_screen_idx]->check(pos.get());
     if (wifi_screens[wifi_screen_idx]->change()){
         wifi_screen_idx = wifi_screen_idx == 0 ? 1 : 0;
         tft.fillScreen(BACKGROUND_COLOR);
         wifi_screens[wifi_screen_idx]->draw(wifi_screens[0]->get_str());
         wifi_screens[wifi_screen_idx]->draw(true);
     }
-    delete pos;
+    showmem("wifi setup");
 }
 
 void force_wifi_connection(){
@@ -275,6 +282,8 @@ void force_wifi_connection(){
     wifi_screens[0]->scan();
     tft.fillScreen(BACKGROUND_COLOR);
     wifi_screens[0]->draw(true);
+
+        showmem("wifi connection");
 
     while(!wifi_screens[wifi_screen_idx]->load_main()){
         wifi_setup();
@@ -296,6 +305,8 @@ pick_city()
         city_input
     };
     uint8_t idx = 0;
+
+        showmem("pick city start");
     screens[idx]->draw(true);
     while(!screens[idx]->load_main())
     {
@@ -308,6 +319,8 @@ pick_city()
         if(!pos){
             continue;
         }
+            showmem("pick city in setup");
+
         screens[idx]->check(pos.get());
         if (screens[idx]->change()){
             idx = idx != 0 ? 0 : 1;
@@ -320,7 +333,7 @@ pick_city()
 
 void setup()
 {
-        Serial.println("FREE: " + String(ESP.getFreeHeap()));
+        showmem("");
     tft.init(); 
     tft.setRotation(3);
 
@@ -335,23 +348,22 @@ void setup()
     ->on_sleep(sleep)
     ->on_wakeup(wakeup);
 
-        Serial.println("FREE FORCE WIFI: " + String(ESP.getFreeHeap()));
     force_wifi_connection();
     delete wifi_screens[0];
     delete wifi_screens[1];
     delete [] wifi_screens;
-        Serial.println("FREE WIFI SCREENS: " + String(ESP.getFreeHeap()));
+        showmem("deleted wifis");
 
     tft.fillScreen(BACKGROUND_COLOR);
     city_list->init();
     city_list->set_city_info();
 
-        Serial.println("FREE PICK CITY: " + String(ESP.getFreeHeap()));
+        showmem("set city info");
     pick_city();
     delete city_list;
     delete city_input;
     tft.fillScreen(BACKGROUND_COLOR);
-        Serial.println("FREE CITY LIST: " + String(ESP.getFreeHeap()));
+        showmem("deleted cities");
 
     weather = new Weather;
     forecast = new Forecast;
@@ -361,7 +373,7 @@ void setup()
     for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++){
         forecast->forecasted_weather[i] = new Weather;
     }
-        Serial.println("FREE ALLOC WEATHER: " + String(ESP.getFreeHeap()));
+        showmem("alloc weather");
 
     reset_tft();
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast))){
@@ -371,17 +383,17 @@ void setup()
         }
         delay(3000);
     }
-        Serial.println("FREE INIT MAIN SCREENS: " + String(ESP.getFreeHeap()));
+        showmem("init weather screens");
     screens[0]->init(weather);
     collector->init(weather);
+        showmem("init weather screens");
 
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0]->draw(weather, true);
     sci.draw(3,1,1,1);
-        Serial.println("FREE DRAW SCI: " + String(ESP.getFreeHeap()));
 
     collect_data();
-        Serial.println("FREE COLLECT: " + String(ESP.getFreeHeap()));
+        showmem("collect");
 }
 
 void loop(){

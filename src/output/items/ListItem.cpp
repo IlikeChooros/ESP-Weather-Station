@@ -7,8 +7,13 @@ ListItem(
     int16_t y,
     int16_t width,
     int16_t height
-): TouchButton(x, y, width, height),
+): TouchButton(x, y, width, height), img(0),
 tft(tft), wrap(true), prev_cursor(0) {}
+
+ListItem::
+~ListItem(){
+    delete img;
+}
 
 void
 ListItem::
@@ -19,13 +24,29 @@ draw(bool forceDraw){
     draw_(0x10A3);
 }
 
-void
-ListItem::
+void ListItem::
+on_touch(){
+    if (!img){
+        draw_(0x0861);
+        return;
+    }
+    img->drawRect(0, 0, width, height, TFT_GREEN);
+    draw_(0x0861);
+    img->drawRect(0, 0, width, height, TFT_LIGHTGREY); 
+}
+
+void ListItem::
 draw_(uint16_t color)
 {
     if(to_print.empty()){
         return;
     }
+
+    if(img){
+        img->pushSprite(x, y);
+        return;
+    }
+
     uint16_t x = this->x, y = this->y;
 
     tft->fillRect(x, y, width, height, color);
@@ -50,34 +71,51 @@ draw_(uint16_t color)
     
 }
 
-std::vector<print_data>&
-ListItem::stored(){
+std::vector<print_data>& ListItem::
+stored(){
     return data;
 }
 
-void
-ListItem::
-on_touch(){
-    draw_(0x0861);
+ListItem* ListItem::
+createSprite(){
+    if (img){
+        return this;
+    }
+    img = new TFT_eSprite(tft);
+    img->createSprite(width, height);
+    img->fillSprite(0x10A3);
+    img->drawRect(0, 0, width, height, to_print.at(0).color);
+    uint16_t x = 5, y = 7, prev_height = 0;
+    for (auto i : to_print){
+        img->loadFont(i.font);
+        img->setTextColor(i.color, 0x10A3);
+
+        if (!i.same_line){
+            y += prev_height+2;
+            x = 5;
+        }
+        x += img->drawString(i.string, x, y);
+        x += 10;
+        prev_height = img->fontHeight();
+        img->unloadFont();
+    }
+    return this;
 }
 
-ListItem*
-ListItem::
+ListItem* ListItem::
 set_position(Point& pos){
     this->x = pos.x;
     this->y = pos.y;
     return this;
 }
 
-ListItem*
-ListItem::
+ListItem* ListItem::
 wrap_text(bool wrap){
     this->wrap = wrap;
     return this;
 }
 
-ListItem*
-ListItem::
+ListItem* ListItem::
 set_data(
     String str,
     bool same_line,
