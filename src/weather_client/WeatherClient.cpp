@@ -7,21 +7,14 @@ City_info picked_city;
 // 2. cacheTime in millis
 //--------------------------
 WeatherClient::
-WeatherClient(
-    HTTPClient* http, 
-    uint32_t cacheTime
-)
-{
+WeatherClient(HTTPClient* http, uint32_t cacheTime){
     Serial.begin(115200);
     this->http = http;
     this->cacheTime = cacheTime;
 }
 
-std::vector<City_info>
-WeatherClient::
-get_all_cities_info(
-    String city_name
-){
+std::vector<City_info> WeatherClient::
+get_all_cities_info(String city_name){
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
     uint16_t http_code = http->GET();
     String payload = http->getString();
@@ -59,12 +52,8 @@ get_all_cities_info(
     return data;
 }
 
-City_info*
-WeatherClient::
-get_city_info(
-    String city_name, 
-    uint8_t idx
-)
+City_info* WeatherClient::
+get_city_info(String city_name, uint8_t idx)
 {
     City_info *data, get_data;
     auto get = get_all_cities_info(city_name);
@@ -78,12 +67,8 @@ get_city_info(
     return data;
 }
 
-bool
-WeatherClient::
-_init_(
-    String city_name,
-    uint8_t idx
-)
+bool WeatherClient::
+_init_(String city_name,uint8_t idx)
 {
     auto get = get_city_info(city_name, idx);
     bool isSuccessful = false;
@@ -105,10 +90,8 @@ _init_(
 // 1. Weather weather = new Weather
 // Returns boolean wheter obtaining weather info was successful
 //--------------------------------------------------------------
-bool 
-WeatherClient::
-current_weather
-(Weather* weather)
+bool WeatherClient::
+current_weather(Weather* weather)
 {
     if (millis() - lastWeatherCheck < cacheTime){
         return false;
@@ -164,10 +147,8 @@ current_weather
 // 3. forecast->number_of_forecasts = NUMBER_OF_HOURS_TO_FORECAST;
 // Returns boolean wheter obtaining weather info was successful
 //----------------------------------
-bool 
-WeatherClient::
-forecast_weather
-(Forecast* forecast)
+bool WeatherClient::
+forecast_weather(Forecast* forecast)
 {
     if (millis() - lastForecastCheck < cacheTime){
         return false;

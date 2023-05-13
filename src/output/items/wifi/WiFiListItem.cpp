@@ -15,7 +15,6 @@ tft(tft), password_saved(password_saved),
 strenght(strenght), bg_c(bg_c), ssid(ssid) {    
     std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));      
     this->to_print = tw->prepare(width*0.7f, 5)->wrapBegin(std::forward<String>(ssid));
-    to_print += to_print != ssid ? "..." : "";    
 }
 
 int8_t 

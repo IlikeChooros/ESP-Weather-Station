@@ -113,7 +113,6 @@ draw_wifi_name(bool forceDraw){
         wifi_name.loadFont(NOTE_FONT12);
         std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
         String wrap = tw->prepare(75, 0)->wrapBegin(WiFi.SSID());
-        wrap += wrap != WiFi.SSID() ? "..." : "";
         wifi_name.createSprite(wifi_name.textWidth(wrap), wifi_name.fontHeight());
         wifi_name.setTextColor(TFT_LIGHTGREY, bg_c);     
         wifi_name.fillSprite(bg_c);   

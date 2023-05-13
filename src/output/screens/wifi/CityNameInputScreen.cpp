@@ -88,9 +88,12 @@ void
 CityNameInputScreen::
 enter()
 {
-    load_main_ = draw_get(inputfield->get_input(), 0);
+    load_main_ = draw_get(inputfield->get_input());
 
+    // On failed location search
     if (!load_main_){
+        tft->fillRect(55, 70, 210, 100, bg_c);
+        keyboard->draw(true);
         return;
     }
     EEPROM.begin(EEPROM_SIZE);

@@ -10,6 +10,7 @@
 #include "../../../custom_font/fonts.h"
 #include "../../items/wifi/WiFiStrenghtItem.h"
 #include "../../items/ScreenPointItem.h"
+#include "../../items/text/TextWrapper.h"
 
 class WiFiScreen
 {

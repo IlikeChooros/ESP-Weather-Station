@@ -35,8 +35,6 @@ draw(String wifi_name)
     tft->setTextColor(TFT_WHITE);
     tft->drawCentreString(wifi_name, 160, 0, 2);
 
-    tft->fillRect(0,70, 320, 170, bg_c);
-
     keyboard->draw(true);
     enter_button->draw(true);
     exit_button->draw(true);

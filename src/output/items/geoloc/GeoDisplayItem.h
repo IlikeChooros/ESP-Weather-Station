@@ -2,6 +2,7 @@
 
 #include "../../../weather_client/WeatherClient.h"
 #include "../../../custom_font/fonts.h"
+#include "../text/TextWrapper.h"
 #include "TFT_eSPI.h"
 
 class GeoDisplayItem

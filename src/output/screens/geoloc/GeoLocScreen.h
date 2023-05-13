@@ -9,6 +9,7 @@ private:
     TFT_eSPI *tft;
     TFT_eSprite img;
     TouchScreen* ts;
+    ScreenPointItem* sci;
     CustomButton* exit_button;
     CustomButton* enter_button;
     GeoLocItem* geoitem;

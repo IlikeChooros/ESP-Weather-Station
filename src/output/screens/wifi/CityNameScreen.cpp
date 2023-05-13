@@ -1,36 +1,50 @@
 #include "CityNameScreen.h"
 
-bool
-CityNameScreen::
+bool CityNameScreen::
 load_main(){
     return this->load_main_;
 }
 
-bool
-CityNameScreen::
+bool CityNameScreen::
 change(){
     return this->change_;
 }
 
-bool 
-CityNameScreen::
-draw_get(String city_name, uint8_t idx)
-{
-    tft->fillRect(40, 40, 240, 160, TFT_BLACK);
-    tft->drawRect(40, 40, 240, 160, TFT_WHITE);
+bool CityNameScreen::
+draw_get(String city_name){
 
-    tft->setTextColor(TFT_LIGHTGREY);
-    tft->setTextSize(2);
-    tft->drawCentreString("Getting "+city_name, 160, 60, 2);
-    tft->drawCentreString("coordinates...", 160, 100, 2);
+    tft->loadFont(NOTE_FONT16);
+    tft->setTextColor(TFT_LIGHTGREY, 0x10A3);
+    tft->fillRect(55, 70, 210, 100, 0x10A3);
+    tft->drawRect(55, 70, 210, 100, TFT_LIGHTGREY);
+    std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
+    String wrap(tw->prepare(130, 10)->wrapBegin(std::forward<String>(city_name)));
 
-    if(!wclient->_init_(city_name, idx)){
-        tft->setTextColor(TFT_RED);
-        tft->drawCentreString("Failed, try again.", 160, 130, 2);
-        delay(1000);
-        tft->fillScreen(bg_c);
-        draw(true);
-        return false;
+    tft->drawString("Searching: " + wrap, 60, 75);
+
+    std::unique_ptr<ScreenPointItem> sci(new ScreenPointItem(tft, 160, 135, 0x10A3, 20));
+    sci->draw(3, 1, 1, 1);
+
+    uint64_t timer = millis(), delta;
+    bool successful = true;
+    uint16_t color = TFT_GREEN;
+    auto payload = wclient->get_all_cities_info(city_name);
+    String msg("Found: "+String(payload.size()));
+    
+    if(payload.empty()){
+        successful = false;
+        color = TFT_RED;
+        msg = "Not found.";
     }
-    return true;
+    delta = millis() - timer;
+    delta = delta > 300 ? delta : 400;
+    delay(100);
+    sci->draw(3, 1, 2, 1);
+    delay(delta*2);
+    sci->draw(3, 1, 3, 1);
+    tft->drawRect(55, 70, 210, 100, color);
+    tft->drawString(msg, 60, 92);
+    tft->unloadFont();
+    delay(500);
+    return successful;
 }

@@ -130,7 +130,6 @@ set_data(
     if (wrap){
         std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));  
         temp = tw->prepare(width - prev_cursor, 10)->wrapBegin(std::forward<String>(str));
-        temp += temp != str ? "..." : "";
     }    
     else{
         temp = str;

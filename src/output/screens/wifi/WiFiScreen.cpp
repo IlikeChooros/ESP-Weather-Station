@@ -20,18 +20,20 @@ draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
 
     std::unique_ptr<char[]> ptr_ssid(ssid);
     std::unique_ptr<char[]> ptr_pass(pass);
+    std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
 
+    String wrap;
     tft->loadFont(NOTE_FONT16);
     tft->setTextColor(TFT_LIGHTGREY, 0x10A3);
-    tft->setCursor(90, 75);
-    tft->print("Connecting to:");
-    tft->drawCentreString(ssid, 160, 95, 2);
+    tft->drawString("Connecting to:", 90, 75);
+    wrap = tw->prepare(210, 20)->wrapBegin(String(ssid));
+    tft->drawCentreString(wrap, 160, 95, 2);
     tft->unloadFont();
 
     std::unique_ptr<WiFiStrenghtItem> wifi(new WiFiStrenghtItem(tft, 200, 115, 35, 0x10A3));
     wifi->draw(WiFi.RSSI(i));
     
-    std::unique_ptr<ScreenPointItem> sci(new ScreenPointItem(tft, 135, 135, 0x10A3, 16));
+    std::unique_ptr<ScreenPointItem> sci(new ScreenPointItem(tft, 140, 135, 0x10A3, 16));
     sci->draw(5, 1, 1, 1);
 
     uint8_t number_of_tries = 0;

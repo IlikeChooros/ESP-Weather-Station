@@ -10,7 +10,8 @@
 
 #include "../../items/ListItem.h"
 #include "../../items/memory/ReadMem.h"
-
+#include "../../items/ScreenPointItem.h"
+#include "../../items/text/TextWrapper.h"
 
 // city name is up to 22 characters, 512 - 2*22 -2 = 466, 
 // 466 (default) address is used for number of saved city names
@@ -55,5 +56,5 @@ protected:
     bool change_;
 
     bool
-    draw_get(String city_name, uint8_t idx);
+    draw_get(String city_name);
 };

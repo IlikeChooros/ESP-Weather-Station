@@ -9,12 +9,13 @@ GeoDisplayItem(
     uint16_t bg_c
 ): tft(tft), info(city_info),
 x(x), y(y), bg_c(bg_c),
-state(city_info.state != "null"),
-to_print(info.name + " " + info.country) {
+state(city_info.state != "null") {
 
+    std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));
     tft->loadFont(EXTENDED_LATIN);
     uint16_t len;
-
+    to_print = tw->prepare(240, 10)->wrapBegin(std::forward<String>(city_info.name));
+    to_print += " " + info.country;
     len = tft->textWidth(to_print);
     y += tft->fontHeight() + 7;
     tft->unloadFont();

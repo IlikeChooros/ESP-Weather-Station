@@ -77,9 +77,7 @@ change(Move dir){
     display[geo_pos]->clear();
     if (dir == Move::RIGHT){
         geo_pos = geo_pos < data.size()-1 ? geo_pos+1 : 0;
-        draw(true);
         return;
     }
     geo_pos = geo_pos > 0 ? geo_pos - 1 : data.size()-1;
-    draw(true);
 }
