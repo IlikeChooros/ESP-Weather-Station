@@ -17,8 +17,8 @@ using ui8 = uint8_t;
 using i8 = int8_t;
 using ui16 = uint16_t;
 
-class WeatherDataCollector
-{
+class WeatherDataCollector{
+private:
     std::vector<std::vector<WeatherData>> _data;
     std::vector<std::vector<i8>> _min_max;
     ui8 current_day_;
@@ -34,8 +34,10 @@ class WeatherDataCollector
         ui8 ending_idx
     );
 
-    public:
-    WeatherDataCollector(ui8 number_of_data_to_collect);
+public:
+    WeatherDataCollector(
+        ui8 number_of_data_to_collect
+    );
 
     /**
      * @brief Initializes the object, setting starting day
@@ -87,7 +89,9 @@ class WeatherDataCollector
     );
 
     void 
-    clear_mem(uint8_t idx);
+    clear_mem(
+        uint8_t idx
+    );
 
     std::vector<WeatherData>& 
     get_data(uint8_t idx);

@@ -58,9 +58,12 @@ del(){
     this->input.remove(_end_cursor-1);
     tft->loadFont(LATIN);
     _end_cursor = input.length();
-    while (_start_cursor > 0 && tft->textWidth(input.substring(_start_cursor, _end_cursor)) < width - 30){
+    bool wrapped = false;
+    while (_start_cursor > 0 && tft->textWidth(input.substring(_start_cursor, _end_cursor)) <= width - 30){
         _start_cursor--;
+        wrapped = true;
     }
+    _start_cursor += wrapped ? 1 : 0;
     to_print = input.substring(_start_cursor, _end_cursor);
     draw(true);
     tft->unloadFont();
