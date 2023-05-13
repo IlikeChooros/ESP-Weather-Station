@@ -14,7 +14,7 @@ WeatherClient(HTTPClient* http, uint32_t cacheTime){
 }
 
 std::vector<City_info> WeatherClient::
-get_all_cities_info(String city_name){
+get_all_cities_info(const String& city_name){
     http->begin("http://api.openweathermap.org/geo/1.0/direct?q=" + city_name + "&limit=5&appid="+APPID);
     uint16_t http_code = http->GET();
     String payload = http->getString();
@@ -53,7 +53,7 @@ get_all_cities_info(String city_name){
 }
 
 City_info* WeatherClient::
-get_city_info(String city_name, uint8_t idx)
+get_city_info(const String& city_name, uint8_t idx)
 {
     City_info *data, get_data;
     auto get = get_all_cities_info(city_name);
@@ -68,7 +68,7 @@ get_city_info(String city_name, uint8_t idx)
 }
 
 bool WeatherClient::
-_init_(String city_name,uint8_t idx)
+_init_(const String& city_name,uint8_t idx)
 {
     auto get = get_city_info(city_name, idx);
     bool isSuccessful = false;

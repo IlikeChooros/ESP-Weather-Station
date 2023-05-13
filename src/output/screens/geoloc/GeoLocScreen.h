@@ -28,7 +28,7 @@ public:
     draw(bool forceDraw);
 
     void
-    set_location(String location);
+    set_location(const String& location);
 
     void
     check(void);

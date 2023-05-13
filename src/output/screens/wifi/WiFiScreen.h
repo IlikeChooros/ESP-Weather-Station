@@ -53,7 +53,7 @@ protected:
 
     bool 
     draw_connecting_to_wifi(
-        String wifi_name, 
+        const String& wifi_name, 
         char* ssid, 
         char* pass
     );

@@ -18,7 +18,6 @@ private:
     std::vector<City_info> data;
 
     GeoDisplayItem** display;
-
     WeatherClient* wclient;
     TFT_eSPI* tft;
 
@@ -43,7 +42,7 @@ public:
      * @param city_name 
      */
     void 
-    set_loctation(String city_name);
+    set_loctation(const String& city_name);
 
     /**
      * @brief Clear previous data std::vector

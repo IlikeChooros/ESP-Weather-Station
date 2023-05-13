@@ -105,7 +105,7 @@ draw(bool forceDraw){
 }
 
 void GeoLocScreen::
-set_location(String location){
+set_location(const String& location){
     waitForGeoLoc = true;
     picked = false;
     geo_pos = 0;

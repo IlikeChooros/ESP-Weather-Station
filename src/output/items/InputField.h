@@ -63,7 +63,7 @@ class InputField
      * 
      * @return String 
      */
-    String
+    const String& 
     get_input();
 
     

@@ -24,11 +24,9 @@ draw(bool forceDraw)
 {
     // Probably should scale this
     if (data.empty()){
-        tft->fillRect(45, 40, 230, 160, bg_c);
         tft->loadFont(NOTE_FONT16);
         tft->setTextColor(TFT_LIGHTGREY, bg_c);
-        tft->setCursor(45,40);
-        tft->print("No data...");
+        tft->drawCentreString("No data...", 160, 80, 2);
         tft->unloadFont();
     }
 
@@ -40,11 +38,14 @@ draw(bool forceDraw)
 }
 
 void GeoLocItem::
-set_loctation(String city_name){
-    clear();
-        
-    display = new GeoDisplayItem* [5];
+set_loctation(const String& city_name){
+    clear(); 
+
     data = wclient->get_all_cities_info(city_name);
+    if (data.empty()){
+        return;
+    }
+    display = new GeoDisplayItem* [data.size()];
     uint8_t j = 0;
     for(auto i : data){
         display[j] = new GeoDisplayItem(tft, i, x, y, bg_c);
@@ -55,18 +56,15 @@ set_loctation(String city_name){
 
 void GeoLocItem::
 clear(){
-    data.clear();
-    if (!display){
+    if (data.empty()){
         return;
     }
-
-    for (uint8_t i=0; i<5; ++i){
-        if (!display[i]){
-            break;
-        }
+    for (uint8_t i=0; i<data.size(); ++i){
         delete display[i];
     }
     delete [] display;
+    display = 0;
+    data.clear();
 }
 
 void GeoLocItem::

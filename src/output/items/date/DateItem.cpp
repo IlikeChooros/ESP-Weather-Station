@@ -19,7 +19,6 @@ full_date(tft){
         new DigitSection(tft, STARTING_X+70, y_hour, bg_c, true),
         new DigitSection(tft, STARTING_X+140, y_hour, bg_c, false)
     };
-    full_date.createSprite(320, 28);
 }
 
 void 
@@ -44,9 +43,11 @@ init(){
 
     full_date.loadFont(DATE_FONT);
     full_date.setTextColor(TFT_WHITE, bg_c);
+    text_width = full_date.textWidth(dateFormat->formatDateInfo());
+    x_full_date = 160 - text_width/2;
+    full_date.createSprite(text_width, full_date.fontHeight());
     full_date.fillSprite(bg_c);
-    full_date.drawCentreString(dateFormat->formatDateInfo(), 160, 0, 2);
-    text_width = tft->textWidth(dateFormat->formatDateInfo());
+    full_date.drawString(dateFormat->formatDateInfo(), 0, 0);
     full_date.unloadFont();
 }
 
@@ -74,8 +75,8 @@ draw(bool forceDraw){
         return;
     }
 
-    tft->fillRect(center_x - text_width/2 - 2, y_full_date, text_width + 4, tft->fontHeight(), bg_c);
-    full_date.pushSprite(0, y_full_date);
+    tft->fillRect(x_full_date, y_full_date, text_width, 28, bg_c);
+    full_date.pushSprite(x_full_date, y_full_date);
 }
 
 void 

@@ -9,7 +9,7 @@ tft(tft), bg_c(bg_c) {}
 // connects to WiFi
 //*****************************
 bool WiFiScreen::
-draw_connecting_to_wifi(String wifi_name, char* ssid, char* pass){
+draw_connecting_to_wifi(const String& wifi_name, char* ssid, char* pass){
     uint8_t i = 0;
     while(wifi_name != WiFi.SSID(i)){
         ++i;

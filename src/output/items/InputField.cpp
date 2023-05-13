@@ -66,7 +66,7 @@ del(){
     tft->unloadFont();
 }
 
-String 
+const String& 
 InputField::
 get_input(){
     return this->input;

@@ -43,7 +43,7 @@ public:
 
     bool 
     _init_(
-        String city_name,
+        const String& city_name,
         uint8_t idx    
     );
 
@@ -59,7 +59,7 @@ public:
     /// @return City_info* - might be nullptr if no connection to WiFi or overall error occured when requesting api
     City_info*
     get_city_info(
-        String city_name,
+        const String& city_name,
         uint8_t idx
     );
 
@@ -68,7 +68,7 @@ public:
     /// @return might be empty if no cities found
     std::vector<City_info>
     get_all_cities_info(
-        String city_name
+        const String& city_name
     );
 };
 

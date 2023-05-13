@@ -26,6 +26,7 @@ class DateItem
     int16_t text_width;
     int16_t center_x;
     int16_t y_full_date;
+    int16_t x_full_date;
     int16_t y_hour;
     int16_t bg_c;
     uint16_t _timezone;
