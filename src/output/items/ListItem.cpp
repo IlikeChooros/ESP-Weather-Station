@@ -31,7 +31,7 @@ on_touch(){
         return;
     }
     img->drawRect(0, 0, width, height, TFT_GREEN);
-    draw_(0x0861);
+    img->pushSprite(x, y);
     img->drawRect(0, 0, width, height, TFT_LIGHTGREY); 
 }
 
@@ -83,6 +83,7 @@ createSprite(){
     }
     img = new TFT_eSprite(tft);
     img->createSprite(width, height);
+    img->setTextWrap(false);
     img->fillSprite(0x10A3);
     img->drawRect(0, 0, width, height, to_print.at(0).color);
     uint16_t x = 5, y = 7, prev_height = 0;
@@ -120,7 +121,8 @@ set_data(
     String str,
     bool same_line,
     String font,
-    uint16_t text_color
+    uint16_t text_color,
+    int16_t max_width
 )
 {
     data.push_back(print_data(str, font, text_color, same_line)); 
@@ -129,7 +131,7 @@ set_data(
     String temp;
     if (wrap){
         std::unique_ptr<TextWrapper> tw(new TextWrapper(tft));  
-        temp = tw->prepare(width - prev_cursor, 10)->wrapBegin(std::forward<String>(str));
+        temp = tw->prepare(max_width, 5)->wrapBegin(std::forward<String>(str));
     }    
     else{
         temp = str;

@@ -1,25 +1,27 @@
 #pragma once
 
-#include <TFT_eSPI.h> 
-#include <SPI.h>
-#include <Arduino.h>
+#include "TFT_eSPI.h" 
 
-#include "../../data_structures/Point.h"
-#include "../../data_structures/Hsv_to_rgb.h"
+#include "../../../data_structures/Point.h"
+#include "../../../data_structures/Hsv_to_rgb.h"
 #include <vector>
 
-#define VELOCITY_X 6
-#define VELOCITY_Y 3
-#define NUMBER_OF_RECTS 6
-
-#define TRIANGLE_IDX 0
-#define RECTANGLE_IDX 1
-#define CIRCLE_IDX 2
-#define L_IDX 3
-#define MOON_IDX 4
-
-class RandomFigure
+namespace Figure
 {
+    
+
+enum fig{
+    VELOCITY_X=6,
+    VELOCITY_Y=3,
+    NUMBER_OF_RECTS=6,
+    TRIANGLE_IDX=0,
+    RECTANGLE_IDX=1,
+    CIRCLE_IDX=2,
+    L_IDX=3,
+    MOON_IDX=4
+};
+
+class RandomFigure{
     TFT_eSPI* tft_;
 
     uint8_t height_;
@@ -85,8 +87,8 @@ class RandomFigure
         return this;
     }
     RandomFigure* rest() {
-        this->velocity_x_ = VELOCITY_X;
-        this->velocity_y_ = VELOCITY_Y;
+        this->velocity_x_ = Figure::VELOCITY_X;
+        this->velocity_y_ = Figure::VELOCITY_Y;
         this->prev_x_ = x_;
         this->prev_y_ = y_;
         this->time_ = 0;
@@ -94,8 +96,7 @@ class RandomFigure
         this->offset_x_ = 0;
         this->offset_y_ = 0;
 
-        if (idx_ == CIRCLE_IDX)
-        {
+        if (idx_ == Figure::CIRCLE_IDX){
             width_ /=2;
             width_ -= 1;
             height_ = width_;
@@ -109,37 +110,5 @@ class RandomFigure
     draw();
 };
 
-class SleepScreen
-{
-    TFT_eSPI* tft;
-    uint16_t bg_c;
+} // namespace Figure
 
-    std::vector<RandomFigure> rects;
-    public:
-    /**
-     * @brief Screen that converse tft screen usage
-     * 
-     * @param tft 
-     */
-    SleepScreen(
-        TFT_eSPI* tft,
-        uint16_t bg_c
-    ): tft(tft), bg_c(bg_c) 
-    {
-        reset();
-    }
-
-    /**
-     * @brief Draws rectangles to tft screen
-     * 
-     */
-    void
-    draw();
-
-    /**
-     * @brief Resets previous data, ready to draw again
-     * 
-     */
-    void 
-    reset();
-};

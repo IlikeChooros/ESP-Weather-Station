@@ -63,7 +63,8 @@ public:
         String str,
         bool same_line,
         String font,
-        uint16_t text_color
+        uint16_t text_color,
+        int16_t max_width
     );
 
     /// @brief Set new position of the listItem

@@ -96,7 +96,7 @@ set_window(String ssid){
         }
             Serial.println("Memory check: " + String(ESP.getFreeHeap()));
     }
-    tft->fillRect(40, 40, 240, 160, bg_c);
+    tft->fillRect(20, 30, 260, 210, bg_c);
     screen->draw(true);
 }
 

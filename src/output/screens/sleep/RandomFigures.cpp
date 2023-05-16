@@ -1,9 +1,12 @@
-#include "SleepScreen.h"
+#include "RandomFigures.h"
 
-void
-RandomFigure::draw()
-{
-    if (millis() - time_ < 20) {return;}
+
+namespace Figure{
+
+void RandomFigure::
+draw(){
+    if (millis() - time_ < 20) 
+        return;
     move();
     draw_by_idx();
     prev_x_ = x_;
@@ -11,9 +14,8 @@ RandomFigure::draw()
     time_ = millis();
 }
 
-void
-RandomFigure::draw_by_idx()
-{
+void RandomFigure::
+draw_by_idx(){
     switch(idx_)
     {
         case TRIANGLE_IDX:
@@ -39,50 +41,19 @@ RandomFigure::draw_by_idx()
     }
 }
 
-void
-RandomFigure::move()
-{
+void RandomFigure::
+move(){
     x_ += velocity_x_;
     y_ += velocity_y_;
 
-    if (x_ <= offset_x_ || x_>= tft_->width() - width_)
-    {
+    if (x_ <= offset_x_ || x_>= tft_->width() - width_){
         velocity_x_ = -velocity_x_;
     }
 
-    if (y_ <= offset_y_ || y_ >= tft_->height() - height_)
-    {
+    if (y_ <= offset_y_ || y_ >= tft_->height() - height_){
         velocity_y_ = -velocity_y_;
     }
 }
 
-void
-SleepScreen::draw()
-{
-    for(uint8_t i=0; i<rects.size(); i++)
-    {
-        rects.at(i).draw();
-    }
-}
 
-void
-SleepScreen::reset()
-{
-    rects.clear();
-
-    for (uint8_t i=0; i<NUMBER_OF_RECTS; i++)
-    {
-        RandomFigure* rect(static_cast<RandomFigure*>(::operator new(sizeof(RandomFigure))));
-        rect
-        ->bg_c(bg_c)
-        ->color()
-        ->tft(tft)
-        ->height(4)
-        ->width(4)
-        ->x(esp_random()%280+20) // from 20 to 299
-        ->y(esp_random()%200+20) // from 20 to 219
-        ->rest();
-        rects.push_back(std::forward<RandomFigure>(*rect));
-        delete rect;
-    }
 }

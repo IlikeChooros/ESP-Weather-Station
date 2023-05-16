@@ -103,7 +103,7 @@ init(){
         _list.push_back(uptrl(new ListItem(tft, x, _list_y + i * _itr_y, w - width - offset_x, _itr_y - offset)));
         _list.at(i)->set_data(
             data.string, data.same_line,
-            data.font, data.color);
+            data.font, data.color, w);
         i++;
     }
 }

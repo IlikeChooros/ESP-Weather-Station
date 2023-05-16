@@ -26,14 +26,13 @@ String TextWrapper::
 wrapBegin(String&& text){
     end_cursor = text.length();
     start_cursor = 0;
-    bool wrapped = false;
+    String ret = text.substring(start_cursor, end_cursor);
+    if (tft->textWidth(ret) < max_width - margin){
+        return ret;
+    }
+    margin += tft->textWidth("...");
     while (tft->textWidth(text.substring(start_cursor, end_cursor)) >= max_width - margin && end_cursor > 0){
         end_cursor--;
-        wrapped = true;
-    }    
-    String ret = text.substring(start_cursor, end_cursor);
-    if (wrapped){
-        ret += "...";
-    }
-    return ret;
+    }     
+    return text.substring(start_cursor, end_cursor) + "...";
 }

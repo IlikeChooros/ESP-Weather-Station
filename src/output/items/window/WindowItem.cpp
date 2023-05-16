@@ -52,7 +52,7 @@ init(){
     quit = false;
     for (auto i : to_print){
         content->set_data(
-            i.string, i.same_line, i.font, i.color
+            i.string, i.same_line, i.font, i.color, w
         );
     }
     content->wrap_text(false);

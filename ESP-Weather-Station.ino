@@ -19,7 +19,7 @@
 #include "src/output/screens/chart/ChartScreenNext12Hours.h"
 #include "src/output/screens/chart/ChartScreenToday.h"
 
-#include "src/output/screens/SleepScreen.h"
+#include "src/output/screens/sleep/SleepScreen.h"
 
 #include "src/output/items/ScreenPointItem.h"
 

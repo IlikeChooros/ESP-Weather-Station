@@ -61,15 +61,15 @@ set_city_info()
 
         if (!info){
             city_list[count]
-            ->set_data("No data", true, LATIN, TFT_LIGHTGREY);
+            ->set_data("No data", true, LATIN, TFT_LIGHTGREY, 100);
             count++;
             continue;
         }
 
         city_list[count]
-        ->set_data(info->name, true, EXTENDED_LATIN, TFT_LIGHTGREY)
-        ->set_data(info->country, true, LATIN, TFT_LIGHTGREY)
-        ->set_data(info->state, false, EXTENDED_LATIN_SMALL, TFT_LIGHTGREY)
+        ->set_data(info->name, true, EXTENDED_LATIN, TFT_LIGHTGREY, 200)
+        ->set_data(info->country, true, LATIN, TFT_LIGHTGREY, 80)
+        ->set_data(info->state, false, EXTENDED_LATIN_SMALL, TFT_LIGHTGREY, LIST_WIDTH)
         ->createSprite();
             Serial.println("Memory Sprite: " + String(ESP.getFreeHeap()));
         count++;

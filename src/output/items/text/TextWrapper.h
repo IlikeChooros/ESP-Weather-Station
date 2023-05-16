@@ -18,6 +18,9 @@ public:
     TextWrapper*
     prepare(uint16_t max_width, uint16_t margin);
 
+    /// @brief Wraps text to given width ex.: Hello World, -> Hello Wo...
+    /// @param text Text to wrap
+    /// @return Wrapped text
     String
     wrapBegin(String&& text);
 
