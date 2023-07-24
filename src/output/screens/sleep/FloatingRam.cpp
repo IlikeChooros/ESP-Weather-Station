@@ -10,14 +10,12 @@ _velocity_x((uint16_t)Factors::velocity_x),
 _velocity_y((uint16_t)Factors::velocity_y), 
 _waiting_time(20){
     setRamText();
-
-    uint16_t range = _slider_time - _width + 1;
-    _colors = std::unique_ptr<uint16_t[]> (new uint16_t [range]);
-    for (uint16_t i=0; i < range ; ++i){
-        _colors[i] = HSV_RGB({float(i)/float(range)*360, 80, 80});
-    }
 }
 
+FloatingRam::
+~FloatingRam(){
+
+}
 void FloatingRam::
 setRamText(){
     img.deleteSprite();

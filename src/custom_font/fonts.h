@@ -1,12 +1,13 @@
 #pragma once
 /*
 Include your custom fonts here.
-All of the fonts used by me are in Arial font.
+All of the fonts used by me are in Ubuntu font.
 
 If you want to create your own font then
 follow strictly instructions in: TFT_eSPI/Tools/Create_Smooth_Font/Create_font
 
-Here are unicode block I used:
+Here are unicode blocks I used:
+
     0x002C, 0x002F, // Basic Latin letterns only
     0x0041, 0x005A,
     0x0061, 0x007A,
@@ -17,6 +18,7 @@ Here are unicode block I used:
     0x0100, 0x017F,
 
 Here are individual unicodes:
+
     0x002D, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, // - 0 1 2 3 4
     0x0035, 0x0036, 0x0037, 0x0038, 0x0039,  // 5 6 7 8 9  
     0x00B0,  0x0043, 0x0025, 0x003A, 0x002F, // ° C % : /
@@ -24,11 +26,42 @@ Here are individual unicodes:
     0x006E, 0x006F, 0x0070, 0x0072, 0x0073, 0x0074, 0x0075, 0x0076, 0x0079,  // n o p r s t u v y
     0x0041, 0x0045, 0x0046, 0x004A, 0x004D, 0x004E, 0x0050, 0x0053, 0x0054, 0x0057, //A, D, F, J, M, N, P, S, T, W
 
+
+Use ubuntu font: (works only on Linux Ubuntu since this script uses system fonts) 
+
+    int fontNumber = 287;
+
+
+DISCLAIMER:
+Use provided string names as file names in order for this to work, or use
+custom file names and change defines.
+
+You should create total of 9 files:
+
+BasicLatin28.vlw
+ExtendedLatin28.vlw
+.
+.
+.
+
+Upload them using ESP32 Sketch Data Upload Tool (found in Tools > ESP32 Sketch Data Upload )
+
 */
+
+
+
+
 
 /*
 Displaying keyboard and network SSID's:
 It's full Basic Latin
+
+int fontSize = 28;
+
+Mass import:
+
+    0x0021, 0x007E, // Basic Latin
+
 */
 #ifndef LATIN
     #define LATIN "BasicLatin28"
@@ -38,6 +71,22 @@ It's full Basic Latin
 /*
 Displaying cities' info:
 It's letters only: Basic Latin and Latin-1 Supplement 
+
+int fontSize = 28;
+
+Mass import:
+
+    0x002C, 0x002F, // Basic Latin letterns only
+    0x0041, 0x005A,
+    0x0061, 0x007A,
+
+    0x00C0, 0x00D6, // Latin-1 Supplement only letters
+    0x00D8, 0x00F6,
+    0x00F8, 0x00FF,
+    0x0100, 0x017F,
+
+    
+
 */
 #ifndef EXTENDED_LATIN
     #define EXTENDED_LATIN "ExtendedLatin28"
@@ -46,6 +95,20 @@ It's letters only: Basic Latin and Latin-1 Supplement
 /*
 Displaying cities' info but smaller:
 It's letters only: Basic Latin and Latin-1 Supplement 
+
+int fontSize = 12;
+
+Mass import:
+
+    0x002C, 0x002F, // Basic Latin letterns only
+    0x0041, 0x005A,
+    0x0061, 0x007A,
+
+    0x00C0, 0x00D6, // Latin-1 Supplement only letters
+    0x00D8, 0x00F6,
+    0x00F8, 0x00FF,
+    0x0100, 0x017F,
+
 */
 #ifndef EXTENDED_LATIN_SMALL
     #define EXTENDED_LATIN_SMALL "ExtendedLatin12"
@@ -55,6 +118,15 @@ It's letters only: Basic Latin and Latin-1 Supplement
 /*
 Displaying small text, used as titles of screens:
 It's letters only Basic Latin
+
+int fontSize = 12, 16
+
+Mass import:
+
+    0x002C, 0x002F, // Basic Latin letterns only
+    0x0041, 0x005A,
+    0x0061, 0x007A,
+
 */
 #ifndef NOTE_FONT
     #define NOTE_FONT
@@ -71,6 +143,17 @@ Can display for example:
     113 km/h
     1025 hPa
     17:00
+
+
+int fontSize = 16;
+
+Individual:
+
+    0x002D, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, // - 0 1 2 3 4
+    0x0035, 0x0036, 0x0037, 0x0038, 0x0039,  // 5 6 7 8 9  
+    0x00B0,  0x0043, 0x0025, 0x003A, 0x002F, // ° C % : /
+    0x0061,  0x0065, 0x0068, 0x0069, 0x006B, 0x006C, 0x006D, 0x0073, // a e h i k l m s 
+    0x0046,  0x0050, // F, P
 */
 #ifndef WEATHER_FONT
     #define WEATHER_FONT "Weather16"
@@ -80,6 +163,15 @@ Can display for example:
 /*
 Displaying current temperature in CurrentWeatherScreen, contains:
 0 1 2 3 4 5 6 7 8 9 - ° C
+
+int fontSize = 42;
+
+Individual:
+
+    0x002D, 0x0030, 0x0031, 0x0032, 0x0033, 0x0034, // - 0 1 2 3 4
+    0x0035, 0x0036, 0x0037, 0x0038, 0x0039,  // 5 6 7 8 9  
+    0x00B0, 0x0043, // ° C 
+
 */
 #ifndef TEMP_FONT
     #define TEMP_FONT "Temp42"
@@ -88,6 +180,15 @@ Displaying current temperature in CurrentWeatherScreen, contains:
 /*
 Displaying clock in CurrentWeatherScreen, contains:
 0 1 2 3 4 5 6 7 8 9 :
+
+int fontSize = 48;
+
+Individual:
+
+    0x0030, 0x0031, 0x0032, 0x0033, 0x0034, // 0 1 2 3 4
+    0x0035, 0x0036, 0x0037, 0x0038, 0x0039,  // 5 6 7 8 9  
+    0x003A, // :
+
 */
 #ifndef CLOCK_FONT
     #define CLOCK_FONT "Clock48"
@@ -99,6 +200,20 @@ a b c d e g h i l n o p r s t u v y A D F J M N P S T W
 With those letters you can formulate words: 
     Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Nov, Dec
     Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+
+
+int fontSize = 26;
+
+Individual:
+
+    0x0030, 0x0031, 0x0032, 0x0033, 0x0034, // 0 1 2 3 4
+    0x0035, 0x0036, 0x0037, 0x0038, 0x0039,  // 5 6 7 8 9  
+
+    0x00B0,  0x0043, 0x0025, 0x003A, 0x002F, // ° C % : /
+    0x0061, 0x0062, 0x0063, 0x0064, 0x0065, 0x0067, 0x0068, 0x0069, 0x006C, // a b c d e g h i l 
+    0x006E, 0x006F, 0x0070, 0x0072, 0x0073, 0x0074, 0x0075, 0x0076, 0x0079,  // n o p r s t u v y
+    0x0041, 0x0045, 0x0046, 0x004A, 0x004D, 0x004E, 0x0050, 0x0053, 0x0054, 0x0057, //A, D, F, J, M, N, P, S, T, W
+
 */ 
 #ifndef DATE_FONT
     #define DATE_FONT "Date26"

@@ -98,9 +98,18 @@ It also lets you override saved locations.
 ## Troubleshooting
 While I did my best making sure everything is working fine, there are possible situations in which ESP might crash. Make sure to post them in the Issuses.
 
- * [Esp restarts immediately after uploading the code](#esp-restarts-after-connecting-to-wifi)
- * [Esp restarts after connecting to wifi](#esp-restarts-after-connecting-to-wifi)
- * [Reset saved wifis](#reset-saved-wifis)
+- [ESP Weather Station](#esp-weather-station)
+  - [TOC](#toc)
+  - [Introduction](#introduction)
+  - [Setup](#setup)
+    - [In order to run this code:](#in-order-to-run-this-code)
+  - [Step by step explanation](#step-by-step-explanation)
+  - [Features](#features)
+  - [Troubleshooting](#troubleshooting)
+    - [Esp restarts immediately after uploading the code](#esp-restarts-immediately-after-uploading-the-code)
+    - [Esp restarts after connecting to wifi](#esp-restarts-after-connecting-to-wifi)
+    - [Reset saved wifis](#reset-saved-wifis)
+    - [Upload Failed! on font files upload](#upload-failed-on-font-files-upload)
 
 ### Esp restarts immediately after uploading the code
 This situation might happen on first upload. The root of this problem is most likely that some data is written on addresses 10 *(starting address for writing saved wifi data)* and 487 *(`CITY_NAME_IDX`)*. They are used to control number of data saved in EEPROM, so conflicting data will cause an undefined behaviour and as a result ESP abort.
@@ -158,3 +167,22 @@ void setup()
     ...
 }
 ```
+
+### Upload Failed! on font files upload 
+On Linux:
+Found the problem to be a python vs Python 3 command call (and binary path) issue. Solution for me was:
+
+```
+sudo apt update
+```
+
+```
+sudo apt install python-is-python3
+```
+
+
+https://linuxpip.org/python-is-python3/
+
+### Core dump flash config is corrupted! on font files upload
+
+

@@ -34,7 +34,6 @@ class FloatingRam{
     int16_t _slider_x;
     int16_t _slider_width;
     int16_t _slider_velocity;
-    std::unique_ptr<uint16_t[]> _colors;
 
     int16_t _velocity_x;
     int16_t _velocity_y;
@@ -57,7 +56,7 @@ class FloatingRam{
 
 public:
     FloatingRam(TFT_eSPI* tft, uint16_t bg_c);
-    ~FloatingRam()=default;
+    ~FloatingRam();
 
     FloatingRam*
     x(uint16_t x){

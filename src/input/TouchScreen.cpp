@@ -18,6 +18,7 @@ holdTime(HOLD_TIME){
     this->on_sleep(do_nothing);
     this->on_wakeup(do_nothing);
     if (!SPIFFS.begin()){
+        Serial.println("SPIFFS is not configured. See github README");
         while(true) yield();
     }
 }

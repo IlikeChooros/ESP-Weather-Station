@@ -352,18 +352,15 @@ void setup()
     delete wifi_screens[0];
     delete wifi_screens[1];
     delete [] wifi_screens;
-        showmem("deleted wifis");
 
     tft.fillScreen(BACKGROUND_COLOR);
     city_list->init();
     city_list->set_city_info();
 
-        showmem("set city info");
     pick_city();
     delete city_list;
     delete city_input;
     tft.fillScreen(BACKGROUND_COLOR);
-        showmem("deleted cities");
 
     weather = new Weather;
     forecast = new Forecast;
@@ -373,7 +370,6 @@ void setup()
     for (uint8_t i=0;i<NUMBER_OF_HOURS_TO_FORECAST; i++){
         forecast->forecasted_weather[i] = new Weather;
     }
-        showmem("alloc weather");
 
     reset_tft();
     while (!(wclient.current_weather(weather) && wclient.forecast_weather(forecast))){
@@ -383,17 +379,15 @@ void setup()
         }
         delay(3000);
     }
-        showmem("init weather screens");
+
     screens[0]->init(weather);
     collector->init(weather);
-        showmem("init weather screens");
 
     tft.fillScreen(BACKGROUND_COLOR);
     screens[0]->draw(weather, true);
     sci.draw(3,1,1,1);
 
     collect_data();
-        showmem("collect");
 }
 
 void loop(){
